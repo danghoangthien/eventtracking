@@ -1,0 +1,45 @@
+hyper_event_homepage:
+    path:     /event/postback
+    defaults: { _controller: HyperEventBundle:Default:index }
+hyper_event_store_document:
+    path:     /event/store
+    defaults: { _controller: HyperEventBundle:Default:storeDocument }
+hyper_event_test_memcached:
+    path:     /test/memcached
+    defaults: { _controller: hyper_event.storage_controller:testMemcachedAction }
+
+hyper_event_v2:
+    path:     /event/postback/v2
+    defaults: { _controller: hyper_event.storage_controller:indexAction }
+
+hyper_event_v3:
+    path:     /event/postback/v3
+    defaults: { _controller: hyper_event.storage_controller_v3:indexAction }
+hyper_event_v3_provider:
+    path:     /event/postback/v3/provider/{provider}
+    defaults: { _controller: hyper_event.storage_controller_v3:indexAction, provider:null }   
+hyper_event_v3_test_memcached:
+    path:     /test/memcached/v3
+    defaults: { _controller: hyper_event.storage_controller_v3:testMemcachedAction }
+hyper_event_v3_test_memcached_provider:
+    path:     /test/memcached/v3/provider/{provider}
+    defaults: { _controller: hyper_event.storage_controller_v3:testMemcachedAction, provider:null }         
+
+hyper_event_v4:
+    path:     /event/postback/v4
+    defaults: { _controller: hyper_event.storage_controller_v4:indexAction }
+hyper_event_v4_provider:
+    path:     /event/postback/v4/provider/{provider}
+    defaults: { _controller: hyper_event.storage_controller_v4:indexAction, provider:null }
+hyper_event_v4_test_memcached:
+    path:     /test/memcached/v4
+    defaults: { _controller: hyper_event.storage_controller_v4:testMemcachedAction }    
+
+    
+hyper_event_latest:
+    path:     /event/postback/latest
+    defaults: { _controller: hyper_event.storage_controller_v3:indexAction }
+hyper_event_latest_provider:
+    path:     /event/postback/latest/provider/{provider}
+    defaults: { _controller: hyper_event.storage_controller_v3:indexAction, provider:null }      
+

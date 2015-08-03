@@ -1,0 +1,3 @@
+hyper_domain_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: HyperDomainBundle:Default:index }

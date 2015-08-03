@@ -1,0 +1,9 @@
+services:
+#    hyper_domain.example:
+#        class: Hyper\DomainBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]
+    device_repository:
+            class:  Hyper\DomainBundle\Repository\DTDeviceRepository
+            factory_service: doctrine.orm.pgsql_entity_manager
+            factory_method: getRepository
+            arguments: [  Hyper\Domain\Device\Device ]

@@ -1,0 +1,34 @@
+parameters:
+    hyper_event.amazon_s3.class: AmazonS3
+    hyper_event.event_log_uploader.class: Hyper\EventBundle\Upload\EventLogUploader
+services:
+#    hyper_event.example:
+#        class: Hyper\EventBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]
+    #hyper_event.amazon_s3:
+    #    class: %hyper_event.amazon_s3.class%
+    #    arguments: [{key: '%hyper_event.amazon_s3.aws_key%',secret: '%hyper_event.amazon_s3.aws_secret_key%'}]
+    hyper_event.amazon_s3:
+        class: %hyper_event.amazon_s3.class%
+        arguments: 
+            options:
+                key: '%hyper_event.amazon_s3.aws_key%'
+                secret: '%hyper_event.amazon_s3.aws_secret_key%'
+    hyper_event.event_log_uploader: 
+        class: %hyper_event.event_log_uploader.class%
+        arguments: ['@event_log_filesystem']
+    hyper_event.storage_controller:
+        class: Hyper\EventBundle\Controller\StorageController
+        arguments: 
+            container: '@service_container'
+    hyper_event.storage_controller_v3:
+        class: Hyper\EventBundle\Controller\StorageControllerV3
+        arguments: 
+            container: '@service_container'
+    hyper_event.storage_controller_v4:
+        class: Hyper\EventBundle\Controller\StorageControllerV4
+        arguments: 
+            container: '@service_container'        
+    hyper_event.event_process:
+        class: Hyper\EventBundle\Service\EventProcess
+        
