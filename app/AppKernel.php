@@ -23,7 +23,7 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\MongoDBBundle\DoctrineMongoDBBundle(),
             new Hyper\EventBundle\HyperEventBundle(),
             new Knp\Bundle\GaufretteBundle\KnpGaufretteBundle(),
-            new Lsw\MemcacheBundle\LswMemcacheBundle(),
+            //new Lsw\MemcacheBundle\LswMemcacheBundle(),
             new Hyper\DomainBundle\HyperDomainBundle(),
         );
 

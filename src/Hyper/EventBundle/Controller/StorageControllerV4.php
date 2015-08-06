@@ -106,9 +106,9 @@ class StorageControllerV4 extends Controller
     {
         $contentType = $request->headers->get('Content-Type');
         $method = $request->getMethod();
-        $logger = $this->get('logger');
-        $logger->info('result contentType'.$contentType);
-        $logger->info('result method'.$method);
+        //$logger = $this->get('logger');
+        //$logger->info('result contentType'.$contentType);
+        //$logger->info('result method'.$method);
         return ($contentType == 'application/json' && $method == 'POST');
     }
     
@@ -160,11 +160,11 @@ class StorageControllerV4 extends Controller
             return $rawJsonContent;
         } else {
             $content = json_decode($rawJsonContent,true);
-            $logger = $this->get('logger');
+            //$logger = $this->get('logger');
             //$logger->info('result content '.$content);
-            $logger->info('result rawJsonContent '.$rawJsonContent);
+            //$logger->info('result rawJsonContent '.$rawJsonContent);
             if(is_array($content) && !empty($content)){
-                $logger->info('result valid content ');
+                //$logger->info('result valid content ');
                 return $content;
             }else{
                 return null;
@@ -373,8 +373,9 @@ class StorageControllerV4 extends Controller
     protected function storeEventS3FromAPI(Request $request){
         $amazonBaseURL = $this->container->getParameter('hyper_event.amazon_s3.base_url');
         $rootDir = $this->get('kernel')->getRootDir();// '/var/www/html/projects/event_tracking/app'
-        $rawLogDir = $rootDir. '/../web/raw_event';
-    
+        $rawLogDir = '/var/www/html/projects/event_tracking/web/raw_event';
+         
+        $fs = new Filesystem();
         $rawContent = $this->getValidContent($request,'json');
         $content = $this->getValidContent($request,'array');
         $appId=$content['app_id'];
@@ -440,7 +441,9 @@ class StorageControllerV4 extends Controller
         $filePathName = $file->getPathname();
         $gzFilePathName = $pathGz;
         file_put_contents($gzFilePathName, gzencode( file_get_contents($filePathName),9));
-        chmod($gzFilePathName, 0664);
+        chmod($gzFilePathName, 0777);
+        $logger = $this->get('logger');
+        $logger->info('file exist? '.$gzFilePathName.':'.file_exists($gzFilePathName));
         $gzFile = new File($gzFilePathName);
         
         $eventUploader = $this->getEventLogUploader();
@@ -575,6 +578,7 @@ class StorageControllerV4 extends Controller
     
     public function postBackProviders() {
         return array(
+            '0' => 'csv',
             '1' => 'appsflyer'
         );
     }

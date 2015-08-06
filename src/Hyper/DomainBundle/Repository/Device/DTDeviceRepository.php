@@ -1,6 +1,6 @@
 <?php
 
-namespace Hyper\DomainBundle\Repository;
+namespace Hyper\DomainBundle\Repository\Device;
 
 use Doctrine\ORM\EntityRepository;
 use Hyper\Domain\Device\DeviceRepository;
@@ -16,6 +16,6 @@ class DTDeviceRepository extends EntityRepository implements DeviceRepository
 {
     public function add (Device $device){
         $this->_em->persist($device);
-        $this->_em->flush();
+        //$this->_em->flush();
     }
 }

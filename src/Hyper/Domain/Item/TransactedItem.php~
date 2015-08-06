@@ -1,0 +1,81 @@
+<?php
+
+namespace Hyper\Domain\Item;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
+
+/**
+ * TransactedItem
+ *
+ * @ORM\Table(name="items")
+ * @ORM\Entity(repositoryClass="Hyper\DomainBundle\Repository\DTTransactedItemRepository")
+ * @ExclusionPolicy("all")
+ */
+class TransactedItem
+{
+    /**
+     * @var string
+     * @ORM\Column(name="id", type="string")
+     * @ORM\Id
+     * @Expose
+     */
+    private $id;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="device_id", type="string")
+     * @Expose
+     */
+    private $deviceId;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="application_id", type="string")
+     * @Expose
+     */
+    private $applicationId;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Hyper\Domain\Action\Transaction", fetch="EXTRA_LAZY", inversedBy="transacted_items")
+     * @ORM\JoinColumn()
+     * @Expose
+     */
+    private $transaction;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Hyper\Domain\Item\Item", fetch="EXTRA_LAZY", inversedBy="transacted_items")
+     * @ORM\JoinColumn()
+     * @Expose
+     */
+    private $item;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="transacted_price", type="float", options={"unsigned"=true})
+     * @Expose
+     */
+     
+    private $transactedPrice;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="created", type="integer")
+     * @Expose
+     */
+    private $created;    
+    
+    public function __construct()
+    {
+        $this->id = uniqid('',true);
+        $this->created = time();
+    }
+    
+}
