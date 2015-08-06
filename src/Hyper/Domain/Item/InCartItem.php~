@@ -1,0 +1,64 @@
+<?php
+
+namespace Hyper\Domain\Item;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
+
+/**
+ * InCartItem
+ *
+ * @ORM\Table(name="in_cart_items")
+ * @ORM\Entity(repositoryClass="Hyper\DomainBundle\Repository\DTInCartItemRepository")
+ * @ExclusionPolicy("all")
+ */
+class InCartItem
+{
+    /**
+     * @var string
+     * @ORM\Column(name="id", type="string")
+     * @ORM\Id
+     * @Expose
+     */
+    private $id;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="device_id", type="string")
+     * @Expose
+     */
+    private $deviceId;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="application_id", type="string")
+     * @Expose
+     */
+    private $applicationId;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Hyper\Domain\Action\AddToCartAction", fetch="EXTRA_LAZY", inversedBy="in_cart_items")
+     * @ORM\JoinColumn()
+     * @Expose
+     */
+    private $cart;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Hyper\Domain\Item\Item", fetch="EXTRA_LAZY", inversedBy="in_cart_items")
+     * @ORM\JoinColumn()
+     * @Expose
+     */
+    private $item;
+    
+    public function __construct()
+    {
+        $this->id = uniqid('',true);
+        $this->created = time();
+    }
+    
+}

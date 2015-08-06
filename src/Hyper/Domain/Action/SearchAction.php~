@@ -1,0 +1,78 @@
+<?php
+
+namespace Hyper\Domain\Action;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
+
+/**
+ * SearchAction
+ *
+ * @ORM\Table(name="search_actions")
+ * @ORM\Entity(repositoryClass="Hyper\DomainBundle\Repository\DTSearchActionRepository")
+ * @ExclusionPolicy("all")
+ */
+class SearchAction
+{
+    /**
+     * @ORM\OneToOne(targetEntity="Action")
+     * @ORM\JoinColumn(name="id", referencedColumnName="id")
+     * @ORM\Id
+     */
+    private $action;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="device_id", type="string")
+     * @Expose
+     */
+    private $deviceId;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="application_id", type="string")
+     * @Expose
+     */
+    private $applicationId;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="search_string", type="string")
+     * @Expose
+     */
+    private $searchString;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="searched_time", type="integer")
+     * @Expose
+     */
+    private $searchedTime;
+    
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="created", type="integer")
+     * @Expose
+     */
+    private $created;    
+    
+    
+    
+    
+    public function __construct()
+    {
+        $this->created = time();
+    }
+    
+}

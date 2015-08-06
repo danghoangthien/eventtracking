@@ -38,8 +38,8 @@ hyper_event_v4_test_memcached:
     
 hyper_event_latest:
     path:     /event/postback/latest
-    defaults: { _controller: hyper_event.storage_controller_v3:indexAction }
+    defaults: { _controller: hyper_event.storage_controller_v4:indexAction }
 hyper_event_latest_provider:
     path:     /event/postback/latest/provider/{provider}
-    defaults: { _controller: hyper_event.storage_controller_v3:indexAction, provider:null }      
+    defaults: { _controller: hyper_event.storage_controller_v4:indexAction, provider:null }      
 

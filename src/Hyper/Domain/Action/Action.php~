@@ -1,0 +1,86 @@
+<?php
+
+namespace Hyper\Domain\Action;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
+
+/**
+ * Action
+ *
+ * @ORM\Table(name="actions")
+ * @ORM\Entity(repositoryClass="Hyper\DomainBundle\Repository\DTActionRepository")
+ * @ExclusionPolicy("all")
+ */
+class Action
+{
+    /**
+     * @var string
+     * @ORM\Column(name="id", type="string")
+     * @ORM\Id
+     * @Expose
+     */
+    private $id;
+
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Hyper\Domain\Device\Device", fetch="EXTRA_LAZY", inversedBy="identities")
+     * @ORM\JoinColumn()
+     * @Expose
+     */
+    private $device;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="application_id", type="string")
+     * @Expose
+     */
+    private $applicationId;
+
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="action_type", type="integer")
+     * @Expose
+     */
+    private $actionType;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="behaviour_id", type="integer")
+     * @Expose
+     */
+    private $behaviourId;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="happened_at", type="integer")
+     * @Expose
+     */
+    private $happenedAt;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="created", type="integer")
+     * @Expose
+     */
+    private $created;    
+    
+    
+    
+    
+    public function __construct()
+    {
+        $this->id = uniqid('',true);
+        $this->created = time();
+    }
+    
+}

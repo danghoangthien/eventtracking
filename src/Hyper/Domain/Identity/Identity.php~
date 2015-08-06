@@ -1,0 +1,108 @@
+<?php
+
+namespace Hyper\Domain\Identity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
+
+/**
+ * Identity
+ *
+ * @ORM\Table(name="identities")
+ * @ORM\Entity(repositoryClass="Hyper\DomainBundle\Repository\DTDeviceRepository")
+ * @ExclusionPolicy("all")
+ */
+class Identity
+{
+    /**
+     * @var string
+     * @ORM\Column(name="id", type="string", options={"unsigned"=true})
+     * @ORM\Id
+     * @Expose
+     */
+    private $id;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="full_name", type="string")
+     * @Expose
+     */
+    private $fullName;
+
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="sex", type="integer",options={"unsigned"=true})
+     * @Expose
+     */
+    private $sex;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="birthday", type="string")
+     * @Expose
+     */
+    private $birthDay;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="email", type="string")
+     * @Expose
+     */
+    private $email;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="email_2", type="string")
+     * @Expose
+     */
+    private $email2;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="email_3", type="string")
+     * @Expose
+     */
+    private $email3;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="facebook_id", type="string")
+     * @Expose
+     */
+    private $facebookId;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="created", type="integer")
+     * @Expose
+     */
+    private $created;
+    
+    /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="Hyper\Domain\Device\Device", mappedBy="identities", fetch="EXTRA_LAZY", cascade={"persist"})
+     */
+     private $devices;
+
+    
+    public function __construct()
+    {
+        $this->id = uniqid('',true);
+        $this->devices = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->created = time();
+    }
+    
+}

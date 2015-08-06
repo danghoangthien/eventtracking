@@ -1,0 +1,91 @@
+<?php
+
+namespace Hyper\Domain\Action;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
+
+/**
+ * AddToWishlistAction
+ *
+ * @ORM\Table(name="add_to_wishlist_actions")
+ * @ORM\Entity(repositoryClass="Hyper\DomainBundle\Repository\DTAddToWishlistActionRepository")
+ * @ExclusionPolicy("all")
+ */
+class AddToWishlistAction
+{
+    /**
+     * @ORM\OneToOne(targetEntity="Action")
+     * @ORM\JoinColumn(name="id", referencedColumnName="id")
+     * @ORM\Id
+     */
+    private $action;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="device_id", type="string")
+     * @Expose
+     */
+    private $deviceId;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="application_id", type="string")
+     * @Expose
+     */
+    private $applicationId;
+
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="total_items", type="integer")
+     * @Expose
+     */
+    private $totalItems;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="quantity", type="integer")
+     * @Expose
+     */
+    private $quantity;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="added_time", type="integer")
+     * @Expose
+     */
+    private $addedTime;
+    
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="created", type="integer")
+     * @Expose
+     */
+    private $created;    
+    
+    /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="Hyper\Domain\Item\InWishlistItem", mappedBy="add_to_wishlist_actions", fetch="EXTRA_LAZY", cascade={"persist"})
+     */
+     private $inWishlistItems;
+    
+    
+    public function __construct()
+    {
+        $this->created = time();
+        $this->inWishlistItems = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+}
