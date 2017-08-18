@@ -1,0 +1,396 @@
+{% extends 'layout_ak/base.html.twig' %}
+{% block sub_head_title %}Dashboard - Audience Deck{% endblock %}
+{% block body %}
+	<!-- Main Content -->
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="carddeck-row audiencedeck">
+            {% include 'audience_deck/_paginate.html.twig' %}
+        </div>
+        {% if pageCurrent < listFilter.getPageCount() %}
+            <div class="row buffer-bottom">
+                <div class="col-xs-4"></div>
+            	<div class="col-md-4">
+            	    <div class="loadmore" style="cursor: pointer;">
+            		    <span class="uj_card_add loadmore-text">Load More</span><span style="margin-left: 10px"><i class="fa fa-plus"></i></span>
+            		</div>
+            	</div>
+            	<div class="col-xs-4"></div>
+            </div>
+		{% endif %}
+    </div>
+    <!-- END Main Content -->
+{% endblock %}
+{% block stylesheets_inline %}
+    <link href="{{ asset('bundles/hyperevent/plugins/rotatecard/rotating-card.css') }}" rel="stylesheet" />
+    <style>
+        .audiencedeck .active:after {
+            font-family: "FontAwesome";
+            content: "\2713";
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            color: white;
+            background: green;
+            border-radius: 25px;
+            width: 18px;
+            height: 18px;
+            text-align: center;
+        }
+		.carddeck-row {
+			-moz-column-width: 17em;
+			-webkit-column-width: 17em;
+			-moz-column-gap: 1em;
+			-webkit-column-gap: 1em;
+		}
+		.carddeck-panel{
+		display: inline-block;
+		padding:  0;
+		width:100%;
+		}
+    </style>
+{% endblock %}
+{% block javascript_inline %}
+    <script>
+    	var AudienceDeck = {
+    		pageCurrent: {{ pageCurrent }},
+
+    		init: function() {
+    			this.fireEventDeleteCardBox();
+    			this.fireEventCannel();
+    			this.fireEventLoadmore();
+    			this.fireEventPushToFacebook();
+    			this.fireEventPushDataFacebook();
+    			// mc
+    			this.fireEventPushEmailToMC();
+    			this.fireEventPushDataMC();
+    		},
+    		fireEventPushToFacebook: function() {
+    			var self = this;
+    			$(document).on('click', '[data-btn-push-to-facebook]', function() {
+    				var cardnumber = $(this).data('cardnumber');
+    				var cardId = $(this).data('id');
+    				self.loadListAdAccountFb(cardId);
+    			});
+    		},
+    		fireEventPushEmailToMC: function() {
+    			var self = this;
+    			$(document).on('click', '[data-btn-push-email-to-mc]', function() {
+    				var cardnumber = $(this).data('cardnumber');
+    				var cardId = $(this).data('id');
+    				self.loadSubscriberListMC(cardId);
+    			});
+    		},
+    		fireEventCardBox: function() {
+    		    var self = this;
+    			$(document).on('click', '.cardbox', function() {
+    				var cardnumber = $(this).attr('id');
+    				self.resetCard($(this).data('id'));
+    				var numb = cardnumber.match(/\d/g);numb = numb.join("");
+		        	$('#adac'+numb).modal('show');
+
+		        	$('.modal-backdrop').remove();
+    			});
+    		},
+    		fireEventPushDataFacebook: function() {
+    		    var self = this;
+    			$(document).on('click', '[data-btn-push-fb]', function() {
+    				var cardId = $(this).data('id');
+    				self.pushDataToFacebook(cardId);
+    			});
+    		},
+    		fireEventPushDataMC: function() {
+    		    var self = this;
+    			$(document).on('click', '[data-btn-push-mc]', function() {
+    				var cardId = $(this).data('id');
+    				self.pushEmailToMC(cardId);
+    			});
+    		},
+    		resetCard: function(cardnumber) {
+    		    if ($('[data-coordinate-group="push-to-facebook['+cardnumber+']"][data-btn-disabled]').length) {
+    		        $('[data-coordinate-group="push-to-facebook['+cardnumber+']"][data-btn-disabled]').removeClass('disabled').addClass('disabled');
+    		    } else {
+    		        $('[data-coordinate-group="push-to-facebook['+cardnumber+']"][data-btn-push-to-facebook]').removeClass('disabled');
+    		    }
+    		    if ($('[data-coordinate-group="export-csv['+cardnumber+']"][data-btn-disabled]').length) {
+    		        $('[data-coordinate-group="export-csv['+cardnumber+']"][data-btn-disabled]').removeClass('disabled').addClass('disabled');
+    		    } else {
+    		        $('[data-coordinate-group="export-csv['+cardnumber+']"][data-btn-export-csv]').removeClass('disabled');
+    		    }
+    		    if ($('[data-coordinate-group="push-email-to-mc['+cardnumber+']"][data-btn-disabled]').length) {
+    		        $('[data-coordinate-group="push-email-to-mc['+cardnumber+']"][data-btn-disabled]').removeClass('disabled').addClass('disabled');
+    		    } else {
+    		        $('[data-coordinate-group="push-email-to-mc['+cardnumber+']"][data-btn-push-email-to-mc]').removeClass('disabled');
+    		    }
+    		    $('[data-coordinate-group="push-to-facebook['+cardnumber+']"][data-select-ad-account-fb-group]').removeClass('hide').addClass('hide');
+    		    $('[data-coordinate-group="push-email-to-mc['+cardnumber+']"][data-select-subscriber-list-mc-group]').removeClass('hide').addClass('hide');
+    		    $('[data-coordinate-group="alert['+cardnumber+']"][data-alert]').removeClass('hide').addClass('hide');
+
+    		},
+    		fireEventLoadmore: function() {
+    			var self = this;
+    			$(document).on('click', '.loadmore', function() {
+    				self.processLoadmore($(this));
+    			});
+    		},
+    		fireEventDeleteCardBox: function() {
+    			var self = this;
+    			$(document).on('click', '.delete-card', function() {
+        			{% if isDemoAccount == true %}
+        			alert("Sorry you cannot make changes as this feature is disabled in demo mode.");
+        			return;
+        			{% endif %}
+        			var result = confirm("Are you sure this card?");
+        			if (!result) {
+        			    return false;
+        			}
+    				var cardnumber = $(this).data('cardnumber');
+    				var cardId = $(this).data('id');
+    				self.processDeleteCardBox($(this), cardnumber, cardId);
+    			});
+    		},
+    		processDeleteCardBox: function(obj, cardnumber, cardId) {
+    			if (obj.data("disabled")) {
+			        return false;
+			    }
+    			$.ajax({
+                    url : "{{ path('dashboard_filter_execute_delete_v2') }}",
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        id: cardId
+                    },
+                    beforeSend: function() {
+                        obj.data("disabled", "disabled");
+                    },
+                    success: function(resp) {
+                    	if (resp.status == 'success') {
+                    		$('#adac'+cardnumber).modal('hide');
+                    		$('#card'+cardnumber).remove();
+                    	}
+                    	if (!$('_cardbox-item').length) {
+                    	    window.location.href = '{{ path('dashboard_filter_showlist_v2') }}';
+                    	}
+                    },
+                    error: function() {
+                    	obj.removeData("disabled");
+                    },
+                    complete: function() {
+                        obj.removeData("disabled");
+                    }
+                });
+    		},
+    		processLoadmore: function(obj) {
+    			var self = this;
+    			if (obj.data("disabled")) {
+			        return false;
+			    }
+    			self.pageCurrent++;
+                $.ajax({
+                    url : "{{ path('dashboard_filter_showlist_v2') }}",
+                    type: 'GET',
+                    dataType: 'json',
+                    data: {
+                        page: self.pageCurrent
+                    },
+                    beforeSend: function() {
+                        obj.data("disabled", "disabled");
+                        obj.find('.loadmore-text').html("Loading...");
+                    },
+                    success: function(resp) {
+                    	if (resp.status == 1) {
+                    		$('.audiencedeck-add-card').remove();
+                    		$('.audiencedeck').append(resp.content);
+                    		obj.find('.loadmore-text').html("Load more...");
+                    		//self.loadCards();
+                    		if (resp.is_last_page) {
+                    			$('.loadmore').remove();
+                    		}
+                    	}
+                    },
+                    error: function() {
+                    	self.pageCurrent--;
+                    	obj.removeData("disabled");
+                    },
+                    complete: function() {
+                        obj.removeData("disabled");
+                    }
+                });
+    		},
+    		loadCard: function(obj, id, i) {
+    		    var self = this;
+    		    $.ajax({
+                    url : "{{ path('dashboard_filter_loadcard_v2') }}",
+                    type: 'GET',
+                    dataType: 'json',
+                    data: {
+                        card_id: id,
+                        card_index: self.pageCurrent * i
+                    },
+                    beforeSend: function() {
+                    },
+                    success: function(resp) {
+                    	if (resp.status == 1) {
+                    		obj.replaceWith(resp.content);
+                    	}
+                    },
+                    error: function() {
+                    },
+                    complete: function() {
+                    }
+                });
+    		},
+    		pushDataToFacebook: function(cardId) {
+    		    var self = this;
+    		    var adAccountId = $('select[data-coordinate-group="push-to-facebook['+cardId+']"][data-select-ad-account-fb]').val();
+    		    $.ajax({
+                    url : "{{ path('dashboard_filter_push_to_facebook_v2') }}",
+                    type: 'GET',
+                    dataType: 'json',
+                    data: {
+                        card_id: cardId
+                        , ad_account_id: adAccountId
+                    },
+                    beforeSend: function() {
+                        $('[data-coordinate-group="push-to-facebook['+cardId+']"][data-btn-push-fb]').html('Processing...');
+                    },
+                    success: function(resp) {
+                    	if (resp.error == 1) {
+                    		$('[data-coordinate-group="alert['+cardId+']"][data-alert]')
+                    		.removeClass('hide')
+                    		.find('.alert')
+                            .removeAttr('data-alert-current').attr('data-alert-current','')
+                            .removeClass('alert-warning').addClass('alert-warning');
+                            $('[data-coordinate-group="alert['+cardId+']"][data-alert-msg]').html(resp.content);
+                    	}
+                    	if (resp.error == 0) {
+                    	    self.resetCard(cardId);
+                    	    $('[data-coordinate-group="alert['+cardId+']"][data-alert]')
+                    	    .removeClass('hide')
+                    	    .find('.alert')
+                            .removeAttr('data-alert-current').attr('data-alert-current','')
+                            .removeClass('alert-warning').addClass('alert-success');
+                            $('[data-coordinate-group="alert['+cardId+']"][data-alert-msg]').html("Uploaded to facebook successfully.");
+                    	}
+                    },
+                    error: function() {
+                        $('[data-coordinate-group="push-to-facebook['+cardId+']"][data-btn-push-fb]').html('Push');
+                    },
+                    complete: function() {
+                        $('[data-coordinate-group="push-to-facebook['+cardId+']"][data-btn-push-fb]').html('Push');
+                    }
+                });
+    		},
+    		pushEmailToMC: function(cardId) {
+    		    var self = this;
+    		    var subscriberListId = $('select[data-coordinate-group="push-email-to-mc['+cardId+']"][data-select-subscriber-list-mc]').val();
+    		    $.ajax({
+                    url : "{{ path('dashboard_push_email_to_mc') }}",
+                    type: 'GET',
+                    dataType: 'json',
+                    data: {
+                        card_id: cardId
+                        , subscriber_list_id: subscriberListId
+                    },
+                    beforeSend: function() {
+                        $('[data-coordinate-group="push-email-to-mc['+cardId+']"][data-btn-push-mc]').html('Processing...');
+                    },
+                    success: function(resp) {
+                    	if (resp.error == 1) {
+                    		$('[data-coordinate-group="alert['+cardId+']"][data-alert]').find('.alert')
+                            .removeAttr('data-alert-current').attr('data-alert-current','')
+                            .removeClass('alert-warning').addClass('alert-warning')
+                            .removeClass('hide');
+                            $('[data-coordinate-group="alert['+cardId+']"][data-alert-msg]').html(resp.result);
+                    	}
+                    	if (resp.error == 0) {
+                    	    self.resetCard(cardId);
+                    	    $('[data-coordinate-group="alert['+cardId+']"][data-alert]')
+                            .removeAttr('data-alert-current').attr('data-alert-current','')
+                            .removeClass('alert-warning').addClass('alert-success').removeClass('hide');
+                            $('[data-coordinate-group="alert['+cardId+']"][data-alert-msg]').html("Uploaded email to MailChimp successfully.");
+                    	}
+                    },
+                    error: function() {
+                        $('[data-coordinate-group="push-email-to-mc['+cardId+']"][data-btn-push-mc]').html('Push');
+                    },
+                    complete: function() {
+                        $('[data-coordinate-group="push-email-to-mc['+cardId+']"][data-btn-push-mc]').html('Push');
+                    }
+                });
+    		},
+    		loadListAdAccountFb: function(cardId) {
+    		    var self = this;
+    		    $.ajax({
+                    url : "{{ path('dashboard_filter_load_list_ad_account_fb_v2') }}",
+                    type: 'GET',
+                    dataType: 'json',
+                    beforeSend: function() {
+
+                    },
+                    success: function(resp) {
+                        if (resp.error == 1) {
+                            $('[data-coordinate-group="alert['+cardId+']"][data-alert]')
+                            .removeAttr('data-alert-current').attr('data-alert-current','').removeClass('hide');
+                            $('[data-coordinate-group="alert['+cardId+']"][data-alert-msg]').html(resp.content);
+                    	} else if (resp.error == 0 ) {
+                    	    var html = '';
+                    		$.each(resp.content, function(i, adAccountId) {
+                    		    html += '<option value="'+adAccountId+'">'+adAccountId+'</option>';
+                    		});
+                    		$('[data-coordinate-group="export-csv['+cardId+']"][data-btn-export-csv]').removeClass('disabled').addClass('disabled');
+                    		$('[data-coordinate-group="push-to-facebook['+cardId+']"][data-select-ad-account-fb]').html(html);
+                    		$('[data-coordinate-group="push-to-facebook['+cardId+']"][data-select-ad-account-fb-group]').removeClass('hide');
+                    	}
+                    },
+                    error: function() {
+                    },
+                    complete: function() {
+                    }
+                });
+    		},
+    		loadSubscriberListMC: function(cardId) {
+    		    var self = this;
+    		    $.ajax({
+                    url : "{{ path('dashboard_push_email_to_mc_load_subscriber_list') }}",
+                    type: 'GET',
+                    dataType: 'json',
+                    beforeSend: function() {
+
+                    },
+                    success: function(resp) {
+                        if (resp.error == 1) {
+                            $('[data-coordinate-group="alert['+cardId+']"][data-alert]')
+                            .removeAttr('data-alert-current').attr('data-alert-current','').removeClass('hide');
+                            $('[data-coordinate-group="alert['+cardId+']"][data-alert-msg]').html(resp.result);
+                    	} else if (resp.error == 0 ) {
+                    	    var html = '';
+                    		$.each(resp.result, function(subscriberListId, subscriberListName) {
+                    		    html += '<option value="'+subscriberListId+'">'+subscriberListName+'</option>';
+                    		});
+                    		$('[data-coordinate-group="export-csv['+cardId+']"][data-btn-export-csv]').removeClass('disabled').addClass('disabled');
+                    		$('[data-coordinate-group="push-to-facebook['+cardId+']"][data-btn-push-to-facebook]').removeClass('disabled').addClass('disabled');
+                    		$('[data-coordinate-group="push-email-to-mc['+cardId+']"][data-select-subscriber-list-mc]').html(html);
+                    		$('[data-coordinate-group="push-email-to-mc['+cardId+']"][data-select-subscriber-list-mc-group]').removeClass('hide');
+                    	}
+                    },
+                    error: function() {
+                    },
+                    complete: function() {
+                    }
+                });
+    		},
+    		fireEventCannel: function() {
+    	        var self = this;
+    	        $(document).on('click', '[data-btn-cancel]', function() {
+    				var cardnumber = $(this).data('cardnumber');
+    				var cardId = $(this).data('id');
+    				self.resetCard(cardId);
+    			});
+    		}
+    	};
+    	$(document).ready(function() {
+            AudienceDeck.init();
+        });
+    </script>
+
+{% endblock %}

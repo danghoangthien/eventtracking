@@ -1,0 +1,665 @@
+<?php
+namespace Hyper\EventBundle\Document;
+
+use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
+use Hyper\EventBundle\Annotations as HyperEvent;
+/**
+ * @MongoDB\Document(
+ *     db="bklp",
+ *     collection="persons"
+ * )
+ */
+class Person
+{
+    /**
+     * @MongoDB\Id
+     */
+    protected $id;
+    
+    /**
+     * @MongoDB\Field(name="hypid",type="string")
+     */
+    protected $hypid;
+    /**
+     * @MongoDB\Field(name="app_id",type="string")
+     * @HyperEvent\CsvMeta(field="App ID")
+     */
+    protected $appId;
+
+    /**
+     * @MongoDB\String
+     */
+    protected $platform;
+    /**
+     * @MongoDB\Field(name="click_type",type="string")
+     */
+    protected $clickTime;
+    /**
+     * @MongoDB\Field(name="install_time",type="string")
+     */
+    protected $installTime;
+    /**
+     * @MongoDB\Field(name="country_code",type="string")
+     */
+    protected $countryCode;
+    /**
+     * @MongoDB\Field(name="city",type="string")
+     */
+    protected $city;
+    /**
+     * @MongoDB\Field(name="ip",type="string")operato
+     */
+    protected $ip;
+    /**
+     * @MongoDB\Field(name="wifi",type="string")
+     */
+    protected $wifi;
+    /**
+     * @MongoDB\Field(name="language",type="string")
+     */
+    protected $language;
+    /**
+     * @MongoDB\Field(name="operator",type="string")
+     */
+    protected $operator;
+    /**
+     * @MongoDB\Field(name="advertising_id",type="string")
+     */
+    protected $advertisingId;
+    /**
+     *@MongoDB\Field(name="android_id",type="string")
+     */
+    protected $androidId;
+    /**
+     * @MongoDB\Field(name="imei",type="string")
+     */
+    protected $imei;
+    /**
+     * @MongoDB\Field(name="idfa",type="string")
+     */
+    protected $idfa;
+    /**
+     * @MongoDB\Field(name="idfa",type="string")
+     */
+    protected $idfv;
+    /**
+     * @MongoDB\Field(name="idfv",type="string")
+     */
+    protected $mac;
+    /**
+     * @MongoDB\Field(name="device_brand",type="string")
+     */
+    protected $deviceBrand;
+    /**
+     * @MongoDB\Field(name="device_model",type="string")
+     */
+    protected $deviceModel;
+    /**
+     * @MongoDB\Field(name="device_name",type="string")
+     */
+    protected $deviceName;
+    /**
+     * @MongoDB\Field(name="device_type",type="string")
+     */
+    protected $deviceType;
+    /**
+     * @MongoDB\Field(name="os_version",type="string")
+     */
+    protected $osVersion;
+    /**
+     * @MongoDB\Field(name="app_version",type="string")
+     */
+    protected $appVersion;
+    /**
+     * @MongoDB\Field(name="person_name",type="string")
+     */
+    protected $personName;
+    /**
+     * @MongoDB\Field(name="person_email",type="string")
+     */
+    protected $personEmail;
+    /**
+     * @MongoDB\Field(name="facebook_id",type="string")
+     */
+    protected $facebookId;
+    
+
+
+    /**
+     * Get id
+     *
+     * @return id $id
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set hypid
+     *
+     * @param string $hypid
+     * @return self
+     */
+    public function setHypid($hypid)
+    {
+        $this->hypid = $hypid;
+        return $this;
+    }
+
+    /**
+     * Get hypid
+     *
+     * @return string $hypid
+     */
+    public function getHypid()
+    {
+        return $this->hypid;
+    }
+
+    /**
+     * Set appId
+     *
+     * @param string $appId
+     * @return self
+     */
+    public function setAppId($appId)
+    {
+        $this->appId = $appId;
+        return $this;
+    }
+
+    /**
+     * Get appId
+     *
+     * @return string $appId
+     */
+    public function getAppId()
+    {
+        return $this->appId;
+    }
+
+    /**
+     * Set platform
+     *
+     * @param string $platform
+     * @return self
+     */
+    public function setPlatform($platform)
+    {
+        $this->platform = $platform;
+        return $this;
+    }
+
+    /**
+     * Get platform
+     *
+     * @return string $platform
+     */
+    public function getPlatform()
+    {
+        return $this->platform;
+    }
+
+    /**
+     * Set clickTime
+     *
+     * @param string $clickTime
+     * @return self
+     */
+    public function setClickTime($clickTime)
+    {
+        $this->clickTime = $clickTime;
+        return $this;
+    }
+
+    /**
+     * Get clickTime
+     *
+     * @return string $clickTime
+     */
+    public function getClickTime()
+    {
+        return $this->clickTime;
+    }
+
+    /**
+     * Set countryCode
+     *
+     * @param string $countryCode
+     * @return self
+     */
+    public function setCountryCode($countryCode)
+    {
+        $this->countryCode = $countryCode;
+        return $this;
+    }
+
+    /**
+     * Get countryCode
+     *
+     * @return string $countryCode
+     */
+    public function getCountryCode()
+    {
+        return $this->countryCode;
+    }
+
+    /**
+     * Set city
+     *
+     * @param string $city
+     * @return self
+     */
+    public function setCity($city)
+    {
+        $this->city = $city;
+        return $this;
+    }
+
+    /**
+     * Get city
+     *
+     * @return string $city
+     */
+    public function getCity()
+    {
+        return $this->city;
+    }
+
+    /**
+     * Set ip
+     *
+     * @param string $ip
+     * @return self
+     */
+    public function setIp($ip)
+    {
+        $this->ip = $ip;
+        return $this;
+    }
+
+    /**
+     * Get ip
+     *
+     * @return string $ip
+     */
+    public function getIp()
+    {
+        return $this->ip;
+    }
+
+    /**
+     * Set wifi
+     *
+     * @param string $wifi
+     * @return self
+     */
+    public function setWifi($wifi)
+    {
+        $this->wifi = $wifi;
+        return $this;
+    }
+
+    /**
+     * Get wifi
+     *
+     * @return string $wifi
+     */
+    public function getWifi()
+    {
+        return $this->wifi;
+    }
+
+    /**
+     * Set language
+     *
+     * @param string $language
+     * @return self
+     */
+    public function setLanguage($language)
+    {
+        $this->language = $language;
+        return $this;
+    }
+
+    /**
+     * Get language
+     *
+     * @return string $language
+     */
+    public function getLanguage()
+    {
+        return $this->language;
+    }
+
+    /**
+     * Set operator
+     *
+     * @param string $operator
+     * @return self
+     */
+    public function setOperator($operator)
+    {
+        $this->operator = $operator;
+        return $this;
+    }
+
+    /**
+     * Get operator
+     *
+     * @return string $operator
+     */
+    public function getOperator()
+    {
+        return $this->operator;
+    }
+
+    /**
+     * Set customerUserId
+     *
+     * @param string $customerUserId
+     * @return self
+     */
+    public function setCustomerUserId($customerUserId)
+    {
+        $this->customerUserId = $customerUserId;
+        return $this;
+    }
+
+    /**
+     * Get customerUserId
+     *
+     * @return string $customerUserId
+     */
+    public function getCustomerUserId()
+    {
+        return $this->customerUserId;
+    }
+
+    /**
+     * Set advertisingId
+     *
+     * @param string $advertisingId
+     * @return self
+     */
+    public function setAdvertisingId($advertisingId)
+    {
+        $this->advertisingId = $advertisingId;
+        return $this;
+    }
+
+    /**
+     * Get advertisingId
+     *
+     * @return string $advertisingId
+     */
+    public function getAdvertisingId()
+    {
+        return $this->advertisingId;
+    }
+
+    /**
+     * Set androidId
+     *
+     * @param string $androidId
+     * @return self
+     */
+    public function setAndroidId($androidId)
+    {
+        $this->androidId = $androidId;
+        return $this;
+    }
+
+    /**
+     * Get androidId
+     *
+     * @return string $androidId
+     */
+    public function getAndroidId()
+    {
+        return $this->androidId;
+    }
+
+    /**
+     * Set imei
+     *
+     * @param string $imei
+     * @return self
+     */
+    public function setImei($imei)
+    {
+        $this->imei = $imei;
+        return $this;
+    }
+
+    /**
+     * Get imei
+     *
+     * @return string $imei
+     */
+    public function getImei()
+    {
+        return $this->imei;
+    }
+
+    /**
+     * Set idfa
+     *
+     * @param string $idfa
+     * @return self
+     */
+    public function setIdfa($idfa)
+    {
+        $this->idfa = $idfa;
+        return $this;
+    }
+
+    /**
+     * Get idfa
+     *
+     * @return string $idfa
+     */
+    public function getIdfa()
+    {
+        return $this->idfa;
+    }
+    
+    /**
+     * Set idfv
+     *
+     * @param string $idfv
+     * @return self
+     */
+    public function setIdfv($idfv)
+    {
+        $this->idfv = $idfv;
+        return $this;
+    }
+
+    /**
+     * Get idfv
+     *
+     * @return string $idfv
+     */
+    public function getIdfv()
+    {
+        return $this->idfv;
+    }
+
+    /**
+     * Set mac
+     *
+     * @param string $mac
+     * @return self
+     */
+    public function setMac($mac)
+    {
+        $this->mac = $mac;
+        return $this;
+    }
+
+    /**
+     * Get mac
+     *
+     * @return string $mac
+     */
+    public function getMac()
+    {
+        return $this->mac;
+    }
+
+    /**
+     * Set deviceBrand
+     *
+     * @param string $deviceBrand
+     * @return self
+     */
+    public function setDeviceBrand($deviceBrand)
+    {
+        $this->deviceBrand = $deviceBrand;
+        return $this;
+    }
+
+    /**
+     * Get deviceBrand
+     *
+     * @return string $deviceBrand
+     */
+    public function getDeviceBrand()
+    {
+        return $this->deviceBrand;
+    }
+
+    /**
+     * Set deviceModel
+     *
+     * @param string $deviceModel
+     * @return self
+     */
+    public function setDeviceModel($deviceModel)
+    {
+        $this->deviceModel = $deviceModel;
+        return $this;
+    }
+
+    /**
+     * Get deviceModel
+     *
+     * @return string $deviceModel
+     */
+    public function getDeviceModel()
+    {
+        return $this->deviceModel;
+    }
+
+    /**
+     * Set deviceName
+     *
+     * @param string $deviceName
+     * @return self
+     */
+    public function setDeviceName($deviceName)
+    {
+        $this->deviceName = $deviceName;
+        return $this;
+    }
+
+    /**
+     * Get deviceName
+     *
+     * @return string $deviceName
+     */
+    public function getDeviceName()
+    {
+        return $this->deviceName;
+    }
+
+    /**
+     * Set deviceType
+     *
+     * @param string $deviceType
+     * @return self
+     */
+    public function setDeviceType($deviceType)
+    {
+        $this->deviceType = $deviceType;
+        return $this;
+    }
+
+    /**
+     * Get deviceType
+     *
+     * @return string $deviceType
+     */
+    public function getDeviceType()
+    {
+        return $this->deviceType;
+    }
+
+    /**
+     * Set osVersion
+     *
+     * @param string $osVersion
+     * @return self
+     */
+    public function setOsVersion($osVersion)
+    {
+        $this->osVersion = $osVersion;
+        return $this;
+    }
+
+    /**
+     * Get osVersion
+     *
+     * @return string $osVersion
+     */
+    public function getOsVersion()
+    {
+        return $this->osVersion;
+    }
+
+    /**
+     * Set appVersion
+     *
+     * @param string $appVersion
+     * @return self
+     */
+    public function setAppVersion($appVersion)
+    {
+        $this->appVersion = $appVersion;
+        return $this;
+    }
+
+    /**
+     * Get appVersion
+     *
+     * @return string $appVersion
+     */
+    public function getAppVersion()
+    {
+        return $this->appVersion;
+    }
+
+    /**
+     * Set installTime
+     *
+     * @param string $installTime
+     * @return self
+     */
+    public function setInstallTime($installTime)
+    {
+        $this->installTime = $installTime;
+        return $this;
+    }
+
+    /**
+     * Get installTime
+     *
+     * @return string $installTime
+     */
+    public function getInstallTime()
+    {
+        return $this->installTime;
+    }
+}

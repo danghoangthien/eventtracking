@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Hypergrowth | Admin</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.5 -->
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="dist/css/style.css">
+    <link rel="stylesheet" href="dist/css/animate.css">
+	<link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+	<link rel="stylesheet" href="plugins/bee3d/bee3D.min.css">
+	<link rel="stylesheet" href="plugins/bee3d/bee_style.css">
+	<!-- FooTable -->
+    <link href="plugins/footable/footable.core.css" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div id="wrapper">
+
+		<!-- sidebar -->
+		<nav class="navbar-default navbar-static-side" role="navigation">
+			<div class="sidebar-collapse">
+				<ul class="nav metismenu" id="side-menu" style="display: block;">
+					<li class="nav-header">
+						<div class="dropdown profile-element"> 
+							<div class="user-panel">
+								<span class="image">
+									<img alt="image" class="img-circle" src="img/angiedang.jpg">
+								</span>
+							</div>
+							<a data-toggle="dropdown" class="dropdown-toggle" href="#">
+								<span class="clear"> 
+									<span class="block m-t-xs"> 
+										<strong class="font-bold">Angie Dang</strong>
+									 </span> 
+									 <small>Member since Jun. 2015</small>
+									 <span class="text-muted text-xs block">Bukalapak Client 
+										<b class="caret"></b>
+									</span> 
+								</span> 
+							</a>
+							<ul class="dropdown-menu animated fadeInRight m-t-xs">
+								<li><a href="#">Edit Profile</a></li>
+								<li><a href="#">Sign Out</a></li>
+							</ul>
+						</div>
+						<div class="logo-element">
+							<span class="logo-mini"><img src="img/hypergrowth_small_transparent_16x35.png"></span>
+						</div>
+					</li>
+					<li>
+						<a href="md.html">
+							<i class="fa fa-bar-chart-o"></i> <span>Main Dashboard</span>
+						</a>
+					</li>
+					<li>
+						<a href="ai.html">
+							<i class="fa fa-star"></i> <span>Audience Interest</span>
+						</a>
+					</li>
+					<li>
+						<a href="bs.html">
+							<i class="fa fa-star"></i> <span>Audience Card Creator</span>
+						</a>
+					</li>
+					<li class="active">
+						<a href="ad.html">
+							<i class="fa fa-group"></i> <span>Audience Deck</span>
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<i class="fa fa-child"></i>
+							<span class="nav-label">Audience Spotlight</span> 
+							<span class="fa arrow"></span>
+						</a>
+						<ul class="nav nav-second-level collapse">
+							<li class="active"><a href="uj.html">User Journey</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="#">
+							<i class="fa fa-comments-o"></i> 
+							<span class="nav-label">Audience Connect</span> 
+							<span class="fa arrow"></span>
+						</a>
+						<ul class="nav nav-second-level collapse">
+							<li><a href="pn.html">Push Notification</a></li>
+							<li><a href="pb.html">Promo Banner</a></li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</nav>
+		<!-- /.sidebar -->
+
+		<!-- Content Wrapper. Contains page content -->
+		<div id="page-wrapper" class="content-wrapper">
+			
+			<!--top bar-->
+			<div class="row border-bottom">
+				<nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+					<div class="navbar-header">
+						<a class="navbar-minimalize  minimalize-styl-2 btn btn-default" href="#"><i class="fa fa-bars"></i> </a>
+					</div>
+					<ul class="nav navbar-top-links navbar-right">
+						<li>
+							<span class="m-r-sm text-muted welcome-message">Welcome to Bukalapak Audience Kit</span>
+						</li>
+						<li>
+							<a href="index.html">
+								<i class="fa fa-sign-out"></i> Log out
+							</a>
+						</li>
+					</ul>
+				</nav>
+			</div>
+			<!--End top bar-->
+			
+			<!-- Main Content -->
+			<div class="wrapper wrapper-content animated fadeInRight">
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="ibox float-e-margins">
+							<div class="ibox-title">
+								<h5>Audience Deck <small> (Your set of user segmentation)</small></h5>
+							</div>
+							<div class="ibox-content">
+								<div class="row">
+									<div class="col-sm-8 b-r">
+										<article class="card-deck">
+											<section class="bee3D--slide"> 
+												<div class="bee3D--inner">
+													<div class="row" style="padding-bottom: 5px;font-size:2rem">
+														<div class="col-sm-6 text-left card-platform"><i class="fa fa-android"></i></div>
+														<div class="col-sm-6 text-right card-country">TH</div>
+													</div>
+													<div style="max-height:110px;height:110px;text-align:center">
+														<h4>TH Promo Hunter</h4>
+														<div class="card-des">Users who only take action when there is promo</div>
+													</div>
+													<div style="text-align:center;font-size:2rem">
+														<a style="color:#ffffff"><i class="fa fa-edit"></i></a>
+														<a style="color:#ffffff"><i class="fa fa-trash"></i></a>
+													</div>
+												</div>
+											</section>
+											<section class="bee3D--slide">
+												<div class="bee3D--inner">
+													<div class="row" style="padding-bottom: 5px;font-size:2rem">
+														<div class="col-sm-6 text-left card-platform"><i class="fa fa-apple"></i></div>
+														<div class="col-sm-6 text-right card-country">SG</div>
+													</div>
+													<div style="max-height:110px;height:110px;text-align:center">
+														<h4>SG Music Lover</h4>
+														<div class="card-des">Users who buy music gadgets using Android devices</div>
+													</div>
+													<div style="text-align:center;font-size:2rem">
+														<a style="color:#ffffff"><i class="fa fa-edit"></i></a>
+														<a style="color:#ffffff"><i class="fa fa-trash"></i></a>
+													</div>
+												</div>
+											</section>
+											<section class="bee3D--slide">
+												<div class="bee3D--inner">
+													<div class="row" style="padding-bottom: 5px;font-size:2rem">
+														<div class="col-sm-6 text-left card-platform"><i class="fa fa-apple"></i></div>
+														<div class="col-sm-6 text-right card-country">TH</div>
+													</div>
+													<div style="max-height:110px;height:110px;text-align:center">
+														<h4>TH Wanderlust</h4>
+														<div class="card-des">Thai users who recently travel</div>
+													</div>
+													<div style="text-align:center;font-size:2rem">
+														<a style="color:#ffffff"><i class="fa fa-edit"></i></a>
+														<a style="color:#ffffff"><i class="fa fa-trash"></i></a>
+													</div>
+												</div>
+											</section>
+											<section class="bee3D--slide">
+												<div class="bee3D--inner">
+													<div class="row" style="padding-bottom: 5px;font-size:2rem">
+														<div class="col-sm-6 text-left card-platform"><i class="fa fa-apple"></i></div>
+														<div class="col-sm-6 text-right card-country">SG</div>
+													</div>
+													<div style="max-height:110px;height:110px;text-align:center">
+														<h4>SG White Collar</h4>
+														<div class="card-des">Singapore business users who interested in ebooks</div>
+													</div>
+													<div style="text-align:center;font-size:2rem">
+														<a style="color:#ffffff"><i class="fa fa-edit"></i></a>
+														<a style="color:#ffffff"><i class="fa fa-trash"></i></a>
+													</div>
+												</div>
+											</section>
+											<section class="bee3D--slide">
+												<div class="bee3D--inner">
+													<div class="row" style="padding-bottom: 5px;font-size:2rem">
+														<div class="col-sm-6 text-left card-platform"><i class="fa fa-android"></i></div>
+														<div class="col-sm-6 text-right card-country">US</div>
+													</div>
+													<div style="max-height:110px;height:110px;text-align:center">
+														<h4>US Nerds</h4>
+														<div class="card-des">US Users who spend more than 300$ on computer accessories</div>
+													</div>
+													<div style="text-align:center;font-size:2rem">
+														<a style="color:#ffffff"><i class="fa fa-edit"></i></a>
+														<a style="color:#ffffff"><i class="fa fa-trash"></i></a>
+													</div>
+												</div>
+											</section>
+											<section class="bee3D--slide">
+												<div class="bee3D--inner">
+													<div class="row" style="padding-bottom: 5px;font-size:2rem">
+														<div class="col-sm-6 text-left card-platform"><i class="fa fa-android"></i></div>
+														<div class="col-sm-6 text-right card-country">MY</div>
+													</div>
+													<div style="max-height:110px;height:110px;text-align:center">
+														<h4>Malaysian Gamers</h4>
+														<div class="card-des">Game players who made more than 40 transactions per month</div>
+													</div>
+													<div style="text-align:center;font-size:2rem">
+														<a style="color:#ffffff"><i class="fa fa-edit"></i></a>
+														<a style="color:#ffffff"><i class="fa fa-trash"></i></a>
+													</div>
+												</div>
+											</section>
+											<section class="bee3D--slide">
+												<div class="bee3D--inner">
+													<div class="row" style="padding-bottom: 5px;font-size:2rem">
+														<div class="col-sm-6 text-left card-platform"><i class="fa fa-android"></i></div>
+														<div class="col-sm-6 text-right card-country">VN</div>
+													</div>
+													<div style="max-height:110px;height:110px;text-align:center">
+														<h4>VN Freeloader</h4>
+														<div class="card-des">High Retention Players with no purchase</div>
+													</div>
+													<div style="text-align:center;font-size:2rem">
+														<a style="color:#ffffff"><i class="fa fa-edit"></i></a>
+														<a style="color:#ffffff"><i class="fa fa-trash"></i></a>
+													</div>
+												</div>
+											</section>
+											<section class="bee3D--slide">
+												<div class="bee3D--inner">
+													<div class="row" style="padding-bottom: 5px;font-size:2rem">
+														<div class="col-sm-6 text-left card-platform"><i class="fa fa-apple"></i></div>
+														<div class="col-sm-6 text-right card-country">PH</div>
+													</div>
+													<div style="max-height:110px;height:110px;text-align:center">
+														<h4>PH Gadgets</h4>
+														<div class="card-des">User who recently search for Phone Accessories</div>
+													</div>
+													<div style="text-align:center;font-size:2rem">
+														<a style="color:#ffffff"><i class="fa fa-edit"></i></a>
+														<a style="color:#ffffff"><i class="fa fa-trash"></i></a>
+													</div>
+												</div>
+											</section>
+											<section class="bee3D--slide">
+												<div class="bee3D--inner">
+													<div class="row" style="padding-bottom: 5px;font-size:2rem">
+														<div class="col-sm-6 text-left card-platform"><i class="fa fa-apple"></i></div>
+														<div class="col-sm-6 text-right card-country">UK</div>
+													</div>
+													<div style="max-height:110px;height:110px;text-align:center">
+														<h4>UK Highrollers</h4>
+														<div class="card-des">High spenders on casino apps</div>
+													</div>
+													<div style="text-align:center;font-size:2rem">
+														<a style="color:#ffffff"><i class="fa fa-edit"></i></a>
+														<a style="color:#ffffff"><i class="fa fa-trash"></i></a>
+													</div>
+												</div>
+											</section>
+											<section class="bee3D--slide">
+												<div class="bee3D--inner">
+													<div class="row" style="padding-bottom: 5px;font-size:2rem">
+														<div class="col-sm-6 text-left card-platform"><i class="fa fa-android"></i></div>
+														<div class="col-sm-6 text-right card-country">CA</div>
+													</div>
+													<div style="max-height:110px;height:110px;text-align:center">
+														<h4>CA Campers</h4>
+														<div class="card-des">Users who recently buying camping products</div>
+													</div>
+													<div style="text-align:center;font-size:2rem">
+														<a style="color:#ffffff"><i class="fa fa-edit"></i></a>
+														<a style="color:#ffffff"><i class="fa fa-trash"></i></a>
+													</div>
+												</div>
+											</section>
+											
+											<!-- Navigation Arrows -->
+											<span class="bee3D--nav bee3D--nav__prev"></span>
+											<span class="bee3D--nav bee3D--nav__next"></span>
+										</article>
+									</div>
+									<div class="col-sm-4">
+										<h4>Selected Audience Card</h4>
+										<div style="text-align:center;font-weight:bold;color:#2F4050">
+										<div id="carddisplay"></div>
+									</div>
+									</div>
+								</div><!--End 1st row-->
+								<div class="row buffer-top">
+									<div class="col-lg-8">
+										<!--
+											<input type="text" class="form-control input-sm m-b-xs" id="filter" placeholder="Search in table">
+									   -->
+										<table class="footable table table-stripped" data-page-size="8" data-filter=#filter>
+											<thead>
+											<tr>
+												<th>Event Date</th>
+												<th>User ID</th>
+											</tr>
+											</thead>
+											<tbody>
+											<tr class="gradeA">
+												<td>2016-02-19 00:58:34</td>
+												<td>
+													<a href="#" data-toggle="modal" data-target="#10658e9347afa82be55bdcf1ae35556b">
+													10658e9347afa82be55bdcf1ae35556b</a>
+												</td>
+											</tr>
+											<tr class="gradeA">
+												<td>2016-02-19 00:56:56</td>
+												<td>
+													<a href="#" data-toggle="modal" data-target="#491fd8d51b67ade6d39f33271c6b4e5f">
+													491fd8d51b67ade6d39f33271c6b4e5f</a>
+												</td>
+											</tr>
+
+											<tr class="gradeA">
+												<td>2016-02-19 00:56:24</td>
+												<td>
+													<a href="#" data-toggle="modal" data-target="#3b1396d79357f1ef0afb76b461d3bec9">3b1396d79357f1ef0afb76b461d3bec9</a>
+												</td>
+											</tr>
+											<tr class="gradeA">
+												<td>2016-02-19 00:52:08</td>
+												<td>
+													<a href="#" data-toggle="modal" data-target="#684bb6ca32fb359a31105155b7438cb">684bb6ca32fb359a31105155b7438cb</a>
+												</td>
+											</tr>
+											<tr class="gradeA">
+												<td>2016-02-19 00:51:25</td>
+												<td>
+													<a href="#" data-toggle="modal" data-target="#29c8cbd47070ec778581f8ef18c223ca">29c8cbd47070ec778581f8ef18c223ca</a
+												></td>
+											</tr>
+											<tr class="gradeA">
+												<td>2016-02-19 00:48:42</td>
+												<td>
+													<a href="#"  data-toggle="modal" data-target="#c6feb9f059c8162caba9ad6c0672be39">c6feb9f059c8162caba9ad6c0672be39</a>
+												</td>
+											</tr>
+											</tbody>
+											<tfoot>
+											<tr>
+												<td colspan="5">
+													<ul class="pagination pull-right"></ul>
+												</td>
+											</tr>
+											</tfoot>
+										</table>
+									</div>
+									<div class="col-lg-2">
+										<div class="ibox">
+											<div class="ibox-content product-box">
+												<div class="product-desc">
+													<a href="#" class="product-name">Connect to Audience</a>
+												</div>
+												<div class="product-imitation">
+													<img src="img/audience-connect.jpg">
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-lg-2">
+										<div class="ibox">
+											<div class="ibox-content product-box">
+												<div class="product-desc">
+													<a href="#" class="product-name">Export to CSV</a>
+												</div>
+												<div class="product-imitation">
+													<img src="img/csv-export.jpg">
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-lg-2">
+										<div class="ibox">
+											<div class="ibox-content product-box">
+												<div class="product-desc">
+													<a href="#" class="product-name">Push to Facebook</a>
+												</div>
+												<div class="product-imitation">
+													<img src="img/fb-custom-audience.jpg">
+												</div>
+											</div>
+										</div>
+									</div>
+									
+									<div class="col-lg-2">
+										<div class="ibox">
+											<div class="ibox-content product-box">
+												<div class="product-desc">
+													<a href="#" class="product-name">Push to DSPs</a>
+												</div>
+												<div class="product-imitation">
+													<img src="img/coming-soon.jpg">
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>		
+				
+			</div>
+			<!-- END Main Content -->
+			
+			<div class="footer">
+				<div class="pull-right">
+					<b>Version</b> 1.1.0
+				</div>
+				<div>
+					<strong>Copyright &copy; 2016 <a href="http://www.hypergrowth.co"> HyperGrowth Pte Ltd</a>.</strong> All rights reserved.
+				</div>
+			</div>
+			
+		</div><!-- /.content-wrapper -->
+    </div><!-- ./wrapper -->
+
+    <!-- jQuery 2.1.4 -->
+    <script src="plugins/jQuery/jQuery-2.1.4.min.js"></script>
+    <!-- jQuery UI 1.11.4 -->
+    <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+    <script>
+      $.widget.bridge('uibutton', $.ui.button);
+    </script>
+    <!-- Bootstrap 3.3.5 -->
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <!-- Slimscroll -->
+    <script src="plugins/slimScroll/jquery.slimscroll.min.js"></script>
+    <!-- FastClick -->
+    <script src="plugins/fastclick/fastclick.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="dist/js/inspinia.js"></script>
+	<script src="dist/js/app.min.js"></script>
+	<!-- Metis Menu -->
+    <script src="plugins/metisMenu/jquery.metisMenu.js"></script>
+    
+	<script src="plugins/bee3d/classie.js"></script>
+	<script src="plugins/bee3d/bee3D.js"></script>
+	<!-- FooTable -->
+    <script src="plugins/footable/footable.all.min.js"></script>
+
+	<script>
+		var element = document.querySelector('.card-deck');
+
+		var slider = new Bee3D(element, {
+		  effect: 'coverflow',
+		  navigation: {
+			enabled: true
+		  },
+		  loop: {
+			enabled: true,
+			continuous: true
+		  }
+		});
+		
+		$(document).ready(function() {
+
+            $('.footable').footable();
+			
+			
+			var original_cardcontent = 
+				'<span style=\"font-size:3.5rem\">'+
+					$('.bee3D--slide__active .bee3D--inner h4').text()+
+				'</span><p>'+
+					$('.bee3D--slide__active .bee3D--inner .card-des').text()+
+				'</p>'+
+				'<div style=\"text-align:left;\">'+
+					'<p>Platform: '+$('.bee3D--slide__active .bee3D--inner .card-platform').html()+
+					'</p>'+
+					'<p>Country: '+$('.bee3D--slide__active .bee3D--inner .card-country').text()+
+					'<p>Audience amount: 1,294,312 users'+
+				'</div>';
+				
+			$( '#carddisplay').append(original_cardcontent);
+			$('.bee3D--nav').click(function (){
+				var cardcontent = 
+					'<span style=\"font-size:3.5rem\">'+
+						$('.bee3D--slide__active .bee3D--inner h4').text()+
+					'</span><p>'+
+						$('.bee3D--slide__active .bee3D--inner .card-des').text()+
+					'</p>'+
+					'<div style=\"text-align:left;\">'+
+						'<p>Platform: '+$('.bee3D--slide__active .bee3D--inner .card-platform').html()+
+						'</p>'+
+						'<p>Country: '+$('.bee3D--slide__active .bee3D--inner .card-country').text()+
+						'<p>Audience amount: 1,294,312 users'+
+					'</div>';
+				$( "#carddisplay" ).empty();
+				$( '#carddisplay').append(cardcontent);
+			})
+
+        });
+	</script>
+	
+  </body>
+</html>

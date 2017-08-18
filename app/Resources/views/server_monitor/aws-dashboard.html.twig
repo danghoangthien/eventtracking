@@ -1,0 +1,30 @@
+{% extends 'layout_ak/base.html.twig' %}
+{% block sub_head_title %}Admin Dashboard - Security Monitor{% endblock %}
+{% block body %}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row" id="main">
+    {#<form method="post" enctype="multipart/form-data" role="form" id="form1" name="form1" action="http://52.24.154.151/aws-dashboard.html" >#}
+        <iframe src="http://dev.audiencekit.hypergrowth.co/aws-dashboard.html"></iframe>
+    {#</form>#}
+    </div>
+</div>
+{% endblock %}
+
+{% block stylesheets_inline %}
+    <style>
+        iframe
+        { 
+            width: 100%; 
+            body{ overflow: hidden !important; }
+        }
+    </style>
+{% endblock %}
+
+{% block javascript_inline %}
+    <script>
+        $(document).ready(function()
+        {
+             $("iframe").css("height",$(window).height());
+        });
+    </script>
+{% endblock %}

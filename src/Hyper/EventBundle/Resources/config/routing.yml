@@ -1,0 +1,555 @@
+hyper_event_index:
+    path:     /
+    defaults: { _controller:  HyperEventBundle:Dashboard/Dashboard:landing }
+hyper_event_homepage:
+    path:     /event/postback
+    defaults: { _controller: HyperEventBundle:Default:index }
+hyper_event_v4:
+    path:     /event/postback/v4
+    defaults: { _controller: hyper_event.storage_controller_v4:indexAction }
+hyper_event_v4_provider:
+    path:     /event/postback/v4/provider/{provider}
+    defaults: { _controller: hyper_event.storage_controller_v4:indexAction, provider:null }
+
+# CSV Upload Controller
+# hyper_event_csvupload:
+#     path:     /event/csvupload
+#     defaults: { _controller: hyper_event.csv_upload_controller:indexAction }
+
+# RedShift Table Data Display
+hyper_event_displayactiondata:
+    path:     /event/displayactiondata
+    defaults: { _controller: hyper_event.display_action_data_controller:indexAction }
+hyper_event_exportactiondata:
+    path:     /event/exportactiondata
+    defaults: { _controller: hyper_event.export_action_data_controller:indexAction }
+
+# Dashboard preset filter
+dashboard_filter_showlist:
+    path:   /dashboard/filter/list/{page}
+    defaults: { _controller: dashboard_filter_controller:showListAction,page:1 }
+dashboard_filter_showadd:
+    path:   /dashboard/filter/add
+    defaults: { _controller: dashboard_filter_controller:showAddAction }
+dashboard_filter_executeadd:
+    path:   /dashboard/filter/execute/add
+    defaults: { _controller: dashboard_filter_controller:executeAddAction }
+dashboard_filter_estimate:
+    path:   /dashboard/filter/estimate
+    defaults: { _controller: dashboard_filter_controller:getEstimationAction }
+dashboard_filter_execute_delete:
+    path:   /dashboard/filter/execute/delete
+    defaults: { _controller: dashboard_filter_controller:executeDeleteAction }
+dashboard_filter_execute_update:
+    path:   /dashboard/filter/update
+    defaults: { _controller: dashboard_filter_controller:executeUpdateAction }
+# Dashboard preset filter V2
+dashboard_filter_showlist_v2:
+    path:   /dashboard/filterV2/list/{page}
+    defaults: { _controller: dashboard_filter_controller_v2:showListAction,page:1 }
+dashboard_filter_audience_deck:
+    path:   /dashboard/audience-deck/{page}
+    defaults: { _controller: dashboard_filter_controller_v2:showListAction,page:1 }
+dashboard_filter_showadd_v2:
+    path:   /dashboard/filterV2/add
+    defaults: { _controller: dashboard_filter_controller_v2:showAddAction }
+dashboard_filter_card_builder:
+    path:   /dashboard/card-builder/{filter_id}
+    defaults: { _controller: dashboard_filter_controller_v2:showAddAction,filter_id:null }
+dashboard_filter_showupdate_v2:
+    path:   /dashboard/filterV2/update/{filter_id}
+    defaults: { _controller: dashboard_filter_controller_v2:showAddAction,filter_id:null }
+
+dashboard_filter_executeadd_v2:
+    path:   /dashboard/filterV2/execute/add
+    defaults: { _controller: dashboard_filter_controller_v2:executeAddActionV2 }
+dashboard_filter_estimate:
+    path:   /dashboard/filterV2/estimate
+    defaults: { _controller: dashboard_filter_controller_v2:getEstimationAction }
+dashboard_filter_execute_delete_v2:
+    path:   /dashboard/filterV2/execute/delete
+    defaults: { _controller: dashboard_filter_controller_v2:executeDeleteAction }
+dashboard_filter_execute_update_v2:
+    path:   /dashboard/filterV2/execute/update
+    defaults: { _controller: dashboard_filter_controller_v2:executeUpdateAction }
+dashboard_filter_export_csv_v2:
+    path:   /dashboard/filterV2/export-csv/
+    defaults: { _controller: dashboard_filter_controller_v2:exportCSVAction }
+dashboard_filter_loadcard_v2:
+    path:   /dashboard/filterV2/load-card/
+    defaults: { _controller: dashboard_filter_controller_v2:loadCardAction }
+dashboard_filter_push_to_facebook_v2:
+    path:   /dashboard/filterV2/push-to-facebook/
+    defaults: { _controller: dashboard_filter_controller_v2:pushToFacebookAction }
+dashboard_filter_callack_oauth_facebook_v2:
+    path:   /dashboard/filterV2/callback-oauth-facebook/
+    defaults: { _controller: dashboard_filter_controller_v2:callbackOauthFacebookAction }
+dashboard_filter_load_list_event_name_by_app_title_v2:
+    path:   /dashboard/filterV2/load-list-event-name-by-app-title/
+    defaults: { _controller: dashboard_filter_controller_v2:loadListEventNameByAppTitleAction }
+dashboard_filter_load_list_ad_account_fb_v2:
+    path:   /dashboard/filterV2/load-list-ad-account-fb/
+    defaults: { _controller: dashboard_filter_controller_v2:loadListAdAccountFbAction }
+
+# Push email to MC
+dashboard_push_email_to_mc:
+    path:   /dashboard/filterV2/push-email-to-mc/
+    defaults:   { _controller: HyperEventBundle:Dashboard/PushEmailToMC/PushEmailToMC:pushEmailToMC }
+dashboard_push_email_to_mc_callback_oauth:
+    path:   /dashboard/filterV2/push-email-to-mc/callback-oauth/
+    defaults:   { _controller: HyperEventBundle:Dashboard/PushEmailToMC/PushEmailToMC:callbackOauth }
+dashboard_push_email_to_mc_load_subscriber_list:
+    path:   /dashboard/filterV2/push-email-to-mc/load-subscriber-list/
+    defaults:   { _controller: HyperEventBundle:Dashboard/PushEmailToMC/PushEmailToMC:loadSubscriberList }
+
+hyper_event_latest:
+    path:     /event/postback/latest
+    defaults: { _controller: hyper_event.storage_controller_v4:indexAction }
+hyper_event_latest_provider:
+    path:     /event/postback/latest/provider/{provider}
+    defaults: { _controller: hyper_event.storage_controller_v4:indexAction, provider:null }
+hyper_event_latest_provider_legacy_dev:
+    path:     /projects/event_tracking/web/app_dev.php/event/postback/latest/provider/1
+    defaults: { _controller: hyper_event.storage_controller_v4:indexAction, provider:1 }
+hyper_event_latest_provider_legacy_prod:
+    path:     /projects/event_tracking/web/app.php/event/postback/latest/provider/1
+    defaults: { _controller: hyper_event.storage_controller_v4:indexAction, provider:1 }
+
+#Paul Entries
+dashboard_auth_create:
+    path:     /dashboard/auth/index
+    defaults: { _controller:  auth.controller:indexAction }
+
+dashboard_save_auth:
+    path:     /dashboard/auth/save_auth
+    defaults: { _controller:  auth.controller:saveAuthAction }
+
+#dashboard_login:
+#    path:     /dashboard/auth/login
+#    defaults: { _controller:  auth.controller:loginAction }
+
+dashboard_validate_login:
+    path:     /dashboard/auth/validate_login
+    defaults: { _controller:  auth.controller:validateLoginAction }
+
+dashboard_logout:
+    path:     /dashboard/auth/logout
+    defaults: { _controller:  auth.controller:logoutAction }
+
+dashboard_change_password:
+    path:     /dashboard/auth/change_password
+    defaults: { _controller:  auth.controller:changePasswordAction }
+
+dashboard_validate_change_password:
+    path:     /dashboard/auth/validate_change_password
+    defaults: { _controller:  auth.controller:validateChangePasswordAction }
+dashboard_client_action_show:
+    path:     /dashboard/client/action/list/{preset_filter_id}
+    defaults: { _controller: dashboard_client_show_action_data:showByClientAction,preset_filter_id:null }
+dashboard_client_action_export:
+    path:     /dashboard/client/action/export}
+    defaults: { _controller: dashboard_client_export_action_data:indexAction }
+dashboard_client_action_push_audience_card:
+    path:     /dashboard/client/action/push_audience_card
+    defaults: { _controller: dashboard_client_push_audience_card:pushToFacebookAction }
+
+dashboard_account_listing:
+    path:     /dashboard/auth/account_listing
+    defaults: { _controller:  auth.controller:showAccountListingAction }
+
+dashboard_show_App_Account:
+    path:     /dashboard/auth/show_app_account
+    defaults: { _controller:  auth.controller:showAppAccountAction }
+
+dashboard_update_user_app:
+    path:     /dashboard/auth/update_user_app
+    defaults: { _controller:  auth.controller:updateUserAppAction }
+
+dashboard_lte:
+    path:     /dashboard/auth/render_lte
+    defaults: { _controller:  auth.controller:renderLteAction }
+
+dashboard_show_paginate:
+    path:     /dashboard/auth/accounts/{page}
+    defaults: { _controller:  auth.controller:showUsersAction, page:1 }
+
+dashboard_admin_login:
+    path:     /admin
+    defaults: { _controller:  auth.controller:renderAdminLoginAction }
+
+dashboard_client_login:
+    path:     /dashboard
+    defaults: { _controller:  auth.controller:renderClientLoginAction }
+
+dashboard_user_access:
+    path:     /dashboard/access/user_access/{page}
+    defaults: { _controller:  auth.controller:renderUserAccessAction, page:1 }
+
+dashboard_client_access:
+    path:     /dashboard/client/client_access/{page}
+    defaults: { _controller:  client.controller:indexAction, page:1 }
+
+dashboard_client_save:
+    path:     /dashboard/client/save
+    defaults: { _controller:  client.controller:saveClientAction }
+
+dashboard_user_email:
+    path:     /dashboard/user/email
+    defaults: { _controller:  client.controller:renderResetEmailAction }
+
+dashboard_email_link:
+    path:     /dashboard/user/link
+    defaults: { _controller:  client.controller:createLinkAction }
+
+dashboard_email_reset:
+    path:     /dashboard/user/reset
+    defaults: { _controller:  client.controller:resetPasswordAction }
+
+dashboard_delete_user:
+    path:     /dashboard/access/delete_user
+    defaults: { _controller:  auth.controller:deleteAction }
+
+dashboard_delete_client:
+    path:     /dashboard/access/delete_client
+    defaults: { _controller:  client.controller:deleteAction }
+
+dashboard_render_edit_client:
+    path:     /dashboard/access/render_edit_client
+    defaults: { _controller:  client.controller:renderEditClientAction }
+
+dashboard_edit_client:
+    path:     /dashboard/access/edit_client
+    defaults: { _controller:  client.controller:editClientAction }
+
+dashboard_update_client:
+    path:     /dashboard/access/update_client
+    defaults: { _controller:  client.controller:updateClientAction }
+
+password_reminder:
+    path:     /password-reminder/
+    defaults: { _controller: HyperEventBundle:PasswordReminder:index }
+
+password_reminder_validate:
+    path:     /password-reminder/validate/
+    defaults: { _controller: HyperEventBundle:PasswordReminder:validate }
+password_reminder_reset_password:
+    path:     /password-reminder/reset-password/
+    defaults: { _controller: HyperEventBundle:PasswordReminder:resetPassword }
+
+dashboard_upload_image:
+    path:     /dashboard/user/upload_image
+    defaults: { _controller:  auth.controller:uploadFromLocal }
+
+dashboard_refresh:
+    path:     /dashboard/refresh
+    defaults: { _controller:  auth.controller:refreshAction }
+
+dashboard_show_category:
+    path:     /dashboard/show/category/{page}
+    defaults: { _controller:  category.controller:indexAction, page:1 }
+
+dashboard_refresh_code:
+    path:     /dashboard/category/refresh_code
+    defaults: { _controller:  category.controller:refreshCode }
+
+dashboard_save_code:
+    path:     /dashboard/category/save_code
+    defaults: { _controller:  category.controller:saveCodeAction }
+
+dashboard_server_monitor:
+    path:     /dashboard/server_monitor
+    defaults: { _controller:  auth.controller:renderServerMonitor }
+
+# dashboard_audience:
+#     path:   /dashboard/filter/audience/{preset_filter_id}
+#     defaults: { _controller: dashboard_client_show_action_data:showAudience,preset_filter_id:null }
+dashboard_audience:
+    path:   /dashboard/filter/audience/showHypidData
+    defaults: { _controller: dashboard_client_show_action_data:showHypidData }
+
+#FOR DEMO ONLY
+audience_deck:
+    path:     /dashboard/auth/audience_deck
+    defaults: { _controller:  demo.controller:audienceDeckAction }
+
+audience_interest:
+    path:     /dashboard/auth/audience_interest
+    defaults: { _controller:  demo.controller:audienceInterestAction }
+
+custom_audience:
+    path:     /dashboard/auth/custom_audience
+    defaults: { _controller:  demo.controller:customAudienceAction }
+
+event_mapping:
+    path:     /dashboard/auth/event_mapping
+    defaults: { _controller:  demo.controller:eventMappingAction }
+
+main_dashboard:
+    path:     /dashboard/auth/main_dashboard
+    defaults: { _controller:  client.controller:renderMainDashboard }
+
+data_acquisition:
+    path:     /dashboard/auth/data_acquisition
+    defaults: { _controller:  auth.controller:renderDataAcquisitionAction }
+
+client_management:
+    path:     /dashboard/auth/client_management
+    defaults: { _controller:  demo.controller:clientManagementAction }
+
+logs:
+    path:     /dashboard/auth/logs
+    defaults: { _controller:  demo.controller:logsAction }
+
+user_access_management:
+    path:     /dashboard/auth/user_access_management
+    defaults: { _controller:  demo.controller:userAccessAction }
+
+menu_test:
+    path:     /dashboard/auth/menu_test
+    defaults: { _controller:  demo.controller:menuTestAction }
+
+migrate:
+    path:     /migrate
+    defaults: { _controller:  auth.controller:migrate }
+
+# FOR CLOVER FEATURE
+clover_client_login:
+    path:     /clover/auth/login
+    defaults: { _controller:  clover.controller:renderClientLoginAction }
+
+clover_logout:
+    path:     /clover/auth/logout
+    defaults: { _controller:  clover.controller:logoutAction }
+
+clover_main_dashboard:
+    path:     /clover/client/main
+    defaults: { _controller:  clover_client.controller:renderMainAction }
+
+clover_user_history:
+    path:     /clover/client/user_history
+    defaults: { _controller:  clover_client.controller:renderUserHistoryAction }
+
+clover_validate_login:
+    path:     /clover/auth/validate_login
+    defaults: { _controller:  clover.controller:validateLoginAction }
+
+dashboard_delete_node:
+    path:     /dashboard/category/delete_node
+    defaults: { _controller:  category.controller:deleteNodeAction }
+
+# FOR JASPER FEATURE
+jasper_add:
+    path:     /jasper/add/{page}
+    defaults: { _controller:  jasper_auth.controller:renderAddUserAction, page:1 }
+
+jasper_save:
+    path:     /jasper/save
+    defaults: { _controller:  jasper_auth.controller:saveJasperAccountAction }
+
+#PUSH
+dashboard_push:
+    path:     /dashboard/client/push/{page}
+    defaults: { _controller:  client.controller:renderPushNotifAction, page:1 }
+
+dashboard_banner:
+    path:     /dashboard/client/banner/{page}
+    defaults: { _controller:  client.controller:renderBannerAction, page:1 }
+
+dashboard_get_app:
+    path:     /dashboard/get_app
+    defaults: { _controller:  client.controller:getApplicationsByLoggedInUser }
+
+dashboard_push_save:
+    path:     /dashboard/push/save
+    defaults: { _controller:  push.controller:savePushAction }
+# Analytics
+analytics_data_by_key:
+    path:     /analytics/metadata/{key}/{identifier}/{id}
+    defaults: { _controller: analytics.controller:getByKeyAction, identifier:null, id:null }
+
+dashboard_server_key:
+    path:     /dashboard/server_key
+    defaults: { _controller:  auth.controller:getServerKey }
+
+dashboard_promo_save:
+    path:     /dashboard/promo/save
+    defaults: { _controller:  promo.controller:savePromoAction }
+
+dashboard_promo_placement:
+    path:     /dashboard/banner/placement
+    defaults: { _controller:  banner_placement.controller:savePlacementAction }
+
+dashboard_promo_landing:
+    path:     /dashboard/banner/landing
+    defaults: { _controller:  banner_landing.controller:saveLandingPageAction }
+
+dashboard_ajax_landing:
+    path:     /dashboard/ajax/landing
+    defaults: { _controller:  banner_landing.controller:ajaxLandingPageAction }
+
+dashboard_promo_json:
+    path:     /dashboard/banner/saveAll
+    defaults: { _controller:  banner_landing.controller:saveLandingAndPlacementAction }
+
+#Analytics Page
+dashboard_analytics_display:
+    path:     /dashboard/analytics/display/{page}
+    defaults: { _controller:  auth.controller:displayMetadataAction, page:1 }
+
+dashboard_analytics_save:
+    path:     /dashboard/analytics/save
+    defaults: { _controller:  analytics.controller:saveAnalyticsAction }
+
+dashboard_analytics_delete:
+    path:     /dashboard/analytics/delete
+    defaults: { _controller:  analytics.controller:deleteAnalyticsAction }
+
+dashboard_analytics_update:
+    path:     /dashboard/analytics/update
+    defaults: { _controller:  analytics.controller:updateAnalyticsAction }
+
+dashboard_analytics_create_meta:
+    path:     /dashboard/analytics/create_metadata
+    defaults: { _controller:  analytics.controller:ajaxGenerateMetadataAction }
+
+dashboard_promo_lookup:
+    path:     /dashboard/promo/lookup
+    defaults: { _controller:  promo.controller:sendPromoBannerLookUp }
+
+awaiting_s3_log:
+    path:     /Awaiting_S3log/AwaitingS3log
+    defaults: { _controller:  awaiting.controller:checkFileExistsAction }
+
+dashboard_user_journey:
+    path:     /dashboard/client/user_journey
+    defaults: { _controller:  client.controller:renderUserJourneyAction }
+
+dashboard_audience_advance:
+    path:     /dashboard/client/advance
+    defaults: { _controller:  client.controller:renderAdvancedAudienceCard }
+
+dashboard_client_arrays:
+    path:     /client/apps/folders
+    defaults: { _controller:  hyper_event.test_controller:showArrays }
+
+
+dashboard_user_access_management:
+    path:     /dashboard/user-access-management/
+    defaults: { _controller: HyperEventBundle:Dashboard/UserAccessManagement/UserAccessManagement:index }
+
+dashboard_user_access_management_update:
+    path:     /dashboard/user-access-management/update/{user_id}
+    defaults: { _controller: HyperEventBundle:Dashboard/UserAccessManagement/UserAccessManagement:index }
+
+dashboard_user_access_management_delete:
+    path:     /dashboard/user-access-management/delete
+    defaults: { _controller: HyperEventBundle:Dashboard/UserAccessManagement/UserAccessManagement:delete }
+
+dashboard_user_access_management_validate:
+    path:     /dashboard/user-access-management/validate
+    defaults: { _controller: HyperEventBundle:Dashboard/UserAccessManagement/UserAccessManagement:validate }
+
+dashboard_audience_spotlight:
+    resource: "@HyperEventBundle/Resources/config/routing/audience_spotlight.yml"
+    prefix:   /audience-spotlight
+
+# CVS Import
+dashboard_import_data:
+    resource: "@HyperEventBundle/Resources/config/routing/import_data.yml"
+    prefix:   /dashboard/import-data
+
+# DataAcquisition
+dashboard_data_acquisition:
+    path:     /dashboard/data-acquisition/
+    defaults: { _controller:  HyperEventBundle:Dashboard/DataAcquisition/DataAcquisition:index }
+
+dashboard_data_acquisition_load_count_device_by_platform:
+    path:     /dashboard/data-acquisition/load-count-device-by-platform
+    defaults: { _controller:  HyperEventBundle:Dashboard/DataAcquisition/DataAcquisition:loadCountDeviceByPlatform }
+dashboard_data_acquisition_load_count_device_by_app_title:
+    path:     /dashboard/data-acquisition/load-count-device-by-app-title
+    defaults: { _controller:  HyperEventBundle:Dashboard/DataAcquisition/DataAcquisition:loadCountDeviceByAppTitle }
+
+dashboard_data_acquisition_load_count_device_by_country:
+    path:     /dashboard/data-acquisition/load-count-device-by-country
+    defaults: { _controller:  HyperEventBundle:Dashboard/DataAcquisition/DataAcquisition:loadCountDeviceByCountry }
+
+
+dashboard_main:
+    path:     /dashboard/main/
+    defaults: { _controller:  HyperEventBundle:Dashboard/Dashboard:index }
+
+dashboard_main_load_count_device_by_country:
+    path:     /dashboard/main/load-count-device-by-country
+    defaults: { _controller:  HyperEventBundle:Dashboard/Dashboard:loadCountDeviceByCountry }
+
+dashboard_main_load_count_device_by_platform:
+    path:     /dashboard/main/load-count-device-by-platform
+    defaults: { _controller:  HyperEventBundle:Dashboard/Dashboard:loadCountDeviceByPlatform }
+
+dashboard_main_load_count_device_by_app_title:
+    path:     /dashboard/main/load-count-device-by-app-title
+    defaults: { _controller:  HyperEventBundle:Dashboard/Dashboard:loadCountDeviceByAppTitle }
+
+dashboard_main_load_count_device_and_event_by_app_title:
+    path:     /dashboard/main/load-count-device-and-event-by-app-title
+    defaults: { _controller:  HyperEventBundle:Dashboard/Dashboard:loadCountDeviceAndEventByAppTitle }
+
+dashboard_main_load_recent_filter:
+    path:     /dashboard/main/load-recent-filter
+    defaults: { _controller:  HyperEventBundle:Dashboard/Dashboard:loadRecentFilter }
+
+dashboard_main_load_recent_in_app_event:
+    path:     /dashboard/main/load-recent-in-app-event
+    defaults: { _controller:  HyperEventBundle:Dashboard/Dashboard:loadRecentInAppEvent }
+
+dashboard_main_create_card_by_popup:
+    path:     /dashboard/main/create-card-by-popup
+    defaults: { _controller:  HyperEventBundle:Dashboard/Dashboard:createCardByPopup }
+
+dashboard_infrastructure_monitor_elb:
+    path:     /dashboard/infrastructure-monitor/elastic-load-balancer
+    defaults: { _controller:  HyperEventBundle:Dashboard/InfraMonitor:elb }
+dashboard_infrastructure_monitor_ec2:
+    path:     /dashboard/infrastructure-monitor/elastic-cloud-compute
+    defaults: { _controller:  HyperEventBundle:Dashboard/InfraMonitor:ec2 }
+dashboard_infrastructure_monitor_sqs:
+    path:     /dashboard/infrastructure-monitor/simple-queue-service
+    defaults: { _controller:  HyperEventBundle:Dashboard/InfraMonitor:sqs }
+dashboard_infrastructure_monitor_rs:
+    path:     /dashboard/infrastructure-monitor/redshift
+    defaults: { _controller:  HyperEventBundle:Dashboard/InfraMonitor:rs }
+dashboard_infrastructure_monitor_cloudviz:
+    path:     /dashboard/infrastructure-monitor/cloudviz
+    defaults: { _controller:  HyperEventBundle:Dashboard/InfraMonitor:cloudviz }
+
+dashboard_app_title_management:
+    path:     /dashboard/app-title-management/
+    defaults: { _controller:  HyperEventBundle:Dashboard/AppTitleManagement/AppTitleManagement:index }
+dashboard_app_title_management_delete:
+    path:     /dashboard/app-title-management/delete/{app_title_id}/
+    defaults: { _controller:  HyperEventBundle:Dashboard/AppTitleManagement/AppTitleManagement:delete }
+dashboard_app_title_management_check_folder_duplication:
+    path:     /dashboard/app-title-management/check-folder-duplication/
+    defaults: { _controller:  HyperEventBundle:Dashboard/AppTitleManagement/AppTitleManagement:checkFolderDuplication }
+
+# Client Manangement
+dashboard_client_management:
+    path:     /dashboard/client-management/
+    defaults: { _controller:  HyperEventBundle:Dashboard/ClientManagement/ClientManagement:index }
+# Client Manangement
+dashboard_client_management_delete:
+    path:     /dashboard/client-management/delete/{client_id}/
+    defaults: { _controller:  HyperEventBundle:Dashboard/ClientManagement/ClientManagement:delete }
+
+#In-App Event Config
+dashboard_inappevent_config:
+    path:       /dashboard/inappevent-config/
+    defaults:   { _controller: HyperEventBundle:Dashboard/InappeventConfig/InappeventConfig:index }
+dashboard_inappevent_ajax_save_event:
+    path:       /dashboard/inappevent-config/ajax/event
+    defaults:   { _controller: HyperEventBundle:Dashboard/InappeventConfig/InappeventConfig:ajaxSaveEvent }
+
+dashboard_endtour:
+    path:       /dashboard/end-tour/
+    defaults:   { _controller: HyperEventBundle:Dashboard/Dashboard:endTour }

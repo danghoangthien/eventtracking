@@ -1,0 +1,20 @@
+postback:
+    type: rest
+    prefix: /post
+    resource: Hyper\Adops\APIBundle\Controller\PostbackController
+    name_prefix: api_1_postback_postback_
+getip:
+    type: rest
+    prefix: /getip
+    resource: Hyper\Adops\APIBundle\Controller\GetIpController
+    name_prefix: api_1_getip_
+check_user:
+    type: rest
+    prefix: /users
+    resource: Hyper\Adops\APIBundle\Controller\UserController
+    name_prefix: api_1_check_user_
+testpostback:
+    type: rest
+    prefix: /testpostbacks
+    resource: Hyper\Adops\APIBundle\Controller\TestPostbackController
+    name_prefix: api_1_postback_testpostback_

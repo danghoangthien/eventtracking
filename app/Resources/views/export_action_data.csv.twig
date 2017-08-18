@@ -1,0 +1,13 @@
+{% set quote = '"' %}
+{%- for column in column_names -%}
+{{- quote|raw -}}{{- column -}}{{- quote|raw -}}
+{%- if not loop.last -%},{%- endif -%}
+{% endfor %}
+
+{% for row in result_data %}
+{% for val in row %}
+{{- quote|raw -}}{{- val -}}{{- quote|raw -}}
+{%- if not loop.last -%},{%- endif -%}
+{% endfor %}
+
+{% endfor %}

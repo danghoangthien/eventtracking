@@ -1,0 +1,93 @@
+{% extends 'base_clover.html.twig' %}
+{% block body %} 
+
+<section class="content-header" style="margin: -2em 0 0 -2em !important;">
+    <h1 style="font-size: 24px; margin: 0 0 1em 0.5em;">
+      User History
+    </h1>
+    <ol class="breadcrumb">
+      <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li class="active">User History</li>
+    </ol>
+</section>
+
+<div class="row">
+    <form class="form-horizontal">
+    <div class="form-group">
+		    <label class="col-md-2 control-label">Application</label>
+  			<div class="col-md-8">
+    				<select class="form-control">
+      					<option>Bukalapak Android</option>
+      					<option>Bukalapak iOS</option>
+    				</select>
+  			</div>
+		</div>
+		<div class="form-group">
+  			<label class="col-md-2 control-label">User ID</label>
+  			<div class="col-md-8">
+  				  <input type="text" class="form-control" id="exampleInputName" placeholder="Enter User ID">
+  			</div>
+		</div>
+		<div class="col-md-10">
+			  <button type="submit" class="btn btn-success pull-right">Show User History Data</button>
+		</div>
+	  </form>
+</div>
+<!-- row -->
+<div class="row">
+	  <div class="col-md-2"></div>
+	  <div class="col-md-8">
+    		<!-- The time line -->
+    		<ul class="timeline">
+      			<!-- timeline time label -->
+      			<li class="time-label">
+      				<span class="bg-green">
+      					User #04875454
+      				</span>
+      			</li>
+    			<!-- /.timeline-label -->
+    			<!-- timeline item -->
+    			  <li>
+        				<i class="fa fa-clock-o bg-gray"></i>
+        				<div class="timeline-item col-md-8">
+          					<span class="time"> 12:05</span>
+            					<h3 class="timeline-header"><a href="#">#04875454</a> make a purchase</h3>
+            					<div class="timeline-body">
+            						  <b>Item :</b> Waterproof jacket
+          					</div>
+        				</div>
+      			</li>
+      			<!-- END timeline item -->
+      			<!-- timeline item -->
+      			<li>
+        				<i class="fa fa-clock-o bg-gray"></i>
+        				<div class="timeline-item">
+          					<span class="time"><i class="fa fa-clock-o"></i> 5 mins ago</span>
+          					<h3 class="timeline-header no-border"><a href="#">Sarah Young</a> accepted your friend request</h3>
+        				</div>
+      			</li>
+      			<!-- END timeline item -->
+      			<!-- timeline item -->
+      			<li>
+        				<i class="fa fa-clock-o bg-gray"></i>
+        				<div class="timeline-item">
+          					<span class="time"><i class="fa fa-clock-o"></i> 27 mins ago</span>
+          					<h3 class="timeline-header"><a href="#">Jay White</a> commented on your post</h3>
+          					<div class="timeline-body">
+          						Take me to your leader! Switzerland is small and neutral! We are more like Germany, ambitious and misunderstood!
+          					</div>
+          					<div class="timeline-footer">
+            						<a class="btn btn-warning btn-flat btn-xs">View comment</a>
+          					</div>
+        				</div>
+      			</li>
+      			<!-- END timeline item -->
+      			<li>
+      			    <i class="fa fa-clock-o bg-gray"></i>
+      			</li>
+    		</ul>
+	  </div><!-- /.col -->
+</div><!-- /.row -->
+
+{% endblock %}
+        

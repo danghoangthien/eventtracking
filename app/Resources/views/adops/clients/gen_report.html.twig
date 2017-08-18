@@ -1,0 +1,296 @@
+{% extends 'adops/clients/base_clients.html.twig' %}
+
+{% block stylesheets_extend %}
+<!-- Date Range Picker -->
+<link rel="stylesheet" href="{{ asset('design/hq/plugins/DateRangePicker/daterangepicker.css') }}">
+{% endblock %}
+
+{% block header_title %}
+  <h1 style="color:white;">Custom Report Generator<br />
+  <small>Customized daily reports based on multiple filter and view options </small>
+  </h1>
+{% endblock %}
+
+{%block nav_app %}
+<select name="application_select" class="form-control inline-select-long" style="width: 20%; display:inline-block; margin-left:20px;margin: 8px;">
+  <option value="{{ path('adops_clients_dashboard') }}">Select App</option>
+  {% if applications is not empty %}
+    {% for application in applications %}
+      <option value="{{ path('adops_clients_gen_report', {'appId': application.appId}) }}"
+      {% if application.appId == appId %}selected{% endif %}>
+        {{ application.appName }} {{ application.platform | capitalize }}
+      </option>
+    {% endfor %}
+  {% endif %}
+</select>
+{% endblock %}
+
+{%block sidebar_menu %}
+<!-- Sidebar Menu -->
+<ul class="sidebar-menu">
+  <li class="header">MENU</li>
+  <li class="treeview">
+    <a href="#"><i class="fa fa-briefcase"></i> <span>Reports</span> <i class="fa fa-angle-left pull-right"></i></a>
+    <ul class="treeview-menu">
+      <li><a href="{{ path('adops_clients_gen_report', {'appId': appId}) }}">Custom Report Generator</a></li>
+      <li><a href="{{ path('adops_quality_auditor', {'appId': appId}) }}">Quality Auditor</a></li>
+    </ul>
+  </li>
+</ul><!-- /.sidebar-menu -->
+{% endblock %}
+
+{%block client_content %}
+<!-- Report Configuration Option -->
+<div class="box box-danger" style="padding:5px 20px;">
+  <!--Box Header-->
+  <div class="box-header with-border">
+    <h3 class="box-title">Configuration Options</h3>
+    <div class="box-tools pull-right">
+      <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+      <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+    </div>
+  </div>
+  <!--Box Body-->
+  <div class="box-body">
+    <div class="row">
+      <form class="form-horizontal" name="f_gen_report" method="post">
+        <div class="col-md-6">
+        <!-- Select Campaign -->
+          <div class="form-group">
+            <label class="form-label">Select Campaign:</label><br/>
+            {#<i class="fa fa-paper-plane-o "></i>#}
+            <div class="col-md-9">
+              <select name="f_campaign" class="form-control inline-select-long">
+                <option value="all">All campaigns</option>
+                {% if campaigns is not empty %}
+                  {% for campaign in campaigns %}
+                    <option value="{{campaign.id}}">
+                      {% if is_granted('ROLE_USER_TRANSPARENT') %}
+                      {{ campaign.name }}
+                      {% else %}
+                      {{ campaign.code }}
+                      {% endif %}
+                      </option>
+                  {% endfor %}
+                {% endif %}
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Creatives Filter:</label><br/>
+            {#<i class="fa fa-picture-o"></i>#}
+            <div class="col-md-9">
+              <select name="f_af_adset" class="form-control inline-select-long">
+                <option value="all">All creatives</option>
+                {% if afAdsets is not empty %}
+                  {% for afAdset in afAdsets %}
+                    <option value="{{ afAdset.afAdset }}">{{ afAdset.afAdset }}</option>
+                  {% endfor %}
+                {% endif %}
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Quality Benchmark:</label><br/>
+            {#<i class="fa fa-stethoscope"></i>#}
+            <div class="col-md-9">
+              <select name="f_quality_benchmark" class="form-control inline-select-long">
+                <option value="all">All In-App Events</option>
+                {% if inappevents is not empty %}
+                  {% for inappevent in inappevents %}
+                  <option value="{{ inappevent.name }}">{{ inappevent.name }}</option>
+                  {% endfor %}
+                {% endif %}
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <!-- Date range -->
+          <div class="form-group">
+            <label class="form-label col-md-12">Date range:</label><br/>
+            {#<i class="fa fa-calendar"></i>#}
+            <div class="col-md-9">
+              <input type="text" name="f_daterange" class="form-control inline-select-long" value="01/01/2015 1:30 PM - 01/01/2015 2:00 PM" />
+            </div>
+          </div>
+          {% if is_granted('ROLE_USER_TRANSPARENT') %}
+          <div class="form-group">
+            <label class="form-label col-md-12">Publishers Filter:</label><br/>
+            {#<i class="fa fa-industry"></i>#}
+            <div class="col-md-9">
+              <select name="f_publisher" class="form-control inline-select-long">
+                <option value="all">All Publishers</option>
+                {% if publishers is not empty %}
+                  {% for publisher in publishers %}
+                    <option value="{{ publisher.id }}">{{ publisher.name }}</option>
+                  {% endfor %}
+                {% endif %}
+              </select>
+            </div>
+          </div>
+          {% endif %}
+          <div class="form-group">
+            <div class="col-md-4">
+              <button class="btn btn-block btn-danger" name="gen_report">Generate</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div> <!--End box1   -->
+
+<div class="box box-danger">
+  <!--Box Header-->
+  <div class="box-header with-border">
+    <h3 class="box-title">Report</h3>
+    <div class="box-tools pull-right">
+      <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+      <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+    </div>
+  </div>
+  <div class="box-body">
+    <div class="loading col-md-12" style="display:none;"><img src="{{ asset('assets/img/loading.gif') }}" /></div>
+    <table class="footable" data-page-size="25" data-page-navigation=".pagination">
+      <thead>
+        <tr class="title-report">
+          {% if reports['title'] is defined and reports['title'] is not empty %}
+          {#{{ dump(reports['title']) }}#}
+          {#{{ dump(reports) }}#}
+          <th data-type="numeric">Date</th>
+            {% for report in reports['title'] %}
+              <th data-hide="phone,tablet" data-sort-ignore="true">{{report}}</th>
+            {% endfor %}
+          {% endif %}
+        </tr>
+      </thead>
+      <tbody class="rs-report">
+        {% if reports['data'] is defined and reports['data'] is not empty %}
+            {% for daily, data in reports['data'] %}
+              <tr>
+                <td data-value="{{ data[0]['created'] }}">{{ daily }}</td>
+                {% for value in data %}
+                <td>{{ value['count'] }}</td>
+              {% endfor %}
+              </tr>
+            {% endfor %}
+          {% endif %}
+      </tbody>
+      <tfoot class="hide-if-no-paging">
+        <tr>
+          <td colspan="12" style="text-align:center;">
+            <div class="pagination pagination-centered"></div>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+    {#<div class="form-group col-md-2 pull-right">#}
+    {# <button class="btn btn-block btn-danger fa fa-file-excel-o" style="margin:20px;"> Export to CSV </button>#}
+    {#</div>#}
+  </div>
+</div>
+<style>
+  .title-report th {text-align: center !important;}
+</style>
+{% endblock %}
+
+{% block javascript_libraries_extend %}
+
+  <!-- Moment.JS, dependencies of Date Range Picker-->
+  <script src="{{ asset('design/hq/plugins/DateRangePicker/moment.min.js') }}"></script>
+  <!-- Date Range Picker-->
+  <script src="{{ asset('design/hq/plugins/DateRangePicker/daterangepicker.js') }}"></script>
+  <!-- FooTable-->
+  <script src="{{ asset('design/hq/plugins/FooTable/js/footable.js') }}"></script>
+  <!-- FooTable Sorting-->
+  <script src="{{ asset('design/hq/plugins/FooTable/js/footable.sort.js') }}"></script>
+  <!-- FooTable Pagination-->
+  <script src="{{ asset('design/hq/plugins/FooTable/js/footable.paginate.js') }}"></script>
+  <!-- Page Script-->
+  <script type="text/javascript">
+    $('input[name="f_daterange"]').daterangepicker({
+      "timePicker": true,
+      "locale": {
+        format: 'MM/DD/YYYY h:mm A'
+      },
+      "ranges":{
+        'Today': [moment(), moment()],
+        'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+        'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+        'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+        'This Month': [moment().startOf('month'), moment().endOf('month')],
+        'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+      },
+      "alwaysShowCalendars": true,
+      "startDate": moment().subtract(30, 'days'),
+      "endDate": moment()
+    }, function(start, end, label) {
+      console.log("New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')");
+    });
+
+    $(function(){
+      var table = $('.footable');
+      table.footable();
+      table.bind('footable_breakpoint', function() {
+        table.trigger('footable_expand_first_row');
+      });
+
+      $('select[name*="application_select"]').prop('selected', true).change(function(){
+        var url = $(this).val();
+        window.location = url;
+      });
+
+      $('button[name*="gen_report"]').click(function(){
+        $('.loading').show();
+        var formData = $('form[name*="f_gen_report"]').serialize();
+        var url = '{{ url('adops_clients_gen_report', {'appId': appId}) }}';
+        $.post(
+          url,
+          formData,
+          function(results){
+            console.log(results, 'results');
+            var titleReport = $('.title-report');
+            titleReport.empty();
+            var rsReport = $('.rs-report');
+            rsReport.empty();
+            var titleHtml = '<th data-type="numeric">Date</th>';
+            if (results['title'].length <= 0) {
+              titleReport.append($('<th>Empty result!</th>'));
+            } else {
+              console.log(results['title'], 'title');
+              $.each(results['title'], function(key, value) {
+                if (('daily' == value)) {
+                  return true;
+                }
+                titleHtml += '<th data-hide="phone,tablet">'+value+'</th>';
+              });
+              titleReport.append($(titleHtml));
+
+              $.each(results['data'] , function(daily, data) {
+                var html = '<tr><td data-value="'+data[0]['created']+'">'+daily+'</td>';
+                $.each(results['title'], function(key, value) {
+                  var dataVal = 0;
+                  if(typeof data[key] !== 'undefined') {
+                    dataVal = data[key]['count'];
+                  }
+                  html += '<td>'+dataVal+'</td>';
+                });
+
+                html += "</td></tr>";
+                rsReport.append($(html));
+              });
+            }
+            $('.loading').hide();
+            table.data('footable').reset();
+            table.footable();
+          }).fail(function( jqXHR, textStatus, errorThrown ) {
+            console.log(textStatus, 'textStatus');
+            console.log(errorThrown, 'errorThrown');
+          });
+
+        return false;
+      });
+    })
+  </script>
+{% endblock %}

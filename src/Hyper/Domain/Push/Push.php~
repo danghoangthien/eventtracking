@@ -1,0 +1,118 @@
+<?php
+
+namespace Hyper\Domain\Push;
+
+use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
+
+/**
+ * Push
+ *
+ * @ORM\Table(name="push_notification")
+ * @ORM\Entity(repositoryClass="Hyper\DomainBundle\Repository\Push\DTPushRepository")
+ * @ExclusionPolicy("all")
+ */
+class Push
+{
+    public function __construct()
+    {
+        $this->id = uniqid('',true);    
+        $this->updated = strtotime(date('Y-m-d h:i:s'));
+    }
+    
+    /**
+     * @ORM\Column(name="id", type="string", length=255, nullable=false)")
+     * @ORM\Id
+     * @Expose
+     */
+    protected $id;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="app_name", type="string", length=255, nullable=false)
+     * @Expose
+     */
+    private $appName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="title", type="string", length=255, nullable=false)
+     * @Expose
+     */
+    private $title;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="message", type="string",nullable=false, length=255)
+     * @Expose
+     */
+    private $message;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="device_token", type="string",nullable=false, length=255)
+     * @Expose
+     */
+    private $deviceToken;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="success", type="integer", nullable=true)
+     * @Expose
+     */
+    private $success;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="fail", type="integer", nullable=true)
+     * @Expose
+     */
+    private $fail;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="callback", type="string",nullable=true, length=255)
+     * @Expose
+     */
+    private $callback;
+     
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="json_file", type="string", length=13107, nullable=true)
+     * @Expose
+     */
+    private $jsonFile;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="img_path", type="string",nullable=true, length=255)
+     * @Expose
+     */
+    private $imgPath;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="created", type="integer", nullable=false,)
+     * @Expose
+     */
+    private $created;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="updated", type="integer", nullable=false,)
+     * @Expose
+     */
+    private $updated;
+}

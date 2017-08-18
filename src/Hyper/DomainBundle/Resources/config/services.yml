@@ -1,0 +1,301 @@
+services:
+#    hyper_domain.example:
+#        class: Hyper\DomainBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]
+
+# Identity
+    identity_repository:
+            class:  Hyper\DomainBundle\Repository\Identity\DTIdentityRepository
+            factory_service: doctrine.orm.pgsql_entity_manager
+            factory_method: getRepository
+            arguments: [  Hyper\Domain\Identity\Identity ]
+# Device
+    device_repository:
+            class:  Hyper\DomainBundle\Repository\Device\DTDeviceRepository
+            factory_service: doctrine.orm.pgsql_entity_manager
+            factory_method: getRepository
+            arguments: [  Hyper\Domain\Device\Device ]
+    android_device_repository:
+            class:  Hyper\DomainBundle\Repository\Device\DTAndroidDeviceRepository
+            factory_service: doctrine.orm.pgsql_entity_manager
+            factory_method: getRepository
+            arguments: [  Hyper\Domain\Device\AndroidDevice ]
+    ios_device_repository:
+            class:  Hyper\DomainBundle\Repository\Device\DTIOSDeviceRepository
+            factory_service: doctrine.orm.pgsql_entity_manager
+            factory_method: getRepository
+            arguments: [  Hyper\Domain\Device\IOSDevice ]
+# Application
+# http://symfony.com/doc/current/service_container/factories.html
+    application_repository:
+        class:  Hyper\DomainBundle\Repository\Application\DTApplicationRepository
+        factory_service: doctrine.orm.pgsql_entity_manager
+        factory_method: getRepository
+        arguments: [  Hyper\Domain\Application\Application ]
+
+    application_title_repository:
+        class:  Hyper\DomainBundle\Repository\Application\DTApplicationTitleRepository
+        factory: [@doctrine.orm.pgsql_entity_manager, getRepository]
+        arguments: [  Hyper\Domain\Application\ApplicationTitle ]
+
+    application_platform_repository:
+        class:  Hyper\DomainBundle\Repository\Application\DTApplicationPlatformRepository
+        factory: [@doctrine.orm.pgsql_entity_manager, getRepository]
+        arguments: [  Hyper\Domain\Application\ApplicationPlatform ]
+# Action
+    action_repository:
+            class:  Hyper\DomainBundle\Repository\Action\DTActionRepository
+            factory_service: doctrine.orm.pgsql_entity_manager
+            factory_method: getRepository
+            arguments: [  Hyper\Domain\Action\Action ]
+    install_action_repository:
+            class:  Hyper\DomainBundle\Repository\Action\DTInstallActionRepository
+            factory_service: doctrine.orm.pgsql_entity_manager
+            factory_method: getRepository
+            arguments: [  Hyper\Domain\Action\InstallAction ]
+    search_action_repository:
+            class:  Hyper\DomainBundle\Repository\Action\DTSearchActionRepository
+            factory_service: doctrine.orm.pgsql_entity_manager
+            factory_method: getRepository
+            arguments: [  Hyper\Domain\Action\SearchAction ]
+    add_to_wishlist_action_repository:
+            class:  Hyper\DomainBundle\Repository\Action\DTAddToWishlistActionRepository
+            factory_service: doctrine.orm.pgsql_entity_manager
+            factory_method: getRepository
+            arguments: [  Hyper\Domain\Action\AddToWishlistAction ]
+    add_to_cart_action_repository:
+            class:  Hyper\DomainBundle\Repository\Action\DTAddToCartActionRepository
+            factory_service: doctrine.orm.pgsql_entity_manager
+            factory_method: getRepository
+            arguments: [  Hyper\Domain\Action\AddToCartAction ]
+    transaction_action_repository:
+            class:  Hyper\DomainBundle\Repository\Action\DTTransactionActionRepository
+            factory_service: doctrine.orm.pgsql_entity_manager
+            factory_method: getRepository
+            arguments: [  Hyper\Domain\Action\TransactionAction ]
+    launch_action_repository:
+            class:  Hyper\DomainBundle\Repository\Action\DTLaunchActionRepository
+            factory_service: doctrine.orm.pgsql_entity_manager
+            factory_method: getRepository
+            arguments: [  Hyper\Domain\Action\LaunchAction ]
+    share_content_action_repository:
+            class:  Hyper\DomainBundle\Repository\Action\DTShareContentActionRepository
+            factory_service: doctrine.orm.pgsql_entity_manager
+            factory_method: getRepository
+            arguments: [ Hyper\Domain\Action\ShareContentAction ]
+    view_content_action_repository:
+            class:  Hyper\DomainBundle\Repository\Action\DTViewContentActionRepository
+            factory_service: doctrine.orm.pgsql_entity_manager
+            factory_method: getRepository
+            arguments: [ Hyper\Domain\Action\ViewContentAction ]
+    misc_action_repository:
+            class:  Hyper\DomainBundle\Repository\Action\DTMiscActionRepository
+            factory_service: doctrine.orm.pgsql_entity_manager
+            factory_method: getRepository
+            arguments: [  Hyper\Domain\Action\MiscAction ]
+
+    es_action_repository:
+        class: Hyper\DomainBundle\Repository\Action\ESActionRepository
+        arguments:
+            container: '@service_container'
+
+    es_device_repository:
+        class: Hyper\DomainBundle\Repository\Device\ESDeviceRepository
+        arguments:
+            container: '@service_container'
+    es_ios_device_repository:
+        class: Hyper\DomainBundle\Repository\Device\ESIOSDeviceRepository
+        arguments:
+            container: '@service_container'
+    es_android_device_repository:
+        class: Hyper\DomainBundle\Repository\Device\ESAndroidDeviceRepository
+        arguments:
+            container: '@service_container'
+# Item
+    item_repository:
+            class:  Hyper\DomainBundle\Repository\Item\DTItemRepository
+            factory_service: doctrine.orm.pgsql_entity_manager
+            factory_method: getRepository
+            arguments: [  Hyper\Domain\Item\Item ]
+    in_wishlist_item_repository:
+            class:  Hyper\DomainBundle\Repository\Item\DTInWishlistItemRepository
+            factory_service: doctrine.orm.pgsql_entity_manager
+            factory_method: getRepository
+            arguments: [  Hyper\Domain\Item\InWishlistItem ]
+    in_cart_item_repository:
+            class:  Hyper\DomainBundle\Repository\Item\DTInCartItemRepository
+            factory_service: doctrine.orm.pgsql_entity_manager
+            factory_method: getRepository
+            arguments: [  Hyper\Domain\Item\InCartItem ]
+    in_category_item_repository:
+            class:  Hyper\DomainBundle\Repository\Item\DTInCategoryItemRepository
+            factory_service: doctrine.orm.pgsql_entity_manager
+            factory_method: getRepository
+            arguments: [  Hyper\Domain\Item\InCategoryItem ]
+    transacted_item_repository:
+            class:  Hyper\DomainBundle\Repository\Item\TransactedItemRepository
+            factory_service: doctrine.orm.pgsql_entity_manager
+            factory_method: getRepository
+            arguments: [  Hyper\Domain\Item\TransactedItem ]
+# Category
+    category_repository:
+            class:  Hyper\DomainBundle\Repository\Category\DTCategoryRepository
+            factory_service: doctrine.orm.pgsql_entity_manager
+            factory_method: getRepository
+            arguments: [  Hyper\Domain\Category\Category ]
+# Filter
+    filter_repository:
+            class:  Hyper\DomainBundle\Repository\Filter\DTFilterRepository
+            factory_service: doctrine.orm.pgsql_entity_manager
+            factory_method: getRepository
+            arguments: [  Hyper\Domain\Filter\Filter ]
+
+#Client
+    client_repository:
+            class:  Hyper\DomainBundle\Repository\Client\DTClientRepository
+            factory_service: doctrine.orm.pgsql_entity_manager
+            factory_method: getRepository
+            arguments: [  Hyper\Domain\Client\Client ]
+    client_app_title_repository:
+            class:  Hyper\DomainBundle\Repository\Client\DTClientAppTitleRepository
+            factory_service: doctrine.orm.pgsql_entity_manager
+            factory_method: getRepository
+            arguments: [  Hyper\Domain\Client\ClientAppTitle ]
+#Currency
+    currency_repository:
+            class:  Hyper\DomainBundle\Repository\Currency\DTCurrencyRepository
+            factory_service: doctrine.orm.pgsql_entity_manager
+            factory_method: getRepository
+            arguments: [  Hyper\Domain\Currency\Currency ]
+#Login
+    authentication_repository:
+            class:  Hyper\DomainBundle\Repository\Authentication\DTAuthenticationRepository
+            factory_service: doctrine.orm.pgsql_entity_manager
+            factory_method: getRepository
+            arguments: [  Hyper\Domain\Authentication\Authentication ]
+            arguments: [  Hyper\Domain\Filter\Filter ]
+# Frm
+    frm_repository:
+            class:  Hyper\DomainBundle\Repository\Frm\DTFrmRepository
+            factory_service: doctrine.orm.pgsql_entity_manager
+            factory_method: getRepository
+            arguments: [  Hyper\Domain\Frm\Frm ]
+# Content
+    content_repository:
+            class:  Hyper\DomainBundle\Repository\Content\DTContentRepository
+            factory_service: doctrine.orm.pgsql_entity_manager
+            factory_method: getRepository
+            arguments: [  Hyper\Domain\Content\Content ]
+    in_category_content_repository:
+            class:  Hyper\DomainBundle\Repository\Content\DTInCategoryContentRepository
+            factory_service: doctrine.orm.pgsql_entity_manager
+            factory_method: getRepository
+            arguments: [  Hyper\Domain\Content\InCategoryContent ]
+
+#Jasper
+    jasper_repository:
+            class:  Hyper\DomainBundle\Repository\Jasper\DTJasperRepository
+            factory_service: doctrine.orm.pgsql_entity_manager
+            factory_method: getRepository
+            arguments: [  Hyper\Domain\Jasper\Jasper ]
+            arguments: [  Hyper\Domain\Filter\Filter ]
+# Analytics
+    analytics_metadata_repository:
+            class:  Hyper\DomainBundle\Repository\Analytics\DTMetadataRepository
+            factory_service: doctrine.orm.pgsql_entity_manager
+            factory_method: getRepository
+            arguments: [  Hyper\Domain\Analytics\Metadata ]
+
+#Push Notification
+    push_repository:
+            class:  Hyper\DomainBundle\Repository\Push\DTPushRepository
+            factory_service: doctrine.orm.pgsql_entity_manager
+            factory_method: getRepository
+            arguments: [  Hyper\Domain\Push\Push ]
+            arguments: [  Hyper\Domain\Filter\Filter ]
+
+#Promo Banner
+    promo_repository:
+            class:  Hyper\DomainBundle\Repository\Promo\DTPromoRepository
+            factory_service: doctrine.orm.pgsql_entity_manager
+            factory_method: getRepository
+            arguments: [  Hyper\Domain\Promo\Promo ]
+
+    # dashboard.exception_listener:
+    #         class: Hyper\DomainBundle\Controller\RedirectExceptionListener
+    #         arguments: [@doctrine.orm.entity_manager, @logger]
+    #         tags:
+    #             - { name: kernel.event_listener, event: kernel.exception, method: checkRedirect }
+
+#Promo Placement
+    promo_placement_repository:
+            class:  Hyper\DomainBundle\Repository\Promo_placement\DTPromoPlacementRepository
+            factory_service: doctrine.orm.pgsql_entity_manager
+            factory_method: getRepository
+            arguments: [  Hyper\Domain\Promo_placement\PromoPlacement ]
+
+#Promo Landing
+    promo_landing_repository:
+            class:  Hyper\DomainBundle\Repository\Promo_landing\DTPromoLandingRepository
+            factory_service: doctrine.orm.pgsql_entity_manager
+            factory_method: getRepository
+            arguments: [  Hyper\Domain\Promo_landing\PromoLanding ]
+
+            arguments: [  Hyper\Domain\Filter\Filter ]
+
+# Setting
+    setting_repository:
+            class:  Hyper\DomainBundle\Repository\Setting\DTSettingRepository
+            factory_service: doctrine.orm.pgsql_entity_manager
+            factory_method: getRepository
+            arguments: [  Hyper\Domain\Setting\Setting ]
+
+#Awaiting S3 Log
+    awaiting_repository:
+            class:  Hyper\DomainBundle\Repository\Awaiting\DTAwaitingRepository
+            factory_service: doctrine.orm.pgsql_entity_manager
+            factory_method: getRepository
+            arguments: [  Hyper\Domain\Awaiting_S3log\Awaiting ]
+
+# User Login History
+    user_login_history_repository:
+            class:  Hyper\DomainBundle\Repository\UserLoginHistory\DTUserLoginHistoryRepository
+            factory_service: doctrine.orm.pgsql_entity_manager
+            factory_method: getRepository
+            arguments: [  Hyper\Domain\UserLoginHistory\UserLoginHistory ]
+
+# OAth
+    oauth_client_repository:
+            class:  Hyper\DomainBundle\Repository\OAuth\DTOAuthClientRepository
+            factory_service: doctrine.orm.pgsql_entity_manager
+            factory_method: getRepository
+            arguments: [  Hyper\Domain\OAuth\OAuthClient ]
+    oauth_client_user_access_repository:
+            class:  Hyper\DomainBundle\Repository\OAuth\DTOAuthClientUserAccessRepository
+            factory_service: doctrine.orm.pgsql_entity_manager
+            factory_method: getRepository
+            arguments: [  Hyper\Domain\OAuth\OAuthClientUserAccess ]
+    oauth_access_token_repository:
+            class:  Hyper\DomainBundle\Repository\OAuth\DTOAuthAccessTokenRepository
+            factory_service: doctrine.orm.pgsql_entity_manager
+            factory_method: getRepository
+            arguments: [  Hyper\Domain\OAuth\OAuthAccessToken ]
+
+# Inappevent Config
+    inappevent_config_repository:
+        class: Hyper\DomainBundle\Repository\InappeventConfig\DTInappeventConfigRepository
+        factory_service: doctrine.orm.pgsql_entity_manager
+        factory_method: getRepository
+        arguments: [  Hyper\Domain\InappeventConfig\InappeventConfig ]
+
+    identity_capture_repository:
+        class:  Hyper\DomainBundle\Repository\Identity\DTIdentityCaptureRepository
+        factory_service: doctrine.orm.pgsql_entity_manager
+        factory_method: getRepository
+        arguments: [  Hyper\Domain\IdentityCapture\IdentityCapture ]
+
+    device_preset_filter_repository:
+        class:  Hyper\DomainBundle\Repository\Identity\DTDevicePresetFilterRepository
+        factory_service: doctrine.orm.pgsql_entity_manager
+        factory_method: getRepository
+        arguments: [  Hyper\Domain\Device\DevicePresetFilter ]

@@ -1,0 +1,33 @@
+hyper_event_api:
+    resource: "@HyperEventAPIBundle/Resources/config/routing.yml"
+    type: rest
+    prefix:   /api
+
+hyper_domain:
+    resource: "@HyperDomainBundle/Resources/config/routing.yml"
+    prefix:   /
+
+hyper_event:
+    resource: "@HyperEventBundle/Resources/config/routing.yml"
+    prefix:   /
+
+#hg_event:
+#    resource: "@HGEventBundle/Resources/config/routing.yml"
+#    prefix:   /
+
+#hypergrowth_event_store:
+#    resource: "@HypergrowthEventStoreBundle/Resources/config/routing.yml"
+#    prefix:   /
+
+app:
+    resource: "@AppBundle/Controller/"
+    type:     annotation
+
+# hyper_adops_web:
+#     resource: "@HyperAdopsWebBundle/Controller/"
+#     type:     annotation
+
+# hyper_adops_api:
+#     resource: "@HyperAdopsAPIBundle/Resources/config/adops_routing.yml"
+#     type: rest
+#     prefix: /adops/api/v1

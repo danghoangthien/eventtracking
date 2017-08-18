@@ -1,0 +1,166 @@
+<?php
+
+namespace Hyper\Domain\Promo;
+
+use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
+
+/**
+ * Promo
+ *
+ * @ORM\Table(name="promo_banner")
+ * @ORM\Entity(repositoryClass="Hyper\DomainBundle\Repository\Promo\DTPromoRepository")
+ * @ExclusionPolicy("all")
+ */
+class Promo
+{
+    public function __construct()
+    {
+        $this->id = uniqid('',true);    
+        $this->updated = strtotime(date('Y-m-d h:i:s'));
+    }
+    
+    /**
+     * @ORM\Column(name="id", type="string", length=255, nullable=false)")
+     * @ORM\Id
+     * @Expose
+     */
+    protected $id;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="app_name", type="string", length=255, nullable=false)
+     * @Expose
+     */
+    private $appName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="placement_name", type="string", length=255, nullable=false)
+     * @Expose
+     */
+    private $placementName;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="campaign_title", type="string",nullable=false, length=255)
+     * @Expose
+     */
+    private $campaignTitle;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="success", type="integer", nullable=true)
+     * @Expose
+     */
+    private $success;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="fail", type="integer", nullable=true)
+     * @Expose
+     */
+    private $fail;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="callback", type="string",nullable=true, length=255)
+     * @Expose
+     */
+    private $callback;
+     
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="json_file", type="string", length=13107, nullable=true)
+     * @Expose
+     */
+    private $jsonFile;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="img_path", type="string",nullable=true, length=255)
+     * @Expose
+     */
+    private $imgPath;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="html_path", type="string",nullable=true, length=255)
+     * @Expose
+     */
+    private $htmlPath;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="orientation", type="string",nullable=true, length=255)
+     * @Expose
+     */
+    private $orientation;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="landing_page", type="string", nullable=true)
+     * @Expose
+     */
+    private $landingPage;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="url", type="string", nullable=true)
+     * @Expose
+     */
+    private $url;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="date_from", type="integer", nullable=false,)
+     * @Expose
+     */
+    private $dateFrom;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="date_to", type="integer", nullable=false,)
+     * @Expose
+     */
+    private $dateTo;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="frequency", type="integer", nullable=false,)
+     * @Expose
+     */
+    private $frequency;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="created", type="integer", nullable=false,)
+     * @Expose
+     */
+    private $created;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="updated", type="integer", nullable=false,)
+     * @Expose
+     */
+    private $updated;
+}

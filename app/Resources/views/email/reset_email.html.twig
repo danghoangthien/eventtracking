@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>{% block head_title %}Hypergrowth event tracking system - Dashboard {% endblock %}</title>
+        <!-- Tell the browser to be responsive to screen width -->                 
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">   
+        {% block stylesheets %} 
+        <link rel="stylesheet" href="{{ asset('assets/lte2/bootstrap/css/bootstrap.min.css') }}">        
+        <link rel="stylesheet" href="{{ asset('assets/lte2/dist/css/AdminLTE.min.css') }}">        
+        <link rel="stylesheet" href="{{ asset('assets/lte2/dist/css/skins/_all-skins.min.css') }}">                
+        <link rel="stylesheet" href="{{ asset('assets/lte/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css') }}">        
+        <link rel="stylesheet" href="{{ asset('assets/lte2/plugins/datatables/dataTables.bootstrap.css') }}">
+        {% endblock %}
+        
+        {% block javascript_libraries %}                                    
+        
+        <script src="{{ asset('assets/lte/plugins/jQuery/jQuery-2.1.4.min.js') }}"></script>        
+        <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>        
+        <script>
+        $.widget.bridge('uibutton', $.ui.button);
+        </script>        
+        <script src="{{ asset('assets/lte2/bootstrap/js/bootstrap.min.js') }}"></script>        
+        <script src="{{ asset('assets/lte/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js') }}"></script>                    
+        <script src="{{ asset('assets/lte/dist/js/demo.js') }}"></script>        
+        <script src="{{ asset('assets/lte2/plugins/iCheck/icheck.min.js') }}"></script>                
+    {% endblock %} 
+    </head>
+    <body class="hold-transition skin-red sidebar-mini">
+        <div>
+            <header>
+                <h1 style="font-size: 24px; margin-top:0; padding: 0.7em 0 1em 1em; color: gray;">
+                    Reset Password Module
+                </h1>
+            </header>
+            
+            <div class="row">
+                <div id="main">
+                    <div id="tables">                        
+                        <span style="margin: 1em 0 0 0; display: inline-block; font-size: 17px;">
+                            Please supply email to reset your password
+                        </span>                        
+                        <table  style="margin-top: 3em !important;">                            
+                            <tr style="padding-bottom: 3em; display: block;">
+                                <td>
+                                    <input type="email" placeholder="Email..." class="form-control" id="txtEmail"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input type="button" value="Reset Password" class="form-control" id="btnReset"/>
+                                </td>
+                            </tr>
+                        </table>                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="message">
+            {% if email is defined %}
+                {{ "Please check your email: " ~ email }}
+            {% elseif reset is defined %}
+                {{ "Password reset successful. Please check your email for your new password." }}                
+            {% endif %}
+        </div>
+        <script>
+            $(document).ready(function()
+            {                           
+                $("#btnReset").on("click", this, function()
+                {
+                    var email = $("#txtEmail").val();                                    
+                
+                    window.location.href = "{{ path('dashboard_email_link') }}?email="+email;
+                });
+            });
+        </script>
+        <style>
+            #message
+            {                
+                width: 40em;
+                margin: 1em auto;                
+            }
+            
+            #btnReset
+            {
+                border-radius: 0;
+                border: 1px solid #ccc;
+                width: 10em;
+                margin-left: 7.5em;
+            }
+            
+            #txtEmail
+            {
+                border-radius: 0;
+                border: 1px solid #ccc;
+                width: 25em;
+                
+            }
+            
+            table { border: transparent; }
+            
+            #tables
+            {
+                height: 22em;
+                width: 25em;
+                margin: 3em auto;                
+            }
+            
+            header
+            {
+                background-color: black;
+            }
+            
+            #main
+            {
+                height: 22em;
+                width: 40em;
+                margin: 3em auto;
+                border: 2px solid lightslategray;
+            }
+        </style>
+    </body>    
+</html>

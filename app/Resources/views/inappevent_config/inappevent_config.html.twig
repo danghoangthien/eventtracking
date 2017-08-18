@@ -1,0 +1,321 @@
+{% extends 'layout_ak/base.html.twig' %}
+{% block sub_head_title %}Configuration{% endblock %}
+{% block body %}
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row">
+    <div class="col-md-4">
+      <select data-group="required_if_all" name="application_select" class="form-control inline-select-long" style="width: 100%;">
+        <option value="">Select Mobile App</option>
+        {% for application in applications %}
+        <option value="{{ application.app_id }}">{{ application.app_name }}
+        {% if application.platform == 1 %} IOS {% else %} Android {% endif %}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+  <div class="row loading" style="display: none; margin-top: 30px;">
+    <div class="col-md-12">
+      <div class="ibox ">
+        <div class="ibox-content">
+          <div class="spiner-example">
+            <div class="sk-spinner sk-spinner-rotating-plane"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="width: 100%;" id="iae-content"></div>
+
+  <!--Template Row -->
+  <script type="text/html" id="template-html">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="ibox float-e-margins">
+        <div class="ibox-title" style="margin-top: 30px;p;padding: 10px 15px 5px;">
+          <div class="form-group">
+            <h3>Event : <span data-content="event_name"></span></h3>
+          </div>
+        </div>
+        <div class="ibox-content" style="padding-top:30px">
+          <form method="post">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="row" style="margin:0">
+                <label class="col-md-4 control-label left-padding">Event Color</label>
+                <div class="col-md-1" style="padding-top: 5px; text-align: left;">
+                  <select class="eventcolorselector" name="event_color" data-value="total_event_color"
+                  data-template-bind='[
+                    {"attribute": "options", "value": {"data": "color_options", "value":"value", "content":"content"}},
+                    {"attribute": "data-selected", "value": "color"}]
+                  '></select>
+                </div>
+              </div>
+              <div class="row" style="margin:0">
+                <label class="col-md-4 control-label left-padding">Human-friendly Name:</label>
+                <div class="col-md-4 no-padding">
+                  <input type="text" class="form-control" data-value="event_friendly_name" name="event_friendly_name">
+                </div>
+              </div>
+              <div class="row" style="margin:0">
+                <div class="col-md-12">
+                  <label style="margin-top:10px">
+                    <input class="event_tag tag_as_email" name="event_tag" type="radio" value="tag_as_email" data-id="tag_as_email_id"> Tag as Email</input>
+                  </label>
+                </div>
+                <div class="col-md-12">
+                  <label style="margin-top:10px">
+                    <input class="event_tag tag_as_iap" name="event_tag" type="radio" value="tag_as_iap" data-id="tag_as_iap_id"> Tag as IAP</input>
+                  </label>
+                </div>
+                <div class="col-md-12">
+                  <label style="margin-top:10px">
+                    <input class="event_tag" name="event_tag" type="radio" value="no_tag" data-id="no_tag_id"> No Tag</input>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="row" style="margin:0">
+                <label class="col-md-3 control-label left-padding">Set Event Icon</label>
+                <div class="icon col-md-9 iconpicker left" role="iconpicker" data-iconset="fontawesome" data-icon="fa-arrow-circle-o-down" data-rows="3" data-cols="7" data-align="left"
+                data-template-bind='[{"attribute": "data-selected", "value": "icon"}]'>
+                </div>
+              </div>
+          	</div>
+          </div>
+          <div class="row" style="margin:0">
+            <div class="col-md-3"></div>
+            <div class="col-md-7" style="margin-top:10px">
+              {% if isDemoAccount %}
+              <span class="tool-tip pull-right" data-toggle="tooltip" data-placement="top" title="Sorry you cannot make changes as this feature is disabled in demo mode.">
+								<button type="button" class="btn btn-primary pull-right disabled">Save Event</button>
+							</span>
+              {% else %}
+              <button class="btn btn-primary pull-right save-event" name="save-event">Save Event</button>
+              {% endif %}
+            </div>
+        	</div>
+        	<!--End row-->
+        	<input type="hidden" name="icon" data-value="icon"/>
+        	<input type="hidden" name="event_name" data-value="event_name"/>
+        	<input type="hidden" name="app_id" data-value="app_id"/>
+        	</form>
+        </div>
+      </div>
+    </div>
+  </div>
+  </script>
+  <!--End Template Row-->
+</div>
+{% endblock %}
+{% block stylesheets_inline %}
+    <link href="{{ asset('bundles/hyperevent/plugins/colorpicker/bootstrap-colorpicker.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('bundles/hyperevent/plugins/colorpicker/bootstrap-colorselector.css') }}" rel="stylesheet">
+    <link href="{{ asset('bundles/hyperevent/plugins/iCheck/square/blue.css') }}" rel="stylesheet">
+    <link href="{{ asset('bundles/hyperevent/plugins/iconpicker/css/bootstrap-iconpicker.css') }}" rel="stylesheet">
+{% endblock %}
+{% block javascript_inline %}
+    <script src="{{ asset('bundles/hyperevent/plugins/iCheck/icheck.min.js') }}"></script>
+    <script src="{{ asset('bundles/hyperevent/plugins/colorpicker/bootstrap-colorpicker.min.js') }}"></script>
+    <script src="{{ asset('bundles/hyperevent/plugins/colorpicker/bootstrap-colorselector.js') }}"></script>
+    <script src="{{ asset('bundles/hyperevent/plugins/jquery-template/jquery.loadTemplate.min.js') }}"></script>
+
+    <script src="{{ asset('bundles/hyperevent/plugins/iconpicker/js/iconset-fontawesome.js') }}"></script>
+    <script src="{{ asset('bundles/hyperevent/plugins/iconpicker/js/iconset-glyphicon.js') }}"></script>
+    <script src="{{ asset('bundles/hyperevent/plugins/iconpicker/js//bootstrap-iconpicker.js') }}"></script>
+    <script>
+        var InappEventConfig =  {
+            init: function() {
+            	console.log('init inappevent config');
+            },
+            initICheck: function(self) {
+              $('input').iCheck({
+                checkboxClass: 'icheckbox_square-blue',
+                radioClass: 'iradio_square-blue',
+                increaseArea: '20%'
+              }).on('ifChanged', function (event) {
+                $(event.target).trigger('change');
+                var currentTagValue = event.currentTarget.attributes.value.value;
+                var currentTagId = event.currentTarget.id;
+                self.validateTag(self, currentTagValue, currentTagId);
+              });
+            },
+            initIcon: function() {
+              $('.iconpicker').each(function(){
+                var iconSelected = $(this).parents('form').children('input[name="icon"]').val();
+                $(this).iconpicker({
+                  align: 'center', // Only in div tag
+                  arrowClass: 'btn-primary',
+                  arrowPrevIconClass: 'glyphicon glyphicon-chevron-left',
+                  arrowNextIconClass: 'glyphicon glyphicon-chevron-right',
+                  cols: 7,
+                  footer: true,
+                  header: true,
+                  icon: iconSelected,
+                  iconset: 'fontawesome',
+                  labelHeader: '{0} of {1} pages',
+                  labelFooter: '{0} - {1} of {2} icons',
+                  placement: 'bottom', // Only in button tag
+                  rows: 3,
+                  search: true,
+                  searchText: 'Search',
+                  selectedClass: 'btn-success',
+                  unselectedClass: ''
+                });
+              });
+
+            },
+            loadFormEvents: function(app_id) {
+            	var self = this;
+              $.ajax({
+                    url : "{{ path('dashboard_inappevent_config') }}",
+                    data: {app_id: app_id},
+                    type: 'POST',
+                    dataType: 'json',
+                    beforeSend: function() {
+                      $('.loading').show();
+                    },
+                    success: function(resp) {
+                      console.log(resp, 'resp');
+                      $('#iae-content').empty();
+                      if (resp.status == false) {
+                        $('#iae-content').append('Empty!');
+                        return false;
+                      }
+                      $('#iae-content').loadTemplate("#template-html",resp.data,{overwriteCache: true});
+                      InappEventConfig.initICheck(self);
+                      InappEventConfig.initIcon();
+                      if (typeof resp.tag_as !== 'undefined') {
+                        if (typeof resp.tag_as.tas_as_email !== 'undefined') {
+                          $('#'+resp.tag_as.tas_as_email).iCheck('check');
+                          InappEventConfig.validateTag(self, 'tag_as_email', resp.tag_as.tas_as_email);
+                        }
+                        if (typeof resp.tag_as.tag_as_iap !== 'undefined') {
+                          $('#'+resp.tag_as.tag_as_iap).iCheck('check');
+                          InappEventConfig.validateTag(self, 'tag_as_iap', resp.tag_as.tag_as_iap);
+                        }
+                      }
+                      InappEventConfig.displayColor();
+                      $('.loading').hide();
+                    },
+                    error: function() {
+                      $('#iae-content').append('Empty!');
+                      $('.loading').hide();
+                    }
+                });
+
+            },
+            saveEvent: function(formData) {
+              var urlSaveEvent = '{{ path('dashboard_inappevent_ajax_save_event') }}';
+              $.ajax({
+                url : urlSaveEvent,
+                data: formData,
+                type: 'POST',
+                dataType: 'json',
+                beforeSend: function() {
+                  $('.loading').show();
+                },
+                success: function(resp) {
+                  if (resp.status) {
+                    alert('Save success!');
+                  } else {
+                    alert('Fail!');
+                  }
+                  $('.loading').hide();
+                },
+                error: function() {
+                  alert('Fail!');
+                  $('.loading').hide();
+                }
+              });
+            },
+            validateTag: function(self, currentTagValue, currentTagId) {
+              switch (currentTagValue) {
+                case 'tag_as_email':
+                  self.displayAllTag('.tag_as_email', 0, currentTagId);
+                  if (!self.checkTag('.tag_as_iap')) {
+                    self.displayAllTag('.tag_as_iap', 1, null);
+                  } else {
+                    var currentTagIapId = currentTagId.replace('email_id_', 'iap_id_');
+                    $('#'+currentTagIapId).parent().parent().parent().hide();
+                  }
+                  break;
+                case 'tag_as_iap':
+                  self.displayAllTag('.tag_as_iap', 0, currentTagId);
+                  if (!self.checkTag('.tag_as_email')) {
+                    self.displayAllTag('.tag_as_email', 1, null);
+                  } else {
+                    var currentTagEmailId = currentTagId.replace('iap_id_', 'email_id_');
+                    $('#'+currentTagEmailId).parent().parent().parent().hide();
+                  }
+
+                  break;
+                case 'no_tag':
+                default:
+                  if (!self.checkTag('.tag_as_email')) {
+                    self.displayAllTag('.tag_as_email', 1, null);
+                  }
+                  if (!self.checkTag('.tag_as_iap')) {
+                    self.displayAllTag('.tag_as_iap', 1, null);
+                  }
+                  break;
+              }
+            },
+            checkTag: function(tagClass) {
+              var flagTag = false;
+              var tagAs = $(tagClass);
+              $.each(tagAs, function( index, el ) {
+                if ($('#'+el.id).parent().hasClass("checked")) {
+                  flagTag = true;
+                }
+              });
+              return flagTag;
+            },
+            displayAllTag: function(tagClass, action, idIgnore = null) {
+              var tagAs = $(tagClass);
+              $.each(tagAs, function( index, el ) {
+                if (null != idIgnore && idIgnore == el.id) {
+                  return;
+                }
+                $('#'+el.id).iCheck('uncheck');
+                if (action) {
+                  $('#'+el.id).parent().parent().parent().show();
+                } else {
+                  $('#'+el.id).parent().parent().parent().hide();
+                }
+              });
+
+            },
+            displayColor: function() {
+              $(".eventcolorselector option").each( function() {
+                if ($(this).parent().attr('data-selected') == $(this).val()) {
+                  $(this).attr("selected", "selected");
+                }
+                $(this).attr("data-color", $(this).val());
+              });
+
+              $('.eventcolorselector').colorselector();
+            },
+        };
+        $(function(){
+          $('select[name*="application_select"]').prop('selected', true).change(function(){
+              var app_id = $('select[name*="application_select"]').val();
+              InappEventConfig.loadFormEvents(app_id);
+          });
+          $(document).on("click", ".save-event", function() {
+            var formData = $(this).parents('form').serialize();
+            InappEventConfig.saveEvent(formData);
+            return false;
+          });
+
+          $('.eventcolorselector').colorselector({
+          });
+
+          $(document).on("change", ".icon", function(e) {
+            $(this).parents('form').find($("input[name='icon']" )).val(e.icon);
+          });
+
+        });
+    </script>
+{% endblock %}

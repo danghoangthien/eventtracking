@@ -1,0 +1,230 @@
+{% set cardBgStyle = '' %}
+{% if presetFilter['card_bg_color_code'] is defined and  presetFilter['card_bg_color_code'] is not empty %}
+	{% set cardBgStyle = 'background-color: '~ presetFilter['card_bg_color_code'] ~ ';' %}
+{% endif %}
+{% set cardTextColorStyle = '' %}
+{% if presetFilter['card_text_color_code'] is defined and  presetFilter['card_text_color_code'] is not empty %}
+	{% set cardTextColorStyle = 'color: '~ presetFilter['card_text_color_code'] ~ ';' %}
+{% endif %}
+{% set cardnumber = random() %}
+<div id="card{{ cardnumber }}" class="cardbox animated bounceInDown carddeck-panel _cardbox-item" style="cursor:pointer" data-id="{{ presetFilter.id }}" data-marked=1>
+	<div class="card-container">
+		<div class="audience-card">
+			<div class="front">
+				<div class="cover" style="{{ cardBgStyle }}"></div>
+				{% set userClassStyle = '' %}
+				{% if presetFilter['filter_data']['platform_ids'] is defined %}
+					{% if presetFilter['filter_data']['platform_ids']|length > 1 %}
+					    {% set userClassStyle = 'padding: 37px 0px 0px 25px;' %}
+					{% else %}
+						{% set userClassStyle = '' %}
+					{% endif %}
+				{% endif %}
+				<div class="user" style="{{ userClassStyle }}">
+					{% if presetFilter['filter_data']['platform_ids'] is defined %}
+						{% if presetFilter['filter_data']['platform_ids']|length > 1 %}
+						    {% set iconSize = 'fa-3x' %}
+						{% else %}
+							{% set iconSize = 'fa-5x' %}
+						{% endif %}
+						{% for platform in presetFilter['filter_data']['platform_ids'] %}
+							<i class="fa fa-{{ listPlatform[platform] }} {{ iconSize }}"></i>
+						{% endfor %}
+					{% else %}
+						{{ '&nbsp;' }}
+					{% endif %}
+				</div>
+				<!--<div class="user"style="padding: 37px 0px 0px 25px;">-->
+				<!--	<i class="fa fa-android fa-3x"></i>-->
+				<!--	<i class="fa fa-apple fa-3x"></i>-->
+				<!--</div>-->
+				<div class="content">
+					<div class="main">
+						<div class="row no-margin">
+							<div class="col-md-12">
+								<div id="card-title-space">
+									<div id="card-title-preview">{{ presetFilter['preset_name'] }}</div>
+								</div>
+							</div>
+						</div>
+						<div class="row no-margin" style="padding: 10px 0px;text-align: justify;color: #3d3d3d;">
+							<div class="col-md-12">
+								<div id="card-description-space">
+									<div id="card-description-preview">
+										{{ presetFilter['description'] }}
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row no-margin">
+							<div class="col-md-12">
+								<div id="card-est-space" style="text-align:center;line-height: 15px;padding: 10px 0px;">
+									{% if presetFilter['profile_count'] is defined %}
+									<p class="no-margin">Estimated Reach</p>
+									<h2 class="no-margin">{{ presetFilter['profile_count']|number_format }}</h2>
+									{% else %}
+									<p>&nbsp;</p>
+									<h2 class="no-margin">&nbsp;</h2>
+									{% endif %}
+								</div>
+							</div>
+						</div>
+						<div class="row no-margin">
+							<div class="col-md-12" style="text-align:center">
+								<div id="card-countries-space">
+									<div id="card-countries-preview" style="line-height: 30px;">
+										{% if presetFilter['filter_data']['country_codes'] is defined %}
+											{% for country in presetFilter['filter_data']['country_codes'] %}
+												<div class="card-countries-preview-box">{{ country|country()|trim }}</div>
+											{% endfor %}
+										{% else %}
+											<div>&nbsp;</div>
+										{% endif %}
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- end front panel -->
+			<div class="back">
+				<div class="header">
+                    <div class="ibox-tools">
+                        <a class="dropdown-toggle" data-toggle="dropdown" onclick="window.location.href='{{ path('dashboard_filter_card_builder', {'filter_id': presetFilter.id}) }}'" href="#">
+                            <i class="fa fa-pencil-square-o"></i>
+                        </a>
+                        {% if isDemoAccount %}
+                        <a class="close-link delete-card disabled is_demo_account" href="#">
+	                        <i class="fa fa-times"></i>
+	                    </a>
+                        {% else %}
+                        <a class="close-link delete-card" data-cardnumber="{{ cardnumber }}" data-id="{{ presetFilter.id }}" href="#">
+                            <i class="fa fa-times"></i>
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+				<div class="content" style=" text-align: center; ">
+					<div class="main">
+						<div class="row m-t-md">
+							{% if isDemoAccount %}
+							<span class="tool-tip" data-toggle="tooltip" data-placement="top" title="Sorry you cannot make changes as this feature is disabled in demo mode.">
+								<a class="btn btn-app disabled is_demo_account" style="width:120px">
+									<i class="fa fa-bullhorn"></i> Push to Facebook
+								</a>
+							</span>
+							{% elseif isLimitAccount %}
+							<a class="btn btn-app disabled is_limit_account" style="width:120px">
+								<i class="fa fa-bullhorn"></i> Push to Facebook
+							</a>
+							{% else %}
+								{% if presetFilter['audience_csv_path'] is not defined or presetFilter['audience_csv_path'] is empty %}
+								<a class="btn btn-app disabled audience_csv_path_not_defined" data-coordinate-group="push-to-facebook[{{presetFilter.id}}]" data-btn-disabled style="width:120px">
+									<i class="fa fa-bullhorn"></i> Push to Facebook
+								</a>
+								{% else %}
+								<a class="btn btn-app" data-coordinate-group="push-to-facebook[{{presetFilter.id}}]" data-btn-push-to-facebook data-id="{{presetFilter.id}}" style="width:120px">
+									<i class="fa fa-bullhorn"></i> Push to Facebook
+								</a>
+								{% endif %}
+							{% endif %}
+						</div>
+						<div class="row m-t-sm">
+							{% if isDemoAccount %}
+							<span class="tool-tip" data-toggle="tooltip" data-placement="top" title="Sorry you cannot make changes as this feature is disabled in demo mode.">
+								<a class="btn btn-app disabled is_demo_account" style="width:120px">
+									<i class="fa fa-download"></i> Export to CSV
+								</a>
+							</span>
+							{% elseif isLimitAccount %}
+							<a class="btn btn-app disabled is_limit_account" style="width:120px">
+								<i class="fa fa-download"></i> Export to CSV
+							</a>
+							{% else %}
+								{% if presetFilter['export_csv_path'] is not defined or presetFilter['export_csv_path'] is empty %}
+									<a class="btn btn-app disabled export_csv_path_is_not_defined" style="width:120px">
+										<i class="fa fa-download"></i> Export to CSV
+									</a>
+								{% else %}
+									<a class="btn btn-app" data-coordinate-group="export-csv[{{presetFilter.id}}]" data-btn-export-csv style="width:120px" href="{{ path('dashboard_filter_export_csv_v2', { id: presetFilter.id }) }}">
+										<i class="fa fa-download"></i> Export to CSV
+									</a>
+								{% endif %}
+							{% endif %}
+						</div>
+						<div class="row m-t-sm">
+							{% if isDemoAccount %}
+							<span class="tool-tip" data-toggle="tooltip" data-placement="top" title="Sorry you cannot make changes as this feature is disabled in demo mode.">
+							<a class="btn btn-app disabled is_demo_account" style="width:120px">
+				            	<i class="fa fa-envelope-o"></i> Push to MailChimp
+			            	</a>
+			            	</span>
+			            	{% elseif isLimitAccount %}
+							<a class="btn btn-app disabled is_limit_account" style="width:120px">
+				            	<i class="fa fa-envelope-o"></i> Push to MailChimp
+			            	</a>
+							{% else %}
+								{% if presetFilter['email_csv_path'] is not defined or presetFilter['email_csv_path'] is empty %}
+									<a class="btn btn-app disabled email_csv_path_is_not_defined" data-coordinate-group="push-email-to-mc[{{presetFilter.id}}]" data-btn-disabled style="width:120px">
+										<i class="fa fa-envelope-o"></i> Push to MailChimp
+									</a>
+								{% else %}
+									<a class="btn btn-app" data-coordinate-group="push-email-to-mc[{{presetFilter.id}}]" data-btn-push-email-to-mc data-id="{{presetFilter.id}}" style="width:120px">
+										<i class="fa fa-envelope-o"></i> Push to MailChimp
+									</a>
+								{% endif %}
+							{% endif %}
+						</div>
+						{% if isLimitAccount %}
+						<div class="row m-t-sm">
+							<div class="alert alert-danger alert-dismissable" style="margin: 10px 15px;padding: 15px 25px;">
+		                        All actions on Audience Cards are disabled. <br/><a class="alert-link" href="mailto:billing@hypergrowth.co">Please Upgrade</a>.
+		                    </div>
+						</div>
+						{% else %}
+						<hr>
+						<div class="row buffer-top hide" data-coordinate-group="push-to-facebook[{{presetFilter.id}}]" data-select-ad-account-fb-group>
+							<div class="row m-t-sm" style=" padding: 0px 15px; ">
+								<div class="form-group">
+									<label>Select Ad Account</label>
+									<select class="form-control" data-coordinate-group="push-to-facebook[{{presetFilter.id}}]" data-select-ad-account-fb>
+				                  </select>
+								</div>
+							</div>
+							<div>
+								<button type="button" data-coordinate-group="push-to-facebook[{{presetFilter.id}}]" data-id="{{presetFilter.id}}" data-btn-push-fb class="btn btn-primary">Push</button>
+								<button type="button" class="btn btn-default" data-btn-cancel data-id="{{presetFilter.id}}">Cancel</button>
+							</div>
+						</div>
+						<div class="row buffer-top hide" data-coordinate-group="push-email-to-mc[{{presetFilter.id}}]" data-select-subscriber-list-mc-group>
+							<div class="row m-t-sm" style=" padding: 0px 15px; ">
+								<div class="form-group">
+									<label>Select a Subscriber List</label>
+									<select data-coordinate-group="push-email-to-mc[{{presetFilter.id}}]" data-select-subscriber-list-mc class="form-control"></select>
+									</select>
+								</div>
+							</div>
+							<div>
+								<button type="button" data-coordinate-group="push-email-to-mc[{{presetFilter.id}}]" data-id="{{presetFilter.id}}" data-btn-push-mc class="btn btn-primary">Push</button>
+								<button type="button" class="btn btn-default" data-btn-cancel data-id="{{presetFilter.id}}">Cancel</button>
+							</div>
+						</div>
+						{% endif %}
+						<div data-coordinate-group="alert[{{presetFilter.id}}]" data-id="{{ presetFilter.id }}" data-alert class="hide">
+							<div class="row m-t-sm">
+								<div class="alert alert-warning alert-dismissable" style="margin: 10px 15px;padding: 15px 25px;">
+			                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						  			<span data-coordinate-group="alert[{{presetFilter.id}}]" data-alert-msg></span>
+			                    </div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- end back panel -->
+		</div>
+		<!-- end card -->
+	</div>
+	<!-- end card-container -->
+</div>

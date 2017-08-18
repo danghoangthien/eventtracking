@@ -1,0 +1,106 @@
+<div class="col-lg-9">
+    <div class="ibox float-e-margins">
+		<div class="ibox-title">
+			<h1>Update User Account</h5>
+		</div>
+      	<div class="ibox-content">
+			<div class="panel" style="margin:0px">
+				<form action="{{ app.request.uri }}" class="update-auth-form" method="post" novalidate>
+					<div class="panel-body">
+						{% if app.session.flashbag.has('notice') %}
+							{% set notice = app.session.flashbag.get('notice').0 %}
+							<div class="row">
+								<div class="alert alert-{{ notice.status }}">
+								  	{{ notice.msg }}
+								</div>
+							</div>
+						{% endif %}
+
+						<div class="row">
+							<div class="form-group custom-input">
+								<div class="input-group col-sm-12">
+									<span style="width: 130px" class="input-group-addon">Full Name</span>
+									{{ form_widget(form_auth.name, {'attr': {'class': 'form-control', 'placeholder': 'Enter Full Name' }}) }}
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group custom-input">
+								<div class="input-group col-sm-12">
+									<span style="width: 130px" class="input-group-addon">Email</span>
+									{{ form_widget(form_auth.email, {'attr': {'class': 'form-control', 'placeholder': 'Enter Email - For Password Reset' }}) }}
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group custom-input">
+								<div class="input-group col-sm-12">
+									<span style="width: 130px" class="input-group-addon">Username</span>
+									{{ form_widget(form_auth.username, {'attr': {'class': 'form-control', 'placeholder': 'Enter Username - For Login' }}) }}
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group custom-input">
+								<div class="input-group col-sm-12">
+									<span style="width: 130px" class="input-group-addon">New Password</span>
+									{{ form_widget(form_auth.password, {'attr': {'class': 'form-control', 'placeholder': 'Enter Password - For Login' }}) }}
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group custom-input">
+								<div class="input-group col-sm-12">
+									<span style="width: 130px" class="input-group-addon">Retype Password </span>
+									{{ form_widget(form_auth.retypePassword, {'attr': {'class': 'form-control', 'placeholder': 'Enter Retype Password' }}) }}
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<label class="col-md-2 control-label left-padding">User Type</label>
+						  	<div class="col-md-10 no-padding">
+						  		{{ form_widget(form_auth.userType, {'attr': {'class': 'form-control inline-select-long', 'style': 'width: 200px;' }}) }}
+							</div>
+						</div>
+						<div class="row">
+						  	<label class="col-md-2 control-label left-padding">Authorized Access </label>
+						  	<div class="col-md-10 no-padding">
+						  		{{ form_widget(form_auth.clientId, {'attr': {'class': 'form-control inputClientMultiple' }}) }}
+							</div>
+						</div>
+						<div class="row">
+							<label class="col-md-2 control-label left-padding">API Key </label>
+							<div class="col-md-10 no-padding">
+								{{ form_widget(form_auth.apiKey, {'attr': {'class': 'form-control', 'placeholder': 'Enter API Key - For User Connect Function' }}) }}
+							</div>
+						</div>
+						{#
+						<div class="row">
+							<label class="col-md-2 control-label left-padding">Allow Bots Access</label>
+							<div class="col-md-10 no-padding">
+								{% if list_cua is defined and list_cua is not empty %}
+				                    {% for cua in list_cua %}
+				                    <div class="col-md-10 no-padding">
+										<input type="checkbox" name="cua[]" value="{{ cua['client_id'] }}" {% if cua['allow'] is defined and cua['allow'] == 1 %} checked {% endif %}> {{ cua['name'] | capitalize }} Bot
+									</div>
+				                    {% endfor %}
+				                {% endif %}
+							</div>
+						</div>
+						#}
+						<div class="row buffer-top">
+							<div class="col-md-2"> </div>
+							<div class="col-md-9 no-padding">
+								<button type="submit" class="btn btn-primary pull-right">Update User Account</button>
+							</div>
+							<div class="col-md-1"> </div>
+						</div>
+    				</div>
+    				{{ form_widget(form_auth.mode) }}
+    				{{ form_widget(form_auth._token) }}
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

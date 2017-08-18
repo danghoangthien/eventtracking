@@ -1,0 +1,609 @@
+{% extends 'layout_ak/base.html.twig' %}
+{% block sub_head_title %}Dashboard - User Access Management{% endblock %}
+
+{% block body %}
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <section class="content-header" style="margin: -2em 0 0 -2em !important;">
+            <h1 style="font-size: 24px; margin: 0 0 1em 0.5em;">
+              Edit Profile
+            </h1>
+            <ol class="breadcrumb">
+              <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+              <li class="active">Edit Profile</li>
+            </ol>
+        </section>
+        {% if app.request.get('msg') is defined %}
+            {% if app.request.get('msg') != "" %}
+                <script>alert("{{ app.request.get('msg') }}");</script>
+            {% endif %}
+        {% endif %}
+        <div class="row">
+            <div class="col-md-3">
+                <!-- Profile Image -->
+                <div class="box box-danger">
+                    <div class="box-body box-profile">
+                        <img class="profile-user-img img-responsive img-circle" 
+                        {% if record.imgPath == "" %}
+                            src="{{authentication.getImagePath() ~ '/user.png'}}"
+                        {% else %}
+                            src="{{authentication.getImagePath() ~ '/' ~  record.imgPath }}" 
+                        {% endif %}
+                        alt="User profile picture">
+                        <h3 class="profile-username text-center">{{ record.name }}</h3>
+                        <p class="text-muted text-center">
+                            {% if record.userType == "0" %}
+                                {{ "Client" }}
+                            {% else %}
+                                {{ "Administrator" }}
+                            {% endif %}
+                        </p>
+                    </div><!-- /.box-body -->
+                </div><!-- /.box -->
+            </div>
+            <div class="col-md-9">
+                <div class="box box-danger">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Edit Profile</h3></div>
+                    <div class="box-body">
+                        <form action="{{ path('dashboard_update_user_app') }}" method="post" enctype="multipart/form-data" role="form" id="editForm">
+                        <div class="form-group">
+                            
+                            <table id="tblAuth">                
+                                <tr class="tr1">
+                                    <td><label class="heads">Username</label></td>
+                                    <td>
+                                        <input type="text" class="form-control" id="username1" value="{{ record.username }}" name="username1" placeholder="Should be lowercase" disabled/>
+                                        <input type="hidden" id="username" value="{{ record.username }}" name="username"/>
+                                        <input type="hidden" id="user_id" value="{{ record.id }}" name="user_id"/>
+                                    </td>
+                                </tr>
+                                <tr class="tr1">
+                                    <td><label class="heads">Email</label></td>
+                                    <td><input type="text" class="form-control" id="email" name="email" value="{{ record.email }}" /></td>
+                                </tr>
+                                <tr class="tr1">
+                                    <td><label class="heads">Name</label></td>
+                                    <td><input type="text" class="form-control" id="name" value="{{ record.name }}" name="name" placeholder="Name" /></td>
+                                </tr>
+                                <tr class="tr1">
+                                    <td><label class="heads">New Password</label></td>
+                                    <td><input type="password" class="form-control" id="password" name="password" value="" placeholder="New Password"/></td>
+                                </tr>
+                                <tr class="tr1">
+                                    <td><label class="heads">Update Image</label></td>
+                                    <td><input type="file" name="csv" id="fileToUpload" class="form-control" accept="image/jpeg"></td>                                </td>
+                                </tr>
+                                
+                                <!-- FOR ADMIN ONLY-->
+                                {% if authentication.getLoggedAuthentication().userType == 1 or authentication.getLoggedAuthentication().userType == 1000%}
+                                <tr class="tr1">
+                                    <td><label class="heads">User type</label></td>
+                                    <td>
+                                        <select name="user_type" id="user_type" class="form-control">
+                                            {#{% if record.userType == "0" %}#}
+                                            {#    <option value="0" selected="selected">Client</option>#}
+                                            {#    <option value="1">Admin</option>#}
+                                            {#{% else %}#}
+                                            {#    <option value="0">Client</option>#}
+                                            {#    <option value="1" selected="selected">Admin</option>#}
+                                            {#{% endif %}#}
+                                            <option value="-1">Please select User Type</option>
+                                            <option value="0">Client</option>
+                                            <option value="1">Admin</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr class="tr1">
+                                    <td><label class="heads">Client</label></td>
+                                    <td>
+                                        {% for app_name in app_name %}
+                                        <input type="hidden" value="{{ app_name.client_name }}" id="db" class="{{ app_name.id }}"/>                                 
+                                        {% endfor %}
+                                        <select name="client_name" id="clients" class="form-control">
+                                            <option value="-1">Please select Client Access</option>
+                                            <option value="777">All Clients</option>
+                                        {% for data in apps %}
+                                            <option value="{{ data.id }}">{{ data.client_name }}</option>                     
+                                        {% endfor %}       
+                                        </select>                                  
+                                    </td>
+                                </tr> 
+                                
+                                <tr class="tr1">
+                                    <td><label for="exampleInputEmail">Api Key</label></td>
+                                    <td><input type="text" class="form-control" name="api_key" id="api_key" value="{{ record.apiKey }}" placeholder="Enter Api Key"></td>
+                                </tr>
+                                
+                                <tr class="tr1">
+                                    <td><label class="heads">Allow Bots Access</label></td>
+                                    <td>
+                                        {% if list_cua is defined and list_cua is not empty %}
+        				                    {% for cua in list_cua %}
+        				                    <div class="col-md-10 no-padding">
+        										<input type="checkbox" name="cua[]" value="{{ cua['client_id'] }}" {% if cua['allow'] is defined and cua['allow'] == 1 %} checked {% endif %}> {{ cua['name'] | capitalize }} Bot
+        									</div>
+        				                    {% endfor %}
+        				                {% endif %}
+                                    </td>
+                                </tr>
+                                {% endif %}
+                                <!-- END FOR ADMIN ONLY-->
+                            </table
+                        </div>
+                        <div id="divSendBtn" class="form-group">
+                            <input type="submit" id="btnSubmit" value="Submit" name="submit" class="btn btn-danger">
+                        </div> 
+                        </form>
+                        <!--
+                        <div id="divSendBtn" class="form-group">
+                            <input type="button" name="authEntry" id="btnUpdate" value="Submit" class="btn btn-primary"/>
+                            
+                            <input type="button" name="authEntry" id="btnCancel" value="Cancel" class="btn btn-danger"/>
+                            <input type="button" name="authEntry" id="btnNew" value="Add New" class="btn btn-primary"/>
+                        </div>      
+                        -->
+                    </div>                                                                               
+                </div>         
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block stylesheets_inline %}
+    <style>
+        /* FOR THE SWITCH FEATURE ONLY */
+        #a{ line-height: 70%; }
+    	#b{ line-height: 200%; }
+    	
+    	/*.container {*/
+     /*     margin: 50px auto;*/
+     /*     width: 280px;*/
+     /*     text-align: center;*/
+     /*   }*/
+     /*   .container > .switch {*/
+     /*     display: block;*/
+     /*     margin: 12px auto;*/
+     /*   }*/
+        
+        .switch {
+          position: relative;
+          display: inline-block;
+          vertical-align: top;
+          width: 56px;
+          height: 20px;
+          padding: 3px;
+          background-color: white;
+          border-radius: 18px;
+          box-shadow: inset 0 -1px white, inset 0 1px 1px rgba(0, 0, 0, 0.05);
+          cursor: pointer;
+          background-image: -webkit-linear-gradient(top, #eeeeee, white 25px);
+          background-image: -moz-linear-gradient(top, #eeeeee, white 25px);
+          background-image: -o-linear-gradient(top, #eeeeee, white 25px);
+          background-image: linear-gradient(to bottom, #eeeeee, white 25px);
+        }
+        
+        .switch-input {
+          position: absolute;
+          top: 0;
+          left: 0;
+          opacity: 0;
+        }
+        
+        .switch-label {
+          position: relative;
+          display: block;
+          height: inherit;
+          font-size: 10px;
+          text-transform: uppercase;
+          background: #eceeef;
+          border-radius: inherit;
+          box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.12), inset 0 0 2px rgba(0, 0, 0, 0.15);
+          -webkit-transition: 0.15s ease-out;
+          -moz-transition: 0.15s ease-out;
+          -o-transition: 0.15s ease-out;
+          transition: 0.15s ease-out;
+          -webkit-transition-property: opacity background;
+          -moz-transition-property: opacity background;
+          -o-transition-property: opacity background;
+          transition-property: opacity background;
+        }
+        .switch-label:before, .switch-label:after {
+          position: absolute;
+          top: 50%;
+          margin-top: -.5em;
+          line-height: 1;
+          -webkit-transition: inherit;
+          -moz-transition: inherit;
+          -o-transition: inherit;
+          transition: inherit;
+        }
+        .switch-label:before {
+          content: attr(data-off);
+          right: 11px;
+          color: #aaa;
+          text-shadow: 0 1px rgba(255, 255, 255, 0.5);
+        }
+        .switch-label:after {
+          content: attr(data-on);
+          left: 11px;
+          color: white;
+          text-shadow: 0 1px rgba(0, 0, 0, 0.2);
+          opacity: 0;
+        }
+        .switch-input:checked ~ .switch-label {
+          background: #47a8d8;
+          box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.15), inset 0 0 3px rgba(0, 0, 0, 0.2);
+        }
+        .switch-input:checked ~ .switch-label:before {
+          opacity: 0;
+        }
+        .switch-input:checked ~ .switch-label:after {
+          opacity: 1;
+        }
+        
+        .switch-handle {
+          position: absolute;
+          top: 4px;
+          left: 4px;
+          width: 18px;
+          height: 18px;
+          background: white;
+          border-radius: 10px;
+          box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+          background-image: -webkit-linear-gradient(top, white 40%, #f0f0f0);
+          background-image: -moz-linear-gradient(top, white 40%, #f0f0f0);
+          background-image: -o-linear-gradient(top, white 40%, #f0f0f0);
+          background-image: linear-gradient(to bottom, white 40%, #f0f0f0);
+          -webkit-transition: left 0.15s ease-out;
+          -moz-transition: left 0.15s ease-out;
+          -o-transition: left 0.15s ease-out;
+          transition: left 0.15s ease-out;
+        }
+        .switch-handle:before {
+          content: '';
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          margin: -6px 0 0 -6px;
+          width: 12px;
+          height: 12px;
+          background: #f9f9f9;
+          border-radius: 6px;
+          box-shadow: inset 0 1px rgba(0, 0, 0, 0.02);
+          background-image: -webkit-linear-gradient(top, #eeeeee, white);
+          background-image: -moz-linear-gradient(top, #eeeeee, white);
+          background-image: -o-linear-gradient(top, #eeeeee, white);
+          background-image: linear-gradient(to bottom, #eeeeee, white);
+        }
+        .switch-input:checked ~ .switch-handle {
+          left: 40px;
+          box-shadow: -1px 1px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .switch-green > .switch-input:checked ~ .switch-label {
+          background: #4fb845;
+        }
+    	/* END OF SWITCH CSS */
+    	
+        #profileHandler
+        {
+            float: left;
+            width: 18em;
+            margin: 2em 0 0 -1em;
+        }
+    
+        #tblAuth{ margin: 0 0 0 1em; }
+    
+        #tblAuth tr td input, #user_type { width: 43em !important; }        
+    
+        #tblAuth tr td label
+        {
+            font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;
+            font-size: 14px;
+        }
+    
+        #menu span:hover
+        {
+            cursor: pointer;
+        }
+    
+        #menu span
+        {
+            font-weight: bold;
+            font-size: 12px;
+            margin-bottom: 1em !important;
+            display: inline-block;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+    
+        .tm-tag-remove
+        {
+            margin: 0 0 0 0.3em;               
+        }
+    
+        .tm-tag
+        {
+            border: 1px solid gray;                
+            margin: 1em 0 0 1em !important;
+            display: inline-block;
+        }
+    
+        .heads
+        {
+            font-size: 16px;
+            font-weight: bold;
+            margin: 0.9em 0 0 0;
+        }
+    
+        #divSendBtn
+        {
+            float: left;
+            width: 13em;
+            margin:  0.5em 0 0.5em 7.5em !important;           
+            display: inline-block;
+        }
+    
+        #btnSend, #btnSubmit { width: 5em !important; display: inline-block; }
+    
+        input:not([type='button']),select
+        {
+            width: 17em !important;
+            height: 2.5em !important;
+            margin: 1em 0 0 1em;
+        }
+    
+        #mainContainer
+        {
+            width: 53em;
+            height: 38em;
+            /*border: 1px solid lightsteelblue;*/
+            margin: -13.6em -13em 0 0;
+            float: right;
+        }
+    
+        #formHandler
+        {
+            width: 50em;
+            height: 19em;
+            margin: 0 auto;            
+        }
+    </style>
+{% endblock %}
+
+{% block javascript_inline %}
+    <script>   
+        function sortOption(el)
+        {
+            var options = $('#'+ el + ' option');
+            var arr = options.map(function(_, o) { return { t: $(o).text(), v: o.value }; }).get();
+            arr.sort(function(o1, o2) { return o1.t > o2.t ? 1 : o1.t < o2.t ? -1 : 0; });
+            options.each(function(i, o) {
+              o.value = arr[i].v;
+              $(o).text(arr[i].t);
+            });
+        }
+    
+    
+        function error(el)
+        {
+            $(el).css("background-color", "red").css("color","yellow").val("Should not be blank");
+    
+            setTimeout(function()
+            {
+                $(el).css("background-color", "white").css("color","black");
+                $(el).val("");
+            }, 2000);
+        }
+    
+        function triggerMe(el)
+        {
+            var e = jQuery.Event("keydown");
+            e.which = 50; // # Some key code value
+            e.keyCode = 50;
+            $(el).trigger(e);
+        }
+    
+        $(document).ready(function()
+        {            
+            var switches = false;
+            var int_clover = 1;
+            
+            //alert({{ record.userType }});
+            {% if record.userType == 1000 or record.userType == 2 %}
+                $(".switch-input").click();
+                $("#sign").html("*user has clover access*");
+                switches = true;
+                int_clover = 2;
+            {% else %}
+                switches = false;
+                int_clover = 1;
+            {% endif %}
+            $("#is_clover").val(switches);
+            
+            $("#user_type").change(function()
+            {
+                 var access = $(this).val();
+                 if(access == "0")
+                 {
+                     $("#clients option:nth-child(2)").css('display','none');
+                     $("#clients option:nth-child(1)").attr('selected', 'selected');
+                 }
+                 else if(access == 1)
+                 {
+                     $("#clients option:nth-child(2)").css('display','block');
+                 }
+            });
+            
+            $(".switch-input").on('click', this, function()
+    		{ 											
+    			if(switches == false)
+    			{
+    				switches = true;
+    				int_clover = 2;
+    			}
+    			else
+    			{
+    				switches = false;	
+    				int_clover = 1;
+    			}
+    			
+    			$("#sign").html("");
+    			$("#is_clover").val(switches);
+    			
+    			//console.log(int_clover + ": " + switches);
+    			console.log(int_clover + ": " + $("#is_clover").val());
+    		});	
+            //removeFromSelection();
+    
+            /* Set input css thru class */
+            $(".tr1 >td >input").attr("class","form-control");                        
+            sortOption("applications");
+            sortOption("app_id");
+    
+            $('#image').change( function(event) {
+                var tmppath = URL.createObjectURL(event.target.files[0]);
+                
+                console.log(tmppath);
+            });
+            //addSuffix("applications");
+            //addSuffix("app_id");
+    
+            /* GET INITIAL VALUES OF AVAILABLE APPS */
+            var original_apps = new Array();
+            $("#applications").children("option").each(function()
+            {
+                original_apps.push({ "value": $(this).val(), "html": $(this).html() });
+            });    
+    
+            /* Global Vars */
+            var username;
+            var password;
+            var email;   
+            var app_id;
+            var client;
+    
+            /* VALIDATIONS */
+            $('#username').focusout(function()
+            {
+                $(this).val($(this).val().toLowerCase());
+            });
+            /********************************************/                        
+            
+            $("#clients").children("option").each(function()
+            {
+                console.log($(this).text());
+            
+                if($(this).text() == $("#db").val())
+                {
+                    $(this).attr("selected", "selected");
+                    $(this).css("background-color", "green").css("color", "white");
+                }
+            });
+    
+            $("#app_id").keyup(function(e)
+            {
+                if(e.which == 13) 
+                {                                   
+                    $(".tm-tag").children('span').addClass('for_height');                                                        
+    
+                    $(".for_height").css("text-align","center")
+                            .css("padding","0 0 0 2px")
+                            .css("color","#336699");
+                    $(".tm-tag-remove").css("padding","0 2px 0 0").css("font-weight", "bold");        
+    
+                   //alert($(this).val());
+                }
+                //console.log("enter");
+            });                         
+    
+    
+            $("#btnCancel").on("click",this, function()
+            {
+                window.location.href = "{{ path('dashboard_user_access') }}";            
+            });
+            
+            $("#btnSubmit").on("click", this, function()
+            {
+                // console.log($("#user_type").val());
+                // return false;
+                if($("#user_type").val() == "-1")
+                {
+                    alert("Please choose User Type");
+                    return false;
+                }
+                else if($("#clients").val() == "-1")
+                {
+                    alert("Please select Client");
+                    return false;
+                }
+                else
+                {
+                    $("#editForm").submit();     
+                }
+                
+            });
+    
+            $("#btnUpdate").on("click", this, function()
+            {
+                /*
+                $(this).attr('disabled','disabled');
+    
+                var update_app_ids = new Array();
+                $("#app_id").children("option").each(function()
+                {
+                    update_app_ids.push($(this).val());
+                });           
+                var client_id = $("#clients").val();
+                username = $("#username").val();
+                password = $("#password").val();   
+                var image = $("#image").val();
+    
+                $.obj = { "username": username, "password": password, "client_id": client_id, "image":  image};
+                
+                var data= false;
+                if (window.FormData) {
+                     data= new FormData();
+                }
+    
+                console.log($('input[type=file]')[0].files[0]);
+                return false;
+                
+                data.append("size", $('input[type=file]')[0].files[0].size);
+                data.append("fileName",$('input[type=file]')[0].files[0].name);
+                data.append("type",$('input[type=file]')[0].files[0].type);
+                data.append("image",$('input[type=file]')[0].files[0]);
+    
+                jQuery.ajax({
+                        url: "{{ path('dashboard_update_user_app') }}",
+                        type: "POST",
+                        data: data,//Now you attached form datas with filename also,
+                        processData: false,
+                        contentType: false,
+                        success: function (msg) {
+                            alert("Response  Data : "+msg); return false;
+                            
+                            var message = JSON.parse(msg);
+                            if(message.status == "invalid")
+                            {
+                                alert("Invalid data sent...");
+                                $(this).removeAttr('disabled');
+                            }
+                            else if(message.status == "failed")
+                            {
+                                alert("Error updating profile");
+                                $(this).removeAttr('disabled');
+                            }
+                            else
+                            {
+                                console.log(message.path);
+                                alert("User account has been updated");
+                                $(this).removeAttr('disabled');
+                                window.location.href = "{{ path('dashboard_user_access') }}";
+                            }
+                        }
+                });
+                */
+            });
+        });
+    </script>
+{% endblock %}

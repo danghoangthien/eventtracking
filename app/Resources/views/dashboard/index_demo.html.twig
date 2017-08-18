@@ -1,0 +1,952 @@
+{% extends 'layout_ak/base.html.twig' %}
+{% block sub_head_title %}Main Dashboard{% endblock %}
+{% block body %}
+	<div class="wrapper wrapper-content">
+        <div class="row">
+            <div class="col-lg-9" style="padding: 0px 20px;">
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="widget style1 navy-bg">
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    <i class="fa fa-users fa-4x"></i>
+                                </div>
+                                <div class="col-xs-8 text-left">
+                                    <span> Total Users </span>
+                                    <h2 id="total_profiles" class="font-bold">2,182,192</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="widget style1 blue-bg">
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    <i class="fa fa-apple fa-4x"></i>
+                                </div>
+                                <div class="col-xs-8 text-left">
+                                    <span> iOS Users </span>
+                                    <h2 class="font-bold" id="total_ioscount">489,489</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="widget style1 lazur-bg">
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    <i class="fa fa-android fa-4x"></i>
+                                </div>
+                                <div class="col-xs-8 text-left">
+                                    <span> Android Users </span>
+                                    <h2 class="font-bold" id="total_androidcount">606,089</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="widget style1 yellow-bg">
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    <img src="{{ asset('bundles/hyperevent/img/card-deck.png') }}" width="50px">
+                                </div>
+                                <div class="col-xs-8 text-left">
+                                    <span> Audience Cards </span>
+                                    <h2 class="font-bold">16</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="ibox float-e-margins no-borders no-shadow">
+                            <div class="ibox-title-transparent" style="padding: 20px 0px;text-align:center;">
+                                <h3 class="font-bold">User Profiles Breakdown by Country</h3>
+                            </div>
+                            <div class="ibox-content-transparent">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="col-md-6">
+                                            <select id="sel_platform" class="form-control">
+                                                <option value="Android">Android</option>
+                                                <option value="iOS">iOS</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6" id="ProfileBreakdownbyCountry_ctn" style="margin-top:20px">
+                                        <div id="ProfileBreakdownbyCountry" style="height: 237px;"></div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div id="ProfileBreakdownbyCountryMap" style="height: 237px;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                    	<div class="ibox float-e-margins">
+                    		<div class="ibox-title" style="text-align:center">
+                                <h5 class="font-bold"><span data-app_title_name>War of Warriors</span></h5>
+                            </div>
+                    		<div class="ibox-content">
+                    			<div class="row no-margin">
+                    				<div class="col-xs-4">
+                    					<small class="stats-label">&nbsp;</small>
+                    					<h4>Android</h4>
+                    				</div>
+                    				<div class="col-xs-4">
+                    					<small class="stats-label">User Profiles</small>
+                    					<h4>123,972</h4>
+                    				</div>
+                    				<div class="col-xs-4">
+                    					<small class="stats-label">Total Events</small>
+                    					<h4>541,017</h4>
+                    				</div>
+                    			</div>
+                    			<div class="row no-margin">
+                    				<div class="col-xs-4">
+                    					<small class="stats-label">&nbsp;</small>
+                    					<h4>iOS</h4>
+                    				</div>
+                    				<div class="col-xs-4">
+                    					<small class="stats-label">User Profiles</small></small>
+                    					<h4>299,281</h4>
+                    				</div>
+                    				<div class="col-xs-4">
+                    					<small class="stats-label">Total Events</small>
+                    					<h4>391,827</h4>
+                    				</div>
+                    			</div>
+                    			<div class="row" style="margin: 15px 15px 0px 15px;border-top:#eee 1px solid;">
+                                    <div class="col-xs-12">
+                                        <div class="row" style="padding-top:15px" data-ghost_user_count_section>
+                                            <h2 class="no-margins">354,418</h2>
+                                            <b><small>Ghost Users</small></b>
+                                            <div class="stat-percent">77%
+                                               <img src="{{ asset('bundles/hyperevent/img/ghost-icon-0.png') }}" width="18px" style=" padding-left: 5px;" data-toggle="tooltip" data-placement="left" title="Users who have installed the app but haven't perform any in-app action">
+                                            </div>
+                                            <div class="progress progress-mini">
+                                                <div style="width: 77%;height: 5px;" class="progress-bar-danger"></div>
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding-top:15px" data-dormant_user_count_section>
+                                            <h2 class="no-margins ">152,662</h2>
+                                            <b><small> Dormant Users</small></b>
+                                            <div class="stat-percent">36%
+                                                <b style=" letter-spacing: -1px; padding-left: 5px;" data-toggle="tooltip" data-placement="left" title="Users who have not logged in for the past 30 days">
+                                                    z <sup> z <sup> z </sup> </sup>
+                                                </b>
+                                            </div>
+                                            <div class="progress progress-mini">
+                                                <div style="width: 36%;height: 5px;" class="progress-bar-warning"></div>
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding-top:30px">
+                                            <button class="btn btn-white center-block" style="font-size:0.9em;color:#425C7F" data-btn_create_card>Create Audience Card</button>
+                                        </div>
+
+                                        <!--Pop up for Card Creation -->
+
+                                        <!--End of Pop up for Card Creation -->
+                                    </div>
+                                </div>
+                    		</div>
+                    	</div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="ibox float-e-margins">
+                    		<div class="ibox-title" style="text-align:center">
+                                <h5 class="font-bold"><span data-app_title_name>BattleTank</span></h5>
+                            </div>
+                    		<div class="ibox-content">
+                    			<div class="row no-margin">
+                    				<div class="col-xs-4">
+                    					<small class="stats-label">&nbsp;</small>
+                    					<h4>Android</h4>
+                    				</div>
+                    				<div class="col-xs-4">
+                    					<small class="stats-label">User Profiles</small>
+                    					<h4>391</h4>
+                    				</div>
+                    				<div class="col-xs-4">
+                    					<small class="stats-label">Total Events</small>
+                    					<h4>1,719</h4>
+                    				</div>
+                    			</div>
+                    			<div class="row no-margin">
+                    				<div class="col-xs-4">
+                    					<small class="stats-label">&nbsp;</small>
+                    					<h4>iOS</h4>
+                    				</div>
+                    				<div class="col-xs-4">
+                    					<small class="stats-label">User Profiles</small></small>
+                    					<h4>0</h4>
+                    				</div>
+                    				<div class="col-xs-4">
+                    					<small class="stats-label">Total Events</small>
+                    					<h4>0</h4>
+                    				</div>
+                    			</div>
+                    			<div class="row" style="margin: 15px 15px 0px 15px;border-top:#eee 1px solid;">
+                                    <div class="col-xs-12">
+                                        <div class="row" style="padding-top:15px" data-ghost_user_count_section>
+                                            <h2 class="no-margins">114</h2>
+                                            <b><small>Ghost Users</small></b>
+                                            <div class="stat-percent">29%
+                                                <img src="{{ asset('bundles/hyperevent/img/ghost-icon-0.png') }}" width="18px" style=" padding-left: 5px;" data-toggle="tooltip" data-placement="left" title="Users who have installed the app but haven't perform any in-app action">
+                                            </div>
+                                            <div class="progress progress-mini">
+                                                <div style="width: 29%;height: 5px;" class="progress-bar"></div>
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding-top:15px" data-dormant_user_count_section>
+                                            <h2 class="no-margins ">276</h2>
+                                            <b><small>Dormant Users</small></b>
+                                            <div class="stat-percent">70%
+                                                <b style=" letter-spacing: -1px; padding-left: 5px;" data-toggle="tooltip" data-placement="left" title="Users who have not logged in for the past 30 days">
+                                                    z <sup> z <sup> z </sup> </sup>
+                                                </b>
+                                            </div>
+                                            <div class="progress progress-mini">
+                                                <div style="width: 70%;height: 5px;" class="progress-bar-danger"></div>
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding-top:30px">
+                                            <button class="btn btn-white center-block" style="font-size:0.9em;color:#425C7F" data-btn_create_card>Create Audience Card</button>
+                                        </div>
+                                    </div>
+                                </div>
+                    		</div>
+                    	</div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="ibox float-e-margins">
+                    		<div class="ibox-title" style="text-align:center">
+                                <h5 class="font-bold"><span data-app_title_name>Unicorn Race</span></h5>
+                            </div>
+                    		<div class="ibox-content">
+                    			<div class="row no-margin">
+                    				<div class="col-xs-4">
+                    					<small class="stats-label">&nbsp;</small>
+                    					<h4>Android</h4>
+                    				</div>
+                    				<div class="col-xs-4">
+                    					<small class="stats-label">User Profiles</small>
+                    					<h4>0</h4>
+                    				</div>
+                    				<div class="col-xs-4">
+                    					<small class="stats-label">Total Events</small>
+                    					<h4>0</h4>
+                    				</div>
+                    			</div>
+                    			<div class="row no-margin">
+                    				<div class="col-xs-4">
+                    					<small class="stats-label">&nbsp;</small>
+                    					<h4>iOS</h4>
+                    				</div>
+                    				<div class="col-xs-4">
+                    					<small class="stats-label">User Profiles</small></small>
+                    					<h4>183,917</h4>
+                    				</div>
+                    				<div class="col-xs-4">
+                    					<small class="stats-label">Total Events</small>
+                    					<h4>397,917</h4>
+                    				</div>
+                    				<div class="row" style="margin: 15px 15px 0px 15px;border-top:#eee 1px solid;">
+                                        <div class="col-xs-12">
+                                            <div class="row" style="padding-top:15px" data-ghost_user_count_section>
+                                                <h2 class="no-margins">23,671</h2>
+                                                <b><small>Ghost Users</small></b>
+                                                <div class="stat-percent">12.8%
+                                                    <img src="{{ asset('bundles/hyperevent/img/ghost-icon-0.png') }}" width="18px" style=" padding-left: 5px;" data-toggle="tooltip" data-placement="left" title="Users who have installed the app but haven't perform any in-app action">
+                                                </div>
+                                                <div class="progress progress-mini">
+                                                    <div style="width: 12.8%;height: 5px;" class="progress-bar"></div>
+                                                </div>
+                                            </div>
+                                            <div class="row" style="padding-top:15px" data-dormant_user_count_section>
+                                                <h2 class="no-margins ">98,219</h2>
+                                                <b><small>Dormant Users</small></b>
+                                                <div class="stat-percent">53.4%
+                                                    <b style=" letter-spacing: -1px; padding-left: 5px;" data-toggle="tooltip" data-placement="left" title="Users who have not logged in for the past 30 days">
+                                                        z <sup> z <sup> z </sup> </sup>
+                                                    </b>
+                                                </div>
+                                                <div class="progress progress-mini">
+                                                    <div style="width: 53.4%;height: 5px;" class="progress-bar-warning"></div>
+                                                </div>
+                                            </div>
+                                            <div class="row" style="padding-top:30px">
+                                                <button class="btn btn-white center-block" style="font-size:0.9em;color:#425C7F" data-btn_create_card>Create Audience Card</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                    			</div>
+                    		</div>
+                    	</div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="ibox float-e-margins">
+                    		<div class="ibox-title" style="text-align:center">
+                                <h5 class="font-bold"><span data-app_title_name>WizardsFantasy</span></h5>
+                            </div>
+                    		<div class="ibox-content">
+                    			<div class="row no-margin">
+                    				<div class="col-xs-4">
+                    					<small class="stats-label">&nbsp;</small>
+                    					<h4>Android</h4>
+                    				</div>
+                    				<div class="col-xs-4">
+                    					<small class="stats-label">User Profiles</small>
+                    					<h4>481,726</h4>
+                    				</div>
+                    				<div class="col-xs-4">
+                    					<small class="stats-label">Total Events</small>
+                    					<h4>618,917</h4>
+                    				</div>
+                    			</div>
+                    			<div class="row no-margin">
+                    				<div class="col-xs-4">
+                    					<small class="stats-label">&nbsp;</small>
+                    					<h4>iOS</h4>
+                    				</div>
+                    				<div class="col-xs-4">
+                    					<small class="stats-label">User Profiles</small></small>
+                    					<h4>6,291</h4>
+                    				</div>
+                    				<div class="col-xs-4">
+                    					<small class="stats-label">Total Events</small>
+                    					<h4>84,917</h4>
+                    				</div>
+                    				<div class="row" style="margin: 15px 15px 0px 15px;border-top:#eee 1px solid;">
+                                        <div class="col-xs-12">
+                                            <div class="row" style="padding-top:15px" data-ghost_user_count_section>
+                                                <h2 class="no-margins">283,012</h2>
+                                                <b><small>Ghost Users</small></b>
+                                                <div class="stat-percent">58%
+                                                    <img src="{{ asset('bundles/hyperevent/img/ghost-icon-0.png') }}" width="18px" style=" padding-left: 5px;" data-toggle="tooltip" data-placement="left" title="Users who have installed the app but haven't perform any in-app action">
+                                                </div>
+                                                <div class="progress progress-mini">
+                                                    <div style="width: 58%;height: 5px;" class="progress-bar-warning"></div>
+                                                </div>
+                                            </div>
+                                            <div class="row" style="padding-top:15px" data-dormant_user_count_section>
+                                                <h2 class="no-margins ">112,761</h2>
+                                                <b><small>Dormant Users</small></b>
+                                                <div class="stat-percent">23%
+                                                    <b style=" letter-spacing: -1px; padding-left: 5px;" data-toggle="tooltip" data-placement="left" title="Users who have not logged in for the past 30 days">
+                                                        z <sup> z <sup> z </sup> </sup>
+                                                    </b>
+                                                </div>
+                                                <div class="progress progress-mini">
+                                                    <div style="width: 23%;height: 5px;" class="progress-bar"></div>
+                                                </div>
+                                            </div>
+                                            <div class="row" style="padding-top:30px">
+                                                <button class="btn btn-white center-block" style="font-size:0.9em;color:#425C7F" data-btn_create_card>Create Audience Card</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                    			</div>
+                    		</div>
+                    	</div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-lg-3">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="ibox">
+                            <div class="ibox-title">
+                                <h5 class="font-bold">Recently Added Audience Card</h5>
+                            </div>
+                            <div class="ibox-content">
+    							<div class="uj_cards row no-margin">
+    								<div class="col-md-12 bg-navy">
+    									<span class="uj_card_title">Train Traveler, $$</span>
+    								</div>
+    							</div>
+    							<div class="uj_cards row no-margin">
+    								<div class="col-md-12 bg-navy-2">
+    									<span class="uj_card_title">Paying User, ID</span>
+    								</div>
+    							</div>
+    							<div class="uj_cards row no-margin">
+    								<div class="col-md-12 bg-navy-3">
+										<span class="uj_card_title">Air Traveler, $$$$</span>
+									</div>
+    							</div>
+    							<div class="uj_cards row no-margin">
+    								<div class="col-md-12 bg-navy-4">
+										<span class="uj_card_title">Loyal 45 days+</span>
+    								</div>
+    							</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="ibox">
+                            <div class="ibox-title">
+                                <h5 class="font-bold">Recent In-App Events</h5>
+                            </div>
+                            <div class="ibox-content">
+    							<ul class="products-list product-list-in-box">
+                                	<li class="item">
+                                		<div class="product-icon" style="background:#FFA500">
+                                			<i class="fa fa-shopping-cart"></i>
+                                		</div>
+                                		<div class="product-info">
+                                			<span class="product-title">Add to Cart</span>
+                                			<span class="product-description">
+                                                2016-04-16 14:00:29
+                                            </span>
+                                            <i class="fa fa-android"></i> &nbsp;<small>War of Warriors</small>
+                            			</div>
+                                	</li>
+                                	<li class="item">
+                                		<div class="product-icon" style="background:#169C5E">
+                                			<i class="fa fa-dollar"></i>
+                                		</div>
+                                		<div class="product-info">
+                                			<span class="product-title">Purchase
+                                                <span class="label pull-right">$1800</span>
+                                			</span>
+                                			<span class="product-description">
+                                                2016-04-16 12:00:48
+                                            </span>
+                                            <i class="fa fa-android"></i> &nbsp;<small>War of Warriors</small>
+                            			</div>
+                                	</li>
+                                	<li class="item">
+                                		<div class="product-icon" style="background:#8E5FB9">
+                                			<i class="fa fa-heart"></i>
+                                		</div>
+                                		<div class="product-info">
+                                			<span class="product-title">Add to Wishlist</span>
+                                			<span class="product-description">
+                                                2016-04-16 12:22:17
+                                            </span>
+                                            <i class="fa fa-apple"></i> &nbsp;<small>WizardsFantasy</small>
+                            			</div>
+                                	</li>
+                                	<li class="item">
+                                		<div class="product-icon" style="background:#8E5FB9">
+                                			<i class="fa fa-heart"></i>
+                                		</div>
+                                		<div class="product-info">
+                                			<span class="product-title">Add to Wishlist</span>
+                                			<span class="product-description">
+                                                2016-04-16 12:18:03
+                                            </span>
+                                            <i class="fa fa-apple"></i> &nbsp;<small>Battle Tanks</small>
+                            			</div>
+                                	</li>
+                                	<li class="item">
+                                		<div class="product-icon" style="background:#169C5E">
+                                			<i class="fa fa-dollar"></i>
+                                		</div>
+                                		<div class="product-info">
+                                			<span class="product-title">Purchase
+                                                <span class="label pull-right">$33.91</span>
+                                			</span>
+                                			<span class="product-description">
+                                                2016-04-16 11:52:31
+                                            </span>
+                                            <i class="fa fa-android"></i> &nbsp;<small>War of Warriors</small>
+                            			</div>
+                                	</li>
+                                </ul>
+                            </div>
+                            <div class="box-footer text-center">
+                                <a>See User Journey</a>
+                            </div>
+                        </div>
+                     </div>
+                </div>
+                <!-- GrowthBot -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="ibox">
+                            <div class="ibox-content">
+                                <div style="text-align:center;padding-top:20px">
+                                    <img src="http://hq.hypergrowth.co/design/hq/img/bot2.png" alt="" style="width:80px;">
+                                    <br/>
+                                    <p style="text-align: center; padding-bottom:10px; padding-top: 10px;">
+                                        <span style="font-size: 1.4em; font-weight: bolder">GrowthBot</span>
+                                        <br/>
+                                        <span class="lead" style="font-size:1em">A private assistant that care.</span>
+                                        <br/>
+                                    </p>
+                                    <a href="https://slack.com/oauth/authorize?scope=bot,commands,chat:write:user,channels:read,users:read&client_id=21541092466.59229792498&redirect_uri=https://bot.hypergrowth.co:3001/new" target="_blank"><img src="{{ asset('bundles/hyperevent/img/add-to-slack.png') }}" style="width:150px" title="Add to slack"></a>
+                                    <br/>
+                                    <span class="lead" style="font-size:1em">
+                                        <a href="http://hypergrowth.co/growthbot/" target="_blank" title="Lear more">Learn more</a>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--/ GrowthBot -->
+            </div>
+        </div>
+    </div>
+
+    <div class="modal inmodal" id="create_card_modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content animated bounceInRight">
+                <div class="modal-header"style="background: #2F4050;color: #fff;">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title"><img src="{{ asset('bundles/hyperevent/img/card-creator.png') }}" width="50px"> &nbsp;&nbsp;<span data-app_title_name></span></h4>
+                </div>
+                <div class="modal-body">
+                    <div style="padding:20px;border: #D2D6DE solid 1px">
+                        <div class="row no-margin" data-ghost_user_count_section>
+                            <h2 class="no-margins">354,418</h2>
+                            <b><small>Ghost Users</small></b>
+                            <div class="stat-percent">77%
+                               <img src="{{ asset('bundles/hyperevent/img/ghost-icon-0.png') }}" width="18px" style=" padding-left: 5px;" data-toggle="tooltip" data-placement="left" title="Users who have installed app but never perform any action in app">
+                            </div>
+                            <div class="progress progress-mini">
+                                <div style="width: 77%;height: 5px;" class="progress-bar-danger"></div>
+                            </div>
+                        </div>
+                        <div class="row no-margin" style="padding-top:15px" data-dormant_user_count_section>
+                            <h2 class="no-margins ">152,662</h2>
+                            <b><small> Dormant Users</small></b>
+                            <div class="stat-percent">36%
+                                <b style=" letter-spacing: -1px; padding-left: 5px;" data-toggle="tooltip" data-placement="left" title="Users who have not logged in for the past 30 days">
+                                    z <sup> z <sup> z </sup> </sup>
+                                </b>
+                            </div>
+                            <div class="progress progress-mini">
+                                <div style="width: 36%;height: 5px;" class="progress-bar-warning"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row no-margins" style="padding-top:15px">
+                        Create <em>ONE</em> audience card with the following condition(s):
+                    </div>
+                    <div class="row no-margins" style="padding-top:15px">
+                        <div class="form-group">
+                            <label>Card Name</label>
+                            <input type="text" placeholder="Dormant User 30 Days" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>Card Description</label>
+                            <input type="text" placeholder="Users who have been inactive for the past 30 days" class="form-control">
+                        </div>
+                        <div class="form-group">
+    						<label>Platform</label>
+    						<div>
+    						    <label style="margin-top:8px;width: 150px;font-weight:normal;">
+    						    	<input class="platform_codes" name="platform_android" type="checkbox" value="android"> Android
+    						    	</input>
+    							</label>
+    							<label style="margin-top:8px;width: 150px;font-weight:normal;">
+    								<input class="platform_codes" name="platform_ios" type="checkbox" value="ios"> iOS </input>
+    							</label>
+    						</div>
+    					</div>
+    					<div class="form-group">
+    						<label>Target</label>
+    						<div>
+    						    <label style="margin-top:8px;width: 150px;font-weight:normal;">
+    						    	<input class="card_condition" name="target_ghost" type="checkbox" value="ghost"> Ghost Users
+    						    	</input>
+    							</label>
+    							<label style="margin-top:8px;width: 150px;font-weight:normal;">
+    								<input class="card_condition" name="target_dormant" type="checkbox" value="dormant"> Dormant Users </input>
+    							</label>
+    						</div>
+    					</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">Cancel</button>
+                    <span class="tool-tip pull-right" data-toggle="tooltip" data-placement="top" title="Sorry you cannot make changes as this feature is disabled in demo mode.">
+						<button type="button" class="btn btn-primary pull-right disabled">Create Card</button>
+					</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block javascript_inline %}
+    <script src="{{ asset('bundles/hyperevent/plugins/highcharts/highcharts.js') }}"></script>
+    <script src="{{ asset('bundles/hyperevent/plugins/highcharts/exporting.js') }}"></script>
+	<script>
+
+        $(document).ready(function() {
+
+            // var appidplatform_dt = "http://52.27.159.130/app_dev.php/analytics/metadata/profiles_breakdown_by_appidplatform";
+            // var clientlist_dt = "http://52.27.159.130/app_dev.php/analytics/metadata/client_list";
+
+            // $.getJSON(appidplatform_dt, function(json) {
+            //     //set variables as array
+            //     var app_id = [];
+            //     var android_profile_count = [];
+            //     var android_appid = [];
+            //     var ios_profile_count = [];
+            //     var ios_appid = [];
+
+            //     //push json result into array object
+            //     for (i = 0; i < json.data.length; i++) {
+            //         app_id.push(json.data[i].app_id);
+            //         if (json.data[i].platform == "Android") {
+            //             android_profile_count.push(json.data[i].profile_count);
+            //             android_appid.push(json.data[i].app_id);
+            //         }
+            //         if (json.data[i].platform == "iOS") {
+            //             ios_profile_count.push(json.data[i].profile_count);
+            //             ios_appid.push(json.data[i].app_id);
+            //         }
+            //     };
+
+            //     //get client list
+            //     $.getJSON(clientlist_dt, function(json) {
+            //         var client_app = [];
+            //         var client_name = [];
+
+            //         //replace app id with client name
+            //         for (i = 0; i < json.data.length; i++) {
+            //             client_app.push(json.data[i].client_app);
+            //             client_name.push(json.data[i].client_name);
+            //         };
+
+            //         for (i = 0; i < client_app.length; i++) {
+            //             var string = client_app[i];
+            //             for (a = 0; a < android_appid.length; a++) {
+            //                 var substring = android_appid[a];
+            //                 if (string.indexOf(substring) > -1) {
+            //                     android_appid[a] = client_name[i];
+            //                     android_profile_count[a] = client_name[i] + ':' + android_profile_count[a];
+            //                 }
+            //             }
+            //             for (b = 0; b < ios_appid.length; b++) {
+            //                 var substring = ios_appid[b];
+            //                 if (string.indexOf(substring) > -1) {
+            //                     ios_appid[b] = client_name[i];
+            //                     ios_profile_count[b] = client_name[i] + ':' + ios_profile_count[b];
+            //                 }
+            //             }
+            //         };
+
+
+            //         //Apply value = 0 if app doesn't have either android or ios
+            //         for (i = 0; i < client_name.length; i++) {
+            //             if ($.inArray(client_name[i], ios_appid) == -1) {
+            //                 ios_appid.push(client_name[i]);
+            //                 ios_profile_count.push(client_name[i] + ':' + 0);
+            //             }
+            //             if ($.inArray(client_name[i], android_appid) == -1) {
+            //                 android_appid.push(client_name[i]);
+            //                 android_profile_count.push(client_name[i] + ':' + 0);
+            //             }
+            //         }
+
+            //         ios_profile_count = ios_profile_count.sort();
+            //         android_profile_count = android_profile_count.sort();
+            //         var ios_count = [];
+            //         var android_count = [];
+
+            //         console.log(ios_profile_count);
+            //         // Trim Text and get only Device Count
+            //         for (i = 0; i < ios_profile_count.length; i++) {
+            //             ios_count.push(eval(ios_profile_count[i].substring(ios_profile_count[i].indexOf(':') + 1)));
+            //         }
+            //         for (i = 0; i < android_profile_count.length; i++) {
+            //             android_count.push(eval(android_profile_count[i].substring(android_profile_count[i].indexOf(':') + 1)));
+            //         }
+
+            //         //Get Data for Summary Rows
+            //         var total_ioscount = eval(ios_count.join('+'));
+            //         var total_androidcount = eval(android_count.join('+'));
+            //         var total_devicecount = parseInt(total_ioscount) + parseInt(total_androidcount);
+
+            //         $("#total_ioscount").text(addThousandsSeparator(total_ioscount));
+            //         $("#total_androidcount").text(addThousandsSeparator(total_androidcount));
+            //         $("#total_profiles").text(addThousandsSeparator(total_devicecount));
+
+            //     })
+            // })
+
+            var apiurl1 = "http://audiencekit.hypergrowth.co/analytics/metadata/profiles_breakdown_by_country";
+            $.getJSON(apiurl1, function(json) {
+
+                var device_ids = [];
+                var android_device_id = [];
+                var ios_device_id = [];
+                var country_names = [];
+                var android_countries = [];
+                var ios_countries = [];
+                var platforms = [];
+
+                //push json result into array object
+                for (i = 0; i < json.data.length; i++) {
+                    country_names.push(json.data[i].country_name);
+                    if (json.data[i].platform == "Android") {
+                        android_device_id.push(json.data[i].device_id + ":" + json.data[i].country_name);
+                        android_countries.push(json.data[i].country_name);
+                    }
+                    if (json.data[i].platform == "iOS") {
+                        ios_device_id.push(json.data[i].device_id + ":" + json.data[i].country_name);
+                        ios_countries.push(json.data[i].country_name);
+                    }
+                };
+                //Apply value = 0 if app doesn't have either android or ios
+                for (i = 0; i < country_names.length; i++) {
+                    if ($.inArray(country_names[i], ios_countries) == -1) {
+                        ios_device_id.push('0:' + country_names[i]);
+                    }
+                    if ($.inArray(country_names[i], android_countries) == -1) {
+                        android_device_id.push('0:' + country_names[i]);
+                    }
+                }
+
+                var countrydata = [];
+                var deviceset = [];
+                $("#sel_platform").change(function() {
+                    var valueSelected = "";
+                    $("select option:selected").each(function() {
+                        valueSelected = $(this).text();
+                        var resetCanvas = function() {
+                            $('#ProfileBreakdownbyCountry').remove(); // this is my <canvas> element
+                            $('#ProfileBreakdownbyCountry_ctn').append('<canvas id="ProfileBreakdownbyCountry"><canvas>');
+                            canvas = document.querySelector('#ProfileBreakdownbyCountry');
+                            ctx = canvas.getContext('2d');
+                            ctx.canvas.width = $('#ProfileBreakdownbyCountry').width(); // resize to parent width
+                            ctx.canvas.height = $('#ProfileBreakdownbyCountry').height(); // resize to parent height
+                            var x = canvas.width / 2;
+                            var y = canvas.height / 2;
+                            ctx.font = '10pt Verdana';
+                            ctx.textAlign = 'center';
+                            ctx.fillText('Profile Breakdown by Country Chart', x, y);
+                        };
+                        if (valueSelected === 'Android') {
+                            deviceset = [];
+                            $('#ProfileBreakdownbyCountryMap').empty();
+                            //resetCanvas();
+                            var set = android_device_id.sort(naturalCompare);
+                            deviceset.push(set);
+                        }
+                        if (valueSelected === 'iOS') {
+                            deviceset = [];
+                            $('#ProfileBreakdownbyCountryMap').empty();
+                            //resetCanvas();
+                            var set = ios_device_id.sort(naturalCompare);
+                            deviceset.push(set);
+                        }
+                        transferdt(deviceset[0]);
+                    });
+                }).change();
+
+                function transferdt(a) {
+                    countrydata = a;
+
+                    // Trim Text and Separate Country and Device Counts
+                    var MapDeviceCounts = [];
+                    var MapCountry = [];
+                    for (i = 0; i < countrydata.length; i++) {
+                        MapCountry.push(countrydata[i].substring(countrydata[i].indexOf(':') + 1));
+                        MapDeviceCounts.push(eval(countrydata[i].substring(0, countrydata[i].indexOf(':'))));
+                    }
+
+                    //Data for Country Chart
+                    var CountryChartLabel = MapCountry.slice(0, 10);
+                    var CountryChartValue = MapDeviceCounts.slice(0, 10);
+                    //console.log(CountryChartLabel);
+                    //console.log(CountryChartValue);
+
+                    var Worldmap = [];
+                    for (i = 0; i < 20; i++) {
+                        var display = {};
+                        var a = MapCountry[i];
+                        var b = parseInt(MapDeviceCounts[i]);
+                        display[a] = b;
+                        Worldmap.push(display);
+                    }
+                    var obj0 = Worldmap[0];
+                    var obj1 = Worldmap[1];
+                    var obj2 = Worldmap[2];
+                    var obj3 = Worldmap[3];
+                    var obj4 = Worldmap[4];
+                    var obj5 = Worldmap[5];
+                    var obj6 = Worldmap[6];
+                    var obj7 = Worldmap[7];
+                    var obj8 = Worldmap[8];
+                    var obj9 = Worldmap[9];
+                    var obj10 = Worldmap[10];
+                    var obj11 = Worldmap[11];
+                    var obj12 = Worldmap[12];
+                    var obj13 = Worldmap[13];
+                    var obj14 = Worldmap[16];
+                    var obj15 = Worldmap[15];
+                    var obj16 = Worldmap[16];
+                    var obj17 = Worldmap[17];
+                    var obj18 = Worldmap[18];
+                    var obj19 = Worldmap[19];
+                    // Merge object2 into object1
+                    $.extend(obj0, obj1, obj2, obj3, obj4, obj5, obj6, obj7, obj8, obj9,
+                        obj10, obj11, obj12, obj13, obj14, obj15, obj16, obj17, obj18, obj19
+                    );
+                    var WorldmapData = obj0;
+                    var CountryProfilesData = WorldmapData;
+                    //console.log(CountryProfilesData);
+
+                    $('#ProfileBreakdownbyCountryMap').vectorMap({
+                        map: 'world_mill_en',
+                        backgroundColor: "transparent",
+                        regionStyle: {
+                            initial: {
+                                fill: '#eeeeee',
+                                "fill-opacity": 1,
+                                stroke: 'none',
+                                "stroke-width": 0,
+                                "stroke-opacity": 1
+                            }
+                        },
+                        series: {
+                            regions: [{
+                                values: CountryProfilesData,
+                                scale: ["#c0c5c9", "#2e3f4e"],
+                                normalizeFunction: 'polynomial'
+                            }]
+                        },
+                        onRegionLabelShow: function(e, el, code) {
+                            if (typeof CountryProfilesData[code] != "undefined")
+                                el.html(el.html() + ': ' + addThousandsSeparator(CountryProfilesData[code]) + ' profiles');
+                        }
+                    });
+
+                    //BarChart
+
+                    $('#ProfileBreakdownbyCountry').highcharts({
+                        chart: {
+                            type: 'column',
+                            backgroundColor: 'transparent'
+                        },
+                        title: {
+                            text: ''
+                        },
+                        xAxis: {
+                            categories: CountryChartLabel,
+                            crosshair: true,
+                            gridLineColor: '#D3D3D3',
+                            gridLineWidth: 1
+                        },
+                        yAxis: {
+                            min: 0,
+                            title: {
+                                text: ''
+                            },
+                            gridLineColor: '#D3D3D3',
+                            gridLineWidth: 1
+                        },
+                        tooltip: {
+                            headerFormat: '<span style="font-weight:bold">{point.key}</span><table>',
+                            pointFormat: '<tr><td style="padding:0"></td>' +
+                                '<td style="padding:0"><b>{point.y:,.0f} profiles</b></td></tr>',
+                            footerFormat: '</table>',
+                            shared: true,
+                            useHTML: true
+                        },
+                        plotOptions: {
+                            column: {
+                                pointPadding: 0.2,
+                                borderWidth: 0
+                            }
+                        },
+                        series: [{
+                            name: 'Country',
+                            data: CountryChartValue,
+                            pointWidth: 22
+                        }],
+                        colors: ["#2E3F4E", "#456f90"],
+                        credits: {
+                            enabled: false
+                        },
+                        exporting: {
+                            enabled: false
+                        }
+                    });
+                };
+
+            });
+
+            //Add Thousands Separator
+            function addThousandsSeparator(input) {
+                    var output = input
+                    if (parseFloat(input)) {
+                        input = new String(input); // so you can perform string operations
+                        var parts = input.split("."); // remove the decimal part
+                        parts[0] = parts[0].split("").reverse().join("").replace(/(\d{3})(?!$)/g, "$1,").split("").reverse().join("");
+                        output = parts.join(".");
+                    }
+                    return output;
+                }
+                // Sort number with string
+            function naturalCompare(b, a) {
+                var ax = [],
+                    bx = [];
+
+                a.replace(/(\d+)|(\D+)/g, function(_, $1, $2) {
+                    ax.push([$1 || Infinity, $2 || ""])
+                });
+                b.replace(/(\d+)|(\D+)/g, function(_, $1, $2) {
+                    bx.push([$1 || Infinity, $2 || ""])
+                });
+
+                while (ax.length && bx.length) {
+                    var an = ax.shift();
+                    var bn = bx.shift();
+                    var nn = (an[0] - bn[0]) || an[1].localeCompare(bn[1]);
+                    if (nn) return nn;
+                }
+                return ax.length - bx.length;
+            }
+
+        });
+    </script>
+    <script>
+    var MainDashboard =  {
+        init: function() {
+            this.fireEventClickCreateCard();
+        },
+        fireEventClickCreateCard: function() {
+    		var self = this;
+    		$(document).on('click', '[data-btn_create_card]', function() {
+    			var AppTitleStatisticEl = $(this).closest('.ibox');
+    			var appTitleName = AppTitleStatisticEl.find('[data-app_title_name]').text();
+    			var ghostUserCountHtml = AppTitleStatisticEl.find('[data-ghost_user_count_section]').html();
+    			var dormantUserCountHtml = AppTitleStatisticEl.find('[data-dormant_user_count_section]').html();
+    			$('#create_card_modal').on('shown.bs.modal', function (e) {
+						$(this).find('[data-app_title_name]').text(appTitleName + ' Card');
+						$(this).find('[data-ghost_user_count_section]').html(ghostUserCountHtml);
+						$(this).find('[data-dormant_user_count_section]').html(dormantUserCountHtml);
+						$(this).find("input[type=text], textarea").val("");
+						$(this).find('input[type=checkbox]').removeAttr('checked');
+				});
+    			$('#create_card_modal').modal('hide').modal('show');
+    		});
+    	},
+    };
+    $(document).ready(function() {
+        MainDashboard.init();
+        $('input').iCheck({
+    		checkboxClass: 'icheckbox_square-blue',
+    		radioClass: 'iradio_square-blue',
+    		increaseArea: '20%'
+      	});
+    });
+	</script>
+{% endblock %}

@@ -1,0 +1,378 @@
+{% extends 'layout_ak/base.html.twig' %}
+{% block sub_head_title %}Admin - Data Acquisition{% endblock %}
+{% block body %}
+	<div class="wrapper wrapper-content">
+		<div class="row">
+			<div class="col-lg-3">
+				<div class="ibox float-e-margins">
+					<div class="ibox-title">
+                        <h5 class="font-bold">Total User Profiles</h5>
+                    </div>
+                    <div class="ibox-content">
+						<h1 class="no-margins" id="total_profiles"></h1>
+						<div class="font-bold">profiles</div>
+					</div>
+                </div>
+			</div>
+			<div class="col-lg-3">
+				<div class="ibox float-e-margins">
+					<div class="ibox-title">
+                        <h5 class="font-bold">Total iOS Profiles</h5>
+                    </div>
+                    <div class="ibox-content">
+						<h1 class="no-margins" id="total_ioscount"></h1>
+						<div class="font-bold">profiles</div>
+					</div>
+                </div>
+			</div>
+			<div class="col-lg-3">
+				<div class="ibox float-e-margins">
+					<div class="ibox-title">
+                        <h5 class="font-bold">Total Android Profiles</h5>
+                    </div>
+                    <div class="ibox-content">
+						<h1 class="no-margins" id="total_androidcount"></h1>
+						<div class="font-bold">profiles</div>
+					</div>
+                </div>
+			</div>
+			<div class="col-lg-3">
+				<div class="ibox float-e-margins">
+					<div class="ibox-title">
+                        <h5 class="font-bold">Total Data Sources</h5>
+                    </div>
+                    <div class="ibox-content">
+						<h1 class="no-margins" id="total_datasources"></h1>
+						<div class="font-bold">sources</div>
+					</div>
+                </div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-9">
+                <div class="ibox float-e-margins">
+					<div class="ibox-title">
+                        <h5 class="font-bold">Profile Breakdown by App Title</h5>
+                    </div>
+                    <div class="ibox-content">
+						<div class="row">
+							<div class="col-md-9">
+								<div id="ProfileBreakdownbyAppSourcePlatform" style="min-width: 210px; height: 450px;margin-top:20px;"></div>
+							</div>
+							<div class="col-md-3">
+								<div id="ProfileBreakdownbyAppSource" style="height:400px"></div>
+							</div>
+						</div>
+					</div>
+                </div>
+            </div>
+			{{ render(controller('HyperEventBundle:Dashboard/DataAcquisition/DataAcquisition:renderRecentLogin', {request: app.request})) }}
+		</div>
+
+		<div class="row">
+			<div class="col-lg-9">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+						<h5 class="font-bold">Profile Breakdown by Country</h5>
+					</div>
+					<div class="ibox-content">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-md-6">
+									<select id="sel_platform" class="form-control">
+										<option value="2">Android</option>
+										<option value="1">iOS</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-md-6" id="ProfileBreakdownbyCountry_ctn" style="margin-top:20px">
+								<div id="ProfileBreakdownbyCountry" style="height: 237px;"></div>
+							</div>
+							<div class="col-md-6">
+								<div id="ProfileBreakdownbyCountryMap" style="height: 237px;"></div>
+							</div>
+						</div>
+
+                    </div>
+                </div>
+            </div>
+		</div>
+	</div>
+{% endblock %}
+{% block stylesheets_inline %}
+    <link rel="stylesheet" href="{{ asset('bundles/hyperevent/plugins/jvectormap/jquery-jvectormap-1.2.2.css') }}">
+{% endblock %}
+{% block javascript_inline %}
+    	<script src="{{ asset('bundles/hyperevent/plugins/highcharts/highcharts.js') }}"></script>
+    	<script src="{{ asset('bundles/hyperevent/plugins/highcharts/exporting.js') }}"></script>
+        <script>
+        var DataAcquisition =  {
+        	defaultPlatform: 2,
+        	listCountry: [],
+        	listCountryCount: [],
+            init: function() {
+                this.loadCountDeviceByPlatform();
+                this.loadCountDeviceByCountry();
+                this.fireEventChangePlatform();
+            },
+            loadCountDeviceByPlatform: function() {
+                var self = this;
+                $.ajax({
+                    url : "{{ path('dashboard_data_acquisition_load_count_device_by_app_title') }}",
+                    type: 'GET',
+                    dataType: 'json',
+                    beforeSend: function() {
+                        $('#total_profiles').html('loading...');
+                        $('#total_ioscount').html('loading...');
+                        $('#total_androidcount').html('loading...');
+                        $('#total_datasources').html('loading...');
+                    },
+                    success: function(resp) {
+                    	$('#total_profiles').html(self.addThousandsSeparator(resp.total_device));
+                        $('#total_ioscount').html(self.addThousandsSeparator(resp.total_ios));
+                        $('#total_androidcount').html(self.addThousandsSeparator(resp.total_android));
+                        $('#total_datasources').html(self.addThousandsSeparator(resp.total_client));
+                        self.chartProfileBreakdownByAppSource(resp.list_app_title, resp.list_ios_count_by_app_title, resp.list_android_count_by_app_title);
+                    },
+                    error: function() {
+                    	$('#total_profiles').html('0');
+                        $('#total_ioscount').html('0');
+                        $('#total_androidcount').html('0');
+                        $('#total_datasources').html('0');
+                    }
+                });
+            },
+            loadCountDeviceByCountry: function() {
+                var self = this;
+                $.ajax({
+                    url : "{{ path('dashboard_data_acquisition_load_count_device_by_country') }}",
+                    type: 'GET',
+                    dataType: 'json',
+                    beforeSend: function() {
+                    },
+                    success: function(resp) {
+                    	self.listCountry = resp.list_country;
+                    	self.listCountryCount = resp.list_country_count;
+                        self.chartProfileBreakdownByCountry(self.listCountry[self.defaultPlatform], self.listCountryCount[self.defaultPlatform]);
+                    },
+                    error: function() {
+                    }
+                });
+            },
+            addThousandsSeparator: function(input) {
+    			var output = input
+    			if (parseFloat(input)) {
+    				input = new String(input); // so you can perform string operations
+    				var parts = input.split("."); // remove the decimal part
+    				parts[0] = parts[0].split("").reverse().join("").replace(/(\d{3})(?!$)/g, "$1,").split("").reverse().join("");
+    				output = parts.join(".");
+    			}
+    			return output;
+	    	},
+	    	chartProfileBreakdownByAppSource: function (listClientName, listIOSCountByClient, listAndroidCountByClient) {
+	    	    Highcharts.setOptions({
+					lang: {
+						thousandsSep: ','
+					}
+				});
+				$('#ProfileBreakdownbyAppSourcePlatform').empty();
+	    	    $('#ProfileBreakdownbyAppSourcePlatform').highcharts({
+					chart: {
+						type: 'bar',
+						backgroundColor: 'transparent'
+					},
+					title: {
+						text: ''
+					},
+					xAxis: {
+						categories: listClientName,
+						crosshair: true,
+						gridLineColor: '#D3D3D3',
+            			gridLineWidth: 1
+					},
+					yAxis: {
+						min: 0,
+						title: {
+							text: ''
+						},
+						gridLineColor: '#D3D3D3',
+            			gridLineWidth: 1
+					},
+					tooltip: {
+						headerFormat: '<span style="font-weight:bold">{point.key}</span><table>',
+						pointFormat: '<tr><td style="padding:0">{series.name}: </td>' +
+							'<td style="padding:0"><b>{point.y:,.0f} profiles</b></td></tr>',
+						footerFormat: '</table>',
+						shared: true,
+						useHTML: true
+					},
+					plotOptions: {
+						bar: {
+							pointPadding: 0.1,
+							borderWidth: 0,
+							dataLabels: {
+								enabled: false
+							},
+							groupPadding: 0
+						}
+					},
+					series: [{
+						name: 'Android',
+						data: listAndroidCountByClient,
+						pointWidth: 15
+
+					}, {
+						name: 'iOS',
+						data: listIOSCountByClient,
+						pointWidth: 16
+					}],
+					colors: ["#2E3F4E", "#456f90"],
+					credits: {
+					  enabled: false
+					},
+					exporting: {
+						enabled: false
+					}
+				}); // END COLUMN CHART //
+				var ProfileBreakdownbyAppSourceData = [];
+                for (i = 0; i < listClientName.length; i++) {
+                    var PieChartValue = parseInt(listIOSCountByClient[i]) + parseInt(listAndroidCountByClient[i]);
+                    var PieChartLabel = listClientName[i];
+                    var PieChartData = {y: PieChartValue, name: PieChartLabel};
+                    ProfileBreakdownbyAppSourceData.push(PieChartData);
+                }
+                $('#ProfileBreakdownbyAppSource').empty();
+				$('#ProfileBreakdownbyAppSource').highcharts({
+					chart: {
+						backgroundColor: 'rgba(0,0,0,0)',
+						plotBorderWidth: null,
+						plotShadow: false,
+						type: 'pie'
+					},
+					title: {
+						text: ''
+					},
+					tooltip: {
+						pointFormat: '{series.name}: <b>{point.percentage:,.0f}%</b>'
+					},
+					plotOptions: {
+						pie: {
+							allowPointSelect: true,
+							cursor: 'pointer',
+							dataLabels: {
+								enabled: false
+							},
+							showInLegend: true
+						}
+					},
+					series: [{
+						name: 'Sources',
+						colorByPoint: true,
+						data: ProfileBreakdownbyAppSourceData
+					}],
+					credits: {
+					  enabled: false
+					},
+					colors: ["#00c0ef","#333333","#2E3F4E","#f39c12","#3c8dbc","#800080","#00a65a","#f56954","#FF69B4"],
+					exporting: {
+						enabled: false
+					}
+				});
+	    	},
+	    	chartProfileBreakdownByCountry: function(listCountry, listCountryCount) {
+	    		var self = this;
+	    		$('#ProfileBreakdownbyCountry').empty();
+	    	    $('#ProfileBreakdownbyCountry').highcharts({
+					chart: {
+						type: 'column',
+						backgroundColor: 'transparent'
+					},
+					title: {
+						text: ''
+					},
+					xAxis: {
+						categories: listCountry,
+						crosshair: true,
+						gridLineColor: '#D3D3D3',
+            			gridLineWidth: 1
+					},
+					yAxis: {
+						min: 0,
+						title: {
+							text: ''
+						},
+						gridLineColor: '#D3D3D3',
+            			gridLineWidth: 1
+					},
+					tooltip: {
+						headerFormat: '<span style="font-weight:bold">{point.key}</span><table>',
+						pointFormat: '<tr><td style="padding:0"></td>' +
+							'<td style="padding:0"><b>{point.y:,.0f} profiles</b></td></tr>',
+						footerFormat: '</table>',
+						shared: true,
+						useHTML: true
+					},
+					plotOptions: {
+						column: {
+							pointPadding: 0.2,
+							borderWidth: 0
+						}
+					},
+					series: [{
+						name: 'Country',
+						data: listCountryCount,
+						pointWidth: 22
+					}],
+					colors: ["#2E3F4E", "#456f90"],
+					credits: {
+					  enabled: false
+					},
+					exporting: {
+						enabled: false
+					}
+				});
+				var CountryProfilesData = {};
+				for (var i=0; i<listCountry.length; i++) {
+					CountryProfilesData[listCountry[i]] = listCountryCount[i];
+				}
+				$('#ProfileBreakdownbyCountryMap').empty();
+				$('#ProfileBreakdownbyCountryMap').vectorMap({
+					map: 'world_mill_en',
+					backgroundColor: "transparent",
+					regionStyle: {
+					  initial: {
+						fill: '#eeeeee',
+						"fill-opacity": 1,
+						stroke: 'none',
+						"stroke-width": 0,
+						"stroke-opacity": 1
+					  }
+					},
+					series: {
+					  regions: [{
+						  values: CountryProfilesData,
+						  scale: ["#c0c5c9", "#2e3f4e"],
+						  normalizeFunction: 'polynomial'
+						}]
+					},
+					onRegionLabelShow: function (e, el, code) {
+					  if (typeof CountryProfilesData[code] != "undefined")
+						el.html(el.html() + ': ' + self.addThousandsSeparator(CountryProfilesData[code]) + ' profiles');
+					}
+				});
+
+	    	},
+	    	fireEventChangePlatform: function() {
+	    		var self = this;
+	    		$(document).on('change', '#sel_platform', function(e) {
+	    			self.defaultPlatform = $(this).val();
+	    			console.log(self.defaultPlatform);
+	    			self.chartProfileBreakdownByCountry(self.listCountry[self.defaultPlatform], self.listCountryCount[self.defaultPlatform]);
+	    		});
+	    	}
+        };
+        $(document).ready(function() {
+            DataAcquisition.init();
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,44 @@
+ul.baraja-container {
+	width: 180px;
+	height: 280px;
+	margin: 0 auto 30px;
+	position: relative;
+	padding: 0;
+	list-style-type: none;
+}
+
+ul.baraja-container li {
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	position: absolute;
+	top: 0;
+	left: 0;
+	cursor: pointer;
+	background: #fff;
+	pointer-events: auto;
+	-webkit-backface-visibility: hidden;
+	-moz-backface-visibility: hidden;
+	-ms-backface-visibility: hidden;
+	-o-backface-visibility: hidden;
+	backface-visibility: hidden;
+}
+
+ul.baraja-container li.result_hover{
+	z-index:9999 !important;
+	background-image: url(http://www.transparenttextures.com/patterns/45-degree-fabric-dark.png) !important;
+}
+
+.no-js ul.baraja-container {
+	width: auto;
+	height: auto;
+	text-align: center;
+}
+
+.no-js ul.baraja-container li {
+	position: relative;
+	display: inline-block;
+	width: 200px;
+	height: 310px;
+	margin: 10px;
+}

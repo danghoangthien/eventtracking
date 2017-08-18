@@ -1,0 +1,932 @@
+{% extends 'layout_ak/base.html.twig' %}
+{% block sub_head_title %}Main Dashboard{% endblock %}
+{% block body %}
+	{% if isLimitAccount == true %}
+		<!--Warning bar-->
+        <div class="row wrapper page-heading no-padding">
+            <div class="col-lg-12">
+                <div class="alert alert-danger alert-dismissable">
+                    <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                    You have exceeded the users / data points limit in your existing subscription plan. To continue using Audience Kit, <a class="alert-link" href="mailto:billing@hypergrowth.co">Upgrade Subscription</a>.
+                </div>
+            </div>
+        </div>
+        <!-- end of Warning bar-->
+	{% endif %}
+	<div class="wrapper wrapper-content">
+		<div class="row">
+            <div class="col-lg-9" style="padding: 0px 20px;">
+            	<!-- Total User Profiles,iOS Profiles,Android Profiles,Audience Cards -->
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="widget style1 navy-bg">
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    <i class="fa fa-users fa-4x"></i>
+                                </div>
+                                <div class="col-xs-8 text-left">
+                                    <span> Total Users </span>
+                                    <h2 id="total_profiles" class="font-bold"></h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="widget style1 blue-bg">
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    <i class="fa fa-apple fa-4x"></i>
+                                </div>
+                                <div class="col-xs-8 text-left">
+                                    <span> iOS Users </span>
+                                    <h2 class="font-bold" id="total_ioscount"></h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="widget style1 lazur-bg">
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    <i class="fa fa-android fa-4x"></i>
+                                </div>
+                                <div class="col-xs-8 text-left">
+                                    <span> Android Users </span>
+                                    <h2 class="font-bold" id="total_androidcount"></h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="widget style1 yellow-bg">
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    <img src="{{ asset('bundles/hyperevent/img/card-deck.png') }}" width="50px">
+                                </div>
+                                <div class="col-xs-8 text-left">
+                                    <span> Audience Cards </span>
+                                    <h2 class="font-bold" id="total_filter"></h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Profile Breakdown by Country -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="ibox float-e-margins no-borders no-shadow">
+                            <div class="ibox-title-transparent" style="padding: 20px 0px;text-align:center;">
+                                <h3 class="font-bold">User Profiles Breakdown by Country</h3>
+                            </div>
+                            <div class="ibox-content">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="col-md-6">
+                                            <select id="sel_platform" class="form-control">
+                                                <option value="2">Android</option>
+                                                <option value="1">iOS</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6" id="ProfileBreakdownbyCountry_ctn" style="margin-top:20px">
+                                        <div id="ProfileBreakdownbyCountry" style="height: 237px;"></div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div id="ProfileBreakdownbyCountryMap" style="height: 237px;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--/ Profile Breakdown by Country -->
+                <!--/ Total User Profiles,iOS Profiles,Android Profiles,Audience Cards -->
+                <!-- Profile & Event Breakdown by AppTitle -->
+                <div class="row" id="eventProfileBreakdownByAppTitleContainer">
+
+                </div>
+                <!-- \Profile & Event Breakdown by AppTitle -->
+
+            </div>
+            <div class="col-lg-3">
+            	<!-- Recently Added Audience Card -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="ibox">
+                            <div class="ibox-title">
+                                <h5 class="font-bold">Recently Added Audience Card</h5>
+                            </div>
+                            <div class="ibox-content recent_filter">
+                            	<div class="uj_cards row no-margin" style="text-align:center;">
+									<h5>Loading...</h5>
+								</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Recently Added Audience Card -->
+                <!-- Recent In-App Events -->
+                <div class="row">
+					<div class="col-md-12">
+						<div class="ibox">
+							<div class="ibox-title">
+								<h5 class="font-bold">Recent In-App Events</h5>
+							</div>
+							<div class="ibox-content">
+								<ul class="products-list product-list-in-box" id="recentInAppEventContainer">
+								</ul>
+							</div>
+							<div class="box-footer text-center">
+								<a>See User Journey</a>
+							</div>
+						</div>
+					 </div>
+				</div>
+				<!--/ Recent In-App Events -->
+				<!-- GrowthBot -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="ibox">
+                            <div class="ibox-content">
+                                <div style="text-align:center;padding-top:20px">
+                                    <img src="http://hq.hypergrowth.co/design/hq/img/bot2.png" alt="" style="width:80px;">
+                                    <br/>
+                                    <p style="text-align: center; padding-bottom:10px; padding-top: 10px;">
+                                        <span style="font-size: 1.4em; font-weight: bolder">GrowthBot</span>
+                                        <br/>
+                                        <span class="lead" style="font-size:1em">A private assistant that care.</span>
+                                        <br/>
+                                    </p>
+                                    <a href="https://slack.com/oauth/authorize?scope=bot,commands,chat:write:user,channels:read,users:read&client_id=21541092466.59229792498&redirect_uri=https://bot.hypergrowth.co:3001/new" target="_blank"><img src="{{ asset('bundles/hyperevent/img/add-to-slack.png') }}" style="width:150px" title="Add to slack"></a>
+                                    <br/>
+                                    <span class="lead" style="font-size:1em">
+                                        <a href="http://hypergrowth.co/growthbot/" target="_blank" title="Lear more">Learn more</a>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--/ GrowthBot -->
+            </div>
+        </div>
+	</div>
+
+    <div class="modal inmodal" id="create_card_modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content animated bounceInRight">
+                <div class="modal-header"style="background: #2F4050;color: #fff;">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title"><img src="{{ asset('bundles/hyperevent/img/card-creator.png') }}" width="50px">&nbsp;&nbsp;<span data-app_title_name></span></h4>
+                </div>
+                <form action="{{ path('dashboard_main_create_card_by_popup') }}" method="post" id="create-card-by-popup-frm">
+	                <div class="modal-body">
+	                    <div style="padding:20px;border: #D2D6DE solid 1px">
+	                        <div class="row no-margin" data-ghost_user_count_section></div>
+	                        <div class="row no-margin" style="padding-top:15px" data-dormant_user_count_section></div>
+	                    </div>
+	                    <div class="row no-margins" style="padding-top:15px">
+	                        Create <em>ONE</em> audience card with the following condition(s):
+	                    </div>
+	                    <div class="row no-margins" style="padding-top:15px">
+	                        <div class="form-group">
+	                            <label>Card Name</label>
+	                            <input type="text" name="create_card_by_popup[name]" placeholder="Dormant User 30 Days" class="form-control">
+	                        </div>
+	                        <div class="form-group">
+	                            <label>Card Description</label>
+	                            <input type="text" name="create_card_by_popup[desc]" placeholder="Users who have been inactive for the past 30 days" class="form-control">
+	                        </div>
+	                        <div class="form-group">
+	    						<label>Platform</label>
+								<div>
+								    <label style="margin-top:8px;width: 150px;font-weight:normal;">
+								    	<input name="create_card_by_popup[platform_android]" class="platform_codes" name="platform_android" type="checkbox" value="android"> Android
+								    	</input>
+	    							</label>
+	    							<label style="margin-top:8px;width: 150px;font-weight:normal;">
+	    								<input name="create_card_by_popup[platform_ios]" class="platform_codes" name="platform_ios" type="checkbox" value="ios"> iOS </input>
+	    							</label>
+	    						</div>
+	    					</div>
+	    					<div class="form-group">
+	    						<label>Target</label>
+								<div>
+								    <label style="margin-top:8px;width: 150px;font-weight:normal;">
+								    	<input name="create_card_by_popup[target_ghost]" class="card_condition" type="checkbox" value="ghost"> Ghost Users
+								    	</input>
+	    							</label>
+	    							<label style="margin-top:8px;width: 150px;font-weight:normal;">
+	    								<input name="create_card_by_popup[target_dormant]"  class="card_condition" type="checkbox" value="dormant"> Dormant Users </input>
+	    							</label>
+	    						</div>
+	    					</div>
+	                    </div>
+	                </div>
+	                <div class="modal-footer">
+	                    <button type="button" class="btn btn-white" data-dismiss="modal">Cancel</button>
+	                    <button type="submit" class="btn btn-primary">Create Card</button>
+	                </div>
+	                <input name="create_card_by_popup[app_title_id]" value="" type="hidden">
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block stylesheets_inline %}
+    <link rel="stylesheet" href="{{ asset('bundles/hyperevent/plugins/jvectormap/jquery-jvectormap-1.2.2.css') }}">
+{% endblock %}
+{% block javascript_inline %}
+    <script src="{{ asset('bundles/hyperevent/plugins/highcharts/highcharts.js') }}"></script>
+    <script src="{{ asset('bundles/hyperevent/plugins/highcharts/exporting.js') }}"></script>
+    <script src="{{ asset('bundles/hyperevent/plugins/jquery-template/jquery.loadTemplate.min.js') }}"></script>
+    <script src="{{ asset('assets/js/jquery.validate.min.js') }}"></script>
+    <script>
+        var MainDashboard =  {
+        	defaultPlatform: 2,
+        	listCountry: [],
+        	listCountryCount: [],
+            init: function() {
+            	this.loadCountDeviceByPlatform();
+            	this.loadCountDeviceByCountry();
+            	this.loadRecentFilter();
+            	this.loadRecentInAppEvent();
+            	this.loadEventProfileBreakdownByAppTitle();
+                this.fireEventChangePlatform();
+                this.fireEventClickCreateCard();
+                this.validateCreateCardByPopup();
+
+            },
+            loadRecentFilter: function() {
+            	var self = this;
+                $.ajax({
+                    url : "{{ path('dashboard_main_load_recent_filter') }}",
+                    type: 'GET',
+                    dataType: 'json',
+                    beforeSend: function() {
+                        $('#total_filter').html('loading...');
+                    },
+                    success: function(resp) {
+                    	$('#total_filter').html(self.addThousandsSeparator(resp.filterTotalCount));
+                    	$('.recent_filter').html(resp.content);
+                    },
+                    error: function() {
+                    	$('#total_filter').html('0');
+                    }
+                });
+            },
+            loadRecentInAppEvent: function(){
+				 var self = this;
+                $.ajax({
+                    url : "{{ path('dashboard_main_load_recent_in_app_event') }}",
+                    type: 'GET',
+                    dataType: 'json',
+                    beforeSend: function() {
+                    },
+                    success: function(resp) {
+                    	self.bindRecentInAppEvent(resp);
+                    },
+                    error: function() {
+                    }
+                });
+	    	},
+	    	bindRecentInAppEvent: function(data) {
+	    		$.each(data,function(index,recent_event){
+	    			//console.log('recent_event',recent_event);
+	    			if (recent_event.tag_as_iap == '1'){
+	    				//load purchase tpl
+	    				var tpl = "#recent_iap_in_app_event_tpl";
+	    			} else {
+	    				//load non-purchase tpl
+	    				var tpl = "#recent_non_iap_in_app_event_tpl";
+	    			}
+	    			$("#recentInAppEventContainer").loadTemplate(tpl,recent_event,{append:true,afterInsert:function()
+	    				{
+	    					var iconEl = $("[data-id='"+recent_event.id+"'][data-icon]");
+	    					//console.log('iconEl id',iconEl.data('icon'));
+	    					if(iconEl.data("icon") !== null){
+	    						iconEl.addClass(iconEl.data("icon"));
+	    					}
+
+	    					var colorEl = $("[data-id='"+recent_event.id+"'][data-color]");
+	    					//console.log('iconEl id',iconEl.data('icon'));
+	    					if(colorEl.data("color") !== null){
+	    						colorEl.css('backgroundColor',colorEl.data("color"));
+	    					}
+
+	    					var appPlatformEl = $("[data-id='"+recent_event.id+"'][data-app_platform]");
+	    					if(appPlatformEl.data("app_platform") !== null){
+	    						if (appPlatformEl.data("app_platform") == 2) {
+	    							appPlatformEl.addClass('fa-android');
+	    						} else if (appPlatformEl.data("app_platform") == 1) {
+	    							appPlatformEl.addClass('fa-apple');
+	    						}
+	    					}
+	    				}
+
+	    			});
+	    		});
+	    	},
+            loadCountDeviceByPlatform: function() {
+                var self = this;
+                $.ajax({
+                    url : "{{ path('dashboard_main_load_count_device_by_app_title') }}",
+                    type: 'GET',
+                    dataType: 'json',
+                    beforeSend: function() {
+                        $('#total_profiles').html('loading...');
+                        $('#total_ioscount').html('loading...');
+                        $('#total_androidcount').html('loading...');
+                    },
+                    success: function(resp) {
+                    	$('#total_profiles').html(self.addThousandsSeparator(resp.total_device));
+                        $('#total_ioscount').html(self.addThousandsSeparator(resp.total_ios));
+                        $('#total_androidcount').html(self.addThousandsSeparator(resp.total_android));
+                        //self.chartProfileBreakdownByAppSource(resp.list_app_title, resp.list_ios_count_by_app_title, resp.list_android_count_by_app_title);
+                    },
+                    error: function() {
+                    	$('#total_profiles').html('0');
+                        $('#total_ioscount').html('0');
+                        $('#total_androidcount').html('0');
+                    }
+                });
+            },
+            loadCountDeviceByCountry: function() {
+                var self = this;
+                $.ajax({
+                    url : "{{ path('dashboard_main_load_count_device_by_country') }}",
+                    type: 'GET',
+                    dataType: 'json',
+                    beforeSend: function() {
+                    },
+                    success: function(resp) {
+                    	self.listCountry = resp.list_country;
+                    	self.listCountryCount = resp.list_country_count;
+                        self.chartProfileBreakdownByCountry(self.listCountry[self.defaultPlatform], self.listCountryCount[self.defaultPlatform]);
+                    },
+                    error: function() {
+                    }
+                });
+            },
+            addThousandsSeparator: function(input) {
+    			var output = input
+    			if (parseFloat(input)) {
+    				input = new String(input); // so you can perform string operations
+    				var parts = input.split("."); // remove the decimal part
+    				parts[0] = parts[0].split("").reverse().join("").replace(/(\d{3})(?!$)/g, "$1,").split("").reverse().join("");
+    				output = parts.join(".");
+    			}
+    			return output;
+	    	},
+	    	loadEventProfileBreakdownByAppTitle: function(){
+				 var self = this;
+                $.ajax({
+                    url : "{{ path('dashboard_main_load_count_device_and_event_by_app_title') }}",
+                    type: 'GET',
+                    dataType: 'json',
+                    beforeSend: function() {
+                    },
+                    success: function(resp) {
+
+                    	self.bindEventProfileBreakdownByAppTitle(resp);
+                    },
+                    error: function() {
+                    }
+                });
+	    	},
+	    	bindEventProfileBreakdownByAppTitle: function (data){
+	    		var self = this;
+    			$.each(data,function(app_title,app_title_data){
+    				var bindingValue = {
+    					'app_title' : app_title
+    					, 'device_count': 0
+    					, 'ghost_user_count': 0
+    					, 'ghost_user_count_formated': 0
+    					, 'ghost_user_percent': 0
+    					, 'ghost_user_progress_bar': ''
+    					, 'dormant_user_count': 0
+    					, 'dormant_user_count_formated': 0
+    					, 'dormant_user_percent': 0
+    					, 'dormant_user_progress_bar': ''
+    				};
+    				$.each(app_title_data,function(platform_id,platform_data){
+    					if (platform_id == 1) {
+    						bindingValue.ios_device_count = platform_data.device_count;
+    						bindingValue.ios_event_count = platform_data.event_count;
+    						bindingValue.device_count += platform_data.device_count;
+    					} else if(platform_id == 2) {
+    						bindingValue.android_device_count = platform_data.device_count;
+    						bindingValue.android_event_count = platform_data.event_count;
+    						bindingValue.device_count += platform_data.device_count;
+    					}
+						bindingValue.ghost_user_count = platform_data.ghost_user_count;
+						bindingValue.dormant_user_count = platform_data.dormant_user_count;
+						bindingValue.app_title_id = platform_data.app_title_id;
+    				});
+    				bindingValue.ghost_user_percent = Math.floor((bindingValue.ghost_user_count / bindingValue.device_count) * 100);
+					if (bindingValue.ghost_user_percent <= 29) {
+						bindingValue.ghost_user_progress_bar = 'progress-bar';
+					} else if (bindingValue.ghost_user_percent >= 30 && bindingValue.ghost_user_percent <= 59) {
+						bindingValue.ghost_user_progress_bar = 'progress-bar-warning';
+					} else if (bindingValue.ghost_user_percent >= 60) {
+						bindingValue.ghost_user_progress_bar = 'progress-bar-danger';
+					}
+					bindingValue.ghost_user_count_formated = self.addThousandsSeparator(bindingValue.ghost_user_count);
+
+
+					bindingValue.dormant_user_percent = Math.floor((bindingValue.dormant_user_count / bindingValue.device_count) * 100);
+					if (bindingValue.dormant_user_percent <= 29) {
+						bindingValue.dormant_user_progress_bar = 'progress-bar';
+					} else if (bindingValue.dormant_user_percent >= 30 && bindingValue.dormant_user_percent <= 59) {
+						bindingValue.dormant_user_progress_bar = 'progress-bar-warning';
+					} else if (bindingValue.dormant_user_percent >= 60) {
+						bindingValue.dormant_user_progress_bar = 'progress-bar-danger';
+					}
+					bindingValue.dormant_user_count_formated = self.addThousandsSeparator(bindingValue.dormant_user_count);
+
+					$("#eventProfileBreakdownByAppTitleContainer").loadTemplate("#profile_and_event_breakdown_by_app_title_tpl",bindingValue,{append:true,afterInsert:function(){
+
+	    				var ghostUserProgressBarEl = $("[data-app_title='"+app_title+"'][data-ghost_user_progress_bar]");
+    					//console.log('iconEl id',iconEl.data('icon'));
+    					if(ghostUserProgressBarEl.data("ghost_user_progress_bar") !== null){
+    						ghostUserProgressBarEl.addClass(ghostUserProgressBarEl.data("ghost_user_progress_bar"));
+    						ghostUserProgressBarEl.css('width', ghostUserProgressBarEl.data('ghost_user_percent') + '%');
+    					}
+    					var dormantUserProgressBarEl = $("[data-app_title='"+app_title+"'][data-dormant_user_progress_bar]");
+    					//console.log('iconEl id',iconEl.data('icon'));
+    					if(dormantUserProgressBarEl.data("dormant_user_progress_bar") !== null){
+    						dormantUserProgressBarEl.addClass(dormantUserProgressBarEl.data("dormant_user_progress_bar"));
+    						dormantUserProgressBarEl.css('width', dormantUserProgressBarEl.data('dormant_user_percent') + '%');
+    					}
+					}});
+    			});
+
+	    	},
+	    	chartProfileBreakdownByAppSource: function (listClientName, listIOSCountByClient, listAndroidCountByClient) {
+	    	    Highcharts.setOptions({
+					lang: {
+						thousandsSep: ','
+					}
+				});
+				$('#ProfileBreakdownbyAppSourcePlatform').empty();
+	    	    $('#ProfileBreakdownbyAppSourcePlatform').highcharts({
+					chart: {
+						type: 'bar',
+						backgroundColor: 'transparent'
+					},
+					title: {
+						text: ''
+					},
+					xAxis: {
+						categories: listClientName,
+						crosshair: true,
+						gridLineColor: '#D3D3D3',
+            			gridLineWidth: 1
+					},
+					yAxis: {
+						min: 0,
+						title: {
+							text: ''
+						},
+						gridLineColor: '#D3D3D3',
+            			gridLineWidth: 1
+					},
+					tooltip: {
+						headerFormat: '<span style="font-weight:bold">{point.key}</span><table>',
+						pointFormat: '<tr><td style="padding:0">{series.name}: </td>' +
+							'<td style="padding:0"><b>{point.y:,.0f} profiles</b></td></tr>',
+						footerFormat: '</table>',
+						shared: true,
+						useHTML: true
+					},
+					plotOptions: {
+						bar: {
+							pointPadding: 0.1,
+							borderWidth: 0,
+							dataLabels: {
+								enabled: false
+							},
+							groupPadding: 0
+						}
+					},
+					series: [{
+						name: 'Android',
+						data: listAndroidCountByClient,
+						pointWidth: 15
+
+					}, {
+						name: 'iOS',
+						data: listIOSCountByClient,
+						pointWidth: 16
+					}],
+					colors: ["#2E3F4E", "#456f90"],
+					credits: {
+					  enabled: false
+					},
+					exporting: {
+						enabled: false
+					}
+				}); // END COLUMN CHART //
+				var ProfileBreakdownbyAppSourceData = [];
+                for (i = 0; i < listClientName.length; i++) {
+                    var PieChartValue = parseInt(listIOSCountByClient[i]) + parseInt(listAndroidCountByClient[i]);
+                    var PieChartLabel = listClientName[i];
+                    var PieChartData = {y: PieChartValue, name: PieChartLabel};
+                    ProfileBreakdownbyAppSourceData.push(PieChartData);
+                }
+                $('#ProfileBreakdownbyAppSource').empty();
+				$('#ProfileBreakdownbyAppSource').highcharts({
+					chart: {
+						backgroundColor: 'rgba(0,0,0,0)',
+						plotBorderWidth: null,
+						plotShadow: false,
+						type: 'pie'
+					},
+					title: {
+						text: ''
+					},
+					tooltip: {
+						pointFormat: '{series.name}: <b>{point.percentage:,.0f}%</b>'
+					},
+					plotOptions: {
+						pie: {
+							allowPointSelect: true,
+							cursor: 'pointer',
+							dataLabels: {
+								enabled: false
+							},
+							showInLegend: true
+						}
+					},
+					series: [{
+						name: 'Sources',
+						colorByPoint: true,
+						data: ProfileBreakdownbyAppSourceData
+					}],
+					credits: {
+					  enabled: false
+					},
+					colors: ["#00c0ef","#333333","#2E3F4E","#f39c12","#3c8dbc","#800080","#00a65a","#f56954","#FF69B4"],
+					exporting: {
+						enabled: false
+					}
+				});
+	    	},
+	    	chartProfileBreakdownByAppSource: function (listClientName, listIOSCountByClient, listAndroidCountByClient) {
+	    	    Highcharts.setOptions({
+					lang: {
+						thousandsSep: ','
+					}
+				});
+				$('#ProfileBreakdownbyAppSourcePlatform').empty();
+	    	    $('#ProfileBreakdownbyAppSourcePlatform').highcharts({
+					chart: {
+						type: 'bar',
+						backgroundColor: 'transparent'
+					},
+					title: {
+						text: ''
+					},
+					xAxis: {
+						categories: listClientName,
+						crosshair: true,
+						gridLineColor: '#D3D3D3',
+            			gridLineWidth: 1
+					},
+					yAxis: {
+						min: 0,
+						title: {
+							text: ''
+						},
+						gridLineColor: '#D3D3D3',
+            			gridLineWidth: 1
+					},
+					tooltip: {
+						headerFormat: '<span style="font-weight:bold">{point.key}</span><table>',
+						pointFormat: '<tr><td style="padding:0">{series.name}: </td>' +
+							'<td style="padding:0"><b>{point.y:,.0f} profiles</b></td></tr>',
+						footerFormat: '</table>',
+						shared: true,
+						useHTML: true
+					},
+					plotOptions: {
+						bar: {
+							pointPadding: 0.1,
+							borderWidth: 0,
+							dataLabels: {
+								enabled: false
+							},
+							groupPadding: 0
+						}
+					},
+					series: [{
+						name: 'Android',
+						data: listAndroidCountByClient,
+						pointWidth: 15
+
+					}, {
+						name: 'iOS',
+						data: listIOSCountByClient,
+						pointWidth: 16
+					}],
+					colors: ["#2E3F4E", "#456f90"],
+					credits: {
+					  enabled: false
+					},
+					exporting: {
+						enabled: false
+					}
+				}); // END COLUMN CHART //
+				var ProfileBreakdownbyAppSourceData = [];
+                for (i = 0; i < listClientName.length; i++) {
+                    var PieChartValue = parseInt(listIOSCountByClient[i]) + parseInt(listAndroidCountByClient[i]);
+                    var PieChartLabel = listClientName[i];
+                    var PieChartData = {y: PieChartValue, name: PieChartLabel};
+                    ProfileBreakdownbyAppSourceData.push(PieChartData);
+                }
+                $('#ProfileBreakdownbyAppSource').empty();
+				$('#ProfileBreakdownbyAppSource').highcharts({
+					chart: {
+						backgroundColor: 'rgba(0,0,0,0)',
+						plotBorderWidth: null,
+						plotShadow: false,
+						type: 'pie'
+					},
+					title: {
+						text: ''
+					},
+					tooltip: {
+						pointFormat: '{series.name}: <b>{point.percentage:,.0f}%</b>'
+					},
+					plotOptions: {
+						pie: {
+							allowPointSelect: true,
+							cursor: 'pointer',
+							dataLabels: {
+								enabled: false
+							},
+							showInLegend: true
+						}
+					},
+					series: [{
+						name: 'Sources',
+						colorByPoint: true,
+						data: ProfileBreakdownbyAppSourceData
+					}],
+					credits: {
+					  enabled: false
+					},
+					colors: ["#00c0ef","#333333","#2E3F4E","#f39c12","#3c8dbc","#800080","#00a65a","#f56954","#FF69B4"],
+					exporting: {
+						enabled: false
+					}
+				});
+	    	},
+	    	chartProfileBreakdownByCountry: function(listCountry, listCountryCount) {
+	    		var self = this;
+	    		$('#ProfileBreakdownbyCountry').empty();
+	    	    $('#ProfileBreakdownbyCountry').highcharts({
+					chart: {
+						type: 'column',
+						backgroundColor: 'transparent'
+					},
+					title: {
+						text: ''
+					},
+					xAxis: {
+						categories: listCountry,
+						crosshair: true,
+						gridLineColor: '#D3D3D3',
+            			gridLineWidth: 1
+					},
+					yAxis: {
+						min: 0,
+						title: {
+							text: ''
+						},
+						gridLineColor: '#D3D3D3',
+            			gridLineWidth: 1
+					},
+					tooltip: {
+						headerFormat: '<span style="font-weight:bold">{point.key}</span><table>',
+						pointFormat: '<tr><td style="padding:0"></td>' +
+							'<td style="padding:0"><b>{point.y:,.0f} profiles</b></td></tr>',
+						footerFormat: '</table>',
+						shared: true,
+						useHTML: true
+					},
+					plotOptions: {
+						column: {
+							pointPadding: 0.2,
+							borderWidth: 0
+						}
+					},
+					series: [{
+						name: 'Country',
+						data: listCountryCount,
+						pointWidth: 22
+					}],
+					colors: ["#2E3F4E", "#456f90"],
+					credits: {
+					  enabled: false
+					},
+					exporting: {
+						enabled: false
+					}
+				});
+				var CountryProfilesData = {};
+				for (var i=0; i<listCountry.length; i++) {
+					CountryProfilesData[listCountry[i]] = listCountryCount[i];
+				}
+				$('#ProfileBreakdownbyCountryMap').empty();
+				$('#ProfileBreakdownbyCountryMap').vectorMap({
+					map: 'world_mill_en',
+					backgroundColor: "transparent",
+					regionStyle: {
+					  initial: {
+						fill: '#eeeeee',
+						"fill-opacity": 1,
+						stroke: 'none',
+						"stroke-width": 0,
+						"stroke-opacity": 1
+					  }
+					},
+					series: {
+					  regions: [{
+						  values: CountryProfilesData,
+						  scale: ["#c0c5c9", "#2e3f4e"],
+						  normalizeFunction: 'polynomial'
+						}]
+					},
+					onRegionLabelShow: function (e, el, code) {
+					  if (typeof CountryProfilesData[code] != "undefined")
+						el.html(el.html() + ': ' + self.addThousandsSeparator(CountryProfilesData[code]) + ' profiles');
+					}
+				});
+
+	    	},
+	    	fireEventChangePlatform: function() {
+	    		var self = this;
+	    		$(document).on('change', '#sel_platform', function(e) {
+	    			self.defaultPlatform = $(this).val();
+	    			self.chartProfileBreakdownByCountry(self.listCountry[self.defaultPlatform], self.listCountryCount[self.defaultPlatform]);
+	    		});
+	    	},
+	    	fireEventClickCreateCard: function() {
+	    		var self = this;
+	    		$(document).on('click', '[data-btn_create_card]', function() {
+	    			var AppTitleStatisticEl = $(this).closest('.ibox');
+	    			var appTitleName = AppTitleStatisticEl.find('[data-app_title_name]').text();
+	    			var ghostUserCountHtml = AppTitleStatisticEl.find('[data-ghost_user_count_section]').html();
+	    			var dormantUserCountHtml = AppTitleStatisticEl.find('[data-dormant_user_count_section]').html();
+	    			var appTitleId = $(this).data('app_title_id');
+	    			$('#create_card_modal').on('shown.bs.modal', function (e) {
+							$(this).find('[data-app_title_name]').text(appTitleName + ' Card');
+							$(this).find('[data-ghost_user_count_section]').html(ghostUserCountHtml);
+							$(this).find('[data-dormant_user_count_section]').html(dormantUserCountHtml);
+							$(this).find("input[name='create_card_by_popup[app_title_id]']").val(appTitleId);
+							$(this).find("input[type=text], textarea").val("");
+							$(this).find('input[type=checkbox]').removeAttr('checked');
+					});
+	    			$('#create_card_modal').modal('hide').modal('show');
+	    		});
+	    	},
+	    	validateCreateCardByPopup: function() {
+	    		var self = this;
+	    		$('#create-card-by-popup-frm').validate({
+                    rules : {
+                        'create_card_by_popup[name]': {
+                            required: true
+                        },
+                        'create_card_by_popup[desc]': {
+                            required: true
+
+                        }
+                    },
+                    submitHandler: function(form) {
+						self.bindCreateCardByPopup(form);
+                    }
+                });
+	    	},
+	    	bindCreateCardByPopup: function(form) {
+	    		console.log('bindCreateCardByPopup');
+	    		$.ajax({
+                    url : "{{ path('dashboard_main_create_card_by_popup') }}",
+                    type: 'POST',
+                    dataType: 'json',
+                    data: $('#create-card-by-popup-frm').serialize(),
+                    beforeSend: function() {
+                        $('#create-card-by-popup-frm').attr('disabled', true);
+                    },
+                    success: function(resp) {
+                    	alert(resp.msg);
+                    },
+                    complete: function() {
+                        $('#create-card-by-popup-frm').attr('disabled', false);
+                    }
+                });
+	    	}
+        };
+        $(document).ready(function() {
+            MainDashboard.init();
+        });
+	</script>
+	<script type="text/html" id="profile_and_event_breakdown_by_app_title_tpl">
+		<div class="col-lg-6">
+        	<div class="ibox float-e-margins">
+        		<div class="ibox-title" style="text-align:center">
+                    <h5 class="font-bold" data-app_title_name data-template-bind='[{"attribute":"content","value":"app_title"}]'></h5>
+                </div>
+        		<div class="ibox-content">
+        			<div class="row no-margin">
+        				<div class="col-xs-4">
+        					<small class="stats-label">&nbsp;</small>
+        					<h4>Android</h4>
+        				</div>
+        				<div class="col-xs-4">
+        					<small class="stats-label">User Profiles</small>
+        					<h4 data-template-bind='[{"attribute":"content","value":"android_device_count"}]'>0</h4>
+        				</div>
+        				<div class="col-xs-4">
+        					<small class="stats-label">Total Events</small>
+        					<h4 data-template-bind='[{"attribute":"content","value":"android_event_count"}]'>0</h4>
+        				</div>
+        			</div>
+        			<div class="row no-margin">
+        				<div class="col-xs-4">
+        					<small class="stats-label">&nbsp;</small>
+        					<h4>iOS</h4>
+        				</div>
+        				<div class="col-xs-4">
+        					<small class="stats-label">User Profiles</small></small>
+        					<h4 data-template-bind='[{"attribute":"content","value":"ios_device_count"}]'>0</h4>
+        				</div>
+        				<div class="col-xs-4">
+        					<small class="stats-label">Total Events</small>
+        					<h4 data-template-bind='[{"attribute":"content","value":"ios_event_count"}]'>0</h4>
+        				</div>
+        			</div>
+        			<div class="row" style="margin: 15px 15px 0px 15px;border-top:#eee 1px solid;">
+                        <div class="col-xs-12">
+                            <div class="row" style="padding-top:15px" data-ghost_user_count_section>
+                                <h2 class="no-margins" data-template-bind='[{"attribute":"content","value":"ghost_user_count_formated"}]'></h2>
+                                <b><small>Ghost Users</small></b>
+                                <div class="stat-percent" data-template-bind='[{"attribute":"contentPrepend","value":"ghost_user_percent"}]'>%
+                                   <img src="{{ asset('bundles/hyperevent/img/ghost-icon-0.png') }}" width="18px" style=" padding-left: 5px;" data-toggle="tooltip" data-placement="left" title="" data-original-title="Users who have installed the app but haven't perform any in-app action">
+                                </div>
+                                <div class="progress progress-mini">
+                                    <div style="width: 77%;height: 5px;" data-template-bind='[{"attribute":"data-ghost_user_progress_bar","value":"ghost_user_progress_bar"},{"attribute":"data-app_title","value":"app_title"},{"attribute":"data-ghost_user_percent","value":"ghost_user_percent"}]'></div>
+                                </div>
+                            </div>
+                            <div class="row" style="padding-top:15px" data-dormant_user_count_section>
+                                <h2 class="no-margins" data-template-bind='[{"attribute":"content","value":"dormant_user_count_formated"}]'></h2>
+                                <b><small> Dormant Users</small></b>
+                                <div class="stat-percent" data-template-bind='[{"attribute":"contentPrepend","value":"dormant_user_percent"}]'>%
+                                    <b style=" letter-spacing: -1px; padding-left: 5px;" data-toggle="tooltip" data-placement="left" title="Users who have not logged in for the past 30 days">
+                                        z <sup> z <sup> z </sup> </sup>
+                                    </b>
+                                </div>
+                                <div class="progress progress-mini">
+                                    <div style="width: 36%;height: 5px;" data-template-bind='[{"attribute":"data-dormant_user_progress_bar","value":"dormant_user_progress_bar"},{"attribute":"data-app_title","value":"app_title"},{"attribute":"data-dormant_user_percent","value":"dormant_user_percent"}]'></div>
+                                </div>
+                            </div>
+                            <div class="row" style="padding-top:30px">
+                                <button class="btn btn-white center-block" style="font-size:0.9em;color:#425C7F" data-template-bind='[{"attribute":"data-app_title","value":"app_title"}, {"attribute":"data-app_title_id","value":"app_title_id"}]' data-btn_create_card>Create Audience Card</button>
+                            </div>
+                        </div>
+                    </div>
+        		</div>
+        	</div>
+        </div>
+    </script>
+    <script type="text/html" id="recent_non_iap_in_app_event_tpl">
+		<li class="item">
+    		<div class="product-icon" style="background-color: #107896;" data-template-bind='[{"attribute":"data-color","value":"color"},{"attribute":"data-id","value":"id"}]'>
+    			<i class="fa" data-template-bind='[{"attribute":"data-icon","value":"icon"},{"attribute":"data-id","value":"id"}]'></i>
+    		</div>
+    		<div class="product-info">
+    			<span class="product-title" data-template-bind='[{"attribute":"content","value":"event_friendly_name"}]'></span>
+    			<span class="product-description" data-template-bind='[{"attribute":"content","value":"happened_at_dt"}]'></span>
+    			<i class="fa" data-template-bind='[{"attribute":"data-app_platform","value":"app_platform"},{"attribute":"data-id","value":"id"}]'></i> &nbsp;<small data-template-bind='[{"attribute":"content","value":"app_name"}]'></small>
+			</div>
+    	</li>
+    </script>
+    <script type="text/html" id ="recent_iap_in_app_event_tpl">
+    	<li class="item">
+    		<div class="product-icon" style="background-color: #107896;" data-template-bind='[{"attribute":"data-color","value":"color"},{"attribute":"data-id","value":"id"}]'>
+    			<i class="fa" data-template-bind='[{"attribute":"data-icon","value":"icon"},{"attribute":"data-id","value":"id"}]'></i>
+    		</div>
+    		<div class="product-info">
+    			<span class="product-title" data-template-bind='[{"attribute":"content","value":"event_friendly_name"}]'>Purchase</span>
+    			<div class="label pull-right">
+    			    <span>$</span>
+    			    <span id="hp_sale_amount" data-template-bind='[{"attribute":"content","value":"amount_usd"}]'></span>
+    			</div>
+    			<span class="product-description" data-template-bind='[{"attribute":"content","value":"happened_at_dt"}]'></span>
+    			<i class="fa" data-template-bind='[{"attribute":"data-app_platform","value":"app_platform"},{"attribute":"data-id","value":"id"}]'></i> &nbsp;<small data-template-bind='[{"attribute":"content","value":"app_name"}]'></small>
+			</div>
+    	</li>
+    </script>
+{% endblock %}

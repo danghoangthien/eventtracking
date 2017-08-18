@@ -1,0 +1,462 @@
+{% extends 'lte_base.html.twig' %}
+{% block body %}
+    <section class="content-header" style="margin: -2em 0 0 -2em !important;">
+          <h1 style="font-size: 24px;">
+            Create User
+          </h1>
+          <ol class="breadcrumb" style="margin: 0 -16.5em 0 0;">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li class="active">Create User</li>
+          </ol>
+    </section>  
+
+    <div id="mainContainer" style="clear:both;" class="box box-danger">
+        <div id="formHandler">
+            <form id="formSubmitAuth" name="formSubmitAuth" method="POST">
+            <table id="tblAuth">
+                <tr class="tr1">
+                    <td><label class="heads">Username</label></td>
+                    <td><input type="text" id="username" name="username" placeholder="Should be lowercase"/></td>
+                </tr>
+                <tr class="tr1">
+                    <td><label class="heads">Password</label></td>
+                    <td><input type="text" id="password" name="password" /></td>
+                </tr>
+                <tr class="tr1">
+                    <td><label class="heads">Email</label></td>
+                    <td><input type="email" id="email" name="email" /></td>
+                </tr>
+                <tr class="tr1">
+                    <td><label class="heads">User type</label></td>
+                    <td>
+                        <select name="user_type" id="user_type" class="form-control">
+                            <option value="0">Client</option>
+                            <option value="1">Admin</option>
+                        </select>
+                    </td>
+                </tr>   
+                <tr class="tr1">
+                    <td><label class="heads">App IDs:</label></td>
+                    <td>                        
+                    </td>
+                </tr>  
+            </table>
+            </form>
+            <div style="margin: 0.5em 0 0 0;">                    
+                <div style="float: left;"><b style="margin-left: 1em;">Selection</b>               
+                    <select id="applications" multiple class="form-control">
+                        {% for data in record %}
+                        <option value="{{ data.app_id }}">{{ data.app_name }}</option>                     
+                        {% endfor %}                        
+                    </select>
+                </div>
+                <div id="menu" style="display: inline-block; width: 10em !important; text-align: center; padding-top: 3.5em;">
+                    <input type="button" name="authEntry" id="addAll" value="Select All >>" class="btn-xs btn-default"/><br />
+                    <input type="button" name="authEntry" id="addSingle" value="Select >" class="btn-xs btn-default"/><br />
+                    <input type="button" name="authEntry" id="removeSingle" value="< Remove" class="btn-xs btn-default"/><br />
+                    <input type="button" name="authEntry" id="removeAll" value="<< Remove All" class="btn-xs btn-default"/><br />
+                    <!--<span id="addAll">Select All >></span>   <br />
+                    <span id="addSingle">Select ></span>     <br />
+                    <span id="removeSingle">< Remove</span>        <br />
+                    <span id="removeAll"><< Remove All</span><br />-->
+                    
+                </div>
+                <div style="float:right; margin-right: 4em;"><b>&nbsp;&nbsp;Selected</b>                    
+                    <select id="app_id" multiple class="form-control" style="margin: 0.4 0 0 -0.5em;">                        
+                    </select>
+                </div>    
+            </div>
+        </div>    
+            
+        <div id="divSendBtn">
+            <input type="button" name="authEntry" id="btnCancel" value="Cancel" class="btn btn-danger"/>
+            <input type="button" name="authEntry" id="btnSend" value="Save" class="btn btn-primary"/>
+        </div>
+    </div>
+
+    <script>  
+        function addSuffix(element)
+        {
+            $("#"+element).children("option").each(function()
+            {
+                var prefix = $(this).val();
+                var html   = $(this).html();
+                if(prefix.indexOf("id") == 0)
+                {
+                    console.log(prefix + "-" + html + " (iOS)");
+                    $(this).html(html + " (iOS)");
+                }
+                else
+                {
+                    console.log(prefix + "-" + html + " (Android)");
+                    $(this).html(html + " (Android)");
+                }
+            });   
+        }
+        
+        function sortOption(el)
+        {
+            var options = $('#'+ el + ' option');
+            var arr = options.map(function(_, o) { return { t: $(o).text(), v: o.value }; }).get();
+            arr.sort(function(o1, o2) { return o1.t > o2.t ? 1 : o1.t < o2.t ? -1 : 0; });
+            options.each(function(i, o) {
+              o.value = arr[i].v;
+              $(o).text(arr[i].t);
+            });
+        }
+    
+        function error(el)
+        {
+            $(el).css("background-color", "red").css("color","yellow").val("Should not be blank");
+
+            setTimeout(function()
+            {
+                $(el).css("background-color", "white").css("color","black");
+                $(el).val("");
+            }, 2000);
+        }
+
+        $(document).ready(function()
+        {                     
+            /* Set input css thru class */
+            $(".tr1 >td >input").attr("class","form-control");
+            sortOption("applications");
+            sortOption("app_id");
+            
+            addSuffix("applications");
+            addSuffix("app_id");
+            
+            /* GET INITIAL VALUES OF AVAILABLE APPS */
+            var original_apps = new Array();
+            $("#applications").children("option").each(function()
+            {
+                original_apps.push({ "value": $(this).val(), "html": $(this).html() });
+            });                           
+            
+            /* Global Vars */
+            var username;
+            var password;
+            var email;   
+            var app_id;
+            var user_type;
+
+            /* VALIDATIONS */
+            $('#username').focusout(function()
+            {
+                $(this).val($(this).val().toLowerCase());
+            });
+            /********************************************/           
+
+            $("#btnCancel").on("click",this, function()
+            {
+                window.location.href = "{{ path('dashboard_account_listing') }}";            
+            });
+            
+            $("#addAll").on("click", this, function()
+            {
+                $("#applications").children("option").remove();
+                $("#app_id").children("option").remove();
+                
+                for(var i in original_apps)
+                {
+                    $("#app_id").append("<option value='"+original_apps[i].value+"'>"+original_apps[i].html+"</option>");
+                }
+                
+                sortOption("app_id");
+            });
+        
+            $("#removeAll").on("click", this, function()
+            {
+                $("#applications").children("option").remove();
+                $("#app_id").children("option").remove();
+                
+                for(var i in original_apps)
+                {
+                    $("#applications").append("<option value='"+original_apps[i].value+"'>"+original_apps[i].html+"</option>");
+                }
+                
+                sortOption("applications");
+            });
+
+            $("#removeSingle").on("click", this, function()
+            {
+                var All = new Array();
+                var cnt;
+                var selected = $("#app_id").val(); 
+                var selected_cnt;
+                if(selected != null)
+                {
+                    selected_cnt = selected.length;
+                }    
+
+                $("#app_id").children("option").each(function()
+                {
+                    All.push({ "value": $(this).val(), "text": $(this).html() });
+                });
+
+                if(All.length > 0)
+                {
+                    cnt = All.length;
+                }            
+
+                var applications = new Array();
+                $("#applications").children("option").each(function()
+                {
+                    applications.push($(this).val());
+                });
+
+                for(var i = 0; i < selected_cnt; i++)
+                {                
+                    if(jQuery.inArray(selected[i], applications) != -1)
+                    {
+                        console.log("Found " + selected[i]);
+                    }
+                    else
+                    {                  
+                        for(var x in All)
+                        {
+                            if(All[x].value == selected[i])
+                            {
+                                console.log(All[x].text);
+                                $("#applications").append("<option value='"+All[x].value+"'>"+All[x].text+"</option>");
+                                //$("#app_id").children("option:contains('"+All[x].text+"')").remove();                                            
+                                $("#app_id").children("option").each(function()
+                                {
+                                    if($(this).val() == All[x].value)
+                                    {
+                                        $(this).remove();
+                                        console.log("should remove");
+                                    }
+                                });
+                            }
+                        }                  
+                    }
+                }          
+                
+                sortOption("applications");              
+            });
+        
+            $("#addSingle").on("click", this, function()
+            {
+                var All = new Array();
+                var cnt;
+                var selected = $("#applications").val(); 
+                var selected_cnt;
+                if(selected != null)
+                {
+                    selected_cnt = selected.length;
+                }               
+
+                $("#applications").children("option").each(function()
+                {
+                    All.push({ "value": $(this).val(), "text": $(this).html() });
+                });
+
+                if(All.length > 0)
+                {
+                    cnt = All.length;
+                }  
+
+                var app_id = new Array();
+                $("#app_id").children("option").each(function()
+                {
+                    app_id.push($(this).val());
+                });
+
+                for(var i = 0; i < selected_cnt; i++)
+                {                
+                    if(jQuery.inArray(selected[i], app_id) != -1)
+                    {
+                        console.log("Found " + selected[i]);
+                    }
+                    else
+                    {                  
+                        for(var x in All)
+                        {
+                            if(All[x].value == selected[i])
+                            {
+                                console.log("Transferred: "+All[x].text);
+                                $("#app_id").append("<option value='"+All[x].value+"'>"+All[x].text+"</option>");
+                                //$("#applications").children("option:contains('"+All[x].text+"')").remove();
+                                $("#applications").children("option").each(function()
+                                {
+                                    if($(this).val() == All[x].value)
+                                    {
+                                        $(this).remove();
+                                        console.log("should remove");
+                                    }
+                                });
+                            }
+                        }                                         
+                    }
+                }
+                
+                sortOption("app_id");
+            });            
+                        
+            $("#btnSend").on("click", this, function()
+            {                           
+                var update_app_ids = new Array();
+                $("#app_id").children("option").each(function()
+                {
+                    update_app_ids.push($(this).val());
+                });
+                
+                var joined = update_app_ids.join();
+                console.log(joined);                                
+                            
+                username = $("#username").val();
+                password = $("#password").val();
+                email    = $("#email").val();
+                app_id   = joined;
+                //app_id   = $('[name="hidden-tags"]').val();    
+                user_type = $("#user_type").val();
+
+                if( "" == username){ error($("#username")); return false; }
+                if( "" == password){ error($("#password")); return false; }
+                if( "" == email){ error($("#email")); return false; }
+                if( "" == app_id){ error($("#app_id")); return false; }
+                if( "" == user_type){ error($("#user_type")); return false; }
+                            
+                $(this).attr('disabled','disabled');
+                
+                $.obj = { "username": username, "password": password, "email": email, "app_id": app_id,"user_type": user_type };
+
+                $.ajax(
+                {
+                    /* SWITCH THE 2 BASED ON WHAT I.P. IS USED. CROSS ORIGIN POLICY WILL CAUSE ERROR */
+                    //url: "http://ec2-52-26-47-241.us-west-2.compute.amazonaws.com/projects/event_tracking/web/app_dev.php/save_auth",
+                    //url: "http://52.27.216.114//projects/event_tracking/web/app_dev.php/dashboard/auth/save_auth",
+                    url:"{{ path('dashboard_save_auth') }}",
+                    type: "POST",
+                    data: $.obj,
+                    success: function(msg)
+                    {
+                        var message = JSON.parse(msg);
+                        console.log(message);
+
+                        alert(message.message);
+
+                        if(message.message == "User successfully saved")
+                        {
+                            setTimeout(function()
+                            {
+                                $("#username").val("");
+                                $("#password").val("");
+                                $("#email").val("");
+                                $("#app_id").children("option").remove();                                
+                                //location.reload();
+                                $("#btnSend").removeAttr('disabled');
+                                
+                                window.location.href = "{{ path('dashboard_show_paginate', {'page': 1}) }}"
+                            }, 2000);
+                        }
+                        else
+                        {
+                            $("#btnSend").removeAttr('disabled');
+                        }
+                    }
+                });
+            });                        
+        });
+    </script>    
+    <style>
+        #tblAuth tr td input, #user_type { width: 43em !important; }
+        
+        #tblAuth
+        {
+            margin-left: 1em;
+        }
+        
+        #addAll, #addSingle, #removeAll, #removeSingle
+        {
+            margin-bottom: 0.5em;
+            width: 8em;
+        }
+        
+        #app_id, #applications
+        {
+            width: 10em;
+            min-height: 10em;
+        }
+        
+        #menu button
+        {
+            width: 2em;
+        }
+        
+        #menu span:hover
+        {
+            cursor: pointer;
+        }
+
+        #menu span
+        {
+            font-weight: bold;
+            font-size: 12px;
+            margin-bottom: 1em !important;
+            display: inline-block;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        #addSelected, #removeSelected
+        {
+            text-decoration: underline;
+            font-weight: bold;
+            font-size: 10px;
+            margin: 1em 0 0 1em;
+            cursor: pointer;
+        }
+        
+        .tm-tag-remove
+        {
+            margin: 0 0 0 0.3em;               
+        }
+
+        .tm-tag
+        {
+            border: 1px solid gray;                
+            margin: 1em 0 0 1em !important;
+            display: inline-block;
+        }
+
+        .heads
+        {
+            font-size: 16px;
+            font-weight: bold;
+            margin: 0.9em 0 0 0;
+        }
+
+        #divSendBtn
+        {
+            float: left;
+            width: 13em;
+            margin: 2em 0 0 3.5em !important;                   
+            display: inline-block;
+        }
+
+        #btnSend { width: 7em; display: inline-block; }
+
+        input:not([type='button']),select
+        {
+            width: 17em !important;
+            height: 2.5em !important;
+            margin: 1em 0 0 1em;
+        }
+
+        #mainContainer
+        {
+            width: 55em;
+            height: 35em;
+            /*border: 1px solid lightsteelblue;*/
+            margin: 2em 0 0 10em                   
+        }
+
+        #formHandler
+        {
+            width: 50em;
+            height: 19em;
+            margin: 0 auto;            
+        }
+    </style>
+{% endblock %}

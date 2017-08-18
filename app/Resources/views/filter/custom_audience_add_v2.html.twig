@@ -1,0 +1,1243 @@
+{% extends 'layout_ak/base.html.twig' %}
+{% block sub_head_title %}Dashboard - Audience Card Builder{% endblock %}
+{% block body %}
+<div class="wrapper wrapper-content animated fadeInRight">
+	{% if exception is defined %}
+	    <h3 style="text-align:center">{{ exception }}</h3>
+	{% else %}
+	<!-- Small modal -->
+	<div id="validationMessageModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
+	    <div class="modal-dialog" role="document">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	                <h4 class="modal-title" id="gridSystemModalLabel">Validation:</h4>
+	            </div>
+	            <div class="modal-body">
+	                <div class="row">
+	                    <div class="col-md-12" id="validationMessageText"></div>
+	                </div>
+	                <div class="modal-footer">
+	                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	                </div>
+	            </div>
+	        </div><!-- /.modal-content -->
+	    </div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+	{% if selected_record is defined %}
+	    <input type="hidden" id="id_to_update" name="id_to_update" value="{{ selected_record.id }}"/>
+	    <input type="hidden" value="edit" id="indicator" />
+	    {#{% for intents in selected_record.filterMetadata["intent_metadata"] %}#}
+	    {#        <input type="select" value="{{ intents.intent_key }}" />#}
+	    {#{% endfor %}#}
+
+	{% endif %}
+
+	<div class="row">
+	    <div class="col-md-8">
+	        <div class="ibox float-e-margins">
+	            <div class="ibox-title-transparent">
+					<div class="form-group">
+						<h1>Audience Card Builder</h1>
+					</div>
+				</div>
+	            <div class="ibox-content-transparent">
+	                <div class="panel" style="margin:0px">
+						<form id="preset_card_generator">
+							<div class="panel-body">
+							    <div class="row">
+									<div class="form-group input-group col-sm-12">
+										<span for="inputCardName" style="width: 130px;" class="input-group-addon">Card Name</span>
+									    <input name="preset_name" type="text" class="form-control" id="preset_name" placeholder="Active Paying Users" onkeyup="CardPreviewName(this.value);">
+									</div>
+								</div>
+								<div class="row">
+									<div class="form-group input-group col-sm-12">
+										<span for="inputCardDescription" style="width: 130px;" class="input-group-addon">Card Description</span>
+									    <input name="description" type="text" class="form-control" id="description" placeholder="Android users who purchase more than four times in the last two weeks (for Easter Sale)" onkeyup="CardPreviewDes(this.value);">
+									</div>
+								</div>
+								<div class="row">
+	        						<label class="col-md-2 control-label left-padding">Card Color</label>
+	    							<div class="col-md-2 no-padding">
+	    							    <input name="card_bg_color_code" type="text" class="form-control card-bg-color" id="set_cardbgcolor" value="#f1f3f4" placeholder="#f1f3f4" disabled />
+	        						</div>
+	        						<div  class="col-md-1" style="padding-top: 5px; text-align: left;">
+                                        <select id="cardcolorselector">
+										    <option value="#093145" data-color="#093145">#093145</option>
+										    <option value="#0d3d56" data-color="#0d3d56">#0d3d56</option>
+										    <option value="#3c6478" data-color="#3c6478">#3c6478</option>
+										    <option value="#107896" data-color="#107896" selected>#107896</option>
+										    <option value="#1496bb" data-color="#1496bb">#1496bb</option>
+										    <option value="#43abc9" data-color="#43abc9">#43abc9</option>
+										    <option value="#829356" data-color="#829356">#829356</option>
+										    <option value="#a3b86c" data-color="#a3b86c">#a3b86c</option>
+										    <option value="#b5c689" data-color="#b5c689">#b5c689</option>
+										    <option value="#bca136" data-color="#bca136">#bca136</option>
+										    <option value="#ebc944" data-color="#ebc944">#ebc944</option>
+										    <option value="#efd469" data-color="#efd469">#efd469</option>
+										    <option value="#c2571a" data-color="#c2571a">#c2571a</option>
+										    <option value="#f26d21" data-color="#f26d21">#f26d21</option>
+										    <option value="#f58b4c" data-color="#f58b4c">#f58b4c</option>
+										    <option value="#9a2617" data-color="#9a2617">#9a2617</option>
+										    <option value="#c02f1d" data-color="#c02f1d">#c02f1d</option>
+										    <option value="#cd594a" data-color="#cd594a">#cd594a</option>
+										    <option value="#f1f3f4" data-color="#f1f3f4">#f1f3f4</option>
+										</select>
+                                    </div>
+
+	        			{#			<label class="col-md-2 control-label right-padding">Highlight Box</label>#}
+	    							{#<div class="col-md-2 no-padding">	#}
+	    							{#    <input name="card_highlight_color_code" type="text" class="form-control card-box-color" id="set_hightlightbox" value="#2D3F4E"  placeholder="#2D3F4E" />#}
+	        			{#			</div>#}
+	        						<label class="col-md-3 control-label right-padding">Card Text Color</label>
+	    							<div class="col-md-2 no-padding">
+	    							    <input name="card_text_color_code" type="text" class="form-control card-text-color" id="set_cardtextcolor" value="#f5f5f5"  placeholder="#f5f5f5" disabled />
+	        						</div>
+	        						<div  class="col-md-1" style="padding-top: 5px; text-align: left;">
+                                        <select id="textcolorselector">
+										    <option value="#f5f5f5" data-color="#f5f5f5" selected >#f5f5f5</option>
+										    <option value="#333333" data-color="#333333" >#333333</option>
+										    <option value="#131516" data-color="#131516">#131516</option>
+										    <option value="#efd469" data-color="#efd469">#efd469</option>
+										</select>
+                                    </div>
+	        					</div>
+	        					<div class="row">
+		    						<label class="col-md-2 control-label left-padding">Country: </label>
+		    						<div class="col-md-10 no-padding">
+		    							<select id="country_codes" name="country_codes[]" class="inputCountryMultiple" multiple="multiple" style="width:100%">
+	        							    {% for country in active_country_list %}
+	    									    <option id="{{country.countryCode}}" value="{{country.countryCode}}">{{country.countryCode|country()|trim }}</option>
+	    									{% endfor %}
+	    								</select>
+		    						</div>
+		    					</div>
+		    					<div class="row">
+		    						<label class="col-md-2 control-label left-padding">Platform</label>
+									<div class="col-md-10 no-padding">
+									    {% for id,platform_name in active_platform %}
+	        								<label class="col-md-3 no-padding" style="margin-top:8px">
+	        									<input class="platform_codes" name="platform_ids[]" type="checkbox" value="{{ id }}"> {{ platform_name }}</input>
+	        								</label>
+	    								{% endfor %}
+		    						</div>
+		    					</div>
+		    					{#<div class="row">#}
+		    					{#	<label class="col-md-2 control-label left-padding">App Title: </label>#}
+		    					{#	<div class="col-md-10 no-padding">#}
+		    					{#		<select id="app_title" name="app_title[]" class="inputCountryMultiple" multiple="multiple" style="width:100%">#}
+											{#{% for appTitle in listAppTitle %}#}
+											{#	{% set selected = '' %}#}
+											{#	{% if appTitle.id in listAppTitleSelected %}#}
+											{#		{% set selected = ' selected' %}#}
+											{#	{% endif %}#}
+	    						{#			    <option {{ selected }} id="{{ appTitle.id }}" value="{{ appTitle.id }}">{{ appTitle.title }}</option>#}
+	    						{#			{% endfor %}#}
+	    						{#		</select>#}
+		    					{#	</div>#}
+		    					{#</div>#}
+		    					<div class="row">
+		    						<div class="col-md-2 no-padding"></div>
+		    						<div class="col-md-10" style="font-weight:bold;border-top: #7E8892 dotted 1px;padding: 10px 0px 0px 0px;">Users matching
+		    							<select name="expression" class="form-control inline-select" style="width: 70px;    margin: 0px 10px;">
+		    								<option value="All">All</option>
+		    								<option value="Any">Any</option>
+		    							</select>
+		    						of the following:
+		    						</div>
+		    					</div>
+		    					{#<div class="row buffer-top-s">#}
+		    					{#	<div class="col-md-2 no-padding"></div>#}
+		    					{#	<div class="col-md-10 no-padding">#}
+		    					{#		<div class="col-md-1 no-padding"></div>#}
+			    				{#		<label class="col-md-2 control-label">User Since: </label>#}
+			    				{#		<div class="col-md-9">#}
+			    				{#			<div class="input-group date" data-provide="datepicker" style="width:140px">#}
+			    				{#				<div class="input-group-addon">#}
+			    				{#					<span class="fa fa-calendar"></span>#}
+			    				{#				</div>#}
+			    				{#				<input data-group="required_if_all" readonly="readonly" name="install_time_since" data-provide="datepicker" class="datepicker form-control" data-date-format="dd/mm/yyyy" placeholder="dd/mm/yyyy" style="margin-top:0;" >#}
+			    				{#			</div>#}
+			    				{#		</div>#}
+			    				{#	</div>#}
+		    					{#</div>#}
+		    					{#<div class="row buffer-top-s">#}
+		    					{#	<div class="col-md-2 no-padding"></div>#}
+		    					{#	<div class="col-md-10 no-padding">#}
+		    					{#		<div class="col-md-1 no-padding"></div>#}
+		    					{#		<label class="col-md-3 control-label">Last Login Before: </label>#}
+			    				{#		<div class="col-md-8">#}
+			    				{#			<div class="input-group date" data-provide="datepicker" style="width:140px">#}
+			    				{#				<div class="input-group-addon">#}
+			    				{#					<span class="fa fa-calendar"></span>#}
+			    				{#				</div>#}
+			    				{#				<input data-group="required_if_all" readonly="readonly" name="last_happened_at" data-provide="datepicker" class="datepicker form-control" data-date-format="dd/mm/yyyy" placeholder="dd/mm/yyyy" style="margin-top:0;" >#}
+			    				{#			</div>#}
+			    				{#		</div>#}
+			    				{#	</div>#}
+		    					{#</div>#}
+
+
+
+
+		    					{% for i in 0..2 %}
+		    						{% if i == 0  or preset_filter.filterData.history[i] is defined %}
+		    							{% set hide = '' %}
+		    						{% else %}
+		    							{% set hide = 'style=display:none' %}
+		    						{% endif%}
+		    					<!-- start history {{i}} -->
+		    					<div data-seq="{{i}}" {{hide}} data-group="history-detail"  class="row buffer-top-s">
+		    						<div class="row">
+			    						<div class="col-md-2 no-padding"></div>
+			    						<div class="col-md-10 no-padding">
+			    							<div class="col-md-1 no-padding"></div>
+			    							<div class="col-md-1 no-padding">
+			    								{% if i == 0 %}
+				    								<a data-action="add_more_history" class="btn btn-default" style="width: 40px;margin-right:10px;">
+				    									<i class="fa fa-plus"></i>
+				    								</a>
+			    								{% else %}
+			    									<a data-action="remove_this_history" data-seq="{{i}}" class="btn btn-default" style="width: 40px;margin-right:10px;">
+				    									<i class="fa fa-minus"></i>
+				    								</a>
+			    								{% endif %}
+			    							</div>
+			    							<label class="col-md-2 control-label" style="text-align:right;">User Since</label>
+		    								<div class="col-md-6">
+				    							<div class="input-group date" data-provide="datepicker" style="width:140px;">
+				    								  <div class="input-group-addon">
+				    									<span class="fa fa-calendar"></span>
+				    								  </div>
+				    								  <input data-coordinate-group="history[{{i}}]" readonly="readonly" name="history[{{i}}][install_time_since]" data-provide="datepicker" class="datepicker form-control" data-date-format="dd/mm/yyyy" placeholder="dd/mm/yyyy" style="margin-top:0;" >
+				    							</div>
+				    						</div>
+			    						</div>
+			    					</div>
+	    							<div class="row">
+	    								<div class="col-md-2"> </div>
+		    							<div class="col-md-10">
+		    								<div class="col-md-1 no-padding"></div>
+		    								<div class="col-md-1 no-padding" style="border-left: #7E8892 dotted 1px;height: 45px;">
+		    									<hr style="border-top: #7E8892 dotted 1px;">
+		    								</div>
+		    								<label class="col-md-2 control-label" style="text-align:right;">Last Login Before</label>
+		    								<div class="col-md-6">
+				    							<div class="input-group date" data-provide="datepicker" style="width:140px">
+				    								  <div class="input-group-addon">
+				    									<span class="fa fa-calendar"></span>
+				    								  </div>
+				    								  <input data-coordinate-group="history[{{i}}]" readonly="readonly" name="history[{{i}}][last_happened_at]" data-provide="datepicker" class="datepicker form-control" data-date-format="dd/mm/yyyy" placeholder="dd/mm/yyyy" style="margin-top:0;" >
+				    							</div>
+				    						</div>
+				    					</div>
+				    				</div>
+			    					<div class="row">
+	    								<div class="col-md-2"> </div>
+		    							<div class="col-md-10">
+		    								<div class="col-md-1 no-padding"></div>
+		    								<div class="col-md-1 no-padding" style="border-left: #7E8892 dotted 1px;height: 20px;">
+		    									<hr style="border-top: #7E8892 dotted 1px;">
+		    								</div>
+		    								<label class="col-md-2 control-label" style="text-align:right;">in</label>
+		    								<div class="col-md-6">
+		    									<select name="history[{{i}}][in]" class="form-control inline-select-long" style="width: 140px;">
+													<option value="">select app title</option>
+													{% for appTitle in listAppTitle %}
+														{% set selected = '' %}
+														{% if appTitle.id in listAppTitleSelected %}
+															{% set selected = ' selected' %}
+														{% endif %}
+			    									    <option {{ selected }} id="{{ appTitle.id }}" value="{{ appTitle.id }}">{{ appTitle.title }}</option>
+			    									{% endfor %}
+			    								</select>
+			    							</div>
+		    							</div>
+	    							</div>
+		    					</div>
+		    					<!-- end history {{i}} -->
+								{% endfor %}
+		    					<!-- start in-app detail -->
+		    					<!-- start action 0 -->
+		    					<div data-seq="0" data-group="in-app-detail"  class="row buffer-top-s">
+		    						<div class="row">
+			    						<div class="col-md-2 no-padding"></div>
+			    						<div class="col-md-10 no-padding">
+			    							<div class="col-md-1 no-padding"></div>
+			    							<div class="col-md-1 no-padding">
+			    								<a data-action="add_more_action_filter" class="btn btn-default" style="width: 40px;margin-right:10px;">
+			    								<i class="fa fa-plus"></i>
+			    							</a>
+			    							</div>
+			    							<div class="col-md-10 no-padding">
+			    								<label class="control-label"> Who </label>
+			    								<select data-coordinate-group="actions[0]" name="actions[0][perform]" data-associated-expression-group="actions[0][expression-group][0]" class="form-control inline-select-long" style="width: 120px;margin-left: 10px;">
+				    							    <option value="perform">have</option>
+				    							    <option value="not_perform">haven't</option>
+				    							</select>
+				    							<select data-group="required_if_all" data-coordinate-group="actions[0]" name="actions[0][behaviour_id]" data-associated-cat-select="actions[0][cat_id]" class="form-control inline-select-long" style="width: 160px;margin-left: 10px;">
+				    							    <option value="">select in-app event</option>
+				    							</select>
+				    							<span data-expression-group="actions[0][expression-group][0]">
+					    							<select data-coordinate-group="actions[0]" name="actions[0][frequent][expression]" class="form-control inline-select-long" style="width: 105px;">
+					    								<option value=">">More than</option>
+					    								<option value="<">Less than</option>
+					    								<option value="=">Exactly</option>
+					    								<option value="+">Between</option>
+					    							</select>
+					    							<input data-coordinate-group="actions[0]" name="actions[0][frequent][value][0]" type="text" class="form-control inline-short numeric_only" placeholder="1" style="display:inline;width: 50px;"> <span data-frequent-value-1>and <input data-coordinate-group="actions[0]" name="actions[0][frequent][value][1]" type="text" class="form-control inline-short numeric_only" placeholder="1" style="display:inline;width: 50px;    margin-right: 5px;"></span> times
+				    							</span>
+			    							</div>
+			    						</div>
+			    					</div>
+			    					<div class="row">
+	    								<div class="col-md-2"> </div>
+		    							<div class="col-md-10">
+		    								<div class="col-md-1 no-padding"></div>
+		    								<div class="col-md-1 no-padding" style="border-left: #7E8892 dotted 1px;height: 45px;">
+		    									<hr style="border-top: #7E8892 dotted 1px;">
+		    								</div>
+		    								<label class="col-md-2 control-label" style="text-align:right;">with interest in</label>
+		    								<div class="col-md-6">
+		    									<select data-coordinate-group="actions[0]" name="actions[0][cat_id]" class="form-control inline-select-long" style="width: 140px;">
+			    									<option value="">select interest</option>
+			    								</select>
+			    							</div>
+		    							</div>
+	    							</div>
+	    							<div class="row">
+	    								<div class="col-md-2"> </div>
+		    							<div class="col-md-10">
+		    								<div class="col-md-1 no-padding"></div>
+		    								<div class="col-md-1 no-padding" style="border-left: #7E8892 dotted 1px;height: 45px;">
+		    									<hr style="border-top: #7E8892 dotted 1px;">
+		    								</div>
+		    								<label class="col-md-2 control-label" style="text-align:right;">from</label>
+		    								<div class="col-md-6">
+				    							<div class="input-group date" data-provide="datepicker" style="width:140px;">
+				    								  <div class="input-group-addon">
+				    									<span class="fa fa-calendar"></span>
+				    								  </div>
+				    								  <input data-coordinate-group="actions[0]" readonly="readonly" name="actions[0][happened_at_from]" data-provide="datepicker" class="datepicker form-control" data-date-format="dd/mm/yyyy" placeholder="dd/mm/yyyy" style="margin-top:0;" >
+				    							</div>
+				    						</div>
+		    							</div>
+	    							</div>
+	    							<div class="row">
+	    								<div class="col-md-2"> </div>
+		    							<div class="col-md-10">
+		    								<div class="col-md-1 no-padding"></div>
+		    								<div class="col-md-1 no-padding" style="border-left: #7E8892 dotted 1px;height: 45px;">
+		    									<hr style="border-top: #7E8892 dotted 1px;">
+		    								</div>
+		    								<label class="col-md-2 control-label" style="text-align:right;">to</label>
+		    								<div class="col-md-6">
+				    							<div class="input-group date" data-provide="datepicker" style="width:140px">
+				    								  <div class="input-group-addon">
+				    									<span class="fa fa-calendar"></span>
+				    								  </div>
+				    								  <input data-coordinate-group="actions[0]" readonly="readonly" name="actions[0][happened_at_to]" data-provide="datepicker" class="datepicker form-control" data-date-format="dd/mm/yyyy" placeholder="dd/mm/yyyy" style="margin-top:0;" >
+				    							</div>
+				    						</div>
+				    					</div>
+				    				</div>
+				    				<div class="row">
+	    								<div class="col-md-2"> </div>
+		    							<div class="col-md-10">
+		    								<div class="col-md-1 no-padding"></div>
+		    								<div class="col-md-1 no-padding" style="border-left: #7E8892 dotted 1px;height: 20px;">
+		    									<hr style="border-top: #7E8892 dotted 1px;">
+		    								</div>
+		    								<label class="col-md-2 control-label" style="text-align:right;">in</label>
+		    								<div class="col-md-6">
+		    									<select name="actions[0][in]" data-coordinate-group="actions[0]"  data-group="in-app-detail" class="form-control inline-select-long" style="width: 140px;">
+													<option value="">select app title</option>
+													{% for appTitle in listAppTitle %}
+														{% set selected = '' %}
+														{% if appTitle.id in listAppTitleSelected %}
+															{% set selected = ' selected' %}
+														{% endif %}
+			    									    <option {{ selected }} id="{{ appTitle.id }}" value="{{ appTitle.id }}">{{ appTitle.title }}</option>
+			    									{% endfor %}
+			    								</select>
+			    							</div>
+		    							</div>
+	    							</div>
+		    					</div>
+		    					<!-- end action 0 -->
+		    					<!-- start action 1 -->
+		    					<div data-seq="1" style="display:none" data-group="in-app-detail" class="row buffer-top-s">
+		    						<div class="row">
+			    						<div class="col-md-2 no-padding"></div>
+			    						<div class="col-md-10 no-padding">
+			    							<div class="col-md-1 no-padding"></div>
+			    							<div class="col-md-1 no-padding">
+			    								<a data-action="remove_this_action_filter" data-seq="1" class="btn btn-default" style="width: 40px;margin-right:10px;">
+	                								<i class="fa fa-minus"></i>
+	                							</a>
+			    							</div>
+			    							<div class="col-md-10 no-padding">
+			    								<label class="control-label"> Who </label>
+			    								<select data-coordinate-group="actions[1]" name="actions[1][perform]" data-associated-expression-group="actions[1][expression-group][1]" class="form-control inline-select-long" style="width: 120px;margin-left: 10px;">
+				    							    <option value="perform">have</option>
+				    							    <option value="not_perform">haven't</option>
+				    							</select>
+			    								<select data-coordinate-group="actions[1]" name="actions[1][behaviour_id]" class="form-control inline-select-long" style="width: 160px;margin-left: 10px;">
+				    							    <option value="perform">perform</option>
+				    							    <option value="not_perform">not perform</option>
+				    							</select>
+				    							<select data-group="required_if_all" data-coordinate-group="actions[1]" name="actions[1][behaviour_id]" data-associated-cat-select="actions[1][cat_id]" class="form-control inline-select-long" style="width: 160px;margin-left: 10px;">
+				    							    <option value="">select in-app event</option>
+				    							</select>
+				    							<span data-expression-group="actions[1][expression-group][1]">
+					    							<select data-coordinate-group="actions[1]" name="actions[1][frequent][expression]" class="form-control inline-select-long" style="width: 105px;">
+					    								<option value=">">More than</option>
+					    								<option value="<">Less than</option>
+					    								<option value="=">Exactly</option>
+					    								<option value="+">Between</option>
+					    							</select>
+					    							<input data-coordinate-group="actions[1]" name="actions[1][frequent][value][0]" type="text" class="form-control inline-short numeric_only" placeholder="1" style="display:inline;width: 50px;"> <span data-frequent-value-1>and <input data-coordinate-group="actions[0]" name="actions[1][frequent][value][1]" type="text" class="form-control inline-short numeric_only" placeholder="" style="display:inline;width: 50px;    margin-right: 5px;"></span> times
+				    							</span>
+			    							</div>
+			    						</div>
+			    					</div>
+			    					<div class="row">
+	    								<div class="col-md-2"> </div>
+		    							<div class="col-md-10">
+		    								<div class="col-md-1 no-padding"></div>
+		    								<div class="col-md-1 no-padding" style="border-left: #7E8892 dotted 1px;height: 45px;">
+		    									<hr style="border-top: #7E8892 dotted 1px;">
+		    								</div>
+		    								<label class="col-md-2 control-label" style="text-align:right;">with interest in</label>
+		    								<div class="col-md-6">
+		    									<select data-coordinate-group="actions[1]" name="actions[1][cat_id]" class="form-control inline-select-long" style="width: 140px;">
+			    									<option value="">select interest</option>
+			    								</select>
+			    							</div>
+		    							</div>
+	    							</div>
+	    							<div class="row">
+	    								<div class="col-md-2"> </div>
+		    							<div class="col-md-10">
+		    								<div class="col-md-1 no-padding"></div>
+		    								<div class="col-md-1 no-padding" style="border-left: #7E8892 dotted 1px;height: 45px;">
+		    									<hr style="border-top: #7E8892 dotted 1px;">
+		    								</div>
+		    								<label class="col-md-2 control-label" style="text-align:right;">from</label>
+		    								<div class="col-md-6">
+				    							<div class="input-group date" data-provide="datepicker" style="width:140px;">
+				    								  <div class="input-group-addon">
+				    									<span class="fa fa-calendar"></span>
+				    								  </div>
+				    								  <input data-coordinate-group="actions[1]" readonly="readonly" name="actions[1][happened_at_from]" data-provide="datepicker" class="datepicker form-control" data-date-format="dd/mm/yyyy" placeholder="dd/mm/yyyy" style="margin-top:0;" >
+				    							</div>
+				    						</div>
+		    							</div>
+	    							</div>
+	    							<div class="row">
+	    								<div class="col-md-2"> </div>
+		    							<div class="col-md-10">
+		    								<div class="col-md-1 no-padding"></div>
+		    								<div class="col-md-1 no-padding" style="border-left: #7E8892 dotted 1px;height: 45px;">
+		    									<hr style="border-top: #7E8892 dotted 1px;">
+		    								</div>
+		    								<label class="col-md-2 control-label" style="text-align:right;">to</label>
+		    								<div class="col-md-6">
+				    							<div class="input-group date" data-provide="datepicker" style="width:140px">
+				    								  <div class="input-group-addon">
+				    									<span class="fa fa-calendar"></span>
+				    								  </div>
+				    								  <input data-coordinate-group="actions[1]" readonly="readonly" name="actions[1][happened_at_to]" data-provide="datepicker" class="datepicker form-control" data-date-format="dd/mm/yyyy" placeholder="dd/mm/yyyy" style="margin-top:0;" >
+				    							</div>
+				    						</div>
+				    					</div>
+				    				</div>
+				    				<div class="row">
+	    								<div class="col-md-2"> </div>
+		    							<div class="col-md-10">
+		    								<div class="col-md-1 no-padding"></div>
+		    								<div class="col-md-1 no-padding" style="border-left: #7E8892 dotted 1px;height: 20px;">
+		    									<hr style="border-top: #7E8892 dotted 1px;">
+		    								</div>
+		    								<label class="col-md-2 control-label" style="text-align:right;">in</label>
+		    								<div class="col-md-6">
+		    									<select name="actions[1][in]" data-coordinate-group="actions[1]"  data-group="in-app-detail" class="form-control inline-select-long" style="width: 140px;">
+													<option value="">select app title</option>
+													{% for appTitle in listAppTitle %}
+														{% set selected = '' %}
+														{% if appTitle.id in listAppTitleSelected %}
+															{% set selected = ' selected' %}
+														{% endif %}
+			    									    <option {{ selected }} id="{{ appTitle.id }}" value="{{ appTitle.id }}">{{ appTitle.title }}</option>
+			    									{% endfor %}
+			    								</select>
+			    							</div>
+		    							</div>
+	    							</div>
+		    					</div>
+		    					<!-- end action 1 -->
+		    					<!-- start action 2 -->
+		    					<div data-seq="2" style="display:none" data-group="in-app-detail" class="row buffer-top-s">
+		    						<div class="row">
+			    						<div class="col-md-2 no-padding"></div>
+			    						<div class="col-md-10 no-padding">
+			    							<div class="col-md-1 no-padding"></div>
+			    							<div class="col-md-1 no-padding">
+			    								<a data-action="remove_this_action_filter" data-seq="2" class="btn btn-default" style="width: 40px;margin-right:10px;">
+	                								<i class="fa fa-minus"></i>
+	                							</a>
+			    							</div>
+			    							<div class="col-md-10 no-padding">
+			    								<label class="control-label"> Who </label>
+			    								<select data-coordinate-group="actions[2]" name="actions[2][perform]" data-associated-expression-group="actions[2][expression-group][2]" class="form-control inline-select-long" style="width: 120px;margin-left: 10px;">
+				    							    <option value="perform">have</option>
+				    							    <option value="not_perform">haven't</option>
+				    							</select>
+				    							<select data-group="required_if_all" data-coordinate-group="actions[2]" name="actions[2][behaviour_id]" data-associated-cat-select="actions[2][cat_id]" class="form-control inline-select-long" style="width: 160px;margin-left: 10px;">
+				    							    <option value="">select in-app event</option>
+				    							</select>
+				    							<span data-expression-group="actions[2][expression-group][2]">
+					    							<select data-coordinate-group="actions[2]" name="actions[2][frequent][expression]" class="form-control inline-select-long" style="width: 105px;">
+					    								<option value=">">More than</option>
+					    								<option value="<">Less than</option>
+					    								<option value="=">Exactly</option>
+					    								<option value="+">Between</option>
+					    							</select>
+					    							<input data-coordinate-group="actions[2]" name="actions[2][frequent][value][0]" type="text" class="form-control inline-short numeric_only" placeholder="1" style="display:inline;width: 50px;"> <span data-frequent-value-1>and <input data-coordinate-group="actions[2]" name="actions[2][frequent][value][1]" type="text" class="form-control inline-short numeric_only" placeholder="" style="display:inline;width: 50px;    margin-right: 5px;"></span> times
+					    						</span>
+			    							</div>
+			    						</div>
+			    					</div>
+			    					<div class="row">
+	    								<div class="col-md-2"> </div>
+		    							<div class="col-md-10">
+		    								<div class="col-md-1 no-padding"></div>
+		    								<div class="col-md-1 no-padding" style="border-left: #7E8892 dotted 1px;height: 45px;">
+		    									<hr style="border-top: #7E8892 dotted 1px;">
+		    								</div>
+		    								<label class="col-md-2 control-label" style="text-align:right;">with interest in</label>
+		    								<div class="col-md-6">
+		    									<select data-coordinate-group="actions[2]" name="actions[2][cat_id]" class="form-control inline-select-long" style="width: 140px;">
+			    									<option value="">select interest</option>
+			    								</select>
+			    							</div>
+		    							</div>
+	    							</div>
+	    							<div class="row">
+	    								<div class="col-md-2"> </div>
+		    							<div class="col-md-10">
+		    								<div class="col-md-1 no-padding"></div>
+		    								<div class="col-md-1 no-padding" style="border-left: #7E8892 dotted 1px;height: 45px;">
+		    									<hr style="border-top: #7E8892 dotted 1px;">
+		    								</div>
+		    								<label class="col-md-2 control-label" style="text-align:right;">from</label>
+		    								<div class="col-md-6">
+				    							<div class="input-group date" data-provide="datepicker" style="width:140px;">
+				    								  <div class="input-group-addon">
+				    									<span class="fa fa-calendar"></span>
+				    								  </div>
+				    								  <input data-coordinate-group="actions[2]" readonly="readonly" name="actions[2][happened_at_from]" data-provide="datepicker" class="datepicker form-control" data-date-format="dd/mm/yyyy" placeholder="dd/mm/yyyy" style="margin-top:0;" >
+				    							</div>
+				    						</div>
+		    							</div>
+	    							</div>
+	    							<div class="row">
+	    								<div class="col-md-2"> </div>
+		    							<div class="col-md-10">
+		    								<div class="col-md-1 no-padding"></div>
+		    								<div class="col-md-1 no-padding" style="border-left: #7E8892 dotted 1px;height: 45px;">
+		    									<hr style="border-top: #7E8892 dotted 1px;">
+		    								</div>
+		    								<label class="col-md-2 control-label" style="text-align:right;">to</label>
+		    								<div class="col-md-6">
+				    							<div class="input-group date" data-provide="datepicker" style="width:140px">
+				    								  <div class="input-group-addon">
+				    									<span class="fa fa-calendar"></span>
+				    								  </div>
+				    								  <input data-coordinate-group="actions[2]" readonly="readonly" name="actions[2][happened_at_to]" data-provide="datepicker" class="datepicker form-control" data-date-format="dd/mm/yyyy" placeholder="dd/mm/yyyy" style="margin-top:0;" >
+				    							</div>
+				    						</div>
+				    					</div>
+				    				</div>
+				    				<div class="row">
+	    								<div class="col-md-2"> </div>
+		    							<div class="col-md-10">
+		    								<div class="col-md-1 no-padding"></div>
+		    								<div class="col-md-1 no-padding" style="border-left: #7E8892 dotted 1px;height: 20px;">
+		    									<hr style="border-top: #7E8892 dotted 1px;">
+		    								</div>
+		    								<label class="col-md-2 control-label" style="text-align:right;">in</label>
+		    								<div class="col-md-6">
+		    									<select name="actions[2][in]" data-coordinate-group="actions[2]"  data-group="in-app-detail" class="form-control inline-select-long" style="width: 140px;">
+													<option value="">select app title</option>
+													{% for appTitle in listAppTitle %}
+														{% set selected = '' %}
+														{% if appTitle.id in listAppTitleSelected %}
+															{% set selected = ' selected' %}
+														{% endif %}
+			    									    <option {{ selected }} id="{{ appTitle.id }}" value="{{ appTitle.id }}">{{ appTitle.title }}</option>
+			    									{% endfor %}
+			    								</select>
+			    							</div>
+		    							</div>
+	    							</div>
+		    					</div>
+		    					<!-- end action 2 -->
+		    					<!-- end in-app detail -->
+							</div>
+							<div class="row" style="padding-top: 20px;">
+								<div class="col-md-2"> </div>
+								<div class="col-md-9 no-padding">
+									{% if selected_record is defined %}
+	                                    <button class="btn btn-primary pull-right" data-last='Update Card' id="update_card">Update Audience Card
+	                                    <i class='fa fa-caret-right'></i>
+	                                    </button>
+	                                {% else %}
+	                                <button class="btn btn-primary pull-right" data-last='Create Card' id="save">Save Audience Card
+	                                    <i class='fa fa-caret-right'></i>
+	                                </button>
+	                                {% endif %}
+								</div>
+								<div class="col-md-1"> </div>
+							</div>
+						</form>
+					</div>
+	            </div><!-- end box-body -->
+	        </div>
+	    </div>
+	    <div class="col-md-4 small-box bg-navy-card">
+			<div class="bg-cl"> <!--CARD ELEMENT-->
+				<div class="row no-margin nosum">
+					<div class="col-md-12">
+						<div id="card-platform-space" style="padding: 5px 0px 5px;text-align:right;font-size: 25px;">
+							<div id="card-platform-preview"></div>
+						</div>
+					</div>
+				</div>
+				<div class="row no-margin">
+					<div class="col-md-12" style="padding:10px">
+						<div id="card-title-space">
+							<div id="card-title-preview"></div>
+						</div>
+					</div>
+				</div>
+				<div class="row no-margin nosum" style="min-height: 65px;">
+					<div class="col-md-12" style="padding:15px;">
+						<div id="card-description-space">
+							<div id="card-description-preview"></div>
+						</div>
+					</div>
+				</div>
+				<div class="row no-margin">
+					<div class="col-md-12">
+						<div id="card-est-space" style="text-align:center">
+							<p class="no-margin">Estimated Reach</p>
+							<h3 id="estimate"></h3>
+						</div>
+					</div>
+				</div>
+				<div class="row no-margin">
+					<div class="col-md-12" style="padding-bottom:40px">
+						<div id="card-countries-space">
+							<div id="card-countries-preview"></div>
+						</div>
+					</div>
+				</div>
+
+
+			</div> <!--END CARD ELEMENT-->
+		</div>
+	</div>
+	{% endif %}
+</div>
+{% endblock %}
+{% block stylesheets_inline %}
+    <!-- Select2 -->
+    <link href="{{ asset('bundles/hyperevent/plugins/select2/select2.min.css') }}" rel="stylesheet" />
+    <!-- iCheck -->
+    <link href="{{ asset('bundles/hyperevent/plugins/iCheck/square/blue.css') }}" rel="stylesheet">
+    <!-- Datepicker -->
+    <link href="{{ asset('bundles/hyperevent/plugins/datepicker/css/datepicker.css') }}" rel="stylesheet">
+    <!-- Colorselector -->
+    <link href="{{ asset('bundles/hyperevent/plugins/colorpicker/bootstrap-colorselector.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block javascript_inline %}
+	<!-- Select2 -->
+	<script src="{{ asset('bundles/hyperevent/plugins/select2/select2.min.js') }}"></script>
+    <!-- iCheck -->
+	<script src="{{ asset('bundles/hyperevent/plugins/iCheck/icheck.min.js') }}"></script>
+	<!-- Datepicker -->
+    <script src="{{ asset('bundles/hyperevent/plugins/datepicker/js/bootstrap-datepicker.js') }}"></script>
+	<!-- Color selector -->
+    <script src="{{ asset('bundles/hyperevent/plugins/colorpicker/bootstrap-colorselector.js') }}"></script>
+    <script>
+        // CARD PREVIEW SETTINGS //
+
+        var cardStyle = $('.bg-navy-card .bg-cl')[0].style;
+		//var HighlightStyle = $('.ct-bg')[0].style;
+		document.getElementById('set_cardbgcolor').setAttribute('placeholder', '#f5f5f5');
+		//set_hightlightbox
+		//set_cardtextcolor
+		$('#cardcolorselector').colorselector({
+	          callback: function (value, color, title) {
+	              $("#set_cardbgcolor").val(color);
+	              cardStyle.backgroundColor = color;
+	          }
+	    });
+	    $('#textcolorselector').colorselector({
+	          callback: function (value, color, title) {
+	              $("#set_cardtextcolor").val(color);
+	              cardStyle.color = color;
+	          }
+	    });
+		// $('.card-bg-color').colorpicker({
+  //      	color: cardStyle.backgroundColor,
+  //      	format: 'hex'
+  //      }).on('changeColor', function(ev) {
+  //              cardStyle.backgroundColor = ev.color.toHex();
+  //              document.getElementById('set_cardbgcolor').setAttribute('value', ev.color.toHex());
+  //          });
+        // $('.card-box-color').colorpicker({
+        // 	color: HighlightStyle.backgroundColor,
+        // 	format: 'hex'
+        // }).on('changeColor', function(ev) {
+        //         HighlightStyle.backgroundColor = ev.color.toHex();
+        //         document.getElementById('set_hightlightbox').setAttribute('value', ev.color.toHex());
+        //     });
+        // $('.card-text-color').colorpicker({
+        // 	color: cardStyle.color,
+        // 	format: 'hex'
+        // }).on('changeColor', function(ev) {
+        //         cardStyle.color = ev.color.toHex();
+        //         document.getElementById('set_cardtextcolor').setAttribute('value', ev.color.toHex());
+        //     });
+
+		$(".inputCountryMultiple").select2({
+			placeholder:"Input name of countries"
+		});
+		$(".inputAppTitleMultiple").select2({
+			placeholder:"Input name of app title"
+		});
+		$('input').iCheck({
+    		checkboxClass: 'icheckbox_square-blue',
+    		radioClass: 'iradio_square-blue',
+    		increaseArea: '20%'
+  		});
+  		$('.datepicker').datepicker({
+    	format: 'mm/dd/yyyy',
+    	startDate: '-3d'
+		});
+
+		var defaultCardName = $("#preset_name").attr('placeholder');
+		var defaultCardDes = $("#description").attr('placeholder');
+
+		$("#card-title-preview").text(defaultCardName);
+		$("#card-description-preview").text(defaultCardDes);
+
+		function CardPreviewName(typingText) {
+			$("#card-title-preview").text(typingText);
+	   		if(typingText == ""){
+	   			$("#card-title-preview").text(defaultCardName)
+	   		}
+
+	   		//Auto Resize Text
+	   		var TitleSpace = $('#card-title-space').height();
+	   		var TitleText = $('#card-title-preview').height();
+	   		var TitleWidth = $('.bg-navy-card').width();
+	   		var TitleVerticalAlign = (TitleSpace-TitleText)/2;
+
+	   		$('#card-title-space div').css({
+	   			'padding-top': TitleVerticalAlign,
+	   			'width':TitleWidth-'30',
+	   			'font-size': '2em'
+	   		});
+
+	   		while( $('#card-title-space div').height() > $('#card-title-space').height() ) {
+		    	$('#card-title-space div').css('font-size', (parseInt($('#card-title-space div').css('font-size')) - 1) + "px" );
+		    }
+
+		}
+		function CardPreviewDes(typingText) {
+		   $("#card-description-preview").text(typingText);
+		   if(typingText == ""){
+	   			$("#card-description-preview").text(defaultCardDes)
+	   		}
+
+	   		///Auto Resize Text
+	   		var DesSpace = $('#card-description-space').height();
+	   		var DesText = $('#card-description-preview').height();
+	   		var DesWidth = $('.bg-navy-card').width();
+	   		var DesVerticalAlign = (DesSpace-DesText)/2;
+
+	   		$('#card-description-space div').css({
+	   			'padding-top': DesVerticalAlign,
+	   			'width':DesWidth-'30',
+	   			'font-size': '1em'
+	   		});
+
+	   		while( $('#card-description-space div').height() > $('#card-description-space').height() ) {
+		    	$('#card-description-space div').css('font-size', (parseInt($('#card-description-space div').css('font-size')) - 1) + "px" );
+		    }
+		}
+		$( "#country_codes" ).change(function() {
+			// get reference to display textarea
+		    var CardCountries = document.getElementById('card-countries-preview');
+		    CardCountries.innerHTML = ''; // reset
+		   	var selected = $( ".select2-selection__choice" ).get();
+
+		   	var selectedText = [];
+		   	var countries = [];
+			var bg = $(".ct-bg").css("background-color");
+			for ( var i = 0; i < selected.length; i++ ) {
+				selectedText.push( "<span class='card-countries-preview-box' style='background-color:"+bg+"'>"+selected[ i ].innerText.replace('×','')+"</span>" );
+			}
+
+			var DesWidth = $('.bg-navy-card').width();
+			$('#card-countries-space div').css({
+				'width':DesWidth-'50',
+				'word-wrap': 'break-word',
+				'line-height':'50px'
+			})
+
+			$( "#card-countries-preview" ).html(selectedText);
+			//getEstimate();
+
+		});
+
+		var pf_ios='';
+		var pf_android='';
+
+		//value 1 = ios ; value 2 = android
+
+		$('.platform_codes').on('ifChecked', function(event){
+			var platform = event.target.value;
+			if (platform == '2' && pf_ios == ''){
+				$( "#card-platform-preview" ).html("<i class='fa fa-android'></i>");
+				pf_android = '2';
+			}
+			if (platform == '1' && pf_android == '2'){
+				$( "#card-platform-preview" ).html("<i class='fa fa-apple' style='padding-right:10px'></i><i class='fa fa-android'></i>");
+				pf_android = '2';
+				pf_ios = '1';
+			}
+			if (platform == '1' && pf_android == ''){
+				$( "#card-platform-preview" ).html("<i class='fa fa-apple'></i>");
+				pf_ios = '1';
+			}
+			if (platform == '2' && pf_ios == '1'){
+				$( "#card-platform-preview" ).html("<i class='fa fa-android' style='padding-right:10px'></i><i class='fa fa-apple'></i>");
+				pf_android = '2';
+				pf_ios = '1';
+			}
+			//getEstimate();
+		});
+
+		$('.platform_codes').on('ifUnchecked', function(event){
+			var platform = event.target.value
+			if (platform == '2' && pf_ios == ''){
+				$( "#card-platform-preview" ).html("");
+				pf_android = '';
+			}
+			if (platform == '2' && pf_ios == '1'){
+				$( "#card-platform-preview" ).html("<i class='fa fa-apple'></i>");
+				pf_android = '';
+			}
+			if (platform == '1' && pf_android == ''){
+				$( "#card-platform-preview" ).html("");
+				pf_ios = '';
+			}
+			if (platform == '1' && pf_android == '2'){
+				$( "#card-platform-preview" ).html("<i class='fa fa-android'></i>");
+				pf_ios = '';
+			}
+			//getEstimate();
+		})
+
+		// END CARD PREVIEW SETTINGS //
+
+		$("div[data-group='history-detail']"
+		).each(function(){
+		    //console.log($(this).find("select[name*='cat_id']").attr('name'),$(this).find("select[name*='cat_id']").attr("disabled"));
+		    if($(this).is(':hidden')) {
+		        //alert("seq: "+$(this).attr('data-seq'));
+		        $(this).find('select,input').attr("disabled","disabled");
+		    }
+		});
+        $("div[data-group='in-app-detail']"
+		).each(function(){
+		    $(this).find("select[name*='cat_id']").attr("disabled","disabled");
+		    if($(this).is(':hidden')) {
+		        //alert("seq: "+$(this).attr('data-seq'));
+		        $(this).find('select,input').attr("disabled","disabled");
+		    }
+		});
+		$("[data-action='add_more_action_filter']").click(function(){
+		    console.log('debug','add_more_action_filter clicked');
+		    $("div[data-group='in-app-detail']:hidden").first().show().find('select,input').removeAttr("disabled").find("select[name*='cat_id']").attr("disabled","disabled");
+		});
+		$("select[name*='behaviour_id']").change(function(){
+		    console.log('debug',"name*='behaviour_id'");
+		    if ( $.inArray($(this).val(),["add_to_wishlist","af_add_to_wishlist","add_to_cart","af_add_to_cart","purchase","af_purchase","af_share","af_content_view"]) !== -1) {
+		        console.log('debug','behaviour_id match');
+		        // data-associated-cat-select="actions[0][cat_id]"
+		        $("select[name='"+$(this).attr("data-associated-cat-select")+"']").removeAttr("disabled");
+		    } else {
+		        $("select[name='"+$(this).attr("data-associated-cat-select")+"']").attr("disabled","disabled");
+		    }
+		    //getEstimate();
+		})
+		$("[data-action='remove_this_action_filter']").click(function(){
+		    console.log('debug','remove_this_action_filter clicked');
+		    var seq = $(this).attr('data-seq');
+		    $("div[data-group='in-app-detail'][data-seq='"+seq+"']").first().hide().find('select,input').attr("disabled","disabled");
+		});
+
+		$("#save").click(function(e)
+        {
+
+            e.preventDefault();
+            var validationMessage = '';
+
+		    //client side validation
+		    if(!$("input[name='preset_name']").val()) {
+		        validationMessage= 'please input preset name';
+		        showValidationMessageModal(validationMessage);
+		        return;
+		    }
+		    if(!$("input[name='description']").val()) {
+		        validationMessage= 'please input description';
+		        showValidationMessageModal(validationMessage);
+		        return;
+		    }
+
+		    if($("select[name='expression']").val() == 'All'){
+		        $("*[data-group='required_if_all']").each(function(){
+		            if (!$(this).val() && !$(this).attr("disabled")) {
+		                validationMessage= 'please input or select all condition (User Since,Last login before,Who have peformed)';
+		                return false;
+		            }
+		        });
+		    }
+
+		    $("select[name*='behaviour_id']").each(function(){
+            	$coordinate_group = $(this).attr('data-coordinate-group');
+
+            	if($(this).val() && !$(this).attr("disabled")){
+            		if(!$("select[data-coordinate-group='"+$coordinate_group+"']").val() && !$(this).attr("disabled")){
+		    			validationMessage= 'please select all condition for selected in-app-event';
+		                return false;
+		    		}
+		    		if(
+		    			!$("input[name='"+$coordinate_group+"\[frequent\]\[value\]\[0\]']").attr("disabled")
+		    			&& $("input[name='"+$coordinate_group+"\[frequent\]\[value\]\[0\]']").val() == ''
+		    		){
+		    			validationMessage= "You're missing a <b>frequency</b> value for 1 or more in-app event(s)";
+		                return false;
+		    		}
+		    		if(
+		    			!$("select[name='"+$coordinate_group+"\[frequent\]\[expression\]']").attr("disabled")
+		    			&& $("select[name='"+$coordinate_group+"\[frequent\]\[expression\]']").val() == '+'
+		    			&& (
+		    				!$("input[name='"+$coordinate_group+"\[frequent\]\[value\]\[0\]']").val() ||
+		    				!$("input[name='"+$coordinate_group+"\[frequent\]\[value\]\[1\]']").val()
+		    			)
+		    		){
+		    			validationMessage= "You're missing a <b>frequency</b> value for 1 or more in-app event(s)";
+		                return false;
+		    		}
+		    		if (
+		    			!$("select[name='"+$coordinate_group+"\[frequent\]\[expression\]']").attr("disabled")
+		    			&& $("select[name='"+$coordinate_group+"\[frequent\]\[expression\]']").val() == '<'
+		    			&& $("input[name='"+$coordinate_group+"\[frequent\]\[value\]\[0\]']").val() < 2
+		    		) {
+		    			validationMessage= "Minimum <b>frequency</b> value is 2 for less than operator";
+		                return false;
+		    		}
+		    		if (
+		    			!$("select[name='"+$coordinate_group+"\[frequent\]\[expression\]']").attr("disabled")
+		    			&& $("select[name='"+$coordinate_group+"\[frequent\]\[expression\]']").val() == '='
+		    			&& $("input[name='"+$coordinate_group+"\[frequent\]\[value\]\[0\]']").val() < 1
+		    		) {
+		    			validationMessage= "Minimum <b>frequency</b> value is 1 for equal operator";
+		                return false;
+		    		}
+		    		if(!$("input[data-coordinate-group='"+$coordinate_group+"'][name*='happened_at_from']").val()){
+		    			validationMessage= "You're missing a FROM and TO date range for 1 or more in-app event(s)";
+		                return false;
+		    		}
+		    		if(!$("input[data-coordinate-group='"+$coordinate_group+"'][name*='happened_at_to']").val()){
+		    			validationMessage= "You're missing a FROM and TO date range for 1 or more in-app event(s)";
+		                return false;
+		    		}
+            	}
+            });
+
+		    if(validationMessage != ''){
+		        showValidationMessageModal(validationMessage);
+		        return false;
+		    }
+			var submitData = $('#preset_card_generator').serializeArray();
+		    submitData.push({
+		    	name: 'card_bg_color_code',
+		    	value : $('input[name="card_bg_color_code"]').val()
+		    });
+		    submitData.push({
+		    	name: 'card_text_color_code',
+		    	value : $('input[name="card_text_color_code"]').val()
+		    });
+			    //return;
+			$.ajax({
+                method: "POST",
+                url: "{{ path('dashboard_filter_executeadd_v2') }}",
+                data: submitData,
+                success : function(response){
+                    console.log(response);
+
+                //alert(response);
+                $("#validationMessageModal").on('show.bs.modal', function (event) {
+    		        $(this).find('#validationMessageText').html(response)
+    		    }).modal('show');
+                setTimeout(function(){
+                      window.location.href = "{{ path('dashboard_filter_showlist_v2') }}";
+                },500);
+
+                },
+                error : function(jqXHR, exception){
+                    if (jqXHR.status === 0) {
+                        console.log('error','Not connect.\n Verify Network.');
+                    } else if (jqXHR.status == 404) {
+                        console.log('error','Requested page not found. [404]');
+                    } else if (jqXHR.status == 500) {
+                        console.log('error','Internal Server Error [500].');
+                    } else if (exception === 'parsererror') {
+                        console.log('error','Requested JSON parse failed.');
+                    } else if (exception === 'timeout') {
+                        console.log('error','Time out error.');
+                    } else if (exception === 'abort') {
+                        console.log('error','Ajax request aborted.');
+                    } else if ( jqXHR.status == 400) {
+                        showValidationMessageModal(jqXHR.responseText);
+		                return;
+                    } else {
+                        console.log('error','Uncaught Error.\n' + jqXHR.responseText);
+                    }
+                }
+            });
+		});
+
+    function showValidationMessageModal(message) {
+        $("#validationMessageModal").on('show.bs.modal', function (event) {
+		        $(this).find('#validationMessageText').html(message)
+		    }).modal('show');
+    }
+    function getEstimate() {
+		    $("#estimate").html('...');
+            var data = {};
+            var country_codes = $( "#country_codes" ).val();
+            if(country_codes != '') {
+                data.country_codes = country_codes;
+            }
+            var platform_ids = $( "#platform_ids" ).val();
+            if(platform_ids != '') {
+                data.platform_ids = platform_ids;
+            }
+            $('input[name^="actions"]').each(function() {
+                if($(this).attr('enabled') && $(this).val()){
+                    data.actions.push($(this).val());
+                }
+
+            });
+
+            console.log();
+            /*
+            $.ajax({
+                url : '{{ path('dashboard_filter_estimate') }}',
+                data : data,
+                method : 'POST',
+                dataType : 'json',
+                success : function (json){
+                    console.log('response',json);
+                    $("#estimate").html(json.estimate);
+                }
+            });
+            */
+        }
+
+    var PresetFilter = {
+    	init: function() {
+    		this.fireEventChangeAppTitle();
+    		this.setupFrequentValue();
+			this.fireEventChangeFrequentExp();
+			this.fireEventClickAddMoreHistory();
+			this.fireEventChangePerform();
+			this.disabledExpressionGroupFilter();
+    	},
+    	fireEventChangeAppTitle: function() {
+    		var self = this;
+    		$(document).on('change', "select[data-group='in-app-detail'][name*='[in]']", function() {
+    			var listAppTitleId = $(this).val();
+    			var coordinateGroup = $(this).attr('data-coordinate-group');
+    			self.loadListEventNameByListAppTitle(listAppTitleId, coordinateGroup);
+    		});
+    	},
+    	loadListEventNameByListAppTitle: function(listAppTitleId, coordinateGroup) {
+    		var self = this;
+    		if (!listAppTitleId) {
+				self.resetEventFilter(coordinateGroup);
+				self.resetCategoryFilter(coordinateGroup);
+    			return;
+    		}
+    		$.ajax({
+                url : "{{ path('dashboard_filter_load_list_event_name_by_app_title_v2') }}",
+                type: 'GET',
+                dataType: 'json',
+                data: {
+                    'list_app_title_id': listAppTitleId,
+                },
+                beforeSend: function() {
+					self.disabledEventFilter(coordinateGroup);
+					self.disabledCategoryFilter(coordinateGroup);
+
+                },
+                success: function(resp) {
+                	if (typeof resp.msg != 'undefined') {
+                		alert(resp.msg);
+                	} else {
+						self.addListEventNameToEventFilter(resp['data']['list_event_name'], coordinateGroup);
+						self.addListCategoryToCategoryFilter(resp['data']['list_category'], coordinateGroup);
+                	}
+                },
+                error: function() {
+					self.enabledEventFilter(coordinateGroup);
+					self.enabledCategoryFilter(coordinateGroup);
+                },
+                complete: function() {
+                	self.enabledEventFilter(coordinateGroup);
+                	self.enabledCategoryFilter(coordinateGroup);
+                }
+            });
+    	},
+    	resetEventFilter: function(coordinateGroup) {
+    		var emptyOption = '<option value="">select in-app event</option>';
+			var listOptions = [];
+			listOptions.push(emptyOption);
+			$("select[name='"+coordinateGroup+"\[behaviour_id\]']").html(listOptions.join(''));
+    	},
+    	disabledEventFilter: function(coordinateGroup) {
+    		$("select[name='"+coordinateGroup+"\[behaviour_id\]']").attr('disabled','disabled');
+    	},
+    	enabledEventFilter: function(coordinateGroup) {
+    		$("select[name='"+coordinateGroup+"\[behaviour_id\]']").removeAttr('disabled');
+    	},
+    	resetCategoryFilter: function(coordinateGroup) {
+    		var emptyOption = '<option value="">select interest</option>';
+			var listOptions = [];
+			listOptions.push(emptyOption);
+			$("select[name='"+coordinateGroup+"\[cat_id\]']").html(listOptions.join(''));
+    	},
+    	disabledCategoryFilter: function(coordinateGroup) {
+    		var disabled = $("select[name='"+coordinateGroup+"\[cat_id\]']").attr('disabled');
+			if (disabled) {
+				$("select[name='"+coordinateGroup+"\[cat_id\]']").attr('still-disabled','1');
+			} else {
+				$("select[name='"+coordinateGroup+"\[cat_id\]']").attr('disabled', 'disabled');
+				$("select[name='"+coordinateGroup+"\[cat_id\]']").removeAttr('still-disabled');
+			}
+    	},
+    	enabledCategoryFilter: function(coordinateGroup) {
+    		var stillDisabled = $("select[name='"+coordinateGroup+"\[cat_id\]']").attr('still-disabled');
+			if (stillDisabled) {
+				return;
+			}
+			$("select[name='"+coordinateGroup+"\[cat_id\]']").removeAttr('disabled');
+    	},
+    	addListEventNameToEventFilter: function(listEventName, coordinateGroup) {
+    		var selectedValue = $("select[name='"+coordinateGroup+"\[behaviour_id\]']").val();
+			var listOptions = [];
+			var emptyOption = '<option value="">select in-app event</option>';
+			listOptions.push(emptyOption);
+			for (var i = 0; i < listEventName.length; i++) {
+				var eventName = listEventName[i];
+				var selected = '';
+				if (selectedValue == eventName) {
+					selected = 'selected';
+				}
+				var option = '<option '+selected+' value="'+eventName+'">'+eventName+'</option>';
+				listOptions.push(option);
+			}
+			$("select[name='"+coordinateGroup+"\[behaviour_id\]']").html(listOptions.join(''));
+    	},
+    	addListCategoryToCategoryFilter: function(listCategory, coordinateGroup) {
+    		var selectedValue = $("select[name='"+coordinateGroup+"\[cat_id\]']").val();
+			var listOptions = [];
+			var emptyOption = '<option value="">select interest</option>';
+			listOptions.push(emptyOption);
+			for (var i = 0; i < listCategory.length; i++) {
+				var category = listCategory[i];
+				var selected = '';
+				if (selectedValue == category) {
+					selected = 'selected';
+				}
+				var option = '<option '+selected+' value="'+category+'">'+category+'</option>';
+				listOptions.push(option);
+			}
+			 $("select[name='"+coordinateGroup+"\[cat_id\]']").html(listOptions.join(''));
+    	},
+    	fireEventChangeFrequentExp: function() {
+			var self = this;
+			$(document).on('change', "select[name*='[frequent][expression]']", function (e) {
+				self.setupFrequentValue();
+			});
+		},
+		setupFrequentValue: function(el) {
+			$("select[name*='[frequent][expression]']").each(function(){
+				if ($(this).val() == '+') {
+					$(this).parent().find('[data-frequent-value-1]').show();
+				} else {
+					$(this).parent().find('[data-frequent-value-1]').hide();
+				}
+			});
+		},
+		fireEventClickAddMoreHistory: function() {
+			$("[data-action='add_more_history']").click(function(){
+		    	//console.log('debug','add_more_history clicked');
+		    	$("div[data-group='history-detail']:hidden").first().show().find('select,input').removeAttr("disabled");
+			});
+			$("[data-action='remove_this_history']").click(function(){
+			    //console.log('debug','remove_this_history clicked');
+			    var seq = $(this).attr('data-seq');
+			    $("div[data-group='history-detail'][data-seq='"+seq+"']").first().hide().find('select,input').attr("disabled","disabled");
+			});
+		},
+		fireEventChangePerform: function() {
+			$("select[name*='[perform]']").change(function(){
+				var expressionGroup = $(this).attr('data-associated-expression-group');
+				if ($(this).val() == 'not_perform') {
+					$("span[data-expression-group='"+expressionGroup+"']").hide().find('select,input').attr("disabled","disabled");
+				} else {
+					$("span[data-expression-group='"+expressionGroup+"']").show().find('select,input').removeAttr("disabled","disabled");
+				}
+			});
+		},
+		disabledExpressionGroupFilter: function() {
+			$("select[name*='[perform]']").each(function(){
+				if ($(this).val() && !$(this).attr('disabled')) {
+					var expressionGroup = $(this).attr('data-associated-expression-group');
+					if ($(this).val() == 'not_perform') {
+						$("span[data-expression-group='"+expressionGroup+"']").first().hide().find('select,input').attr("disabled","disabled");
+					} else {
+						$("span[data-expression-group='"+expressionGroup+"']").first().show().find('select,input').removeAttr("disabled","disabled");
+					}
+				}
+			});
+		}
+    };
+
+    $(document).ready(function() {
+    	PresetFilter.init();
+    });
+    </script>
+{% endblock %}

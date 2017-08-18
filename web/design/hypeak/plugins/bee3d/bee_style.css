@@ -1,0 +1,110 @@
+#main {
+  position: relative;
+  min-height: 100vh;
+  width: 100%; }
+
+.bee3D--parent {
+	/*
+	position: absolute;
+	*/
+	top: 0;
+	right: 0;
+	left: 0;
+	bottom: 0; }
+
+.card-deck {
+  /*
+  max-width: 250px;
+  */
+  height:200px;
+  color: #fff;
+  margin: 0 auto;
+  text-align: left; }
+  .card-deck h3 {
+    font-size: 1.8em;
+    text-align: center;
+    margin-bottom: 1em;
+    text-decoration: underline; }
+  .card-deck ul {
+    font-weight: 600;
+    margin: 20px auto; }
+    .card-deck ul li {
+      padding-bottom: 10px; }
+    .card-deck ul a, .card-deck ul dt {
+      font-size: 1.6em; }
+    .card-deck ul dt {
+      color: #363218;
+      margin-bottom: -15px; }
+    .card-deck ul ul {
+      margin-left: 30px; }
+      .card-deck ul ul li {
+        padding-bottom: 6px; }
+
+.bee3D--effect__classic {
+  background: rgba(243, 111, 86, 0.2); }
+  .bee3D--effect__classic .bee3D--inner {
+    background: #F36F56; }
+  .bee3D--effect__classic a {
+    color: #F36F56; }
+
+.bee3D--effect__carousel {
+  background: rgba(121, 255, 0, 0.2); }
+  .bee3D--effect__carousel .bee3D--inner {
+    background: #83C745; }
+  .bee3D--effect__carousel a {
+    color: #83C745; }
+
+.bee3D--effect__concave {
+  background: rgba(235, 156, 184, 0.3); }
+  .bee3D--effect__concave .bee3D--inner {
+    background: #EB9CB8; }
+  .bee3D--effect__concave a {
+    color: #EB9CB8; }
+
+.bee3D--effect__coverflow {
+  /*
+  background: rgba(42, 206, 185, 0.2); 
+  */
+  }
+  .bee3D--effect__coverflow .bee3D--inner {
+    background: #2F4050; 
+	background-image: url(http://www.transparenttextures.com/patterns/crossword.png);
+	}
+  .bee3D--effect__coverflow a {
+    color: #2F4050; }
+
+.bee3D--effect__cube {
+  background: rgba(86, 174, 231, 0.3); }
+  .bee3D--effect__cube .bee3D--inner {
+    background: #56AEE7; }
+  .bee3D--effect__cube a {
+    color: #56AEE7; }
+
+.bee3D--effect__arc {
+  background: rgba(233, 213, 88, 0.2); }
+  .bee3D--effect__arc .bee3D--inner {
+    background: #FFAB07; }
+  .bee3D--effect__arc a {
+    color: #FFAB07; }
+
+.bee3D--effect__wave {
+  background: rgba(179, 224, 153, 0.2); }
+  .bee3D--effect__wave .bee3D--inner {
+    background: #028F76; }
+  .bee3D--effect__wave a {
+    color: #028F76; }
+
+.bee3D--effect__spiral-right {
+  background: rgba(255, 234, 173, 0.2); }
+  .bee3D--effect__spiral-right .bee3D--inner {
+    background: #B3E099; }
+  .bee3D--effect__spiral-right a {
+    color: #B3E099; }
+
+.bee3D--effect__spiral-left {
+  background: rgba(255, 234, 173, 0.2); }
+  .bee3D--effect__spiral-left .bee3D--inner {
+    background: #B3E099; }
+  .bee3D--effect__spiral-left a {
+    color: #B3E099; }
+

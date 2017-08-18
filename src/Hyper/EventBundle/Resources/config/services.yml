@@ -1,0 +1,248 @@
+parameters:
+    hyper_event.amazon_s3.class: AmazonS3
+    hyper_event.event_log_uploader.class: Hyper\EventBundle\Upload\EventLogUploader
+services:
+#    hyper_event.example:
+#        class: Hyper\EventBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]
+    #hyper_event.amazon_s3:
+    #    class: %hyper_event.amazon_s3.class%
+    #    arguments: [{key: '%hyper_event.amazon_s3.aws_key%',secret: '%hyper_event.amazon_s3.aws_secret_key%'}]
+    hyper_event.amazon_s3:
+        class: %hyper_event.amazon_s3.class%
+        arguments:
+            options:
+                key: '%hyper_event.amazon_s3.aws_key%'
+                secret: '%hyper_event.amazon_s3.aws_secret_key%'
+    hyper_event.event_log_uploader:
+        class: %hyper_event.event_log_uploader.class%
+        arguments: ['@event_log_filesystem']
+    hyper_event.storage_controller:
+        class: Hyper\EventBundle\Controller\StorageController
+        arguments:
+            container: '@service_container'
+    hyper_event.storage_controller_v3:
+        class: Hyper\EventBundle\Controller\StorageControllerV3
+        arguments:
+            container: '@service_container'
+    hyper_event.storage_controller_v4:
+        class: Hyper\EventBundle\Controller\StorageControllerV4
+        arguments:
+            container: '@service_container'
+
+    # CSV Upload Controller
+    hyper_event.csv_upload_controller:
+        class: Hyper\EventBundle\Controller\CsvUploadController
+        arguments:
+            container: '@service_container'
+
+    event.csvuploadlog.repository:
+        class: Hyper\Domain\CsvUploadLog\DTCsvUploadLogRepository
+        factory: [@doctrine.orm.pgsql_entity_manager, getRepository]
+        arguments: [Hyper\Domain\CsvUploadLog\CsvUploadLog]
+
+    # RedShift Table Data Display
+    hyper_event.display_action_data_controller:
+        class: Hyper\EventBundle\Controller\DisplayActionDataController
+        arguments:
+            container: '@service_container'
+    # RedShift Table Data Export
+    hyper_event.export_action_data_controller:
+        class: Hyper\EventBundle\Controller\ExportActionDataController
+        arguments:
+            container: '@service_container'
+
+    # Dashboard filter
+    hyper_event.filter_controller:
+        class: Hyper\EventBundle\Controller\PresetFilterController
+        arguments:
+            container: '@service_container'
+
+    # Currency exchange
+    hyper_event.currency_rate_exchange_controller:
+        class: Hyper\EventBundle\Controller\CurrencyExchangeRatesController
+        arguments:
+            container: '@service_container'
+
+    hyper_event.test_controller:
+        class: Hyper\EventBundle\Controller\Test\TestController
+        arguments:
+            container: '@service_container'
+    hyper_event.event_process:
+        class: Hyper\EventBundle\Service\EventProcess
+    redshift_service:
+        class: Hyper\EventBundle\Service\Redshift
+        arguments:
+            container: '@service_container'
+    redshift_batch_processing_service:
+        class: Hyper\EventBundle\Service\RedshiftBatchProcessing
+        arguments:
+            container: '@service_container'
+    s3_count_event_service:
+        class: Hyper\EventBundle\Service\S3CountEvent
+        arguments:
+            container: '@service_container'
+    s3_to_glacier_service:
+        class: Hyper\EventBundle\Service\S3ToGlacier
+        arguments:
+            container: '@service_container'
+    re_index_es_service:
+        class: Hyper\EventBundle\Service\EsReIndex
+        arguments:
+            container: '@service_container'
+    appsflyer_base_action_service:
+        class: Hyper\EventBundle\Service\Request\Appsflyer\BaseAction
+        arguments: [@service_container,@identity_repository,@application_repository,@device_repository,@ios_device_repository,@android_device_repository,@action_repository]
+    appsflyer_install_service:
+        class: Hyper\EventBundle\Service\Request\Appsflyer\Install
+        arguments: [@service_container,@identity_repository,@application_repository,@device_repository,@ios_device_repository,@android_device_repository,@action_repository,@install_action_repository]
+    appsflyer_launch_service:
+        class: Hyper\EventBundle\Service\Request\Appsflyer\Launch
+        arguments: [@service_container,@identity_repository,@application_repository,@device_repository,@ios_device_repository,@android_device_repository,@action_repository,@launch_action_repository]
+    appsflyer_search_service:
+        class: Hyper\EventBundle\Service\Request\Appsflyer\Search
+        arguments: [@service_container,@identity_repository,@application_repository,@device_repository,@ios_device_repository,@android_device_repository,@action_repository,@search_action_repository]
+    appsflyer_add_to_cart_service:
+        class: Hyper\EventBundle\Service\Request\Appsflyer\AddToCart
+        arguments: [@service_container,@identity_repository,@application_repository,@device_repository,@ios_device_repository,@android_device_repository,@action_repository,@add_to_cart_action_repository,@item_repository,@in_cart_item_repository,@in_category_item_repository,@category_repository]
+    appsflyer_add_to_wishlist_service:
+        class: Hyper\EventBundle\Service\Request\Appsflyer\AddToWishlist
+        arguments: [@service_container,@identity_repository,@application_repository,@device_repository,@ios_device_repository,@android_device_repository,@action_repository,@add_to_wishlist_action_repository,@item_repository,@in_wishlist_item_repository,@in_category_item_repository,@category_repository]
+    appsflyer_transaction_service:
+        class: Hyper\EventBundle\Service\Request\Appsflyer\Transaction
+        arguments: [@service_container,@identity_repository,@application_repository,@device_repository,@ios_device_repository,@android_device_repository,@action_repository,@transaction_action_repository,@item_repository,@transacted_item_repository,@in_category_item_repository,@category_repository]
+    appsflyer_share_content_service:
+        class: Hyper\EventBundle\Service\Request\Appsflyer\ShareContent
+        arguments: [@service_container,@identity_repository,@application_repository,@device_repository,@ios_device_repository,@android_device_repository,@action_repository,@share_content_action_repository,@content_repository,@in_category_content_repository,@category_repository]
+    appsflyer_view_content_service:
+        class: Hyper\EventBundle\Service\Request\Appsflyer\ViewContent
+        arguments: [@service_container,@identity_repository,@application_repository,@device_repository,@ios_device_repository,@android_device_repository,@action_repository,@view_content_action_repository,@content_repository,@in_category_content_repository,@category_repository]
+    appsflyer_misc_service:
+        class: Hyper\EventBundle\Service\Request\Appsflyer\Misc
+        arguments: [@service_container,@identity_repository,@application_repository,@device_repository,@ios_device_repository,@android_device_repository,@action_repository,@misc_action_repository]
+
+    #Auth
+    auth.controller:
+        class: Hyper\EventBundle\Controller\Dashboard\Auth\AuthenticationController
+        arguments:
+            container: '@service_container'
+
+    #Category
+    category.controller:
+        class: Hyper\EventBundle\Controller\Dashboard\Category\CategoryController
+        arguments:
+            container: '@service_container'
+
+    #Demo
+    demo.controller:
+        class: Hyper\EventBundle\Controller\Dashboard\Auth\DemoController
+        arguments:
+            container: '@service_container'
+
+    # Template helper
+    template_helper_country:
+        class: Hyper\EventBundle\TemplateHelper\CountryExtension
+        public: false
+        tags:
+            - { name: twig.extension }
+    template_helper_array:
+        class: Hyper\EventBundle\TemplateHelper\ArrayExtension
+        public: false
+        tags:
+            - { name: twig.extension }
+
+    # Dashboard show action data by client
+    dashboard_client_show_action_data:
+        class: Hyper\EventBundle\Controller\Dashboard\Action\ShowActionController
+        arguments:
+            container: '@service_container'
+    # Dashboard export action data by client
+    dashboard_client_export_action_data:
+        class: Hyper\EventBundle\Controller\Dashboard\Action\ExportActionController
+        arguments:
+            container: '@service_container'
+    # Dashboard push audience card to facebook by client
+    dashboard_client_push_audience_card:
+        class: Hyper\EventBundle\Controller\Dashboard\Action\PushAudienceCardController
+        arguments:
+            container: '@service_container'
+
+    # Dashboard filter
+    dashboard_filter_controller:
+        class: Hyper\EventBundle\Controller\Dashboard\Filter\PresetFilterController
+        arguments:
+            container: '@service_container'
+    # Dashboard filter
+    dashboard_filter_controller_v2:
+        class: Hyper\EventBundle\Controller\Dashboard\Filter\PresetFilterControllerV2
+        arguments:
+            container: '@service_container'
+
+    #Client
+    client.controller:
+        class: Hyper\EventBundle\Controller\Dashboard\Client\ClientController
+        arguments:
+            container: '@service_container'
+
+    #Auth
+    clover.controller:
+        class: Hyper\EventBundle\Controller\Clover\Auth\CloverController
+        arguments:
+            container: '@service_container'
+
+    #Clover Client
+    clover_client.controller:
+        class: Hyper\EventBundle\Controller\Clover\Auth\ClientController
+        arguments:
+            container: '@service_container'
+
+    #Jasper Auth
+    jasper_auth.controller:
+        class: Hyper\EventBundle\Controller\Jasper\JasperController
+        arguments:
+            container: '@service_container'
+    #Push Notification
+    push.controller:
+        class: Hyper\EventBundle\Controller\Dashboard\Push\PushController
+        arguments:
+            container: '@service_container'
+    #Analytics
+    analytics.controller:
+        class: Hyper\EventBundle\Controller\Dashboard\Analytics\AnalyticsController
+        arguments:
+            container: '@service_container'
+
+    promo.controller:
+        class: Hyper\EventBundle\Controller\Dashboard\Promo\PromoController
+        arguments:
+            container: '@service_container'
+
+    banner_placement.controller:
+        class: Hyper\EventBundle\Controller\Dashboard\Promo\PromoPlacementController
+        arguments:
+            container: '@service_container'
+
+    banner_landing.controller:
+        class: Hyper\EventBundle\Controller\Dashboard\Promo\PromoLandingController
+        arguments:
+            container: '@service_container'
+
+    awaiting.controller:
+        class: Hyper\EventBundle\Controller\Awaiting_S3log\AwaitingS3logController
+        arguments:
+            container: '@service_container'
+
+    user_provider_service:
+        class: Hyper\EventBundle\Service\UserProvider
+        arguments:
+            container: '@service_container'
+
+    hyper_event.event_api_resful:
+        class: Hyper\EventBundle\Service\EventAPI\EventAPIResful
+        arguments:
+            container: '@service_container'
+
+    elasticsearch_service:
+        class: Hyper\EventBundle\Service\ElasticSearch\ElasticSearch
+        arguments:
+            container: '@service_container'

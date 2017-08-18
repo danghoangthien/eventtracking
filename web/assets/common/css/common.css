@@ -1,0 +1,32 @@
+#paginate
+{            
+    padding: 0.3em 0 0 1em;
+    list-style-type: none !important;
+    border-radius: 25px;
+    background-color: #333333;      
+    height: 30px;
+    width: 100%;
+}
+
+#paginate li
+{            
+    display: inline !important;            
+    margin-right: 0.5em;            
+}
+
+#paginate li a
+{
+    color: #FFFFFF;
+}
+
+.added
+{
+    color: transparent;
+}
+
+.currentPage
+{
+    text-decoration: underline;
+    font-weight: bold;
+    color: white !important;
+}

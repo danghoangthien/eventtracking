@@ -1,0 +1,80 @@
+<?php
+
+namespace Hyper\Domain\Awaiting_S3log;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
+
+/**
+ * Metadata
+ *
+ * @ORM\Table(name="awaiting_s3_log")
+ * @ORM\Entity(repositoryClass="Hyper\DomainBundle\Repository\Awaiting\DTAwaitingRepository")
+ * @ExclusionPolicy("all")
+ */
+class Awaiting
+{
+    /**
+     * @var string
+     * @ORM\Column(name="id", type="string", options={"unsigned"=true})
+     * @ORM\Id
+     * @Expose
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="s3_log_file", type="string", length=65535)
+     * @Expose
+     */
+    private $s3LogFile;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="app_id", type="string", length=65535)
+     * @Expose
+     */
+    private $appId;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="s3_app_folder", type="string", length=255)
+     * @Expose
+     */
+    private $s3AppFolder;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="event_type", type="integer")
+     * @Expose
+     */
+    private $eventType;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="status", type="integer",options={"default"=1})
+     * @Expose
+     */
+    private $status;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="created", type="integer")
+     * @Expose
+     */
+    private $created;
+    
+    public function __construct()
+    {
+        $this->id = uniqid('',true);
+        $this->created = time();
+    }
+}

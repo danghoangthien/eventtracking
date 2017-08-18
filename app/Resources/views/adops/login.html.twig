@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>HQ Clients Login</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="shortcut icon" type="image/png" href="{{ asset('assets/img/favicon.ico') }}"/>
+    
+    <!-- Bootstrap 3.3.5 -->
+    <link rel="stylesheet" href="{{ asset('design/hq/css/bootstrap.min.css') }}">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{{ asset('design/hq/css/font-awesome.min.css') }}">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="{{ asset('design/hq/css/ionicons.min.css') }}">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{{ asset('design/hq/css/AdminLTE.css') }}">
+
+    <link rel="stylesheet" href="{{ asset('design/hq/css/animate.css') }}">
+    <link rel="stylesheet" href="{{ asset('design/hq/css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('design/hq/css/skins/skin-red.css') }}">
+
+</head>
+
+<body class="skin-red sidebar-mini sidebar-collapse">
+
+    <div class="middle-box text-center loginscreen animated fadeInDown">
+        <div>
+            <div>
+                <h1 class="logo-name">HQ</h1>
+            </div>
+            <h3 style="color: #8aa4af;">Welcome to Hypergrowth HQ</h3>
+            <p style="color: #8aa4af;">Part of The Accountability Framework</p>
+            <form class="m-t" role="form" action="{{ path('adops_login') }}" method="post">
+                <div class="form-group">
+                    <input type="text" class="form-control" id="username" name="_username" placeholder="Username" />
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" id="password" name="_password" placeholder="Password">
+                </div>
+                <button class="btn btn-block btn-success">Login</button>
+                {#<a href="#"><small>Forgot password?</small></a>#}
+                <hr>
+                {#<p class="text-muted text-center"><small>Do not have an account?</small></p>#}
+                {#<a class="btn btn-sm btn-white btn-block" href="register.html">Request for an account</a>#}
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                <input type="hidden" name="_target_path" value="{{ target_path }}" />
+            </form>
+        </div>
+    </div>
+
+    <!-- jQuery 2.1.4 -->
+    <script src="{{ asset('design/hq/plugins/jQuery/jQuery-2.1.4.min.js') }}"></script>
+    <!-- Bootstrap 3.3.5 -->
+    <script src="{{ asset('design/hq/js/bootstrap.min.js') }}"></script>
+
+</body>
+
+</html>

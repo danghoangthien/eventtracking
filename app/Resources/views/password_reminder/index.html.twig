@@ -1,0 +1,86 @@
+{% extends 'password_reminder/base.html.twig' %}
+{% block sub_head_title %}Password Reminder{% endblock %}
+{% block body %}
+	<div class="login-box-body">
+		<p class="login-box-msg">Please enter your email to reset password</p>
+		<form id="password-reminder-form" action="{{ path('dashboard_email_link') }}" method="get" novalidate>
+			<div class="form-group has-feedback">
+			    <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+				<input type="email" required name="email" id="txtEmail" value="{{ email is defined ? email : '' }}" class="form-control" placeholder="Email">
+			</div>
+			<div class="row">
+				<div class="col-xs-8">
+					
+				</div><!-- /.col -->
+				<div class="col-xs-4">
+					<button type="submit" id="btnReset" class="btn btn-danger btn-block btn-flat">Reset Password</button>
+				</div><!-- /.col -->
+			</div>
+		</form>
+	</div><!-- /.login-box-body -->
+		
+	<div class="text-right" style="margin-top:40px;">
+		<span class="fa fa-caret-left" style="color:#ab0808"></span>
+		<a href="{{ path('dashboard_client_login') }}" class="text-danger" style="text-decoration:underline;">Go back</a>
+	</div><!-- /.login-logo -->
+{% endblock %}
+{% block javascript_inline %}
+    <script src="{{ asset('assets/js/jquery.validate.min.js') }}"></script>
+    <script>
+        $(function () {
+            $('input').iCheck({
+               checkboxClass: 'icheckbox_square-red',
+               radioClass: 'icheckbox_square-red',
+               increaseArea: '20%' // optional
+            });
+        });
+        $.validator.addMethod("not_exist_email", function(value, element) {
+          return true;
+        }, "We don't have an account with the email address you have provided.");
+        var PasswordReminder =  {
+            validator: '',
+            processAjax: function() {
+                var self = this;
+                $.ajax({
+                    url : "{{ path('password_reminder_validate') }}",
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        email: $('#txtEmail').val()
+                    },
+                    beforeSend: function() {
+                        $('#btnReset').attr('disabled', true);
+                    },
+                    success: function(resp) {
+                        if (resp.msg) {
+                            self.validator.showErrors({
+                                email: resp.msg
+                            });
+                        } else {
+                            $('.login-box-body').html(resp.content);
+                        }
+                    },
+                    complete: function() {
+                        $('#btnReset').attr('disabled', false);
+                    }
+                });
+            },
+            fireEventSubmit:function() {
+                var self = this;
+                self.validator = $('#password-reminder-form').validate({
+                    submitHandler: function(form) {
+                        self.processAjax();
+                        
+                        return false;
+                    }
+                });
+            },
+            init: function() {
+                this.fireEventSubmit();
+            }
+        };
+        $(document).ready(function() {          
+            PasswordReminder.init();
+        });
+    </script>
+{% endblock %}

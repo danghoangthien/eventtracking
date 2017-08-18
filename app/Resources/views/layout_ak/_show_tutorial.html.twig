@@ -1,0 +1,122 @@
+{% if isUserAK %}
+	<div id="step-1" class="single-step" style="text-align:center">
+	    <img src="{{ asset('bundles/hyperevent/dist/img/tour/intro.png') }}" alt="" width="400px"/>
+	    <div style="text-align:center;margin-top:10px">
+	        <p style="line-height: 10px;font-size:1.2em;">Welcome to</p>
+	        <h1 style="font-weight: bold;text-transform: uppercase;letter-spacing: -1px;margin: 0px;line-height: 25px;">Audience Kit</h1>
+	        <!--<p style="font-size:0.8em;">A robust audience management platform for mobile marketers.</p>-->
+	    </div>
+	    <p style="margin-top: 10px;font-size: 1.2em;">Would you like a tour of Audience Kit?</p>
+	    <footer>
+	        <a href="#" class="btn btn-default" data-powertour-action="next">Yes</a><br/>
+	        <a href="#" data-powertour-action="stop">No, thank you!</a>
+	    </footer>
+	</div>
+	<div id="step-2" class="single-step">
+	    <header>
+	       <h3>1. Main Dashboard</h3>
+	    </header>
+	    <img src="{{ asset('bundles/hyperevent/dist/img/tour/dashboard.png') }}" alt="" width="400px"/>
+	    <div style="margin-top:10px">
+	        At one glance: The number of user profiles you have collected on each platform (iOS / Android), in each mobile app, across each country.
+	    </div>
+	    <footer>
+	        <a href="#" class="btn btn-primary pull-right" data-powertour-action="next">Next</a>
+	        <a href="#" class="btn btn-default pull-right" data-powertour-action="prev">Prev</a>
+	        <a href="#" class="btn btn-default" data-powertour-action="stop">End Tour</a>
+	    </footer>
+	</div>
+
+	<div id="step-3" class="single-step">
+	    <header>
+	       <h3>2. Card Builder</h3>
+	    </header>
+	    <img src="{{ asset('bundles/hyperevent/dist/img/tour/cardbuilder.png') }}" alt="" width="400px"/>
+	    <div style="margin-top:10px">
+	        Build your user segments by chaining behavioral and historical conditions, and group them into 'Audience Cards' for remarketing and engagement outreach.
+	    </div>
+	    <footer>
+	        <a href="#" class="btn btn-primary pull-right" data-powertour-action="next">Next</a>
+	        <a href="#" class="btn btn-default pull-right" data-powertour-action="prev">Prev</a>
+	        <a href="#" class="btn btn-default" data-powertour-action="stop">End Tour</a>
+	    </footer>
+	</div>
+
+	<div id="step-4" class="single-step">
+	    <header>
+	       <h3>3. Audience Deck</h3>
+	    </header>
+	    <img src="{{ asset('bundles/hyperevent/dist/img/tour/carddeck.png') }}" alt="" width="400px"/>
+	    <div style="margin-top:10px">
+	        Clicking on any Audience Card opens up an action panel, allowing you to export the audience to third party marketplaces such as Facebook, AdWords and MailChimp effortlessly.
+	    </div>
+	    <footer>
+	        <a href="#" class="btn btn-primary pull-right" data-powertour-action="next">Next</a>
+	        <a href="#" class="btn btn-default pull-right" data-powertour-action="prev">Prev</a>
+	        <a href="#" class="btn btn-default" data-powertour-action="stop">End Tour</a>
+	    </footer>
+	</div>
+
+	<div id="step-5" class="single-step">
+	    <header>
+	       <h3>5. Audience Spotlight</h3>
+	    </header>
+	    <img src="{{ asset('bundles/hyperevent/dist/img/tour/userjourney.png') }}" alt="" width="400px"/>
+	    <div style="margin-top:10px">
+	        View in-depth analytics of your app users, their lifetime user journey, lifetime value stats, and Audience Cards that they're associated with.
+	        <br/><small></small>Hint: Try typing 'samuel@hypergrowth.co' into the Spotlight Search bar for a demo.</small>
+	    </div>
+	    <footer>
+	        <a href="#" class="btn btn-default" data-powertour-action="prev">Prev</a>
+	        <a href="#" class="btn btn-default pull-right" data-powertour-action="stop">End Tour</a>
+	    </footer>
+	</div>
+{% endif %}
+<script>
+	var UserTutorial = {
+		routeForEndTour: '{{ path('dashboard_endtour') }}'
+		, showTutorial: {{ showTutorial }}
+		, init: function() {
+			this.runTour();
+		}
+		, runTour: function() {
+			if (!this.showTutorial) {
+				// Use this to run the first tour on page load
+				$.powerTour( 'run' , 1 );
+			}
+		}
+		, endTour: function() {
+			var self = this;
+		    $.ajax({
+                url : self.routeForEndTour,
+                type: 'GET',
+                dataType: 'json',
+                beforeSend: function() {
+
+                },
+                success: function(resp) {
+                	if (resp.status == 1) {
+                		self.hideEndTour();
+                		UserTutorial.showTutorial = 1;
+                	}
+
+                },
+                error: function() {
+                },
+                complete: function() {
+                }
+            });
+		}
+		, hideEndTour: function() {
+			// animate back to the top
+			$('html, body').animate({scrollTop:0}, 1000, 'swing');
+			//$('html, body').animate({scrollLt:0}, 1000, 'swing');
+
+			// progress meter hide and reset
+			$('#progressmeter').children('#progressmeter-bar').width(0).next().text();
+
+			// hide bottom bar
+			$('#demo-bar-footer').animate({bottom: '-70px'},1000);
+		}
+	};
+</script>

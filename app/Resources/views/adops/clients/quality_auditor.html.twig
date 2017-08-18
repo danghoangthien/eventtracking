@@ -1,0 +1,420 @@
+{% extends 'adops/clients/base_clients.html.twig' %}
+
+{% block stylesheets_extend %}
+<!-- Date Range Picker -->
+<link rel="stylesheet" href="{{ asset('design/hq/plugins/DateRangePicker/daterangepicker.css') }}">
+{% endblock %}
+
+{% block header_title %}
+  <h1 style="color:white;">Quality Auditor<br />
+  <small>User acquisition report based on client-defined quality indicators</small>
+  </h1>
+{% endblock %}
+
+{%block nav_app %}
+<select name="application_select" class="form-control inline-select-long" style="width: 20%; display:inline-block; margin-left:20px;margin: 8px;">
+  <option value="{{ path('adops_clients_dashboard') }}">Select App</option>
+  {% if applications is not empty %}
+    {% for application in applications %}
+      <option value="{{ path('adops_quality_auditor', {'appId': application.appId}) }}"
+      {% if application.appId == appId %}selected{% endif %}>
+        {{ application.appName }} {{ application.platform | capitalize }}
+      </option>
+    {% endfor %}
+  {% endif %}
+</select>
+{% endblock %}
+
+{%block sidebar_menu %}
+<!-- Sidebar Menu -->
+<ul class="sidebar-menu">
+  <li class="header">MENU</li>
+  <li class="treeview">
+    <a href="#"><i class="fa fa-briefcase"></i> <span>Reports</span> <i class="fa fa-angle-left pull-right"></i></a>
+    <ul class="treeview-menu">
+      <li><a href="{{ path('adops_clients_gen_report', {'appId': appId}) }}">Custom Report Generator</a></li>
+      <li><a href="{{ path('adops_quality_auditor', {'appId': appId}) }}">Quality Auditor</a></li>
+    </ul>
+  </li>
+</ul><!-- /.sidebar-menu -->
+{% endblock %}
+
+{%block client_content %}
+<!-- Report Configuration Option -->
+<div class="box box-danger" style="padding:5px 20px;">
+  <!--Box Header-->
+  <div class="box-header with-border">
+    <h3 class="box-title">Configuration Options</h3>
+    <div class="box-tools pull-right">
+      <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+      <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+    </div>
+  </div>
+  <!--Box Body-->
+  <div class="box-body">
+    <div class="row">
+      <form class="form-horizontal" name="f_quality_aud" method="post">
+        <div class="col-md-6">
+        <!-- Select Campaign -->
+          <div class="form-group">
+            <label class="form-label">Select Campaign:</label><br/>
+            {#<i class="fa fa-paper-plane-o "></i>#}
+            <div class="col-md-9">
+              <select name="f_campaign" class="form-control inline-select-long">
+                <option value="all">All campaigns</option>
+                {% if campaigns is not empty %}
+                  {% for campaign in campaigns %}
+                    <option value="{{campaign.id}}">
+                      {% if is_granted('ROLE_USER_TRANSPARENT') %}
+                      {{ campaign.name }}
+                      {% else %}
+                      {{ campaign.code }}
+                      {% endif %}
+                      </option>
+                  {% endfor %}
+                {% endif %}
+              </select>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Primary Quality Indicator:</label><br/>
+            <div class="col-md-9">
+              <div class="row">
+                <div class="col-md-6">
+                  <select name="f_primary_indicator" class="form-control inline-select-long">
+                    <option value="non">No Primary Indicator</option>
+                    {% if inappevents is not empty %}
+                      {% for inappevent in inappevents %}
+                      <option value="{{ inappevent.name }}">{{ inappevent.name }}</option>
+                      {% endfor %}
+                    {% endif %}
+                  </select>
+                </div>
+                <div class="col-md-3">
+                  <input type="text" name="f_primary_kpi" class="form-control" placeholder="KPI" value="0">  
+                </div>
+                <div class="col-md-3">
+                  <select name="f_primary_formula" class="form-control inline-select-long">
+                    <option value="0">#</option>
+                    <option value="1">%</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Secondary Quality Indicator:</label><br/>
+            <div class="col-md-9">
+              <div class="row">
+                <div class="col-md-6">
+                  <select name="f_secondary_indicator" class="form-control inline-select-long">
+                    <option value="non">No Secondary Indicator</option>
+                    {% if inappevents is not empty %}
+                      {% for inappevent in inappevents %}
+                      <option value="{{ inappevent.name }}">{{ inappevent.name }}</option>
+                      {% endfor %}
+                    {% endif %}
+                  </select>
+                </div>
+                <div class="col-md-3">
+                  <input type="text" name="f_second_kpi" class="form-control" placeholder="KPI" value="0">  
+                </div>
+                <div class="col-md-3">
+                  <select name="f_second_formula" class="form-control inline-select-long">
+                    <option value="0">#</option>
+                    <option value="1">%</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Strict Geotargeting:</label><br/>
+            <div class="col-md-9">
+              <input type="text" name="strict_geo" class="form-control" placeholder="Optional" />
+            </div>
+          </div>
+          
+        </div>
+        <div class="col-md-6">
+          <!-- Date range -->
+          <div class="form-group">
+            <label class="form-label col-md-12">Benchmark Date:</label><br/>
+            {#<i class="fa fa-calendar"></i>#}
+            <div class="col-md-9">
+              <input type="text" name="f_benchmarkdate" class="form-control inline-select-long" value="{{ "now"|date("m/d/Y") }}" />
+            </div>
+          </div>
+          
+          {% if is_granted('ROLE_USER_TRANSPARENT') %}
+          <div class="form-group">
+            <label class="form-label col-md-12">Publishers Filter:</label><br/>
+            {#<i class="fa fa-picture-o"></i>#}
+            <div class="col-md-9">
+              <select name="f_publisher" class="form-control inline-select-long">
+                <option value="all">All Publishers</option>
+                {% if publishers is not empty %}
+                  {% for publisher in publishers %}
+                    <option value="{{ publisher.id }}">{{ publisher.name }}</option>
+                  {% endfor %}
+                {% endif %}
+              </select>
+            </div>
+          </div>
+          {% endif %}
+          
+          <div class="form-group">
+            <label class="form-label col-md-12">Publisher Site ID Filter:</label><br/>
+            {#<i class="fa fa-industry"></i>#}
+            <div class="col-md-9">
+              <select name="f_af_sub1" class="form-control inline-select-long">
+                <option value="all">All Sites & Apps</option>
+                {% if afSub1s is not empty %}
+                  {% for afSub1 in afSub1s %}
+                    <option value="{{ afSub1.afSub1 }}">{{ afSub1.afSub1 }}</option>
+                  {% endfor %}
+                {% endif %}
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-md-4">
+              <button class="btn btn-block btn-danger" name="genrate_report">Generate</button>
+            </div>
+            <div class="col-md-4">
+              <button type="reset" class="btn btn-block btn-danger" name="reset">Reset</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div> <!--End box1   -->
+
+<div class="box box-danger">
+  <!--Box Header-->
+  <div class="box-header with-border">
+    <h3 class="box-title">Report</h3>
+    <div class="box-tools pull-right">
+      <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+      <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+    </div>
+  </div>
+  <div class="box-body">
+    <div class="loading col-md-12" style="display:none;"><img src="{{ asset('assets/img/loading.gif') }}" /></div>
+    <table class="footable no-paging" data-page-size="25" data-page-navigation=".pagination">
+      <thead class="title-report">
+        <tr role="row">
+          <th rowspan="2" colspan="1" data-toggle="true">Site ID</th>
+          <th rowspan="1" colspan="3" data-hide="phone,tablet">Installs</th>
+        </tr>
+        <tr role="row">
+          <th rowspan="1" data-type="numeric" class="footable-sortable">Yesterday<span class="footable-sort-indicator"></span></th>
+          <th rowspan="1" data-type="numeric" class="footable-sortable">Recent Avg.<span class="footable-sort-indicator"></span></th>
+          <th rowspan="1" data-type="numeric" class="footable-sortable">{{ "now"|date("m/d/Y") }}<span class="footable-sort-indicator"></span></th>
+        </tr>
+      </thead>
+      <tbody class="rs-report">
+        {% if rsOutput is defined and rsOutput['status'] %}
+          {% if rsOutput['data'] is defined and rsOutput['data'] is not empty %}
+            {% for daily, data in rsOutput['data'] %}
+              <tr role="row">
+                <td><span class="footable-toggle"></span>{{ daily }}</td>
+                <td data-value="{{ data['install']['yesterday']['count'] }}">{{ data['install']['yesterday']['count'] }}</td>
+                <td data-value="{{ data['install']['avg']['count'] }}">{{ data['install']['avg']['count'] }}</td>
+                <td data-value="{{ data['install']['benchmarkdate']['count'] }}">{{ data['install']['benchmarkdate']['count'] }}</td>
+              </tr>
+            {% endfor %}
+          {% endif %}
+        {% else %}
+          <tr><td>Empty data.</td></tr>
+        {% endif %}
+      </tbody>
+      <tfoot class="hide-if-no-paging">
+        <tr>
+          <td colspan="12" style="text-align:center;">
+            <div class="pagination pagination-centered"></div>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+    {#<div class="form-group col-md-2 pull-right">#}
+    {# <button class="btn btn-block btn-danger fa fa-file-excel-o" style="margin:20px;"> Export to CSV </button>#}
+    {#</div>#}
+  </div>
+</div>
+<style>
+  .title-report {background-color: #2c3b41 !important;}
+  .title-report th {text-align: center !important;}
+  .yellow {background-color: rgb(236, 231, 190);}
+  .red {background-color: rgb(244, 210, 221);}
+</style>
+{% endblock %}
+
+{% block javascript_libraries_extend %}
+
+  <!-- Moment.JS, dependencies of Date Range Picker-->
+  <script src="{{ asset('design/hq/plugins/DateRangePicker/moment.min.js') }}"></script>
+  <!-- Date Range Picker-->
+  <script src="{{ asset('design/hq/plugins/DateRangePicker/daterangepicker.js') }}"></script>
+  <!-- FooTable-->
+  <script src="{{ asset('design/hq/plugins/FooTable/js/footable.js') }}"></script>
+  <!-- FooTable Sorting-->
+  <script src="{{ asset('design/hq/plugins/FooTable/js/footable.sort.js') }}"></script>
+  <!-- FooTable Pagination-->
+  <script src="{{ asset('design/hq/plugins/FooTable/js/footable.paginate.js') }}"></script>
+  <!-- Page Script-->
+  <script type="text/javascript">
+    $('input[name="f_benchmarkdate"]').daterangepicker({
+      "singleDatePicker": true,
+      "locale": {
+        format: 'MM/DD/YYYY'
+      },
+      "showDropdowns": true,
+      "startDate": function(){
+          moment().subtract(3,'days').calendar()    
+      }
+    }, function(start, end, label) {
+      console.log("New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')");
+    });
+
+    $(function(){
+      var table = $('.footable');
+      table.footable();
+      table.bind('footable_breakpoint', function() {
+        table.trigger('footable_expand_first_row');
+      });
+
+      $('select[name*="application_select"]').prop('selected', true).change(function(){
+        var url = $(this).val();
+        window.location = url;
+      });
+
+      $('button[name*="genrate_report"]').click(function(){
+        $('.loading').show();
+        var formData = $('form[name*="f_quality_aud"]').serialize();
+        var url = '{{ url('adops_quality_auditor', {'appId': appId}) }}';
+        $.post(
+          url,
+          formData,
+          function(results){
+            console.log(results, 'results');
+            var bodyReport = $('.rs-report');
+            bodyReport.empty();
+            
+            if (!results.status || results['data'].length <= 0) {
+              bodyReport.append($('<tr><td>Empty Data!</td></tr>'));
+              $('.loading').hide();
+              table.data('footable').reset();
+              table.footable();
+              table.bind('footable_breakpoint', function() {
+                table.trigger('footable_expand_first_row');
+              });
+              table.trigger('footable_initialized');
+              return false;
+            }
+            
+            // Overwrite title
+            var titleReport = $('.title-report');
+            titleReport.empty();
+            var titleHtml = 
+            '<tr role="row">'
+              +'<th rowspan="2" colspan="1" data-toggle="true">Site ID</th>'
+              +'<th rowspan="1" colspan="3" data-hide="phone,tablet">Installs</th>';
+              $.each(results['title'] , function(key, data) {
+                titleHtml += '<th rowspan="1" colspan="3" data-hide="phone,tablet">'+data+'</th>';
+              });
+              
+            titleHtml += '</tr>'
+            +'<tr role="row">'
+              +'<th rowspan="1" data-type="numeric" class="footable-sortable">Yesterday<span class="footable-sort-indicator"></span></th>'
+              +'<th rowspan="1" data-type="numeric" class="footable-sortable">Recent Avg.<span class="footable-sort-indicator"></span></th>'
+              +'<th rowspan="1" data-type="numeric" class="footable-sortable">'
+              +$('input[name*="f_benchmarkdate"]').val()+'<span class="footable-sort-indicator"></span></th>';
+              $.each(results['title'] , function(key, data) {
+                titleHtml 
+                  += '<th rowspan="1" data-type="numeric" class="footable-sortable">Yesterday<span class="footable-sort-indicator"></span></th>'
+                  +'<th rowspan="1" data-type="numeric" class="footable-sortable">Recent Avg.<span class="footable-sort-indicator"></span></th>'
+                  +'<th rowspan="1" data-type="numeric" class="footable-sortable">'
+                  +$('input[name*="f_benchmarkdate"]').val()+'<span class="footable-sort-indicator"></span></th>';
+              });
+              
+            titleHtml += '</tr>';
+            titleReport.append($(titleHtml));
+            
+            // Overwrite body
+            var html = '';
+            $.each(results['data'] , function(key, data) {
+              html += '<tr role="row" class="'+data.kpi+'">';
+              html += '<td><span class="footable-toggle"></span>'+key+'</td>';
+              
+              var install = data['install'];
+              // console.log(install, 'install');
+              var currentCountInstall = install['benchmarkdate'].count;
+              var yesterdayCountInstall = install['yesterday'].count;
+              var avgCountInstall = install['avg'].count;
+              
+              html += '<td data-value="'+yesterdayCountInstall+'">'+yesterdayCountInstall+'</td>';
+              html += '<td data-value="'+avgCountInstall+'">'+avgCountInstall+'</td>';
+              html += '<td data-value="'+currentCountInstall+'">'+currentCountInstall+'</td>';
+              
+              $.each(results['title'] , function(k, v) {
+                var inappevent = data[k];
+                currentCount = inappevent['benchmarkdate'].count;
+                yesterdayCount = inappevent['yesterday'].count;
+                avgCount = inappevent['avg'].count;
+                
+                html += '<td data-value="'+yesterdayCount+'">'+yesterdayCount+'</td>';
+                html += '<td data-value="'+avgCount+'">'+avgCount+'</td>';
+                html += '<td data-value="'+currentCount+'">'+currentCount+'</td>';
+              });
+              
+              html += '</tr>';
+            });
+            bodyReport.append($(html));
+            
+            $('.loading').hide();
+            table.data('footable').reset();
+            table.footable();
+            table.bind('footable_breakpoint', function() {
+              table.trigger('footable_expand_first_row');
+            });
+            table.trigger('footable_initialized');
+          }).fail(function( jqXHR, textStatus, errorThrown ) {
+            console.log(textStatus, 'textStatus');
+            console.log(errorThrown, 'errorThrown');
+          });
+
+        return false;
+      });
+      
+      $('select[name*="f_publisher"]').prop('selected', true).change(function(){
+        var siteId = $(this).val();
+        var appId = "{{appId}}";
+        console.log(siteId, 'siteId');
+        console.log(appId, 'appId');
+        var url = '{{ url('adops_ajax_af_sub1') }}';
+        $.ajax({
+          method: "POST",
+          url: url,
+          data: {app_id: appId, site_id: siteId},
+          before: function() {},
+          success: function(res){
+            if(res.status) {
+              var afSub1 = $('select[name*="f_af_sub1"]');
+              afSub1.empty();
+              var html = '<option value="all">All Sites &amp; Apps</option>';
+              $.each(res['data'] , function(index, value) {
+                html += '<option value="'+value.afSub1+'">'+value.afSub1+'</option>';
+              });
+              afSub1.append($(html));
+            }
+          }
+        })
+      });
+    })
+  </script>
+{% endblock %}

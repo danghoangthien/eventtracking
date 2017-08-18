@@ -1,0 +1,75 @@
+.carousel-container {
+	width: 100%;
+	overflow: hidden;
+}
+
+#icarousel {
+	/*
+	width: 490px;
+	height: 400px;
+	*/
+	width: 200px;
+    height: 280px;
+	position: relative;
+	margin: 20px auto;
+	-webkit-transform-style: preserve-3d;
+	-moz-transform-style: preserve-3d;
+	-o-transform-style: preserve-3d;
+	-ms-transform-style: preserve-3d;
+	transform-style: preserve-3d;
+	-webkit-perspective: 1000px;
+	-moz-perspective: 1000px;
+	-o-perspective: 1000px;
+	-ms-perspective: 1000px;
+	perspective: 1000px;
+}
+
+#icarousel .slide {
+	display: block;
+	border-radius: 4px;
+	border: 2px #cc6a6a solid;
+	width: 200px !important;
+    height: 280px !important;
+	background-color: #ab0808;
+	background-image: url(http://www.transparenttextures.com/patterns/crossword.png);
+	color:#fff;
+	padding: 15px;
+}
+
+#icarousel .slide .card-des {
+	font-size:14px;
+	padding-bottom:15px;
+	border-bottom: 1px solid #ffffff;
+	margin-bottom: 10px;
+	min-height:100px
+}
+
+/* The Navigation buttons in the Slider */
+a.iCarouselNav {
+	display: block;
+	position: absolute;
+	top: 178px;
+	width: 43px;
+	height: 43px;
+	background: url(arrows.png) no-repeat;
+	z-index: 1000;
+	text-indent: -9999px;
+}
+
+a#iCarouselPrev {
+	left: 10px;
+	background-position: left top;
+}
+
+a#iCarouselPrev:hover {
+	background-position: left bottom;
+}
+
+a#iCarouselNext {
+	right: 10px;
+	background-position: right top;
+}
+
+a#iCarouselNext:hover {
+	background-position: right bottom;
+}

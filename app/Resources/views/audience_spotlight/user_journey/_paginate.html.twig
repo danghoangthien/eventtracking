@@ -1,0 +1,32 @@
+{% for action in listTimeline %}
+    {% set eventName = action['event_friendly_name'] != '' ? action['event_friendly_name'] : action['event_name'] %}
+    {% set eventIcon = action.icon != '' ? action.icon : '' %}
+    {% set eventColor = action.color != '' ? action.color : '' %}
+<li class="event box-1">
+	<div class="event-row-first">
+		<div class="history-type">
+			<div class="history-type-icon" style="background: {{eventColor}};">
+
+				<i class="fa {{ eventIcon }}"></i>
+			</div>
+			<div class="history-type-text">
+				{{ action['happened_at']|date('Y-m-d') }}<br/>{{ action['happened_at']|date('H:i:s') }}
+			</div>
+		</div>
+		<div class="history-content">
+			<h5 class="event-title">
+			    {{ eventName }}
+			</h5>
+			{% if eventName != 'install' %}
+			<div class="event-content">
+				<ul class="event_parameters">
+				    {% for eventParam,eventValue in action['event_value'] %}
+				        <li><b>{{ eventParam }}:</b> {{ eventValue }}</li>
+				    {% endfor %}
+            	</ul>
+			</div>
+			{% endif %}
+		</div>
+	</div>
+</li>
+{% endfor %}

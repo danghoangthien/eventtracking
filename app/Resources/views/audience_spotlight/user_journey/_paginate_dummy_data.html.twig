@@ -1,0 +1,37 @@
+{% for action in listTimeline %}
+    {% set eventName = '' %}
+    {% set eventIcon = '' %}
+    {% if action['event_name'] == 'purchase' %}
+        {% set eventIcon = 'fa-dollar' %}
+        {% set eventColor = '#ad4e99' %}
+    {% elseif action['event_name'] == 'add_to_cart' %}
+        {% set eventIcon = 'fa-shopping-cart' %}
+        {% set eventColor = '#23cf5f' %}
+    {% elseif action['event_name'] == 'add_to_wishlist' %}
+        {% set eventIcon = 'fa-plus' %}
+        {% set eventColor = '#0068cf' %}
+    {% endif %}
+
+    <li class="event box-1">
+		<div class="event-row-first">
+			<div class="history-type">
+				<div class="history-type-icon" style="background: {{eventColor}};">
+					<i class="fa {{ eventIcon }}"></i>
+				</div>
+				<div class="history-type-text">
+					{{ action.timestamp|date('Y-m-d') }}<br>{{ action.timestamp|date('H:i:s') }}
+				</div>
+			</div>
+			<div class="history-content">
+				<h5 class="event-title">{{ action.event_name }}</h5>
+				<div class="event-content">
+					<ul class="event_parameters">
+					    {% for event_param,event_value in action.event_value %}
+                		<li><b>{{ event_param }}:</b> {{ event_value }}</li>
+                		{% endfor %}
+                	</ul>
+				</div>
+			</div>
+		</div>
+	</li>
+{% endfor %}

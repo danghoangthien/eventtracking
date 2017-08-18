@@ -1,0 +1,1574 @@
+{% set bg_colors= ['#093145','#0d3d56','#3c6478','#107896','#1496bb','#43abc9','#829356','#a3b86c','#b5c689','#bca136','#ebc944','#efd469','#c2571a','#f26d21','#f58b4c','#9a2617','#c02f1d','#cd594a','#f1f3f4'] %}
+{% set text_colors = ['#f5f5f5','#333333','#131516','#efd469'] %}
+{% set default_bg_color = '#f1f3f4' %}
+{% set default_text_color = '#f5f5f5' %}
+{% set expressions =['All','Any'] %}
+{% set frequent_expressions = {
+							'>' : 'More than',
+							'<' : 'Less than',
+							'=' : 'Exactly',
+							'+' : 'Between'
+						} %}
+{% set listPerform = {
+							'perform' : 'have',
+							'not_perform' : "haven't"
+						} %}
+{% set appTitles = [] %}
+{% for appTitle in listAppTitle %}
+	{% set appTitles = appTitles|merge({ (appTitle.id) : (appTitle.title) }) %}
+{% endfor %}
+
+{% extends 'layout_ak/base.html.twig' %}
+{% block sub_head_title %}Dashboard - Audience Card Builder{% endblock %}
+{% block body %}
+<div class="wrapper wrapper-content animated fadeInRight">
+	{% if exception is defined %}
+	    <h3 style="text-align:center">{{ exception }}</h3>
+	{% else %}
+	<!-- Small modal -->
+	<div id="validationMessageModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
+	    <div class="modal-dialog" role="document">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	                <h4 class="modal-title" id="gridSystemModalLabel">Validation:</h4>
+	            </div>
+	            <div class="modal-body">
+	                <div class="row">
+	                    <div class="col-md-12" id="validationMessageText"></div>
+	                </div>
+	                <div class="modal-footer">
+	                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	                </div>
+	            </div>
+	        </div><!-- /.modal-content -->
+	    </div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+	<div class="row">
+		<div class="col-md-9">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title" style="text-align:center">
+					<h3 class="no-margin">Audience Card Builder</h3>
+				</div>
+				<div class="ibox-content">
+					<form id="preset_card_generator">
+						<div class="row no-margin">
+							<div class="form-group input-group col-sm-12">
+								<span class="input-group-addon">Card Name</span>
+								{% if preset_filter is defined and preset_filter.presetName %}
+							    <input name="preset_name" type="text" class="form-control" id="preset_name" placeholder="Active Paying Users"  value="{{ preset_filter.presetName }}" onkeyup="CardPreviewName(this.value);">
+								{% else %}
+								<input name="preset_name" type="text" class="form-control" id="preset_name" placeholder="Active Paying Users" onkeyup="CardPreviewName(this.value);">
+								{% endif%}
+							</div>
+						</div>
+						<div class="row no-margin">
+							<div class="form-group input-group col-sm-12">
+								<span class="input-group-addon">Description</span>
+								{% if preset_filter is defined and preset_filter.presetName %}
+							    <input name="description" type="text" class="form-control" id="description" placeholder="Android users who purchase more than four times in the last two weeks (for Easter Sale)" value="{{ preset_filter.description }}" onkeyup="CardPreviewDes(this.value);">
+								{% else %}
+								<input name="description" type="text" class="form-control" id="description" placeholder="Android users who purchase more than four times in the last two weeks (for Easter Sale)" onkeyup="CardPreviewDes(this.value);">
+								{% endif%}
+							</div>
+						</div>
+						<div class="row no-margin">
+							<label class="col-xs-2 col-md-2 control-label left-padding"> Color </label>
+							<div class="col-xs-10 col-md-10 no-padding">
+								<div class="row no-margin">
+									<div class="form-group col-md-5 no-padding">
+										<div class="input-group">
+											<div class="input-group-btn" style=" padding: 0px 10px; ">
+												<select id="cardcolorselector">
+		                                        	{% for color in bg_colors %}
+		                                        		{% if preset_filter.cardBgColorCode is defined and preset_filter.cardBgColorCode == color %}
+														<option value="{{ color }}" data-color="{{ color }}" selected >{{ color }}</option>
+		 										    	{% else %}
+		 										    	<option value="{{ color }}" data-color="{{ color }}" >{{ color }}</option>
+		 										    	{% endif%}
+		 										    {% endfor %}
+		 										</select>
+										 	</div>
+											{% if preset_filter is defined and preset_filter.cardBgColorCode is defined  %}
+		    							    	<input name="card_bg_color_code" type="text" class="form-control card-bg-color" id="set_cardbgcolor" value="{{ preset_filter.cardBgColorCode }}" placeholder="{{ preset_filter.cardBgColorCode }}" disabled />
+		        							{% else %}
+		        							    <input name="card_bg_color_code" type="text" class="form-control card-bg-color" id="set_cardbgcolor" value="{{ default_bg_color}}" placeholder="{{ default_bg_color}}" disabled />
+		        							{% endif %}
+											<!-- /btn-group -->
+										</div>
+										<!-- /input-group -->
+									</div>
+									<div class="form-group col-md-5 no-padding pull-right">
+										<div class="input-group">
+											<div class="input-group-btn" style=" padding: 0px 10px; ">
+												<select id="textcolorselector">
+		                                        	{% for color in text_colors %}
+		                                        		{% if preset_filter is defined and preset_filter.cardTextColorCode is defined and preset_filter.cardTextColorCode == color %}
+		                                        			<option value="{{ color }}" data-color="{{ color }}" selected>{{ color }}</option>
+												   		{% else %}
+												   			<option value="{{ color }}" data-color="{{ color }}"  >{{ color }}</option>
+												   		{% endif %}
+												    {% endfor %}
+												</select>
+											</div>
+											{% if preset_filter is defined and preset_filter.cardTextColorCode is defined %}
+	    							    		<input name="card_text_color_code" type="text" class="form-control card-text-color" id="set_cardtextcolor" value="{{ preset_filter.cardTextColorCode }}"  placeholder="{{ preset_filter.cardTextColorCode }}" disabled />
+		        							{% else %}
+		        								<input name="card_text_color_code" type="text" class="form-control card-text-color" id="set_cardtextcolor" value="{{ default_text_color}}"  placeholder="{{ default_text_color}}" disabled />
+		        							{% endif %}
+											<!-- /btn-group -->
+										</div>
+										<!-- /input-group -->
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row no-margin">
+							<label class="col-xs-3 col-md-2 control-label left-padding">Country </label>
+							<div class="col-xs-9 col-md-10 no-padding m-b-sm">
+								<select id="country_codes" name="country_codes[]" class="inputCountryMultiple" multiple="multiple" style="width:100%">
+								    {% for country in active_country_list %}
+								    	{% if preset_filter is defined and preset_filter.filterData.country_codes is defined and country.countryCode in preset_filter.filterData.country_codes %}
+									    	<option id="{{country.countryCode}}" value="{{country.countryCode}}" selected="selected" >{{country.countryCode|country()|trim }}</option>
+										{% else %}
+											<option id="{{country.countryCode}}" value="{{country.countryCode}}">{{country.countryCode|country()|trim }}</option>
+										{% endif %}
+									{% endfor %}
+								</select>
+							</div>
+						</div>
+						<div class="row no-margin">
+							<label class="col-xs-3 col-md-2 control-label left-padding">Platform</label>
+							<div class="col-xs-9 col-md-10 no-padding m-b-sm">
+								{% for id,platform_name in active_platform %}
+    								<label class="col-md-3 no-padding" style="margin-top:8px">
+    									{% if preset_filter is defined and preset_filter.filterData.platform_ids is defined and id in preset_filter.filterData.platform_ids %}
+    									<input class="platform_codes" name="platform_ids[]" type="checkbox" value="{{ id }}" checked="checked" > {{ platform_name }} </input>
+    									{% else %}
+    									<input class="platform_codes" name="platform_ids[]" type="checkbox" value="{{ id }}"> {{ platform_name }} </input>
+    									{% endif%}
+    								</label>
+								{% endfor %}
+							</div>
+						</div>
+						<div class="row no-margin">
+							<label class="col-md-12 control-label left-padding">
+								Include users who meet all the conditions below
+							</label>
+						</div>
+						<div class="row no-margin condition_area">
+
+		    			</div>
+		    			<!-- add more condition button -->
+    					<div class="row no-margin">
+    						<div class="col-md-1 m-t-md">
+								<button id="add_audience_filter" class="btn btn-primary btn-circle" type="button">
+    								<i class="fa fa-plus"></i>
+        						</button>
+        					</div>
+    					</div>
+    					<!--End add more condition button -->
+    					<div class="row" style="padding-top: 20px;">
+							<div class="col-md-2"> </div>
+							<div class="col-md-9 no-padding">
+								{% if isDemoAccount %}
+								<span class="tool-tip pull-right" data-toggle="tooltip" data-placement="top" title="Sorry you cannot make changes as this feature is disabled in demo mode.">
+									<button type="button" class="btn btn-primary pull-right disabled">{{ preset_filter is defined ? 'Update Audience Card' : 'Update Audience Card' }}</button>
+								</span>
+								{% else %}
+									{% if preset_filter is defined %}
+										<input type="hidden" name="id" value="{{ preset_filter.id }}">
+										<button data-submitUrl="{{ path('dashboard_filter_execute_update_v2') }}" data-redirectUrl="{{ path('dashboard_filter_audience_deck') }}" class="btn btn-primary pull-right" data-last='Update Card' id="save">Update Audience Card
+											<i class='fa fa-caret-right'></i>
+										</button>
+										{% else %}
+										<button data-submitUrl="{{ path('dashboard_filter_executeadd_v2') }}" data-redirectUrl="{{ path('dashboard_filter_audience_deck') }}" class="btn btn-primary pull-right" data-last='Save Card' id="save">Save Audience Card
+											<i class='fa fa-caret-right'></i>
+										</button>
+									{% endif %}
+								{% endif %}
+							</div>
+							<div class="col-md-1"> </div>
+						</div>
+	    			</form>
+	    		</div> <!-- end class ibox-content -->
+	    	</div>	<!-- end class ibox float-e-margins -->
+	    </div>		<!-- end class col-md-9 -->
+    	<div class="col-md-3 small-box bg-navy-card">
+			<div class="bg-cl">
+				<!--CARD ELEMENT-->
+				<div class="row no-margin nosum">
+					<div class="col-md-12">
+						<div id="card-platform-space" style="padding: 5px 0px 5px;text-align:right;font-size: 25px;">
+							<div id="card-platform-preview"></div>
+						</div>
+					</div>
+				</div>
+				<div class="row no-margin">
+					<div class="col-md-12" style="padding:10px">
+						<div id="card-title-space">
+							<div id="card-title-preview"></div>
+						</div>
+					</div>
+				</div>
+				<div class="row no-margin nosum" style="min-height: 65px;">
+					<div class="col-md-12">
+						<div id="card-description-space">
+							<div id="card-description-preview"></div>
+						</div>
+					</div>
+				</div>
+				<div class="row no-margin">
+					<div class="col-md-12">
+						<div id="card-est-space" style="text-align:center">
+							<p class="no-margin">Estimated Reach</p>
+							<h3>16,229,110</h3>
+						</div>
+					</div>
+				</div>
+				<div class="row no-margin">
+					<div class="col-md-12" style="padding-bottom:40px">
+						<div id="card-countries-space">
+							<div id="card-countries-preview"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--END CARD ELEMENT-->
+		</div> <!-- col-md-3 small-box bg-navy-card -->
+	</div>
+
+
+	{% endif %}
+</div>
+{% endblock %}
+{% block stylesheets_inline %}
+    <!-- Select2 -->
+    <link href="{{ asset('bundles/hyperevent/plugins/select2/select2.min.css') }}" rel="stylesheet" />
+    <!-- iCheck -->
+    <link href="{{ asset('bundles/hyperevent/plugins/iCheck/square/blue.css') }}" rel="stylesheet">
+    <!-- Datepicker -->
+    <link href="{{ asset('bundles/hyperevent/plugins/datepicker/css/datepicker.css') }}" rel="stylesheet">
+    <link href="{{ asset('bundles/hyperevent/plugins/daterangepicker/daterangepicker.css') }}" rel="stylesheet">
+    <!-- Colorselector -->
+    <link href="{{ asset('bundles/hyperevent/plugins/colorpicker/bootstrap-colorselector.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block javascript_inline %}
+	<!-- Select2 -->
+	<script src="{{ asset('bundles/hyperevent/plugins/select2/select2.min.js') }}"></script>
+    <!-- iCheck -->
+	<script src="{{ asset('bundles/hyperevent/plugins/iCheck/icheck.min.js') }}"></script>
+	<!-- Datepicker -->
+    <script src="{{ asset('bundles/hyperevent/plugins/datepicker/js/bootstrap-datepicker.js') }}"></script>
+    <!-- Daterangepicker -->
+    <script src="{{ asset('bundles/hyperevent/plugins/datepicker/js/bootstrap-datepicker.js') }}"></script>
+	<script src="{{ asset('bundles/hyperevent/plugins/daterangepicker/moment.min.js') }}"></script>
+	<script src="{{ asset('bundles/hyperevent/plugins/daterangepicker/daterangepicker.js') }}"></script>
+	<!-- Color selector -->
+    <script src="{{ asset('bundles/hyperevent/plugins/colorpicker/bootstrap-colorselector.js') }}"></script>
+    <script src="{{ asset('bundles/hyperevent/plugins/jquery-template/jquery.loadTemplate.min.js') }}"></script>
+    <script>
+        // CARD PREVIEW SETTINGS //
+        var cardColor = '{{ default_text_color }}';
+        var cardBgColor = '{{ default_bg_color }}';
+        {% if preset_filter is defined and preset_filter.cardBgColorCode %}
+        	cardBgColor = '{{ preset_filter.cardBgColorCode }}';
+        {% else %}
+        	cardBgColor = '{{ default_bg_color }}';
+        {% endif %}
+        {% if preset_filter is defined and preset_filter.cardTextColorCode %}
+        	cardColor = '{{ preset_filter.cardTextColorCode }}';
+        {% else %}
+        	cardColor = '{{ default_text_color }}';
+        {% endif %}
+		$('.bg-navy-card .bg-cl').css('color',cardColor);
+		$('#cardcolorselector').colorselector({
+	          callback: function (value, color, title) {
+	              $("#set_cardbgcolor").val(color);
+	               $('.bg-navy-card .bg-cl').css('background-color',color);
+	          }
+	    });
+	    $('#textcolorselector').colorselector({
+	          callback: function (value, color, title) {
+	              $("#set_cardtextcolor").val(color);
+	              $('.bg-navy-card .bg-cl').css('color',color);
+	          }
+	    });
+		// $('.card-bg-color').colorpicker({
+  //      	color: cardStyle.backgroundColor,
+  //      	format: 'hex'
+  //      }).on('changeColor', function(ev) {
+  //              cardStyle.backgroundColor = ev.color.toHex();
+  //              document.getElementById('set_cardbgcolor').setAttribute('value', ev.color.toHex());
+  //          });
+        // $('.card-box-color').colorpicker({
+        // 	color: HighlightStyle.backgroundColor,
+        // 	format: 'hex'
+        // }).on('changeColor', function(ev) {
+        //         HighlightStyle.backgroundColor = ev.color.toHex();
+        //         document.getElementById('set_hightlightbox').setAttribute('value', ev.color.toHex());
+        //     });
+        // $('.card-text-color').colorpicker({
+        // 	color: cardStyle.color,
+        // 	format: 'hex'
+        // }).on('changeColor', function(ev) {
+        //         cardStyle.color = ev.color.toHex();
+        //         document.getElementById('set_cardtextcolor').setAttribute('value', ev.color.toHex());
+        //     });
+
+		$(".inputCountryMultiple").select2({
+			placeholder:"Input name of countries"
+		});
+		$(".inputAppTitleMultiple").select2({
+			placeholder:"Input name of app tile"
+		});
+		$('input[type=checkbox]').iCheck({
+    		checkboxClass: 'icheckbox_square-blue',
+    		increaseArea: '20%'
+  		});
+  		/*
+  		$('.datepicker').datepicker({
+    	format: 'mm/dd/yyyy'
+		});
+		*/
+
+
+		var defaultCardName = $("#preset_name").attr('placeholder');
+		var defaultCardDes = $("#description").attr('placeholder');
+
+		$("#card-title-preview").text(defaultCardName);
+		$("#card-description-preview").text(defaultCardDes);
+
+		function CardPreviewName(typingText) {
+			$("#card-title-preview").text(typingText);
+	   		if(typingText == ""){
+	   			$("#card-title-preview").text(defaultCardName)
+	   		}
+
+	   		//Auto Resize Text
+	   		var TitleSpace = $('#card-title-space').height();
+	   		var TitleText = $('#card-title-preview').height();
+	   		var TitleWidth = $('.bg-navy-card').width();
+	   		var TitleVerticalAlign = (TitleSpace-TitleText)/2;
+
+	   		$('#card-title-space div').css({
+	   			'padding-top': TitleVerticalAlign,
+	   			'width':TitleWidth-'30',
+	   			'font-size': '2em'
+	   		});
+
+	   		while( $('#card-title-space div').height() > $('#card-title-space').height() ) {
+		    	$('#card-title-space div').css('font-size', (parseInt($('#card-title-space div').css('font-size')) - 1) + "px" );
+		    }
+
+		}
+		function CardPreviewDes(typingText) {
+		   $("#card-description-preview").text(typingText);
+		   if(typingText == ""){
+	   			$("#card-description-preview").text(defaultCardDes)
+	   		}
+
+	   		///Auto Resize Text
+	   		var DesSpace = $('#card-description-space').height();
+	   		var DesText = $('#card-description-preview').height();
+	   		var DesWidth = $('.bg-navy-card').width();
+	   		var DesVerticalAlign = (DesSpace-DesText)/2;
+
+	   		$('#card-description-space div').css({
+	   			'padding-top': DesVerticalAlign,
+	   			'width':DesWidth-'30',
+	   			'font-size': '1em'
+	   		});
+
+	   		while( $('#card-description-space div').height() > $('#card-description-space').height() ) {
+		    	$('#card-description-space div').css('font-size', (parseInt($('#card-description-space div').css('font-size')) - 1) + "px" );
+		    }
+		}
+		$( "#country_codes" ).change(function() {
+			// get reference to display textarea
+		    var CardCountries = document.getElementById('card-countries-preview');
+		    CardCountries.innerHTML = ''; // reset
+		   	var selected = $( ".select2-selection__choice" ).get();
+
+		   	var selectedText = [];
+		   	var countries = [];
+			var bg = $(".ct-bg").css("background-color");
+			for ( var i = 0; i < selected.length; i++ ) {
+				selectedText.push( "<span class='card-countries-preview-box' style='background-color:"+bg+"'>"+selected[ i ].innerText.replace('Ã—','')+"</span>" );
+			}
+
+			var DesWidth = $('.bg-navy-card').width();
+			$('#card-countries-space div').css({
+				'width':DesWidth-'50',
+				'word-wrap': 'break-word',
+				'line-height':'50px'
+			})
+
+			$( "#card-countries-preview" ).html(selectedText);
+			//getEstimate();
+
+		});
+
+		var pf_ios='';
+		var pf_android='';
+
+		//value 1 = ios ; value 2 = android
+
+		$('.platform_codes').on('ifChecked', function(event){
+			var platform = event.target.value;
+			if (platform == '2' && pf_ios == ''){
+				$( "#card-platform-preview" ).html("<i class='fa fa-android'></i>");
+				pf_android = '2';
+			}
+			if (platform == '1' && pf_android == '2'){
+				$( "#card-platform-preview" ).html("<i class='fa fa-apple' style='padding-right:10px'></i><i class='fa fa-android'></i>");
+				pf_android = '2';
+				pf_ios = '1';
+			}
+			if (platform == '1' && pf_android == ''){
+				$( "#card-platform-preview" ).html("<i class='fa fa-apple'></i>");
+				pf_ios = '1';
+			}
+			if (platform == '2' && pf_ios == '1'){
+				$( "#card-platform-preview" ).html("<i class='fa fa-android' style='padding-right:10px'></i><i class='fa fa-apple'></i>");
+				pf_android = '2';
+				pf_ios = '1';
+			}
+			//getEstimate();
+		});
+
+		$('.platform_codes').on('ifUnchecked', function(event){
+			var platform = event.target.value
+			if (platform == '2' && pf_ios == ''){
+				$( "#card-platform-preview" ).html("");
+				pf_android = '';
+			}
+			if (platform == '2' && pf_ios == '1'){
+				$( "#card-platform-preview" ).html("<i class='fa fa-apple'></i>");
+				pf_android = '';
+			}
+			if (platform == '1' && pf_android == ''){
+				$( "#card-platform-preview" ).html("");
+				pf_ios = '';
+			}
+			if (platform == '1' && pf_android == '2'){
+				$( "#card-platform-preview" ).html("<i class='fa fa-android'></i>");
+				pf_ios = '';
+			}
+			//getEstimate();
+		})
+
+		// END CARD PREVIEW SETTINGS //
+
+    function showValidationMessageModal(message) {
+        $("#validationMessageModal").on('show.bs.modal', function (event) {
+		        $(this).find('#validationMessageText').html(message)
+		    }).modal('show');
+    }
+
+    // load preset data
+    var audiences = [];
+    {% if preset_filter is defined and preset_filter.filterData is defined  %}
+    	{% if preset_filter.filterData.audience is defined %}
+    		var audiences_json_str = '{{ preset_filter.filterData.audience|json_encode()|raw }}';
+    		//console.log('audiences_json_str',audiences_json_str);
+    		audiences =  $.parseJSON( audiences_json_str );
+    	{% endif %}
+    {% endif%}
+    //console.log('audiences :: ',audiences);
+    var has_form_data = false;
+    var PresetFilter = {
+		init: function() {
+			this.loadInAppTitleEventData();//cache
+			this.fireEventChangeAppTitle();
+			this.setupFrequentValue();
+			this.fireEventChangeFrequentExp();
+			this.fireEventChangeFrequentType();
+			this.fireEventClickAddMoreHistory();
+			this.fireEventChangePerform();
+			this.disabledExpressionGroupFilter();
+			this.loadInitialFilter();
+			this.fillPresetData();
+			this.fireEventSelectFilterType();
+			this.fireAddFilter();
+			this.fireSubmit();
+
+		},
+		loadInAppTitleEventData : function(){
+			var appTitles = {{ appTitles|json_encode()|raw }};
+			$.each(appTitles,function(id,title){
+				//console.log('appTitle',id);
+				$.ajax({
+	                url : "{{ path('dashboard_filter_load_list_event_name_by_app_title_v2') }}",
+	                type: 'GET',
+	                dataType: 'json',
+	                data: {
+	                    'list_app_title_id': id,
+	                },
+	                success: function(resp) {
+	                	if (typeof resp.msg != 'undefined') {
+	                		alert(resp.msg);
+	                	} else {
+							$("body").data(id,resp);
+							//console.log("cache "+id,resp);
+	                	}
+	                }
+	            });
+			});
+		},
+		fillPresetData : function(){
+			var append = true;
+			var self = this;
+			$("input[name=preset_name]").trigger('onkeyup');
+			$("input[name=description]").trigger('onkeyup');
+			$("#cardcolorselector").trigger('change');
+			$("#textcolorselector").trigger('change');
+			$( "#country_codes" ).trigger('change');
+			$(".platform_codes:checked").trigger('ifChecked');
+			console.log('audiences-',audiences);
+			//support both object or array
+			if (audiences && audiences.length > 0){
+				$.each(audiences, function(i, audience) {
+					/*
+					if ( i != 0){
+						self.loadInitialFilter();
+					}
+					*/
+					if($('.initial_fitler_container').length == 0 ) {
+						self.loadInitialFilter();
+					}
+					var filterContainer = $(".filter_container").last();
+
+					console.log('audience',audience);
+				    if (audience.history) {
+				    	console.log('load history');
+				    	// load history
+				    	self.loadHistoryFilter(filterContainer,audience);
+				    } else if (audience.usage) {
+						// load usage template
+						self.loadUsageFilter(filterContainer,audience);
+				    }
+				});
+			} else {
+				has_form_data = false;
+			}
+			$(".numeric_only").keyup(function () {
+			    this.value = this.value.replace(/[^0-9\.]/g,'');
+			});
+		},
+		formValidation : function(){
+			 var validationMessage = '';
+
+			    //client side validation
+			    if(!$("input[name='preset_name']").val()) {
+			        validationMessage= 'please input preset name';
+			        //showValidationMessageModal(validationMessage);
+			        //return;
+			    }
+
+			    if(!$("input[name='description']").val()) {
+			        validationMessage= 'please input description';
+			        //showValidationMessageModal(validationMessage);
+
+			    }
+
+				$("input[name*='[history][value]']").each(function(){
+					if(!$(this).val() && $(this).is(':disabled')== false){
+						validationMessage = 'please select date time in History of user';
+						return false;
+					}
+				});
+
+				$("select[name*='[history][in]']").each(function(){
+					if(!$(this).val()) {
+						validationMessage = 'please select an App Title in History of user';
+						return false;
+					}
+				});
+
+				$("select[name*='[usage][in]']").each(function(){
+					var coordinate_group = $(this).attr('data-coordinate-group');
+					if(!$(this).val()) {
+						validationMessage = 'please select an App Title in Behavior of user';
+						return false;
+					}
+				});
+
+				if( validationMessage != '') {
+					return validationMessage;
+				}
+
+			    $("select[name*='behaviour_id']").each(function(){
+	            	$coordinate_group = $(this).attr('data-coordinate-group');
+
+					if($(this).val() == ''){
+						validationMessage = 'please select an in-app event in Behavior of user';
+						return false;
+					}
+	            	if($(this).val() && !$(this).attr("disabled")){
+	            		if(!$("select[data-coordinate-group='"+$coordinate_group+"']").val() && !$(this).attr("disabled")){
+			    			validationMessage= 'please select all condition for behaviour of user';
+			                return false;
+			    		}
+			    		if(
+			    			!$("input[name='"+$coordinate_group+"[usage][frequent][value][0]']").attr("disabled")
+							&& $("input[name='"+$coordinate_group+"[usage][frequent][value][0]']").val() == ''
+			    		){
+			    			validationMessage= "You're missing a <b>frequency</b> value for 1 or more in-app event(s)";
+			                return false;
+			    		}
+			    		if(
+			    			!$("select[name='"+$coordinate_group+"[usage][frequent][expression]']").attr("disabled")
+			    			&& $("select[name='"+$coordinate_group+"[usage][frequent][expression]']").val() == '+'
+			    			&& (
+			    				!$("input[name='"+$coordinate_group+"[usage][frequent][value][0]']").val() ||
+			    				!$("input[name='"+$coordinate_group+"[usage][frequent][value][1]']").val()
+			    			)
+			    		){
+			    			validationMessage= "You're missing a <b>frequency</b> value for 1 or more in-app event(s)";
+			                return false;
+			    		}
+			    		if (
+			    			!$("select[name='"+$coordinate_group+"[usage][frequent][expression]']").attr("disabled")
+			    			&& $("select[name='"+$coordinate_group+"[usage][frequent][expression]']").val() == '<'
+			    			&& $("input[name='"+$coordinate_group+"[usage][frequent][expression]']").val() < 2
+			    		) {
+			    			validationMessage= "Minimum <b>frequency</b> value is 2 for less than operator";
+			                return false;
+			    		}
+			    		if (
+			    			!$("select[name='"+$coordinate_group+"[usage][frequent][expression]']").attr("disabled")
+			    			&& $("select[name='"+$coordinate_group+"[usage][frequent][expression]']").val() == '='
+			    			&& $("input[name='"+$coordinate_group+"[usage][frequent][value][0]']").val() < 1
+			    		) {
+			    			validationMessage= "Minimum <b>frequency</b> value is 1 for equal operator";
+			                return false;
+			    		}
+
+			    		if(
+			    			!$("input[type=hidden][data-coordinate-group='"+$coordinate_group+"'][name*='[happened_at][value][0]']").val()
+			    			&&
+			    			$("input[type=hidden][data-coordinate-group='"+$coordinate_group+"'][name*='[happened_at][value][0]']").is(':disabled') == false
+			    		){
+			    			validationMessage= "You're missing a FROM and TO date range for 1 or more in-app event(s)";
+			                return false;
+			    		}
+			    		if(
+			    			!$("input[type=hidden][data-coordinate-group='"+$coordinate_group+"'][name*='[happened_at][value][1]']").val()
+			    			&&
+			    			$("input[type=hidden][data-coordinate-group='"+$coordinate_group+"'][name*='[happened_at][value][1]']").is(':disabled') == false
+			    		){
+			    			validationMessage= "You're missing a FROM and TO date range for 1 or more in-app event(s)";
+			                return false;
+			    		}
+			    		/*
+			    		if(!$("input[data-coordinate-group='"+$coordinate_group+"'][name*='happened_at_from']").val()){
+			    			validationMessage= "You're missing a FROM and TO date range for 1 or more in-app event(s)";
+			                return false;
+			    		}
+			    		if(!$("input[data-coordinate-group='"+$coordinate_group+"'][name*='happened_at_to']").val()){
+			    			validationMessage= "You're missing a FROM and TO date range for 1 or more in-app event(s)";
+			                return false;
+			    		}
+			    		*/
+	            	}
+
+	            });
+	            return validationMessage;
+		},
+		fireSubmit: function() {
+			var self = this;
+			$("#save").on("click",function(e)
+	        {
+	        	var submitUrl = $(this).attr('data-submitUrl');
+	        	var redirectUrl = $(this).attr('data-redirectUrl');
+	            e.preventDefault();
+				var validationMessage = self.formValidation();
+
+			    if(validationMessage != ''){
+			        showValidationMessageModal(validationMessage);
+			        return false;
+			    }
+			    //stop form submit to debug
+			    //return;
+			    var submitData = $('#preset_card_generator').serializeArray();
+			    submitData.push({
+			    	name: 'card_bg_color_code',
+			    	value : $('input[name="card_bg_color_code"]').val()
+			    });
+			    submitData.push({
+			    	name: 'card_text_color_code',
+			    	value : $('input[name="card_text_color_code"]').val()
+			    });
+
+				$.ajax({
+	                method: "POST",
+	                url: submitUrl,
+	                data: submitData,
+	                success : function(response){
+	                    //console.log(response);
+
+	                //alert(response);
+	                $("#validationMessageModal").on('show.bs.modal', function (event) {
+	    		        $(this).find('#validationMessageText').html(response)
+	    		    }).modal('show');
+					if(redirectUrl){
+						setTimeout(function(){
+		                	window.location.href = redirectUrl;
+		                },500);
+					}
+
+
+	                },
+	                error : function(jqXHR, exception){
+	                    if (jqXHR.status === 0) {
+	                        console.log('error','Not connect.\n Verify Network.');
+	                    } else if (jqXHR.status == 404) {
+	                        console.log('error','Requested page not found. [404]');
+	                    } else if (jqXHR.status == 500) {
+	                        console.log('error','Internal Server Error [500].');
+	                    } else if (exception === 'parsererror') {
+	                        console.log('error','Requested JSON parse failed.');
+	                    } else if (exception === 'timeout') {
+	                        console.log('error','Time out error.');
+	                    } else if (exception === 'abort') {
+	                        console.log('error','Ajax request aborted.');
+	                    } else if ( jqXHR.status == 400) {
+	                        showValidationMessageModal(jqXHR.responseText);
+			                return;
+	                    } else {
+	                        console.log('error','Uncaught Error.\n' + jqXHR.responseText);
+	                    }
+	                }
+	            });
+
+			});
+		},
+		fireEventSelectFilterType: function() {
+			var self = this;
+			//filter_type
+			$(document).on('change', "select[name='filter_type']", function() {
+				var filterContainer = $(this).closest('.filter_container');
+				var current_seq = $(this).data('seq');
+    			var selectedFilterType = $(this).val();
+    			if (selectedFilterType == 'user_history'){
+					self.loadHistoryFilter(filterContainer,null,current_seq);
+    			} else if (selectedFilterType == 'user_behaviors') {
+					self.loadUsageFilter(filterContainer,null,current_seq);
+    			}
+    		});
+		},
+		fireEventChangeAppTitle: function() {
+    		var self = this;
+    		$(document).on('change', "select[data-group='in-app-detail'][name*='[in]']", function() {
+    			console.log('trace','on app title changed');
+    			var listAppTitleId = $(this).val();
+    			var coordinateGroup = $(this).attr('data-coordinate-group');
+    			self.loadListEventNameByListAppTitle(listAppTitleId, coordinateGroup);
+    		});
+    	},
+    	fireEventChangeEventType : function(self,coordinateGroup,iap,list_category_by_iae) {
+
+    		$(document).on('change', "select[name='"+coordinateGroup+"[usage][behaviour_id]']", function() {
+    			//alert($(this).val());
+    			var seleted_event_name = $(this).val();
+    			console.log('trace','call enabledCategoryFilter when changing event type ');
+    			if($(this).is(":visible") == true) {
+    					$(".show_if_iae_chosen[data-coordinate-group='"+coordinateGroup+"']").show();
+    			}
+				// get category by choosen event only
+				if ($.inArray(seleted_event_name,list_category_by_iae)){
+					self.addListCategoryToCategoryFilter(list_category_by_iae[seleted_event_name], coordinateGroup);
+				}
+				
+    			self.enabledCategoryFilter(coordinateGroup);
+    			/*
+    			if ( $.inArray($(this).val(),["add_to_wishlist","af_add_to_wishlist","add_to_cart","af_add_to_cart","purchase","af_purchase","af_share","af_content_view"]) !== -1) {
+
+					self.enabledCategoryFilter(coordinateGroup);
+		    	} else {
+		    		console.log('trace','call disabledCategoryFilter ');
+		    		self.disabledCategoryFilter(coordinateGroup);
+		    	}
+		    	*/
+		    	// *** enable 'revenue frequent type' if match IAP ***
+		    	if ($.inArray($(this).val(),iap) !== -1) {
+		    		console.log('trace','call enableIAPRevenue ');
+		    		console.log('trace',iap);
+		    		self.enabledIAPRevenue(coordinateGroup);
+		    	} else {
+		    		console.log('trace','call disableIAPRevenue ');
+		    		self.disabledIAPRevenue(coordinateGroup);
+		    	}
+
+    		});
+    	},
+    	fireAddFilter: function(){
+    		var self = this;
+    		$(document).on('click','#add_audience_filter',function() {
+    			var validationMessage = self.formValidation();
+    			if(validationMessage != ''){
+			        showValidationMessageModal(validationMessage);
+			        return false;
+			    }
+			    // todo - implement count event
+    			if ($('.initial_fitler_container').length == 0){
+    				self.loadInitialFilter();
+    			}
+
+    		});
+    	},
+    	loadInitialFilter: function(){
+    		var self = this;
+    		$(".condition_area").loadTemplate("#initial_fitler_tpl",null,{append:true});
+    	},
+    	removeCurrentFilter: function(current_filter){
+    		current_filter.remove();
+    	},
+    	defineFilterLength: function(){
+    		var seq = 0;
+    		var current_filter_length = $(".filter_container").length;
+    		console.log("current_filter_length",current_filter_length);
+    		if(current_filter_length >0 ) {
+    			seq = current_filter_length -1 ;
+    		} else {
+    			seq = 0;
+    		}
+			console.log("seq",seq);
+			return seq;
+    	},
+    	loadHistoryFilter: function(filterContainer,formData,current_seq){
+    		//var isAppend = isAppend || false;
+    		//console.log('filterContainer',filterContainer);
+    		var self = this;
+    		if (typeof current_seq !== 'undefined') {
+    			console.log('current_seq++++',current_seq);
+			    var seq = current_seq;
+			} else {
+    			var seq = self.defineFilterLength();
+    		}
+    		var data = {
+    			append_relation : "audience["+seq+"][append_relation]",
+    			history_type : "audience["+seq+"][history][type]",
+				history_value_0 : "audience["+seq+"][history][value][0]",
+				history_value_1 : "audience["+seq+"][history][value][1]",
+				history_value_0_1 : "audience["+seq+"][history][value][0_1]",
+    			in : "audience["+seq+"][history][in]",
+    			coordinate_group : "audience["+seq+"]",
+    			seq : seq
+    		};
+    		if (formData){
+    			data.form_data = formData;
+    			//console.log('loadHistoryFilter with form data',data);
+    		}
+    		filterContainer.loadTemplate("#history_filter_tpl",data,{afterInsert:function(){
+    			//Remove and,or,remove btn for first filter
+    			if (seq == 0) {
+    				$(".remove_if_first_filter[data-coordinate-group='"+data.coordinate_group+"']").empty();
+    			}
+    			//register remove btn on click event
+    			$(".remove_current_filter").on('click',function() {
+    					$(this).closest('.history_filter_container,.usage_filter_container').remove();
+    			});
+	    		$("input[name='"+data.history_value_0_1+"']").daterangepicker({
+					autoUpdateInput: false,
+					locale: {
+						cancelLabel: 'Clear'
+					}
+				}).on('apply.daterangepicker', function(ev, picker) {
+						$(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
+						$("input[name='"+data.history_value_0+"']").val(picker.startDate.format('DD/MM/YYYY'));
+						$("input[name='"+data.history_value_1+"']").val(picker.endDate.format('DD/MM/YYYY'));
+						console.log('trace history_value_0',$("input[name='"+data.history_value_0+"']").val());
+						console.log('trace history_value_1',$("input[name='"+data.history_value_1+"']").val());
+					}
+				).on('cancel.daterangepicker', function(ev, picker) {
+					$(this).val('');
+					$("input[name='"+data.history_value_0+"']").val();
+					$("input[name='"+data.history_value_1+"']").val();
+				});
+
+				if (typeof data.form_data === 'undefined' ){
+					$(".hide_if_init[data-coordinate-group='"+data.coordinate_group+"']").hide();
+					//console.log('trace','hide history el');
+				}
+				//init and fire on change history type
+				self.initHistoryTypeAndFireChange(filterContainer,data.coordinate_group);
+    			//binding data
+    			if(data.form_data){
+    				// AND OR
+	    			if (data.form_data.append_relation) {
+	    				$("input[type=radio][data-coordinate-group='"+data.coordinate_group+"'][value='"+data.form_data.append_relation+"']").attr("checked",true);
+	    			}
+	    			//AppTitle
+	    			if (data.form_data.history.in && $("select[name='"+data.in+"']").find("option[value='"+data.form_data.history.in+"']") ) {
+	    				$("select[name='"+data.in+"']").val(data.form_data.history.in);
+	    			}
+	    			//History type
+	    			if (data.form_data.history.type) {
+	    				var history_type = data.form_data.history.type;
+	    				$("select[name='"+data.history_type+"']").val(data.form_data.history.type);
+	    				//History value 0
+		    			if (data.form_data.history.value['0']) {
+		    				$("div[data-for-history-type='"+history_type+"'] input[name='"+data.history_value_0+"']").val(data.form_data.history.value['0']);
+		    				$("div[data-for-history-type='"+history_type+"'] select[name='"+data.history_value_0+"']").val(data.form_data.history.value['0']);
+		    			}
+		    			//History value 1
+		    			if (data.form_data.history.value['1']) {
+		    				$("input[name='"+data.history_value_1+"']").val(data.form_data.history.value['1']);
+		    				$("input[name='"+data.history_value_0_1+"']").val(data.form_data.history.value['0'] + ' - ' + data.form_data.history.value['1']);
+		    			} -
+		    			self.assignHistoryType($("select[name='"+data.history_type+"']"),data.coordinate_group);
+	    			}
+
+
+    			}//end data form data
+    			//style icheck
+    			$("input[type=radio][data-coordinate-group='"+data.coordinate_group+"']").iCheck({
+		    		radioClass: 'iradio_square-blue',
+		    		increaseArea: '20%'
+		  		});
+
+    		}});
+    		filterContainer.removeClass("initial_fitler_container");
+    	},
+    	loadUsageFilter: function(filterContainer,formData,current_seq){
+    		var self = this;
+    		if (typeof current_seq !== 'undefined') {
+    			console.log('current_seq++++',current_seq);
+			    var seq = current_seq;
+			} else {
+    			var seq = self.defineFilterLength();
+    		}
+
+    		var data = {
+    			append_relation : "audience["+seq+"][append_relation]",
+    			perform : "audience["+seq+"][usage][perform]",
+    			behaviour_id : "audience["+seq+"][usage][behaviour_id]",
+				cat_id : "audience["+seq+"][usage][cat_id]",
+				frequent_type : "audience["+seq+"][usage][frequent][type]",
+    			frequent_expression : "audience["+seq+"][usage][frequent][expression]",
+				frequent_value_0 : "audience["+seq+"][usage][frequent][value][0]",
+    			frequent_value_1 : "audience["+seq+"][usage][frequent][value][1]",
+    			happened_at_type : "audience["+seq+"][usage][happened_at][type]",
+    			happened_at_value_0 : "audience["+seq+"][usage][happened_at][value][0]",
+    			happened_at_value_1 : "audience["+seq+"][usage][happened_at][value][1]",
+    			happened_at_value_0_1 : "audience["+seq+"][usage][happened_at][value][0_1]",
+    			in : "audience["+seq+"][usage][in]",
+    			coordinate_group : "audience["+seq+"]",
+    			seq : seq
+    		};
+    		if (formData){
+    			data.form_data = formData;
+    			console.log('loadHistoryFilter with form data',data);
+    		}
+
+    		filterContainer.loadTemplate("#usage_filter_tpl",data,{afterInsert:function() {
+    			//Remove and,or,remove btn for first filter
+    			if (seq == 0) {
+    				$(".remove_if_first_filter[data-coordinate-group='"+data.coordinate_group+"']").empty();
+    				console.log('trace','remove_if_first_filter');
+    			}
+    			//register remove btn on click event
+    			$(".remove_current_filter").on('click',function() {
+    					$(this).closest('.history_filter_container,.usage_filter_container').remove();
+    			});
+    			
+    			$("input[name='"+data.happened_at_value_0_1+"']").daterangepicker({
+					autoUpdateInput: false,
+					locale: {
+						cancelLabel: 'Clear'
+					}
+				}).on('apply.daterangepicker', function(ev, picker) {
+						$(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
+						$("input[name='"+data.happened_at_value_0+"']").val(picker.startDate.format('DD/MM/YYYY'));
+						$("input[name='"+data.happened_at_value_1+"']").val(picker.endDate.format('DD/MM/YYYY'));
+						console.log('trace happened_at_value_0',$("input[name='"+data.happened_at_value_0+"']").val());
+						console.log('trace happened_at_value_1',$("input[name='"+data.happened_at_value_1+"']").val());
+					}
+				).on('cancel.daterangepicker', function(ev, picker) {
+					$(this).val('');
+					$("input[name='"+data.happened_at_value_0+"']").val();
+					$("input[name='"+data.happened_at_value_1+"']").val();
+				});
+    			
+    			if (typeof data.form_data === 'undefined' ){
+					$(".hide_if_init[data-coordinate-group='"+data.coordinate_group+"']").hide();
+    			}
+    			self.initHappenedAtTypeAndFireChange(filterContainer,data.coordinate_group);
+    			//show_if_iap
+    			$(".show_if_iap[data-coordinate-group='"+data.coordinate_group+"']").hide();
+				//show if between
+    			$(".show_if_between[data-coordinate-group='"+data.coordinate_group+"']").hide();
+    			$("select[name='"+data.frequent_expression+"']").on('change',function(){
+    				if ($(this).val()=='+') {
+    					$(".show_if_between[data-coordinate-group='"+data.coordinate_group+"']").show();
+    					$(".show_if_between[data-coordinate-group='"+data.coordinate_group+"']").removeAttr('disabled');
+    				} else {
+    					$(".show_if_between[data-coordinate-group='"+data.coordinate_group+"']").hide();
+    					$(".show_if_between[data-coordinate-group='"+data.coordinate_group+"']").attr('disabled','disabled');
+    				}
+    			})
+    			//hide if not ferform
+    			$("select[name='"+data.perform+"']").on('change',function() {
+    				if ($(this).val() == 'not_perform') {
+    					$(".hide_if_not_perform[data-coordinate-group='"+data.coordinate_group+"']").find('input,select').attr('disabled','disabled');
+    					$(".hide_if_not_perform[data-coordinate-group='"+data.coordinate_group+"']").hide();
+    				} else {
+    					$(".hide_if_not_perform[data-coordinate-group='"+data.coordinate_group+"']").find('input,select').removeAttr('disabled');
+    					$(".hide_if_not_perform[data-coordinate-group='"+data.coordinate_group+"']").show();
+    				}
+    			})
+    			// register frequent type change
+    			self.fireEventChangeFrequentType();
+    			// binding form data
+    			if (data.form_data) {
+    				// AND OR
+	    			if (data.form_data.append_relation) {
+	    				$("input[type=radio][name='"+data.append_relation+"'][value='"+data.form_data.append_relation+"']").attr("checked",true);
+	    			}
+	    			// in appTitle
+	    			if (data.form_data.usage.in && $("select[name='"+data.in+"']").find("option[value='"+data.form_data.usage.in+"']") ) {
+	    				$("select[name='"+data.in+"']").val(data.form_data.usage.in);
+	    				$("select[name='"+data.in+"']").trigger('change');
+		    			if (data.form_data.usage.behaviour_id) {
+		    				$("select[name='"+data.behaviour_id+"']").val(data.form_data.usage.behaviour_id);
+		    			}
+		    			// cat_id
+		    			if (data.form_data.usage.cat_id) {
+		    				$("select[name='"+data.cat_id+"']").val(data.form_data.usage.cat_id);
+		    			}
+	    			}
+	    			//perform or not perform
+	    			if (data.form_data.usage.perform) {
+	    				$("select[name='"+data.perform+"']").val(data.form_data.usage.perform);
+	    				if(data.form_data.usage.perform =='not_perform') {
+	    					$("select[name='"+data.perform+"']").trigger('change');
+	    				}
+	    			}
+
+	    			if(data.form_data.usage.frequent) {
+	    				//frequent type
+	    				if (data.form_data.usage.frequent.type) {
+	    					$("select[name='"+data.frequent_type+"']").val(data.form_data.usage.frequent.type).trigger('change');
+
+	    				}
+	    				//frequent expression
+		    			if (data.form_data.usage.frequent.expression) {
+		    				$("select[name='"+data.frequent_expression+"']").val(data.form_data.usage.frequent.expression);
+		    				if (data.form_data.usage.frequent.expression == '+') {
+		    					$("select[name='"+data.frequent_expression+"']").trigger('change');
+		    				}
+		    			}
+		    			//frequent value 0
+		    			$("input[name='"+data.frequent_value_0+"']").val(data.form_data.usage.frequent.value['0']);
+		    			//frequent value 1
+		    			if (data.form_data.usage.frequent.value['1']) {
+		    				$("input[name='"+data.frequent_value_1+"']").val(data.form_data.usage.frequent.value['1']);
+		    			}
+	    			}
+					//happened_at_type
+					if (data.form_data.usage.happened_at.type) {
+						console.log('data.form_data.usage.happened_at.type',data.form_data.usage.happened_at.type)
+	    				var happened_at_type = data.form_data.usage.happened_at.type;
+	    				$("select[name='"+data.happened_at_type+"']").val(happened_at_type);
+	    				console.log("happened at::",$("select[name='"+data.happened_at_type+"']").val());
+	    				//happened_at_value_0
+	    				console.log("debug",data.form_data.usage.happened_at.value);
+	    				if (typeof data.form_data.usage.happened_at.value !== "undefined"){
+	    					if (typeof(data.form_data.usage.happened_at.value['0']) !== "undefined" && data.form_data.usage.happened_at.value['0']) {
+		    					console.log ("binding ","happened_at_value_0");
+		    					$("div[data-for-happened-at-type='"+happened_at_type+"'] input[name='"+data.happened_at_value_0+"']").val(data.form_data.usage.happened_at.value['0']);
+		    					$("div[data-for-happened-at-type='"+happened_at_type+"'] select[name='"+data.happened_at_value_0+"']").val(data.form_data.usage.happened_at.value['0']);
+			    			}
+		    				//happened_at_value_1
+			    			if (typeof data.form_data.usage.happened_at.value['1'] !== 'undefined' && data.form_data.usage.happened_at.value['1']) {
+			    				console.log ("binding ","happened_at_value_1");
+			    				$("div[data-for-happened-at-type='"+happened_at_type+"'] input[name='"+data.happened_at_value_1+"']").val(data.form_data.usage.happened_at.value['1']);
+			    				$("div[data-for-happened-at-type='"+happened_at_type+"'] input[name='"+data.happened_at_value_0_1+"']").val(data.form_data.usage.happened_at.value['0'] +' - '+data.form_data.usage.happened_at.value['1']);
+			    			}
+	    				}
+
+		    			self.assignHappenedAtType($("select[name='"+data.happened_at_type+"']"),data.coordinate_group);
+	    			}
+    			}
+    			//style icheck
+    			$("input[type=radio][data-coordinate-group='"+data.coordinate_group+"']").iCheck({
+		    		radioClass: 'iradio_square-blue',
+		    		increaseArea: '20%'
+		  		});
+
+    		}});
+    		$("select[name='"+data.coordinate_group+"[usage][behaviour_id]']").trigger('change');
+
+
+    		filterContainer.removeClass("initial_fitler_container");
+    	},
+    	loadListEventNameByListAppTitle: function(listAppTitleId, coordinateGroup) {
+    		var self = this;
+    		if (!listAppTitleId) {
+				self.resetEventFilter(coordinateGroup);
+				self.resetCategoryFilter(coordinateGroup);
+    			return;
+    		}
+    		if ($("body").data(listAppTitleId)){
+    			var resp = $("body").data(listAppTitleId);
+    			self.addListEventNameToEventFilter(resp['data']['list_event_name'], coordinateGroup);
+				//resp['data']['list_category'] = ['camera','phone'];
+				self.addListCategoryToCategoryFilter(resp['data']['list_category'], coordinateGroup);
+				self.enabledEventFilter(coordinateGroup);
+            	var iap = resp['data']['list_event_iap'];
+            	var list_category_by_iae = resp['data']['list_category_by_iae'];
+            	self.fireEventChangeEventType(self,coordinateGroup,iap,list_category_by_iae);
+    		} else {
+    			$.ajax({
+	                url : "{{ path('dashboard_filter_load_list_event_name_by_app_title_v2') }}",
+	                type: 'GET',
+	                dataType: 'json',
+	                data: {
+	                    'list_app_title_id': listAppTitleId,
+	                },
+	                beforeSend: function() {
+						self.disabledEventFilter(coordinateGroup);
+						self.disabledCategoryFilter(coordinateGroup);
+
+	                },
+	                success: function(resp) {
+	                	if (typeof resp.msg != 'undefined') {
+	                		alert(resp.msg);
+	                	} else {
+							$("body").data(listAppTitleId,resp);
+							self.addListEventNameToEventFilter(resp['data']['list_event_name'], coordinateGroup);
+							//resp['data']['list_category'] = ['camera','phone'];
+							self.addListCategoryToCategoryFilter(resp['data']['list_category'], coordinateGroup);
+							var iap = resp['data']['list_event_iap'];
+							var list_category_by_iae = resp['data']['list_category_by_iae'];
+	                		self.fireEventChangeEventType(self,coordinateGroup,iap,list_category_by_iae);
+	                	}
+	                },
+	                error: function() {
+						self.enabledEventFilter(coordinateGroup);
+						self.enabledCategoryFilter(coordinateGroup);
+	                },
+	                complete: function(resp) {
+	                	//console.log('resp',resp);
+	                	self.enabledEventFilter(coordinateGroup);
+	                },
+	                async : false
+	            });
+    		}
+			$(".show_if_apptitle_chosen[data-coordinate-group='"+coordinateGroup+"']").show();
+			self.fireEventChangePerform();
+    	},
+    	resetEventFilter: function(coordinateGroup) {
+    		var emptyOption = '<option value="">select in-app event</option>';
+			var listOptions = [];
+			listOptions.push(emptyOption);
+			$("select[name='"+coordinateGroup+"[usage][behaviour_id]']").html(listOptions.join(''));
+    	},
+    	disabledEventFilter: function(coordinateGroup) {
+    		$("select[name='"+coordinateGroup+"[usage][behaviour_id]']").attr('disabled','disabled');
+    	},
+    	enabledEventFilter: function(coordinateGroup) {
+    		$("select[name='"+coordinateGroup+"[usage][behaviour_id]']").removeAttr('disabled');
+    	},
+    	resetCategoryFilter: function(coordinateGroup) {
+    		var emptyOption = '<option value="">select interest</option>';
+			var listOptions = [];
+			listOptions.push(emptyOption);
+			$("select[name='"+coordinateGroup+"[usage][cat_id]']").html(listOptions.join(''));
+    	},
+    	disabledCategoryFilter: function(coordinateGroup) {
+    		$("select[name='"+coordinateGroup+"[usage][cat_id]']").attr('disabled', 'disabled');
+    		/*
+    		var disabled = $("select[name='"+coordinateGroup+"[usage][cat_id]']").attr('disabled');
+			if (disabled) {
+				$("select[name='"+coordinateGroup+"[usage][cat_id]']").attr('still-disabled','1');
+			} else {
+				$("select[name='"+coordinateGroup+"[usage][cat_id]']").attr('disabled', 'disabled');
+				$("select[name='"+coordinateGroup+"[usage][cat_id]']").removeAttr('still-disabled');
+			}*/
+    	},
+    	enabledCategoryFilter: function(coordinateGroup) {
+    		//alert('enabledCategoryFilter');
+    		/*
+    		var stillDisabled = $("select[name='"+coordinateGroup+"[usage][cat_id]']").attr('still-disabled');
+			if (stillDisabled) {
+				return;
+			}*/
+			$("select[name='"+coordinateGroup+"[usage][cat_id]']").removeAttr('disabled');
+    	},
+    	disabledIAPRevenue: function(coordinateGroup){
+    		$("select[name='"+coordinateGroup+"[usage][frequent][type]']").val("event_count");
+    		$("select[name='"+coordinateGroup+"[usage][frequent][type]']").find("option[value='revenue']").attr("disabled","disabled").hide();
+    	},
+    	enabledIAPRevenue: function(coordinateGroup){
+    		$("select[name='"+coordinateGroup+"[usage][frequent][type]']").find("option[value='revenue']").removeAttr("disabled").show();
+    	},
+    	addListEventNameToEventFilter: function(listEventName, coordinateGroup) {
+    		var selectedValue = $("select[name='"+coordinateGroup+"[usage][behaviour_id]']").val();
+			var listOptions = [];
+			var emptyOption = '<option value="">select in-app event</option>';
+			listOptions.push(emptyOption);
+			$.each(listEventName, function(eventName, eventFriendlyName) {
+				var selected = '';
+				if (selectedValue == eventName) {
+					selected = 'selected';
+				}
+				var option = '<option '+selected+' value="'+eventName+'">'+eventFriendlyName+'</option>';
+				listOptions.push(option);
+			});
+			/*
+			for (var i = 0; i < listEventName.length; i++) {
+				var eventName = listEventName[i];
+				var selected = '';
+				if (selectedValue == eventName) {
+					selected = 'selected';
+				}
+				var option = '<option '+selected+' value="'+eventName+'">'+eventName+'</option>';
+				listOptions.push(option);
+			}
+			*/
+			$("select[name='"+coordinateGroup+"[usage][behaviour_id]']").html(listOptions.join(''));
+    	},
+    	addListCategoryToCategoryFilter: function(listCategory, coordinateGroup) {
+    		var selectedValue = $("select[name='"+coordinateGroup+"[usage][cat_id]']").val();
+			var listOptions = [];
+			var emptyOption = '<option value="">select interest</option>';
+			listOptions.push(emptyOption);
+			for (var i = 0; i < listCategory.length; i++) {
+				var category = listCategory[i];
+				var selected = '';
+				if (selectedValue == category) {
+					selected = 'selected';
+				}
+				var option = '<option '+selected+' value="'+category+'">'+category+'</option>';
+				listOptions.push(option);
+			}
+			 $("select[name='"+coordinateGroup+"[usage][cat_id]']").html(listOptions.join(''));
+    	},
+    	initHistoryTypeAndFireChange: function(filterContainer,coordinateGroup) {
+			var self = this;
+			//init
+			//console.log('trace','change history_type');
+			filterContainer.find("div[data-for-history-type][data-coordinate-group='"+coordinateGroup+"'] *[name*='[history][value]']").attr("disabled","disabled");
+			filterContainer.find("div[data-for-history-type][data-coordinate-group='"+coordinateGroup+"']").hide();
+			filterContainer.find("div[data-for-history-type][data-coordinate-group='"+coordinateGroup+"'] *[name*='[history][value]']").first().removeAttr("disabled");
+			//filterContainer.find("div[data-for-history-type][data-coordinate-group='"+coordinateGroup+"']").first().show();
+			//register on change
+			filterContainer.on('change', "select[name*='[history][type]']", function (e) {
+				console.log('trace','change history_type');
+				var that = $(this);
+				var coordinateGroup = that.attr("data-coordinate-group");
+				if (that.is("visible") == true && that.val() !=="" ) {
+					//console.log("trace","show_if_history_type_chosen");
+					$(".show_if_history_type_chosen[data-coordinate-group='"+coordinateGroup+"']").show();
+				}
+				self.assignHistoryType(that,coordinateGroup);
+			});
+		},
+		assignHistoryType: function(history_type_el,coordinateGroup){
+			var history_type = history_type_el.val();
+			$("div[data-for-history-type][data-coordinate-group='"+coordinateGroup+"']").hide();
+			$("div[data-for-history-type][data-coordinate-group='"+coordinateGroup+"'] *[name*='[history][value]']").attr("disabled","disabled");
+			$("div[data-for-history-type='"+history_type+"'][data-coordinate-group='"+coordinateGroup+"']").show();
+			$("div[data-for-history-type='"+history_type+"'][data-coordinate-group='"+coordinateGroup+"'] *[name*='[history][value]']").removeAttr("disabled");
+		},
+		initHappenedAtTypeAndFireChange: function(filterContainer,coordinateGroup) {
+			var self = this;
+			//init
+			console.log('trace','change happened_at_type');
+			filterContainer.find("div[data-for-happened-at-type][data-coordinate-group='"+coordinateGroup+"'] *[name*='[happened_at][value]']").attr("disabled","disabled");
+			filterContainer.find("div[data-for-happened-at-type][data-coordinate-group='"+coordinateGroup+"']").hide();
+			//filterContainer.find("div[data-for-happened-at-type][data-coordinate-group='"+coordinateGroup+"'] *[name*='[happened_at][value]']").first().removeAttr("disabled");
+			//filterContainer.find("div[data-for-happened-at-type][data-coordinate-group='"+coordinateGroup+"']").first().show();
+			//register on change
+			filterContainer.on('change', "select[name*='[happened_at][type]']", function (e) {
+				console.log('trace','change happened_at_type');
+				var that = $(this);
+				self.assignHappenedAtType(that,coordinateGroup);
+			});
+		},
+		assignHappenedAtType: function(happened_at_type_el,coordinateGroup){
+			var happened_at_type = happened_at_type_el.val();
+			$("div[data-for-happened-at-type][data-coordinate-group='"+coordinateGroup+"']").hide();
+			$("div[data-for-happened-at-type][data-coordinate-group='"+coordinateGroup+"'] *[name*='[happened_at][value]']").attr("disabled","disabled");
+			$("div[data-for-happened-at-type='"+happened_at_type+"'][data-coordinate-group='"+coordinateGroup+"']").show();
+			$("div[data-for-happened-at-type='"+happened_at_type+"'][data-coordinate-group='"+coordinateGroup+"'] *[name*='[happened_at][value]']").removeAttr("disabled");
+		},
+		fireEventChangeFrequentExp: function() {
+			var self = this;
+			$(document).on('change', "select[name*='[frequent][expression]']", function (e) {
+				//console.log('debug', 'fireEventChangeFrequentExp');
+				self.setupFrequentValue();
+			});
+		},
+		fireEventChangeFrequentType: function(){
+			console.log('trace','fireEventChangeFrequentType');
+			var self = this;
+			$(document).on('change', "select[name*='[frequent][type]']", function (e) {
+				console.log('on change','[frequent][type]');
+				var coordinateGroup = $(this).attr("data-coordinate-group");
+				if ($(this).val()== 'revenue') {
+					$("span.show_if_iap[data-coordinate-group='"+coordinateGroup+"']").show();
+				} else {
+					$("span.show_if_iap[data-coordinate-group='"+coordinateGroup+"']").hide();
+				}
+			});
+		},
+		setupFrequentValue: function(el) {
+			$("select[name*='[frequent][expression]']").each(function(){
+				//console.log($(this).val());
+				if ($(this).val() == '+') {
+					$(this).parent().find('[data-frequent-value-1]').show();
+				} else {
+					$(this).parent().find('[data-frequent-value-1]').hide();
+				}
+			});
+		},
+		fireEventClickAddMoreHistory: function() {
+			$("[data-action='add_more_history']").click(function(){
+		    	//console.log('debug','add_more_history clicked');
+		    	$("div[data-group='history-detail']:hidden").first().show().find('select,input').removeAttr("disabled");
+			});
+			$("[data-action='remove_this_history']").click(function(){
+			    //console.log('debug','remove_this_history clicked');
+			    var seq = $(this).attr('data-seq');
+			    $("div[data-group='history-detail'][data-seq='"+seq+"']").first().hide().find('select,input').attr("disabled","disabled");
+			});
+		},
+		fireEventChangePerform: function() {
+			$("select[name*='[perform]']").change(function(){
+				var expressionGroup = $(this).attr('data-associated-expression-group');
+				var coordinateGroup = $(this).attr('data-coordinate-group');
+				$(".show_if_has_perform_chosen[data-coordinate-group='"+coordinateGroup+"']").show();
+				console.log('trace','fireEventChangePerform');
+				if ($(this).val() == 'not_perform' || $(this).val() == '') {
+					$("span[data-expression-group='"+expressionGroup+"']").hide().find('select,input').attr("disabled","disabled");
+				} else {
+					$("span[data-expression-group='"+expressionGroup+"']").show().find('select,input').removeAttr("disabled","disabled");
+				}
+			});
+		},
+		disabledExpressionGroupFilter: function() {
+			$("select[name*='[perform]']").each(function(){
+				if ($(this).val() && !$(this).attr('disabled')) {
+					var expressionGroup = $(this).attr('data-associated-expression-group');
+					if ($(this).val() == 'not_perform') {
+						$("span[data-expression-group='"+expressionGroup+"']").first().hide().find('select,input').attr("disabled","disabled");
+					} else {
+						$("span[data-expression-group='"+expressionGroup+"']").first().show().find('select,input').removeAttr("disabled","disabled");
+					}
+				}
+			});
+		}
+	};
+	$(document).ready(function() {
+        PresetFilter.init();
+    });
+
+    </script>
+    <script type="text/html" id="filter_container_tpl">
+    	<div class="filter_container" ></div>
+    </script>
+    <script type="text/html" id="initial_fitler_tpl">
+		<div class="row initial_fitler_container filter_container" >
+			<div class="col-md-3 m-t-md">
+			</div>
+			<div class="col-md-9">
+				<div class="row no-margin">
+					<div class="panel panel-default">
+						<div class="panel-body" style="background:#F5F5F5">
+							<div class="row no-margin">
+								<select name="filter_type" class="col-md-2 form-control inline-select-long m-r-xs" style="width: 200px;" id="au_type">
+								    <option value="">Select Condition Type</option>
+								    <option value="user_history">History of user</option>
+								    <option value="user_behaviors">Behaviors of user</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+    </script>
+    <script type="text/html" id="history_filter_tpl">
+    	<div class="history_filter_container" data-template-bind='[{"attribute":"data-coordinate-group","value":"coordinate_group"},{"attribute":"data-seq","value":"seq"}]'>
+			<div class="remove_if_first_filter col-md-1 m-t-md" data-template-bind='[{"attribute":"data-coordinate-group","value":"coordinate_group"}]'>
+				<button class="remove_current_filter btn btn-primary btn-circle" data-template-bind='[{"attribute":"data-coordinate-group","value":"coordinate_group"}]' type="button">
+					<i class="fa fa-times"></i>
+				</button>
+			</div>
+			<div class="remove_if_first_filter col-md-2 m-t-md" data-template-bind='[{"attribute":"data-coordinate-group","value":"coordinate_group"}]' style="text-align: left;font-weight: bold;;padding: 5px 0px">
+				<input  data-template-bind='[{"attribute":"name","value":"append_relation"},{"attribute":"data-coordinate-group","value":"coordinate_group"}]' type="radio" value="and" checked> and </input> &nbsp;&nbsp;
+				<input  data-template-bind='[{"attribute":"name","value":"append_relation"},{"attribute":"data-coordinate-group","value":"coordinate_group"}]' type="radio" value="or"> or </input>
+			</div>
+			<div class="col-md-9">
+				<div class="row no-margin">
+					<div class="panel panel-default">
+						<div class="panel-body" style="background:#F5F5F5">
+							<div class="row no-margin">
+								<select name="filter_type" data-template-bind='[{"attribute":"data-coordinate-group","value":"coordinate_group"},{"attribute":"data-seq","value":"seq"}]' class="col-md-2 form-control inline-select-long m-r-xs" style="width: 200px;" id="au_type#2">
+									<option value="user_history" selected="" >History of user</option>
+									<option value="user_behaviors">Behaviors of user</option>
+								</select>
+							</div>
+							<div class="row no-margin">
+								<select data-template-bind='[{"attribute":"name","value":"in"},{"attribute":"data-coordinate-group","value":"coordinate_group"}]' name=""  data-group="in-app-detail" class="col-md-2 form-control inline-select-long m-r-xs m-t-sm" style="width: 140px;" id="au_history_apptitle">
+									<option value="">select app title</option>
+										{% for appTitle in listAppTitle %}
+											{% set selected = '' %}
+											{% if appTitle.id in listAppTitleSelected %}
+												{% set selected = ' selected' %}
+											{% endif %}
+											<option {{ selected }} id="{{ appTitle.id }}" value="{{ appTitle.id }}">in {{ appTitle.title }}</option>
+									{% endfor %}
+								</select>
+								<select data-template-bind='[{"attribute":"name","value":"history_type"},{"attribute":"data-coordinate-group","value":"coordinate_group"}]' class="hide_if_init show_if_apptitle_chosen col-md-2 form-control inline-select-long m-r-xs m-t-sm" style="width:190px" id="au_history_duration">
+									<option value="">Select Duration</option>
+									<option value="last_happened_at">whom last login is before</option>
+									<option value="install_time_since">who have installed since</option>
+									<option value="install_time_duration">who have installed in between</option>
+									<option value="install_time_last">who have installed last</option>
+								</select>
+								<!-- last_happened_at -->
+								<div class="hide_if_init show_if_history_type_chosen col-md-4 m-r-xs m-t-sm" data-for-history-type="last_happened_at" data-template-bind='[{"attribute":"data-coordinate-group","value":"coordinate_group"}]'>
+									<div class="input-group date" data-provide="datepicker" style="width:120px">
+										<div class="input-group-addon">
+											<span class="fa fa-calendar"></span>
+										</div>
+										<input data-template-bind='[{"attribute":"name","value":"history_value_0"}]' data-group="required_if_all" readonly="readonly" class="datepicker form-control" data-date-format="dd/mm/yyyy" placeholder="dd/mm/yyyy" style="margin-top:0;" >
+									</div>
+								</div>
+								<!-- install_time_since -->
+								<div class="col-md-4 m-r-xs m-t-sm"  data-for-history-type="install_time_since" data-template-bind='[{"attribute":"data-coordinate-group","value":"coordinate_group"}]'>
+									<div class="input-group date" data-provide="datepicker" style="width:120px">
+										<div class="input-group-addon">
+											<span class="fa fa-calendar"></span>
+										</div>
+										<input data-template-bind='[{"attribute":"name","value":"history_value_0"}]' data-group="required_if_all" readonly="readonly" class="datepicker form-control" data-date-format="dd/mm/yyyy" placeholder="dd/mm/yyyy" style="margin-top:0;" >
+									</div>
+								</div>
+								<!-- install_time_duration -->
+								<div class="col-md-3 m-r-xs m-t-sm"  data-for-history-type="install_time_duration" data-template-bind='[{"attribute":"data-coordinate-group","value":"coordinate_group"}]'>
+									<input data-template-bind='[{"attribute":"name","value":"history_value_0"}]' type="hidden" >
+									<input data-template-bind='[{"attribute":"name","value":"history_value_1"}]' type="hidden" >
+									<input data-template-bind='[{"attribute":"name","value":"history_value_0_1"}]' class="form-control" style="width: 190px;" type="text"  />
+								</div>
+								<!-- install_time_last -->
+								<div class="col-md-4  m-r-xs m-t-sm"  data-for-history-type="install_time_last" data-template-bind='[{"attribute":"data-coordinate-group","value":"coordinate_group"}]'>
+									<select data-template-bind='[{"attribute":"name","value":"history_value_0"}]' class="form-control inline-select-long" style="width: 120px;">
+									    <option value="7">7 days</option>
+									    <option value="14">14 days</option>
+									    <option value="30">30 days</option>
+									</select>
+								</div>
+							</div> <!-- end of class row no-margin -->
+
+						</div> <!-- end of class panel-body -- >
+					</div> <!-- end of class panel panel-default -- >
+
+				</div> <!-- end of class row no-margin -->
+
+			</div> <!-- end of class col-md-9 -->
+		</div> <!-- end of class history_filter_container -->
+    </script>
+    <script type="text/html" id="usage_filter_tpl">
+    	<div class="usage_filter_container" data-template-bind='[{"attribute":"data-seq","value":"seq"}]'>
+    		<div class="remove_if_first_filter col-md-1 m-t-md" data-template-bind='[{"attribute":"data-coordinate-group","value":"coordinate_group"}]'>
+				<button class="remove_current_filter btn btn-primary btn-circle" data-template-bind='[{"attribute":"data-coordinate-group","value":"coordinate_group"}]' type="button">
+					<i class="fa fa-times"></i>
+				</button>
+			</div>
+			<div class="remove_if_first_filter col-md-2 m-t-md" data-template-bind='[{"attribute":"data-coordinate-group","value":"coordinate_group"}]' style="text-align: left;font-weight: bold;;padding: 5px 0px">
+				<input  data-template-bind='[{"attribute":"name","value":"append_relation"},{"attribute":"data-coordinate-group","value":"coordinate_group"}]' type="radio" value="and" checked> and </input> &nbsp;&nbsp;
+				<input  data-template-bind='[{"attribute":"name","value":"append_relation"},{"attribute":"data-coordinate-group","value":"coordinate_group"}]' type="radio" value="or"> or </input>
+			</div>
+
+			<div class="col-md-9">
+				<div class="row no-margin">
+					<div class="panel panel-default">
+						<div class="panel-body" style="background:#F5F5F5">
+							<div class="row no-margin">
+								<select name="filter_type" data-template-bind='[{"attribute":"data-coordinate-group","value":"coordinate_group"},{"attribute":"data-seq","value":"seq"}]' class="col-md-2 form-control inline-select-long m-r-xs" style="width: 200px;" id="au_type#2">
+									<option value="user_history">History of user</option>
+									<option value="user_behaviors" selected="">Behaviors of user</option>
+								</select>
+							</div>
+							<div class="row no-margin">
+								<select data-template-bind='[{"attribute":"name","value":"in"},{"attribute":"data-coordinate-group","value":"coordinate_group"}]'  data-group="in-app-detail" class="col-md-2 form-control inline-select-long m-r-xs m-t-sm" style="width: 140px;" id="au_behaviors_apptitle">
+									<option value="">select app title</option>
+									{% for appTitle in listAppTitle %}
+										{% set selected = '' %}
+										{% if appTitle.id in listAppTitleSelected %}
+											{% set selected = ' selected' %}
+										{% endif %}
+										<option {{ selected }} id="{{ appTitle.id }}" value="{{ appTitle.id }}">in {{ appTitle.title }}</option>
+									{% endfor %}
+						    	</select>
+								<select data-template-bind='[{"attribute":"name","value":"perform"},{"attribute":"data-coordinate-group","value":"coordinate_group"}]' class="hide_if_init show_if_apptitle_chosen col-md-2 form-control inline-select-long m-r-xs m-t-sm" style="width: 120px;">
+								    <option value="">select behaviour</option>
+								    <option value="perform" >who have perform</option>
+								    <option value="not_perform">who haven't perform</option>
+								</select>
+								<select data-template-bind='[{"attribute":"name","value":"behaviour_id"},{"attribute":"data-coordinate-group","value":"coordinate_group"}]' data-group="required_if_all" data-associated-cat-select="actions[0][cat_id]" class="hide_if_init show_if_has_perform_chosen col-md-2 form-control inline-select-long m-r-xs m-t-sm" style="width: 140px;">
+								    	<option value="">select in-app event</option>
+								</select>
+							</div>
+							<div class="row no-margin hide_if_not_perform show_if_iae_chosen" data-template-bind='[{"attribute":"data-coordinate-group","value":"coordinate_group"}]'>
+								<select data-template-bind='[{"attribute":"name","value":"frequent_type"},{"attribute":"data-coordinate-group","value":"coordinate_group"}]' class="hide_if_init show_if_iae_chosen col-md-2 form-control inline-select-long m-r-xs m-t-sm"" style="width: 140px;">
+								    <option value="event_count" selected>with event count</option>
+								    <option class="show_if_iap" value="revenue">with revenue</option>
+								</select>
+								<select data-template-bind='[{"attribute":"name","value":"frequent_expression"},{"attribute":"data-coordinate-group","value":"coordinate_group"}]' class="hide_if_init show_if_iae_chosen col-md-2 form-control inline-select-long m-r-xs m-t-sm"" style="width: 140px;">
+								    <option value=">">More than</option>
+									<option value="<">Less than</option>
+									<option value="=">Exactly</option>
+									<option value="+">Between</option>
+								</select>
+								<input data-template-bind='[{"attribute":"name","value":"frequent_value_0"},{"attribute":"data-coordinate-group","value":"coordinate_group"}]' type="text" class="hide_if_init show_if_iae_chosen col-md-2 form-control m-r-xs m-t-sm numeric_only" placeholder="1" style="width:80px">
+								<span data-template-bind='[{"attribute":"data-coordinate-group","value":"coordinate_group"}]' class="show_if_between col-md-1" style="padding: 20px 0px 0px 0px; width: 50px; display: block;">and</span>
+								<input data-template-bind='[{"attribute":"name","value":"frequent_value_1"},{"attribute":"data-coordinate-group","value":"coordinate_group"}]' type="text" class="show_if_between col-md-2 form-control m-r-xs m-t-sm numeric_only" placeholder="1" style="width:80px">
+								<span data-template-bind='[{"attribute":"data-coordinate-group","value":"coordinate_group"}]' class="show_if_iap col-md-1" style="padding: 20px 0px 0px 0px;width:50px">$</span>
+
+			                </div>
+			                <div class="row no-margin">
+								<select class="hide_if_init show_if_apptitle_chosen col-md-3 form-control inline-select-long m-r-xs m-t-sm" style="width: 180px;" data-template-bind='[{"attribute":"name","value":"cat_id"},{"attribute":"data-coordinate-group","value":"coordinate_group"}]' class="form-control inline-select-long" style="width: 140px;">
+						    		<option value="">select interest</option>
+						    	</select>
+						    </div>
+							<div class="row no-margin">
+						    	<select data-template-bind='[{"attribute":"name","value":"happened_at_type"},{"attribute":"data-coordinate-group","value":"coordinate_group"}]' class="hide_if_init show_if_apptitle_chosen col-md-3 form-control inline-select-long m-r-xs m-t-sm" style="width: 110px;">
+								    <option value="">select duration</option>
+								    <option value="duration">in between</option>
+								    <option value="last">for the last</option>
+								    <option value="lifetime">during lifetime</option>
+								</select>
+								<!-- duration -->
+								<div class ="hide_if_init show_if_happened_at_type_chosen col-md-7 m-r-xs m-t-sm" data-for-happened-at-type="duration" data-template-bind='[{"attribute":"data-coordinate-group","value":"coordinate_group"}]'>
+								    <input data-template-bind='[{"attribute":"name","value":"happened_at_value_0"},{"attribute":"data-coordinate-group","value":"coordinate_group"}]' type="hidden" />
+								    <input data-template-bind='[{"attribute":"name","value":"happened_at_value_1"},{"attribute":"data-coordinate-group","value":"coordinate_group"}]' type="hidden" />
+									<input data-template-bind='[{"attribute":"name","value":"happened_at_value_0_1"},{"attribute":"data-coordinate-group","value":"coordinate_group"}]' class="form-control" style="width: 190px;" type="text" />
+								</div>
+								<!-- last -->
+								<div class ="hide_if_init col-md-8 m-r-xs m-t-sm" data-for-happened-at-type="last" data-template-bind='[{"attribute":"data-coordinate-group","value":"coordinate_group"}]' >
+									<select data-template-bind='[{"attribute":"name","value":"happened_at_value_0"},{"attribute":"data-coordinate-group","value":"coordinate_group"}]' class="col-md-3 form-control inline-select-long" style="width: 130px;">
+									    <option value="7">7 days</option>
+									    <option value="14">14 days</option>
+									    <option value="30">30 days</option>
+									</select>
+								</div>
+								<!-- lifetime -->
+								<div class ="hide_if_init col-md-8" data-for-happened-at-type="lifetime" data-template-bind='[{"attribute":"data-coordinate-group","value":"coordinate_group"}]' >
+									<input  data-template-bind='[{"attribute":"name","value":"happened_at_value_0"},{"attribute":"data-coordinate-group","value":"coordinate_group"}]' type="hidden" value ="1">
+			                	</div>
+							</div>
+						</div>  <!-- end of class panel-body -- >
+					</div> <!-- end of class panel panel-default -- >
+				</div> <!-- end of class row no-margin -->
+			</div>	<!-- end of class col-md-9 -->
+		</div> <!-- end of class usage_filter_container -->
+    </script>
+{% endblock %}

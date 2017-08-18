@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Hypergrowth | Admin</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.5 -->
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+	<!-- DataTables -->
+    <link rel="stylesheet" href="plugins/datatables/dataTables.bootstrap.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+	
+	<link rel="stylesheet" href="plugins/carousel/carousel.css" />
+	
+	<style>
+		.progress.progress-small {
+			height: 10px;
+			line-height: 10px;
+		}
+	</style>
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body class="hold-transition skin-red sidebar-mini">
+    <div class="wrapper">
+
+      <header class="main-header">
+        <!-- Logo -->
+        <a href="da.html" class="logo">
+          <!-- mini logo for sidebar mini 50x50 pixels -->
+          <span class="logo-mini"><img src="img/hypergrowth_small_red_transparent_16x35.png"></span>
+          <!-- logo for regular state and mobile devices -->
+          <span class="logo-lg"><img src="img/hypergrowth_red_transparent_102x35.png"></span>
+        </a>
+        <!-- Header Navbar: style can be found in header.less -->
+        <nav class="navbar navbar-static-top" role="navigation">
+          <!-- Sidebar toggle button-->
+          <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+            <span class="sr-only">Toggle navigation</span>
+          </a>
+          <div class="navbar-custom-menu">
+            <ul class="nav navbar-nav">
+              <!-- User Account: style can be found in dropdown.less -->
+              <li class="dropdown user user-menu">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                  <img src="img/angiedang.jpg" class="user-image" alt="User Image">
+                  <span class="hidden-xs">Angie Dang</span>
+                </a>
+                <ul class="dropdown-menu">
+                  <!-- User image -->
+                  <li class="user-header">
+                    <img src="img/angiedang.jpg" class="img-circle" alt="User Image">
+                    <p>
+                      Angie Dang - Bukalapak Client
+                      <small>Member since Jun. 2015</small>
+                    </p>
+                  </li>
+                  <!-- Menu Footer-->
+                  <li class="user-footer">
+                    <div class="pull-left">
+                      <a href="cef.html" class="btn btn-default btn-flat">Edit Profile</a>
+                    </div>
+                    <div class="pull-right">
+                      <a href="index.html" class="btn btn-default btn-flat">Sign out</a>
+                    </div>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </header>
+      <!-- Left side column. contains the logo and sidebar -->
+      <aside class="main-sidebar">
+        <!-- sidebar: style can be found in sidebar.less -->
+        <section class="sidebar">
+          <!-- Sidebar user panel -->
+          <div class="user-panel">
+            <div class="pull-left image">
+              <img src="img/angiedang.jpg" class="img-circle" alt="User Image">
+            </div>
+            <div class="pull-left info">
+              <p>Angie Dang</p>
+              <a href="#"><i class="fa  fa-hand-peace-o"></i> Bukalapak Client</a>
+            </div>
+          </div>
+
+          <!-- sidebar menu: : style can be found in sidebar.less -->
+          <ul class="sidebar-menu">
+            <li>
+              <a href="md.html">
+                <i class="fa fa-dashboard"></i> <span>Main Dashboard</span>
+              </a>
+            </li>
+            <li>
+              <a href="ev.html">
+                <i class="fa fa-users"></i> <span>Event Mapping</span>
+              </a>
+            </li>
+			<li>
+              <a href="ai.html">
+                <i class="fa fa-user-secret"></i> <span>Audience Interest</span>
+              </a>
+            </li>
+			<li>
+              <a href="ca.html">
+                <i class="fa fa-list"></i> <span>Custom Audience</span>
+              </a>
+            </li>
+			<li class="active">
+              <a href="ad.html">
+                <i class="fa fa-list"></i> <span>Audience Deck</span>
+              </a>
+            </li>
+          </ul>
+        </section>
+        <!-- /.sidebar -->
+      </aside>
+
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1>
+            Audience Deck
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li class="active">Audience Deck</li>
+          </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+			<!-- First Panel -->
+			<div class="row">
+				<div class="col-md-12">
+					<form class="form-horizontal">
+						<div class="form-group">
+							<div class="col-md-12">
+								<div id="cont">
+									<div class="carousel-container">
+										<div id="icarousel">
+											<div class="slide">
+												<div class="card">
+													<div class="row" style="padding-bottom: 5px;font-size:2rem">
+														<div class="col-sm-6 text-left"><i class="fa fa-android"></i></div>
+														<div class="col-sm-6 text-right">TH</div>
+													</div>
+													<h4>TH Promo Hunter</h4>
+													<div class="card-des">Users who only take action when there is promo</div>
+													<div style="text-align:center">
+														<a class="btn btn-app">
+															<i class="fa fa-edit"></i> Edit
+														</a>
+														<a class="btn btn-app">
+															<i class="fa fa-trash"></i> Delete
+														</a>
+													</div>
+												</div>
+											</div>
+											<div class="slide">
+												<div class="card">
+													<div class="row" style="padding-bottom: 5px;font-size:2rem">
+														<div class="col-sm-6 text-left"><i class="fa fa-android"></i></div>
+														<div class="col-sm-6 text-right">SG</div>
+													</div>
+													<h4>SG Music Lover</h4>
+													<div class="card-des">Users who buy music gadgets using Android devices</div>
+													<div style="text-align:center">
+														<a class="btn btn-app">
+															<i class="fa fa-edit"></i> Edit
+														</a>
+														<a class="btn btn-app">
+															<i class="fa fa-trash"></i> Delete
+														</a>
+													</div>
+												</div>
+											</div>
+											<div class="slide">
+												<div class="card">
+													<div class="row" style="padding-bottom: 5px;font-size:2rem">
+														<div class="col-sm-6 text-left"><i class="fa fa-apple"></i></div>
+														<div class="col-sm-6 text-right">TH</div>
+													</div>
+													<h4>TH Wanderlust</h4>
+													<div class="card-des">Thai users who recently travels</div>
+													<div style="text-align:center">
+														<a class="btn btn-app">
+															<i class="fa fa-edit"></i> Edit
+														</a>
+														<a class="btn btn-app">
+															<i class="fa fa-trash"></i> Delete
+														</a>
+													</div>
+												</div>
+											</div>
+											<div class="slide">
+												<div class="card">
+													<div class="row" style="padding-bottom: 5px;font-size:2rem">
+														<div class="col-sm-6 text-left"><i class="fa fa-apple"></i></div>
+														<div class="col-sm-6 text-right">SG</div>
+													</div>
+													<h4>SG White Collar</h4>
+													<div class="card-des">Singapore business users who interested in ebooks</div>
+													<div style="text-align:center">
+														<a class="btn btn-app">
+															<i class="fa fa-edit"></i> Edit
+														</a>
+														<a class="btn btn-app">
+															<i class="fa fa-trash"></i> Delete
+														</a>
+													</div>
+												</div>
+											</div>
+											<div class="slide">
+												<div class="card">
+													<div class="row" style="padding-bottom: 5px;font-size:2rem">
+														<div class="col-sm-6 text-left"><i class="fa fa-android"></i></div>
+														<div class="col-sm-6 text-right">US</div>
+													</div>
+													<h4>US Nerds</h4>
+													<div class="card-des">US Users who spend more than 300$ on computer accessories </div>
+													<div style="text-align:center">
+														<a class="btn btn-app">
+															<i class="fa fa-edit"></i> Edit
+														</a>
+														<a class="btn btn-app">
+															<i class="fa fa-trash"></i> Delete
+														</a>
+													</div>
+												</div>
+											</div>
+											<div class="slide">
+												<div class="card">
+													<div class="row" style="padding-bottom: 5px;font-size:2rem">
+														<div class="col-sm-6 text-left"><i class="fa fa-android"></i></div>
+														<div class="col-sm-6 text-right">MY</div>
+													</div>
+													<h4>Malaysian Gamers</h4>
+													<div class="card-des">Game players who made more than 40 transactions per month</div>
+													<div style="text-align:center">
+														<a class="btn btn-app">
+															<i class="fa fa-edit"></i> Edit
+														</a>
+														<a class="btn btn-app">
+															<i class="fa fa-trash"></i> Delete
+														</a>
+													</div>
+												</div>
+											</div>
+											<div class="slide">
+												<div class="card">
+													<div class="row" style="padding-bottom: 5px;font-size:2rem">
+														<div class="col-sm-6 text-left"><i class="fa fa-android"></i></div>
+														<div class="col-sm-6 text-right">VN</div>
+													</div>
+													<h4>VN Freeloader</h4>
+													<div class="card-des">High Retention Players with no purchase</div>
+													<div style="text-align:center">
+														<a class="btn btn-app">
+															<i class="fa fa-edit"></i> Edit
+														</a>
+														<a class="btn btn-app">
+															<i class="fa fa-trash"></i> Delete
+														</a>
+													</div>
+												</div>
+											</div>
+											<div class="slide">
+												<div class="card">
+													<div class="row" style="padding-bottom: 5px;font-size:2rem">
+														<div class="col-sm-6 text-left"><i class="fa fa-apple"></i></div>
+														<div class="col-sm-6 text-right">PH</div>
+													</div>
+													<h4>PH Gadgets</h4>
+													<div class="card-des">User who recently search for Phone Accessories</div>
+													<div style="text-align:center">
+														<a class="btn btn-app">
+															<i class="fa fa-edit"></i> Edit
+														</a>
+														<a class="btn btn-app">
+															<i class="fa fa-trash"></i> Delete
+														</a>
+													</div>
+												</div>
+											</div>
+											<div class="slide">
+												<div class="card">
+													<div class="row" style="padding-bottom: 5px;font-size:2rem">
+														<div class="col-sm-6 text-left"><i class="fa fa-android"></i></div>
+														<div class="col-sm-6 text-right">UK</div>
+													</div>
+													<h4>UK Highrollers</h4>
+													<div class="card-des">High spenders on casino apps</div>
+													<div style="text-align:center">
+														<a class="btn btn-app">
+															<i class="fa fa-edit"></i> Edit
+														</a>
+														<a class="btn btn-app">
+															<i class="fa fa-trash"></i> Delete
+														</a>
+													</div>
+												</div>
+											</div>
+											<div class="slide">
+												<div class="card">
+													<div class="row" style="padding-bottom: 5px;font-size:2rem">
+														<div class="col-sm-6 text-left"><i class="fa fa-android"></i></div>
+														<div class="col-sm-6 text-right">CA</div>
+													</div>
+													<h4>CA Campers</h4>
+													<div class="card-des">Users who recently buying camping products</div>
+													<div style="text-align:center">
+														<a class="btn btn-app">
+															<i class="fa fa-edit"></i> Edit
+														</a>
+														<a class="btn btn-app">
+															<i class="fa fa-trash"></i> Delete
+														</a>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<div class="col-md-12" style="text-align:center;font-size:3.5rem;font-weight:bold;color:#ab0808">
+								<div id="carddisplay"></div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-2 control-label">Action Type</label>
+							<div class="col-md-10">
+								<select class="form-control">
+									<option>Install</option>
+									<option>Add to cart</option>
+									<option>Purchase</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-2 control-label">Time range</label>
+							<div class="col-md-10">
+								<select class="form-control">
+									<option>24 hours</option>
+									<option>3 days</option>
+									<option>1 week</option>
+									<option>1 month</option>
+								</select>
+							</div>
+						</div>
+						<button type="submit" class="btn btn-danger pull-right">Show Audience Data</button>
+					</form>
+				</div>
+			</div>
+			<div class="row" style="margin-top:20px">
+				<div class="col-md-12">
+					<div class="box box-danger">
+						<div class="box-body">
+							<table id="example" class="table table-bordered table-striped">
+								<thead>
+									<tr>
+										<th>Date</th>
+										<th>Hypid</th>
+										<th>Device ID</th>
+										<th>Mobile App</th>
+										<th>Event Type</th>
+										<th>Event Value</th>
+										<th>Currency</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>2015-02-17 23:48:20</td>
+										<td>
+											<a href="#" class="btn btn-block btn-danger btn-xs" data-toggle="modal" data-target="#04875454">04875454</a>
+										</td>
+										<td>07026770</td>
+										<td>Bukalapak Android</td>
+										<td>Purchase</td>
+										<td>167000</td>
+										<td>IDR</td>
+									</tr>
+									<tr>
+										<td>2015-09-25 13:04:38</td>
+										<td>73449196</td>
+										<td>97797477</td>
+										<td>Bukalapak iOS</td>
+										<td>Install</td>
+										<td>0</td>
+										<td>IDR</td>
+									</tr>
+									<tr>
+										<td>2015-09-25 13:05:10</td>
+										<td>73449196</td>
+										<td>97797477</td>
+										<td>Bukalapak iOS</td>
+										<td>Add to Cart</td>
+										<td>172000</td>
+										<td>IDR</td>
+									</tr>
+								</tbody>
+								<tfoot>
+									<tr>
+										<th>Date</th>
+										<th>Hypid</th>
+										<th>Device ID</th>
+										<th>Mobile App</th>
+										<th>Event Type</th>
+										<th>Event Value</th>
+										<th>Currency</th>
+									</tr>
+								</tfoot>
+							</table>
+						</div><!-- /.box-body -->
+					</div><!-- /.box -->
+				</div>
+			</div>
+			<!-- END First Panel-->   
+			
+			<!-- Modal -->
+			<div class="modal fade" id="04875454" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-sm">
+					<div class="modal-content" style="background-color: #ab0808; background-image: url(http://www.transparenttextures.com/patterns/crossword.png);">
+						<div class="modal-body" style="height:535px; max-height:535px;">
+							<img class="profile-user-img img-responsive img-circle" src="img/user.png" alt="User profile picture">
+							<h4 class="text-center" style="color:#ffffff;">Hypid #563ebd31e37c55.16002822</h4>
+							
+							<div class="nav-tabs-custom">
+								<ul class="nav nav-tabs">
+									<li class="active">
+										<a href="#tab_1" data-toggle="tab" aria-expanded="true">
+											<b>User Info</b>
+										</a>
+									</li>
+									<li class="">
+										<a href="#tab_2" data-toggle="tab" aria-expanded="false">
+											<b>Intent Score</b>
+										</a>
+									</li>
+								</ul>
+								<div class="tab-content" style="height: 320px; max-height: 320px;">
+									<div class="tab-pane active" id="tab_1">
+										<ul class="list-group list-group-unbordered">
+											<li class="list-group-item">
+												<p><b>Platform</b> <a class="pull-right">Android</a></p>
+												<i class="fa fa-android pull-left"></i>Android ID <h6 style="margin:0px" class="text-muted">43ff5bb8e4a3ee02</h6>
+												<i class="fa fa-android pull-left"></i>Advertising ID <h6 style="margin:0px" class="text-muted">d0fe1c13-cf9f-4e9f-a434-0664ebc41648</h6>
+											<li class="list-group-item">
+												<b>Country</b> <a class="pull-right">Indonesia</a>
+											</li>
+											<li class="list-group-item">
+												<b>Total Transaction</b> <a class="pull-right">22</a>
+											</li>
+											<li class="list-group-item">
+												<b>Total Money Spent</b> <a class="pull-right">$543</a>
+											</li>
+											<li class="list-group-item">
+												<b>Last Transaction</b> <a class="pull-right">2015-02-17 20:34:12</a>
+											</li>
+											<li class="list-group-item">
+												<b>Last Activity</b> <a class="pull-right">2015-10-22 16:16:53</a>
+											</li>
+										</ul>
+									</div><!-- /.tab-pane -->
+									<div class="tab-pane" id="tab_2">
+										<table id="tableintent" class="table">
+											<b>Intent score by transactions</b> 
+											<span class="pull-right badge bg-blue" style="margin-right: 10px;">33</span>
+											<thead>
+												<tr>
+													<th colspan="2" rowspan="1" style="padding: 10px 0px;">Intent score by Interest</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>Business</td>
+													<td style="width:100px">
+														<span class="pull-right badge bg-green">55</span>
+													</td>
+												</tr>
+												<tr>
+													<td>Fashion</td>
+													<td>
+														<span class="pull-right badge bg-green">80</span>
+													</td>
+												</tr>
+												<tr>
+													<td>Electronics</td>
+													<td>
+														<span class="pull-right badge bg-green">65</span>
+													</td>
+												</tr>
+												<tr>
+													<td>F &amp; B</td>
+													<td>
+														<span class="pull-right badge bg-green">44</span>
+													</td>
+												</tr>
+												<tr>
+													<td>Travel</td>
+													<td>
+														<span class="pull-right badge bg-green">25</span>
+													</td>
+												</tr>
+												<tr>
+													<td>Entertainment</td>
+													<td>
+														<span class="pull-right badge bg-green">78</span>
+													</td>
+												</tr>
+												<tr>
+													<td>Sports &amp; Fitness</td>
+													<td>
+														<span class="pull-right badge bg-green">33</span>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+									</div><!-- /.tab-pane -->
+								</div><!-- /.tab-content -->
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+	
+			
+
+        </section><!-- /.content -->
+      </div><!-- /.content-wrapper -->
+      <footer class="main-footer">
+        <div class="pull-right hidden-xs">
+          <b>Version</b> 1.1.0
+        </div>
+        <strong>Copyright &copy; 2015 <a href="http://www.hypergrowth.co"> HyperGrowth Pte Ltd</a>.</strong> All rights reserved.
+      </footer>
+
+    </div><!-- ./wrapper -->
+
+    <!-- jQuery 2.1.4 -->
+    <script src="plugins/jQuery/jQuery-2.1.4.min.js"></script>
+    <!-- jQuery UI 1.11.4 -->
+    <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+    <script>
+      $.widget.bridge('uibutton', $.ui.button);
+    </script>
+    <!-- Bootstrap 3.3.5 -->
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+	<!-- DataTables -->
+    <script src="plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="plugins/datatables/dataTables.bootstrap.min.js"></script>
+    <!-- Slimscroll -->
+    <script src="plugins/slimScroll/jquery.slimscroll.min.js"></script>
+    <!-- FastClick -->
+    <script src="plugins/fastclick/fastclick.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="dist/js/app.min.js"></script>
+	<!-- page script -->
+		<script src="plugins/carousel/raphael-min.js"></script>
+		<script src="plugins/carousel/jquery.mousewheel.js"></script>
+		<script src="plugins/carousel/jquery.easing.1.3.js"></script>
+		<script src="plugins/carousel/icarousel.packed.js"></script>
+    <script>
+		$(function () {
+			$("#example").DataTable();
+			$('#tableintent').DataTable({
+			  "paging": true,
+			  "lengthChange": false,
+			  "searching": false,
+			  "ordering": false,
+			  "info": false,
+			  "autoWidth": false,
+			  "pageLength": 5,
+			  "pagingType":"simple",
+			  "scrollCollapse": false,
+			  "columns": [
+				{ "width": "50%" },
+				{ "width": "50%" }
+			  ],
+			  "language": {
+				"paginate": {
+				  "next": ">",
+				  "previous": "<"
+				}
+			  }
+			});
+			//$("#tableintent thead").remove()
+		});
+		$(document).ready(function(){
+			$('#icarousel').iCarousel({
+				autoPlay: false,
+				easing: 'ease-in-out',
+				slides: 10,
+				slidesSpace: 180,
+				make3D: true,
+				touchNav: true,
+				animationSpeed: 800,
+				directionNav: false,
+				timer: "false",
+				mouseWheel: false
+			});
+			
+			//var original_cardcontent = $('.current .card h4').text()+': '+$('.current .card .card-des').text();
+			var original_cardcontent = $('.current .card h4').text();
+			$( '#carddisplay').append(original_cardcontent);
+			
+			$('.slide').click(function (){
+				//var cardcontent = $('h4',this).text()+': '+$('.card-des',this).text();
+				var cardcontent = $('h4',this).text();
+				$( "#carddisplay" ).empty();
+				$( '#carddisplay').append(cardcontent);
+			})
+			/*
+			.bind('mousewheel', function(){
+				$( "#carddisplay" ).empty();
+				var cardcontent = $('.current .card h4').text()+': '+$('.current .card .card-des').text();
+				$( '#carddisplay').append(cardcontent);
+			})
+			*/
+		});
+
+
+    </script>
+  </body>
+</html>

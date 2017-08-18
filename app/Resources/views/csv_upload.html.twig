@@ -1,0 +1,121 @@
+{% extends 'base2.html.twig' %}
+{% block body %}
+
+<section class="content-header" style="margin: -2em 0 0 -2em !important;">
+    <h1 style="font-size: 24px; margin: 0 0 1em 0.5em;">
+      Upload CSV
+    </h1>
+    <ol class="breadcrumb">
+      <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li class="active">Upload CSV</li>
+    </ol>
+</section> 
+{% if error != "" %}
+    <p>{{ error }}</p>
+{% endif %}
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="box box-danger">
+            <div class="box-header with-border">
+                <h3 class="box-title">Upload CSV</h3>
+            </div>
+            <form action="{{ path('hyper_event_csvupload') }}" method="post" enctype="multipart/form-data" role="form">
+                <table class="table">
+                    <tr>
+                        <td>Select CSV file to upload</td>
+                        <td>:&nbsp;&nbsp;</td>
+                        <td><input type="file" name="csv" id="fileToUpload" class="form-control"></td>
+                    </tr>
+                    
+                    <tr>
+                        <td>Select Application ID</td>
+                        <td>:</td>
+                        <td>
+                            <select name="app_id" class="form-control">
+            
+                            {% for key,label in app_id %}
+                                <option value="{{ key }}">{{ label }}</option>
+                            {% endfor %}
+            
+                            </select>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td>Select Application Name</td>
+                        <td>:</td>
+                        <td>
+                            <select name="app_name" class="form-control">
+            
+                            {% for key,label in app_name %}
+                                <option value="{{ key }}">{{ label }}</option>
+                            {% endfor %}
+            
+                            </select>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td>Select Data Source Provider</td>
+                        <td>:</td>
+                        <td>
+                            <select name="provider" class="form-control">
+            
+                            {% for key,label in provider %}
+                                <option value="{{ key }}">{{ label }}</option>
+                            {% endfor %}
+            
+                            </select>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td>Select Event Type</td>
+                        <td>:</td>
+                        <td>
+                            <select name="event_type" class="form-control">
+            
+                            {% for key,label in event_type %}
+                                <option value="{{ key }}">{{ label }}</option>
+                            {% endfor %}
+            
+                            </select>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td>Select Attribution Type</td>
+                        <td>:</td>
+                        <td>
+                            <div class="form-group">
+                            <select name="attribution_type" class="form-control">
+            
+                            {% for key,label in attribution_type %}
+                                <option value="{{ key }}">{{ label }}</option>
+                            {% endfor %}
+            
+                            </select>
+                            </div>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td colspan="3" align="right">
+                            <input type="submit" value="Upload File" name="submit" class="btn btn-danger">
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+<style>
+    table tbody tr { padding: 10px 0 10px 0; position: relative; line-height: 30px;}
+    
+    .separator
+    {
+        height: 10px;
+    }
+</style>
+{% endblock %}

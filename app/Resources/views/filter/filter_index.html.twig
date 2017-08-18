@@ -1,0 +1,588 @@
+{% extends 'base2.html.twig' %}
+{% block body %}
+{% if exception is defined %}
+<h3 style="text-align:center">{{ exception }}</h3>
+{% else %}
+<section class="content-header" style="margin: -2em 0 0 -2em !important;">
+    <h1 style="font-size: 24px; margin: 0 0 1em 0.5em;">
+      Audience Deck
+    </h1>
+    <ol class="breadcrumb">
+      <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li class="active">Audience Deck</li></li>
+    </ol>
+</section> 
+
+<!-- Main content -->
+<div class="row">
+    <div class="col-md-12">
+		<form class="form-horizontal" id="action_data_form" action="{{ path('dashboard_audience') }}" method="post" enctype="multipart/form-data">
+		<input type="hidden" name="last_preset_filter_id" value="
+		{% if last_preset_filter_id is defined %}
+			{{ last_preset_filter_id }}
+		{% endif %} ">
+		
+        <input type="hidden" name="last_action_type" value="
+        {% if last_action_type is defined %}
+        	{{ last_action_type }}
+    	{% endif %} ">
+    	
+        <input type="hidden" name="last_sort_field" value="
+        {% if last_sort_field is defined %}
+        	{{ last_sort_field }}" 
+        {% endif %} id="last_sort_field">
+        
+        <input type="hidden" name="sort_field" value="
+        {% if sort_field is defined %}
+        	{{ sort_field }}" 
+        {% endif %}	id="sort_field">
+        
+        <input type="hidden" name="sort_order" value="
+        {% if sort_order is defined %}
+        	{{ sort_order }}"
+        {% endif %} id="sort_order">
+        	
+        <input type="hidden" name="preset_filter_id" id="preset_filter_id" value="" />
+			<div class="form-group">
+				<div class="col-md-12">
+					<div id="cont">
+						<div class="carousel-container">
+							<div id="icarousel">
+								{% if count_card > 0 %}
+								{% for preset_filter in preset_filters_by_auth_session %}
+									<div class="slide" id="{{preset_filter.id}}" name="preset_filter_id__">
+										<div class="card">
+											<div class="row" style="padding-bottom: 5px;font-size:2rem">
+												<div class="col-sm-6 text-left"><i class="fa fa-android"></i></div>
+												<div class="col-sm-6 text-right">TH</div>
+											</div>
+											<h4>{{ preset_filter.presetName }}</h4>
+											<div class="card-des">Description for {{ preset_filter.presetName }}</div>
+											<div style="font-size:4rem;text-align:center">
+												<i class="fa fa-music"></i>
+											</div>
+										</div>
+									</div>
+								{% endfor %}
+								{% else %}
+									<div class="slide">
+										<div class="card">
+											<div class="row" style="padding-bottom: 5px;font-size:2rem">
+												<div class="col-sm-6 text-left"><i class="fa fa-android"></i></div>
+												<div class="col-sm-6 text-right">TH</div>
+											</div>
+											<h4>TH Promo Hunter</h4>
+											<div class="card-des">Users who only take action when there is promo</div>
+											<div style="font-size:4rem;text-align:center">
+												<i class="fa fa-music"></i>
+											</div>
+										</div>
+									</div>
+									<div class="slide">
+										<div class="card">
+											<div class="row" style="padding-bottom: 5px;font-size:2rem">
+												<div class="col-sm-6 text-left"><i class="fa fa-android"></i></div>
+												<div class="col-sm-6 text-right">SG</div>
+											</div>
+											<h4>SG Music Lover</h4>
+											<div class="card-des">Users who buy music gadgets using Android devices</div>
+											<div style="font-size:4rem;text-align:center">
+												<i class="fa fa-music"></i>
+											</div>
+										</div>
+									</div>
+									<div class="slide">
+										<div class="card">
+											<div class="row" style="padding-bottom: 5px;font-size:2rem">
+												<div class="col-sm-6 text-left"><i class="fa fa-apple"></i></div>
+												<div class="col-sm-6 text-right">TH</div>
+											</div>
+											<h4>TH Wanderlust</h4>
+											<div class="card-des">Thai users who recently travels</div>
+											<div style="font-size:4rem;text-align:center">
+												<i class="fa fa-plane"></i>
+											</div>
+										</div>
+									</div>
+									<div class="slide">
+										<div class="card">
+											<div class="row" style="padding-bottom: 5px;font-size:2rem">
+												<div class="col-sm-6 text-left"><i class="fa fa-apple"></i></div>
+												<div class="col-sm-6 text-right">SG</div>
+											</div>
+											<h4>SG White Collar</h4>
+											<div class="card-des">Singapore business users who interested in ebooks</div>
+											<div style="font-size:4rem;text-align:center">
+												<i class="fa fa-suitcase"></i>
+											</div>
+										</div>
+									</div>
+									<div class="slide">
+										<div class="card">
+											<div class="row" style="padding-bottom: 5px;font-size:2rem">
+												<div class="col-sm-6 text-left"><i class="fa fa-android"></i></div>
+												<div class="col-sm-6 text-right">US</div>
+											</div>
+											<h4>US Nerds</h4>
+											<div class="card-des">US Users who spend more than 300$ on computer accessories </div>
+											<div style="font-size:4rem;text-align:center">
+												<i class="fa fa-mobile"></i>
+											</div>
+										</div>
+									</div>
+									<div class="slide">
+										<div class="card">
+											<div class="row" style="padding-bottom: 5px;font-size:2rem">
+												<div class="col-sm-6 text-left"><i class="fa fa-android"></i></div>
+												<div class="col-sm-6 text-right">MY</div>
+											</div>
+											<h4>Malaysian Gamers</h4>
+											<div class="card-des">Game players who made more than 40 transactions per month</div>
+											<div style="font-size:4rem;text-align:center">
+												<i class="fa fa-gamepad"></i>
+											</div>
+										</div>
+									</div>
+									<div class="slide">
+										<div class="card">
+											<div class="row" style="padding-bottom: 5px;font-size:2rem">
+												<div class="col-sm-6 text-left"><i class="fa fa-android"></i></div>
+												<div class="col-sm-6 text-right">VN</div>
+											</div>
+											<h4>VN Freeloader</h4>
+											<div class="card-des">High Retention Players with no purchase</div>
+											<div style="font-size:4rem;text-align:center">
+												<i class="fa fa-cart-arrow-down"></i>
+											</div>
+										</div>
+									</div>
+									<div class="slide">
+										<div class="card">
+											<div class="row" style="padding-bottom: 5px;font-size:2rem">
+												<div class="col-sm-6 text-left"><i class="fa fa-apple"></i></div>
+												<div class="col-sm-6 text-right">PH</div>
+											</div>
+											<h4>PH Gadgets</h4>
+											<div class="card-des">User who recently search for Phone Accessories</div>
+											<div style="font-size:4rem;text-align:center">
+												<i class="fa fa-search"></i>
+											</div>
+										</div>
+									</div>
+									<div class="slide">
+										<div class="card">
+											<div class="row" style="padding-bottom: 5px;font-size:2rem">
+												<div class="col-sm-6 text-left"><i class="fa fa-android"></i></div>
+												<div class="col-sm-6 text-right">UK</div>
+											</div>
+											<h4>UK Highrollers</h4>
+											<div class="card-des">High spenders on casino apps</div>
+											<div style="font-size:4rem;text-align:center">
+												<i class="fa fa-usd"></i>
+											</div>
+										</div>
+									</div>
+									<div class="slide">
+										<div class="card">
+											<div class="row" style="padding-bottom: 5px;font-size:2rem">
+												<div class="col-sm-6 text-left"><i class="fa fa-android"></i></div>
+												<div class="col-sm-6 text-right">CA</div>
+											</div>
+											<h4>CA Campers</h4>
+											<div class="card-des">Users who recently buying camping products</div>
+											<div style="font-size:4rem;text-align:center">
+												<i class="fa fa-map"></i>
+											</div>
+										</div>
+									</div>
+								{% endif %}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-md-2 control-label" style="padding-top:0px;">Audience Card Selected</label>
+				<div class="col-md-10">
+					<div id="carddisplay"></div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-md-2 control-label">Action Type</label>
+				<div class="col-md-10">
+					<select name="action_type" class="form-control" id="action_type">
+	                    {% for key,type in action_types %}
+	                        <option value="{{ key }}" {% if type.is_selected == 1 %} selected {% endif %}>{{ type.name }}</option>
+	                    {% endfor %}
+                    </select>
+					{#<select class="form-control">#}
+					{#	<option>Install</option>#}
+					{#	<option>Add to cart</option>#}
+					{#	<option>Purchase</option>#}
+					{#</select>#}
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-md-2 control-label">Time range</label>
+				<div class="col-md-10">
+					<select name="transaction_day" class="form-control" id="transaction_day">
+                        {% for key,day_range in transaction_days %}
+                            <option value="{{ key }}" {% if day_range.is_selected == 1 %} selected {% endif %}>{{ day_range.name }}</option>
+                        {% endfor %}
+                    </select>
+                    
+					{#<select class="form-control">#}
+					{#	<option>24 hours</option>#}
+					{#	<option>3 days</option>#}
+					{#	<option>1 week</option>#}
+					{#	<option>1 month</option>#}
+					{#</select>#}
+				</div>
+			</div>
+			<button type="button" class="btn btn-danger pull-right" id="btnSubmit">Show Audience Data</button>
+		</form>
+	</div>
+</div><!-- /.row -->
+
+<div class="row" style="margin-top:20px">
+	<div class="col-md-12">
+		<div class="box box-danger">
+			<div class="box-body">
+				<table id="example" class="table table-bordered table-striped">
+					<thead>
+						<tr>
+							<th>Date</th>
+							<th>Hypid</th>
+							<th>Device ID</th>
+							<th>Mobile App</th>
+							<th>Event Type</th>
+							<th>Event Value</th>
+							<th>Currency</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>2015-02-17 23:48:20</td>
+							<td>
+								<a href="#" class="btn btn-block btn-danger btn-xs" data-toggle="modal" data-target="#04875454">04875454</a>
+							</td>
+							<td>07026770</td>
+							<td>Bukalapak Android</td>
+							<td>Purchase</td>
+							<td>167000</td>
+							<td>IDR</td>
+						</tr>
+						<tr>
+							<td>2015-09-25 13:04:38</td>
+							<td>73449196</td>
+							<td>97797477</td>
+							<td>Bukalapak iOS</td>
+							<td>Install</td>
+							<td>0</td>
+							<td>IDR</td>
+						</tr>
+						<tr>
+							<td>2015-09-25 13:05:10</td>
+							<td>73449196</td>
+							<td>97797477</td>
+							<td>Bukalapak iOS</td>
+							<td>Add to Cart</td>
+							<td>172000</td>
+							<td>IDR</td>
+						</tr>
+					</tbody>
+					<tfoot>
+						<tr>
+							<th>Date</th>
+							<th>Hypid</th>
+							<th>Device ID</th>
+							<th>Mobile App</th>
+							<th>Event Type</th>
+							<th>Event Value</th>
+							<th>Currency</th>
+						</tr>
+					</tfoot>
+				</table>
+			</div><!-- /.box-body -->
+		</div><!-- /.box -->
+	</div>
+</div>
+<div class="modal fade" id="04875454" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content" style="background-color: #ab0808; background-image: url(http://www.transparenttextures.com/patterns/crossword.png);">
+			<div class="modal-body" style="height:535px; max-height:535px;">
+				<img class="profile-user-img img-responsive img-circle" src="https://s3-us-west-2.amazonaws.com/testhasoffer/user_images/user.png" alt="User profile picture">
+				<h4 class="text-center" style="color:#ffffff;">Hypid #04875454</h4>
+				
+				<div class="nav-tabs-custom">
+					<ul class="nav nav-tabs">
+						<li class="active">
+							<a href="#tab_1" data-toggle="tab" aria-expanded="true">
+								<b>User Info</b>
+							</a>
+						</li>
+						<li class="">
+							<a href="#tab_2" data-toggle="tab" aria-expanded="false">
+								<b>Purchase Intent</b>
+							</a>
+						</li>
+					</ul>
+					<div class="tab-content" style="height: 320px; max-height: 320px;">
+						<div class="tab-pane active" id="tab_1">
+							<ul class="list-group list-group-unbordered">
+								<li class="list-group-item">
+									<p><b>Platform</b> <a class="pull-right">Android, iOS</a></p>
+									<i class="fa fa-android pull-left"></i> <h6 style="margin:0px" class="text-muted">C594DA3576FDACCD</h6><br/>
+									<i class="fa fa-apple pull-left"></i> <h6 style="margin:0px" class="text-muted">CEBB93B8-B00C-4338-B3DD-CABB47813BDC</h6>
+								<li class="list-group-item">
+									<b>Country</b> <a class="pull-right">Indonesia</a>
+								</li>
+								<li class="list-group-item">
+									<b>Total Transaction</b> <a class="pull-right">22</a>
+								</li>
+								<li class="list-group-item">
+									<b>Total Money Spent</b> <a class="pull-right">$543</a>
+								</li>
+								<li class="list-group-item">
+									<b>Last Transaction</b> <a class="pull-right">2015-02-17 20:34:12</a>
+								</li>
+								<li class="list-group-item">
+									<b>Last Activity</b> <a class="pull-right">2015-10-22 16:16:53</a>
+								</li>
+							</ul>
+						</div><!-- /.tab-pane -->
+						<div class="tab-pane" id="tab_2">
+							<table id="tableintent" class="table">
+								<thead>
+									<tr>
+										<th>Interest</th>
+										<th>Intent Score</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>Business</td>
+										<td style="width:100px">
+											<div class="progress progress-xs">
+												<div class="progress-bar progress-bar-green" style="width: 55%" data-toggle="tooltip" data-placement="top" title="55%"></div>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td>Fashion</td>
+										<td>
+											<div class="progress progress-xs">
+												<div class="progress-bar progress-bar-aqua" style="width: 80%" data-toggle="tooltip" data-placement="top" title="80%"></div>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td>Electronics</td>
+										<td>
+											<div class="progress progress-xs">
+												<div class="progress-bar progress-bar-green" style="width: 65%" data-toggle="tooltip" data-placement="top" title="65%"></div>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td>F &amp; B</td>
+										<td>
+											<div class="progress progress-xs">
+												<div class="progress-bar progress-bar-yellow" style="width: 44%" data-toggle="tooltip" data-placement="top" title="44%"></div>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td>Travel</td>
+										<td>
+											<div class="progress progress-xs">
+												<div class="progress-bar progress-bar-red" style="width: 25%" data-toggle="tooltip" data-placement="top" title="25%"></div>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td>Entertainment</td>
+										<td>
+											<div class="progress progress-xs">
+												<div class="progress-bar progress-bar-aqua" style="width: 78%" data-toggle="tooltip" data-placement="top" title="78%"></div>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td>Sports &amp; Fitness</td>
+										<td>
+											<div class="progress progress-xs">
+												<div class="progress-bar progress-bar-yellow" style="width: 33%" data-toggle="tooltip" data-placement="top" title="33%"></div>
+											</div>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div><!-- /.tab-pane -->
+					</div><!-- /.tab-content -->
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<style>
+    #example1
+    {
+        width: 100%;
+        max-width: 100%;
+    }
+    .progress.progress-small {
+		height: 10px;
+		line-height: 10px;
+	}
+</style>
+<script>
+    $(function () {
+            // $("#example").DataTable();
+            // $('#tableintent').DataTable({
+            //   "paging": true,
+            //   "lengthChange": false,
+            //   "searching": false,
+            //   "ordering": false,
+            //   "info": false,
+            //   "autoWidth": false,
+            //   "pageLength": 5,
+            //   "pagingType":"simple",
+            //   "scrollCollapse": false,
+            //   "columns": [
+            //         { "width": "50%" },
+            //         { "width": "50%" }
+            //   ],
+            //   "language": {
+            //         "paginate": {
+            //           "next": ">",
+            //           "previous": "<"
+            //         }
+            //   }
+            // });
+            //$("#tableintent thead").remove()
+    });
+    
+    function setSort(field, order) {
+        $('#sort_field').val(field);
+        if (order == '') {
+            order = 0;
+        } else if (order == 0) {
+            order = 1;
+        } else if (order == 1) {
+            order = '';
+        }
+        $('#sort_order').val(order);
+        $('#action_data_form').submit();
+    }
+
+    function setSearch() {
+        if ($('#search_string').val() != "") {
+            $('#page_num').val(1);
+            $('#action_data_form').submit();
+        }
+    }
+
+    function flipPage(field, order) {
+        $('#sort_field').val(field);
+        $('#sort_order').val(order);
+        $('#action_data_form').submit();
+    }
+        
+    $(document).ready(function()
+    {
+        $('#icarousel').iCarousel({
+                autoPlay: false,
+                easing: 'ease-in-out',
+                slides: 10,
+                slidesSpace: 180,
+                make3D: true,
+                touchNav: true,
+                animationSpeed: 800,
+                directionNav: false,
+                timer: "false",
+                mouseWheel: false
+        });
+        
+        $("#preset_filter_id").val("");
+        
+        $('#icarousel > div').each(function()
+        {
+        	if($(this).attr("class") == "slide current")
+        	{
+        		// console.log("found");
+        		// console.log($(this).attr("class"));
+        		$("#preset_filter_id").val($(this).attr("id"));
+        	}
+        	else
+        	{
+        		// console.log("not found");
+        		// console.log($(this).attr("class"));
+        	}
+        });
+        
+        $("#btnSubmit").on('click', this, function()
+        {
+       		$('#icarousel > div').each(function()
+	        {
+	        	if($(this).attr("class") == "slide current")
+	        	{
+	        		// console.log("found");
+	        		// console.log($(this).attr("class"));
+	        		$("#preset_filter_id").val($(this).attr("id"));
+	        	}
+	        	else
+	        	{
+	        		// console.log("not found");
+	        		// console.log($(this).attr("class"));
+	        	}
+	        });
+	        
+	        console.log("Preset: "+$("#preset_filter_id").val());
+	        console.log("Action Type: "+$("#action_type").val());
+	        console.log("Time Range: "+$("#transaction_day").val());
+	        //$("#action_data_form").submit();
+        });
+
+        var original_cardcontent = $('.current .card h4').text()+': '+$('.current .card .card-des').text();
+        $( '#carddisplay').append(original_cardcontent);
+
+        $('.slide').click(function (){
+                var cardcontent = $('h4',this).text()+': '+$('.card-des',this).text();
+                $( "#carddisplay" ).empty();
+                $( '#carddisplay').append(cardcontent);
+        })
+        /*
+        .bind('mousewheel', function(){
+                $( "#carddisplay" ).empty();
+                var cardcontent = $('.current .card h4').text()+': '+$('.current .card .card-des').text();
+                $( '#carddisplay').append(cardcontent);
+        })
+        */
+        $("#example").DataTable();
+        $('#tableintent').DataTable({
+          "paging": true,
+          "lengthChange": false,
+          "searching": false,
+          "ordering": false,
+          "info": false,
+          "autoWidth": false,
+          "pageLength": 5,
+          "pagingType":"simple",
+          "scrollCollapse": false,
+          "columns": [
+                { "width": "50%" },
+                { "width": "50%" }
+          ],
+          "language": {
+                "paginate": {
+                  "next": ">",
+                  "previous": "<"
+                }
+          }
+        });
+    });
+</script>
+{% endif %} 
+{% endblock %}

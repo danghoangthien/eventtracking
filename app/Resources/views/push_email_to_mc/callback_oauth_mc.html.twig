@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+    <body>
+    </body>
+    <script src="{{ asset('bundles/hyperevent/plugins/jQuery/jQuery-2.1.4.min.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            {% if hasAccessToken == true %}
+                var windowOpener = window.opener;
+                if (typeof windowOpener != 'undefined') {
+                    var cardId = windowOpener.$('[data-alert-current]').data('id');
+                    windowOpener.$('[data-alert-current]').removeClass('hide').addClass('hide');
+                    windowOpener.$('[data-coordinate-group="push-email-to-mc['+cardId+']"][data-btn-push-email-to-mc]').trigger("click");
+                }
+                window.close();
+            {% endif %}
+        });
+    </script>
+</html>

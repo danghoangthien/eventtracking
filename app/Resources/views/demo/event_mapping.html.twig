@@ -1,0 +1,101 @@
+{% extends 'base2.html.twig' %}
+{% block body %} 
+<section class="content-header" style="margin: -2em 0 0 -2em !important;">
+    <h1 style="font-size: 24px; margin: 0 0 1em 0.5em;">
+      Event Mapping
+    </h1>
+    <ol class="breadcrumb">
+      <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li class="active">Event Mapping</li>
+    </ol>
+</section>    
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="box box-danger">
+            <div class="box-header with-border">
+                <h3 class="box-title">Map your SDK Event</h3>
+            </div><!-- /.box-header -->
+            <!-- form start -->
+            <form role="form">
+                <div class="box-body">
+                    <div class="form-group">
+                        <label>Select App</label>
+                        <select class="form-control">
+                            <option>Bukalapak Android</option>
+                            <option>Bukalapak iOS</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>SDK Event</label>
+                        <select class="form-control">
+                            <option>bklp_purchase</option>
+                            <option>bklk_addtocart</option>
+                            <option>bklp_wishlist</option>
+                            <option>bklp_contentview</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Audience Kit Event Tag</label>
+                        <select class="form-control">
+                            <option>Purchase</option>
+                            <option>Add to Cart</option>
+                            <option>Add to Wishlist</option>
+                            <option>Item View</option>
+                        </select>
+                    </div>
+                </div><!-- /.box-body -->
+                <div class="box-footer">
+                    <button type="submit" class="btn btn-danger">Save Event</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <table class="table table-bordered">
+            <tr>
+                <th class="text-red" style="width: 90px">Mobile App</th>
+                <th class="text-red">SDK Event</th>
+                <th class="text-red" style="width: 150px">Event Tag</th>
+                <th class="text-red" style="width: 100px">Action</th>
+            </tr>
+            <tr>
+                <td>Bukalapak Android</td>
+                <td>bklp_purchase</td>
+                <td>Purchase</td>
+                <td>
+                    <a href="#">Edit</a>
+                    <a href="#">Delete</a>
+                </td>
+            </tr>
+            <tr>
+                <td>Bukalapak iOS</td>
+                <td>bklp_transaction</td>
+                <td>Purchase</td>
+                <td>
+                    <a href="#">Edit</a>
+                    <a href="#">Delete</a>
+                </td>
+            </tr>
+            <tr>
+                <td>Bukalapak Android</td>
+                <td>bklk_addtocart</td>
+                <td>Add to Cart</td>
+                <td>
+                    <a href="#">Edit</a>
+                    <a href="#">Delete</a>
+                </td>
+            </tr>
+            <tr>
+                <td>Bukalapak Android</td>
+                <td>bklp_contentview</td>
+                <td>Item View</td>
+                <td>
+                    <a href="#">Edit</a>
+                    <a href="#">Delete</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+{% endblock %}

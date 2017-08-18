@@ -1,0 +1,4 @@
+hyper_event_api_v1:
+    resource: "@HyperEventAPIBundle/Resources/config/v1/routing.yml"
+    prefix:   /v1
+    name_prefix: hyper_event_api_v1_

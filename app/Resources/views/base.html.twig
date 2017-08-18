@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block head_title %}Hypergrowth event tracking system - Dashboard {% endblock %}</title>
+        {% block stylesheets %}
+           <link href="{{ asset('assets/css/bootstrap.min.css') }}" type="text/css" rel="stylesheet" />
+           <link href="{{ asset('assets/css/bootstrap-theme.min.css') }}" type="text/css" rel="stylesheet" />
+           <link href="{{ asset('assets/dataTables1-10-7/css/jquery.dataTables.min.css') }}" type="text/css" rel="stylesheet" />
+        {% endblock %}
+        {% block javascript_libraries %}
+            <script src="{{ asset('assets/js/jquery2.1.4.js') }}" ></script>
+            <script src="{{ asset('assets/dataTables1-10-7/js/jquery.dataTables.js') }}"></script>
+            <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
+            <script src="{{ asset('assets/inputs/tagmanager.js') }}"></script>
+        {% endblock %}
+        <style>
+        /*
+            #content-body{
+                min-height : 50%;
+            }
+        */
+            html, body {
+              height: 100%;
+            }
+            #footer {
+                height: 30px;
+                line-height: 30px;
+                text-align: center;
+                
+            }
+            #wrap {
+                min-height: 100%;
+                height: auto !important;
+                height: 100%;
+                margin: 0 auto -30px;
+            } 
+        </style>
+    </head>
+<body>
+<div id="wrap">
+    {% block navigation_header %}    
+    <nav id="myNavbar" class="navbar navbar-default navbar-inverse navbar-fixed-top" role="navigation">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbarCollapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Hypergrowth event monitor system</a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li  role="presentation" class="active dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                            Hello, {{authentication.getLoggedAuthenticationUsername()}} <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{{ path('dashboard_change_password') }}">Change passord</a></li>
+                            <li><a href="#" id="logout">Logout</a></li>
+                        </ul>    
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+    </nav>
+    {% endblock %}
+    <div class="jumbotron">
+        <div class="container-fluid">
+            <h2>{% block page_title %}Dashboard{% endblock %}</h2>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row" id="content-body">
+            {% block left_menu %}
+                {% set auth = authentication.getLoggedAuthentication()%}
+                {% if auth is not null %}
+                    {% set userType = auth.getUserType()  %}
+                    {% if userType is not null %}
+                        {% if userType == 1 %}
+                            {% include 'menu/admin.html.twig' ignore missing %}
+                        {% endif %}
+                        {% if userType == 0 %}
+                            {% include 'menu/client.html.twig' ignore missing %}
+                        {% endif %}
+                    {% endif %}    
+                {% endif %}
+                
+            {% endblock %}
+            <div class="{% block body_grid_size %}col-xs-10{% endblock %}">
+                {% block body %}{% endblock %}
+            </div>
+        </div>
+        
+        
+    </div>
+</div>
+<hr>
+<footer id="footer">
+    <p>&copy; Copyright 2015 Hypergrowth co</p>
+</footer>
+<script type = "text/javascript" >
+    $.fn.ready(function() {
+           console.log("trace"," application start ");
+           $("#logout").on("click",this,function()
+           {
+               $.ajax(
+                    {                                                        
+                        url:"{{ path('dashboard_logout') }}",
+                        type: "POST",
+                        data: { "logout": "logout" },
+                        success: function(msg)
+                        {
+                            var message = JSON.parse(msg);
+                            console.log(message);                                                                
+                            
+                            if(message.status == "-1")
+                            {
+                                window.location.href = "{{ path('dashboard_login') }}";
+                            }
+                        }
+                    });
+           });
+       }
+    );
+</script>
+</body>
+</html>                 

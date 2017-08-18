@@ -1,0 +1,104 @@
+{% extends 'base_adops.html.twig' %}
+{% block body %}
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <h1 style="color:white;">Manage Publishers</h1> 
+  </section>
+
+  <!-- Main content -->
+  <section class="content">
+     <!-- Client Access Form -->
+    <div class="box box-danger" style="padding:5px 12px;">
+      <!--Box Header-->
+      <div class="box-header with-border">
+        <h3 class="box-title"></h3>
+        <div class="box-tools pull-right">
+          <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+          <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+        </div>
+      </div>
+      <div class="box-body">
+        {{ form_start(form, {'attr': {'class': 'form-horizontal'} }) }}
+          {{ form_errors(form) }}
+          {% for flash_message in app.session.flashbag.get('notice') %}
+              <div class="flash-notice">
+                  {{ flash_message }}
+              </div>
+          {% endfor %}
+          <div class="form-group">
+            <div class="col-sm-2 control-label">
+              {{ form_label(form.name) }}
+            </div>
+            <div class="col-sm-10">
+              {{ form_widget(form.name, {'attr': {'class': 'form-control'} }) }}
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-2"></div>
+            <div class="col-sm-10">
+              {{ form_widget(form.save, {'attr': {'class': 'btn btn-danger btn-flat'}}) }}
+            </div>
+          </div>
+          {{ form_rest(form) }}
+        {{ form_end(form) }}
+      </div>
+    </div>
+    
+    <div class="box box-danger" style="padding:5px 12px;">
+      <!--Box Header-->
+      <div class="box-header with-border">
+        <h3 class="box-title"></h3>
+        <div class="box-tools pull-right">
+          <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+          <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+        </div>              
+      </div>
+      <div class="box-body">
+        <table class="footable" data-page-size="7" data-page-navigation=".pagination">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Publisher Name</th>                    
+              <th>Action</th>
+            </tr>
+          </thead> 
+          <tbody>
+            {% if adops_publishers is not empty%}
+              {% for adops_publisher in adops_publishers %}
+                <tr>
+                  <td>{{ adops_publisher.id }}</td>
+                  <td>{{ adops_publisher.name }}</td>
+                  <td><a href="{{ path('publishers_edit', {'id': adops_publisher.id}) }}">Edit</a> | <a class="btn-delete" data-href="{{ path('publishers_delete', {'id': adops_publisher.id}) }}">Delete</a></td>
+                </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="3" align="center">Not found!</td>
+                   </tr>
+                {% endfor %}
+            {% endif %}
+          </tbody>
+          <tfoot class="hide-if-no-paging">
+            <tr>
+              <td colspan="12" style="text-align:center;">
+                <div class="pagination pagination-centered"></div>
+              </td>
+            </tr>
+          </tfoot>    
+        </table>
+      </div>
+    </div>
+  </section>
+
+<script>
+    $(document).ready(function()
+    {
+      $('.btn-delete').click(function(){
+        var deleteHref = $(this).attr('data-href');
+        var r = confirm("Are you sure delete ?");
+        if (r) {
+              window.location = deleteHref;
+          }
+      });
+    });
+</script>
+{% endblock %}

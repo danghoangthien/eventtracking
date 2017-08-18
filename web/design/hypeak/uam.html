@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Hypergrowth | Admin</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.5 -->
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="dist/css/style.css">
+    <link rel="stylesheet" href="dist/css/animate.css">
+    <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+
+
+    <!-- Select2 -->
+    <link href="plugins/select2/select2.min.css" rel="stylesheet" />
+    <!-- FooTable -->
+    <link rel="stylesheet" href="plugins/footable/footable.core.css">
+    <link rel="stylesheet" href="plugins/footable/footable.metro.css">
+
+</head>
+
+  <body class="fixed-sidebar"> <!-- mini-navbar for collapsed sidebar, fixed-sidebar for fixed--> 
+    <div id="wrapper">
+
+        <!-- sidebar -->
+        <nav class="navbar-default navbar-static-side" role="navigation">
+            <div class="sidebar-collapse">
+                <ul class="nav metismenu" id="side-menu" style="display: block;">
+                    <li class="nav-header">
+                        <div class="dropdown profile-element">
+                            <div class="user-panel">
+                                <span class="image">
+									<img alt="image" class="img-circle" src="img/samuelchan.jpg">
+								</span>
+                            </div>
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                <span class="clear"> 
+									<span class="block m-t-xs"> 
+										<strong class="font-bold">Samuel Chan</strong>
+									 </span>
+                                <small>Member since Jun. 2015</small>
+                                <span class="text-muted text-xs block">Warehouse Admin 
+										<b class="caret"></b>
+									</span>
+                                </span>
+                            </a>
+                            <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                                <li><a href="#">Edit Profile</a>
+                                </li>
+                                <li><a href="#">Sign Out</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="logo-element">
+                            <span class="logo-mini"><img src="img/hypergrowth_small_transparent_16x35.png"></span>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="da.html">
+                            <i class="fa fa-bar-chart-o"></i> <span>Data Acquisition</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="cm.html">
+                            <i class="fa fa-user-secret"></i> <span>Client Management</span>
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="uam.html">
+                            <i class="fa fa-sitemap"></i> <span>User Access Management</span>
+                        </a>
+                    </li>
+					<li>
+						<a href="#">
+							<i class="fa fa-laptop"></i> 
+							<span class="nav-label">Infrastructure Monitor</span> 
+							<span class="fa arrow"></span>
+						</a>
+						<ul class="nav nav-second-level collapse">
+							<li><a href="#">Elastic Load Balancer</a></li>
+							<li><a href="#">Elastic Cloud Compute</a></li>
+							<li><a href="#">Redshift</a></li>
+							<li><a href="#">Simple Queue Service</a></li>
+						</ul>
+					</li>
+                </ul>
+            </div>
+        </nav>
+        <!-- /.sidebar -->
+
+        <!-- Content Wrapper. Contains page content -->
+        <!--class content-wrapper for full width without sidebar, and gray-bg sidebar-content for right sidebar-->
+        <div id="page-wrapper" class="content-wrapper">
+
+            <!--top bar-->
+            <div class="row">
+                <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+                    <div class="navbar-header">
+                        <a class="navbar-minimalize  minimalize-styl-2 btn btn-default" href="#"><i class="fa fa-bars"></i> </a>
+                    </div>
+                    <ul class="nav navbar-top-links navbar-right">
+                        <li>
+                            <span class="m-r-sm welcome-message">Welcome to Warehouse Admin</span>
+                        </li>
+                        <li>
+                            <a href="index-admin.html">
+                                <i class="fa fa-sign-out"></i> Log out
+                            </a>
+                        </li>
+                    </ul>
+
+                </nav>
+            </div>
+            <!--End top bar-->
+
+            <!-- Main Content -->
+            <div class="wrapper wrapper-content">
+                <div class="row">
+                    <div class="col-lg-9">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <h1>Add User Account</h1>
+                            </div>
+                            <div class="ibox-content">
+                                <div class="panel" style="margin:0px">
+                                    <form action="" class="">
+                                        <div class="panel-body">
+                                            <div class="row">
+                                                <div class="input-group col-sm-12">
+                                                    <span style="width: 130px;" class="input-group-addon">Full Name</span>
+                                                    <input type="text" class="form-control" placeholder="Enter Full Name">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <label class="col-md-2 control-label no-padding">&nbsp;</label>
+                                                <div class="col-md-10 no-padding">
+                                                    <label id="form_create_auth_name-error" class="error bottom-padding" for="form_create_auth_name">This field is required.</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="input-group col-sm-12">
+                                                    <span style="width: 130px;" class="input-group-addon">Email</span>
+                                                    <input type="email" class="form-control" placeholder="Enter Email - For Password Reset">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <label class="col-md-2 control-label no-padding">&nbsp;</label>
+                                                <div class="col-md-10 no-padding">
+                                                    <label id="form_create_auth_name-error" class="error bottom-padding" for="form_create_auth_name">This field is required.</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="input-group col-sm-12">
+                                                    <span style="width: 130px;" class="input-group-addon">Username</span>
+                                                    <input type="text" class="form-control" placeholder="Enter Username - For Login">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <label class="col-md-2 control-label no-padding">&nbsp;</label>
+                                                <div class="col-md-10 no-padding">
+                                                    <label id="form_create_auth_name-error" class="error bottom-padding" for="form_create_auth_name">This field is required.</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="input-group col-sm-12">
+                                                    <span style="width: 130px;" class="input-group-addon">Password</span>
+                                                    <input type="password" class="form-control" placeholder="Enter Password - For Login">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <label class="col-md-2 control-label no-padding">&nbsp;</label>
+                                                <div class="col-md-10 no-padding">
+                                                    <label id="form_create_auth_name-error" class="error bottom-padding" for="form_create_auth_name">This field is required.</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <label class="col-md-2 control-label left-padding">User Type</label>
+                                                <div class="col-md-10 no-padding">
+                                                    <select class="form-control inline-select-long" style="width: 200px;">
+                                                        <option value="">Select User Type</option>
+                                                        <option value="">Client</option>
+                                                        <option value="">Admin</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <label class="col-md-2 control-label no-padding">&nbsp;</label>
+                                                <div class="col-md-10 no-padding">
+                                                    <label id="form_create_auth_name-error" class="error bottom-padding" for="form_create_auth_name">This field is required.</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <label class="col-md-2 control-label left-padding">Authorized Access </label>
+                                                <div class="col-md-10 no-padding">
+                                                    <select class="form-control inputClientMultiple" multiple="multiple" style="width:100%">
+                                                        <option>Please select Client Access</option>
+                                                        <option>All Clients</option>
+                                                        <option>Brave Frontier</option>
+                                                        <option>Raiders Quest</option>
+                                                        <option>Wakfu Raiders</option>
+                                                        <option>Asian Poker</option>
+                                                        <option>Bukalapak</option>
+                                                        <option>Tiket</option>
+                                                        <option>Yogrt</option>
+                                                        <option>Liputan6</option>
+                                                        <option>Chain Chronicle</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <label class="col-md-2 control-label no-padding">&nbsp;</label>
+                                                <div class="col-md-10 no-padding">
+                                                    <label id="form_create_auth_name-error" class="error bottom-padding" for="form_create_auth_name">This field is required.</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <label class="col-md-2 control-label left-padding">API Key </label>
+                                                <div class="col-md-10 no-padding">
+                                                    <input type="text" class="form-control" placeholder="Enter API Key - For User Connect Function">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <label class="col-md-2 control-label no-padding">&nbsp;</label>
+                                                <div class="col-md-10 no-padding">
+                                                    <label id="form_create_auth_name-error" class="error bottom-padding" for="form_create_auth_name">This field is required.</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="row buffer-top">
+                                                <div class="col-md-2"> </div>
+                                                <div class="col-md-9 no-padding">
+                                                    <button type="submit" class="btn btn-primary pull-right">Create User Account</button>
+                                                </div>
+                                                <div class="col-md-1"> </div>
+                                            </div>
+                                        </div>
+                                </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-content-transparent">
+                                <h2>Recent Logins</h2>
+                                <ul style="list-style: none outside none;padding:0">
+                                    <li class="divider"></li>
+                                    <li>
+                                        <h3 class="m-b-xs text-navy">liputan6</h3>
+                                        <div>March 29 at 5:26pm</div>
+                                        <div>101.99.29.31 </div>
+                                        <div>Jakarta, Indonesia</div>
+                                        <div>Firefox on Windows 8.1</div>
+                                    </li>
+                                    <li class="divider"></li>
+                                    <li>
+                                        <h3 class="m-b-xs text-navy">tiketcom</h3>
+                                        <div>March 30 at 1:26am</div>
+                                        <div>132.1.349.12 </div>
+                                        <div>Ho Chi Minh City, Vietnam</div>
+                                        <div>Chrome on Windows 7</div>
+                                    </li>
+                                    <li class="divider"></li>
+                                    <li>
+                                        <h3 class="m-b-xs text-navy">alkemisgames</h3>
+                                        <div>March 12 at 12:05pm</div>
+                                        <div>191.201.67.23 </div>
+                                        <div>Singapore, Singapore</div>
+                                        <div>Chrome on Windows 7</div>
+                                    </li>
+                                    <li class="divider"></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row buffer-bottom-s">
+                    <div class="col-md-8"></div>
+                    <label class="col-md-1 control-label" style="text-align: right;">Search: </label>
+                    <div class="col-md-3">
+                        <input type="text" class="form-control" id="filter">
+                    </div>
+                </div>
+                <div class="row buffer-bottom">
+                    <div class="col-lg-12">
+                        <table class="footable-user" data-page-size="7" data-page-navigation=".pagination" data-filter="#filter" data-filter-text-only="true">
+                            <thead>
+                                <tr>
+                                    <th>Username</th>
+                                    <th data-sort-ignore="true">Email</th>
+                                    <th data-sort-ignore="true">Client Access</th>
+                                    <th data-sort-ignore="true">Last Login</th>
+                                    <th data-sort-ignore="true">IP Address</th>
+                                    <th data-sort-ignore="true">Location</th>
+                                    <th data-sort-ignore="true">Device Type</th>
+                                    <th data-sort-ignore="true">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>liputan6</td>
+                                    <td>admin@liputan6.co.id</td>
+                                    <td>Raider Quest</td>
+                                    <td>March 29 at 5:26pm</td>
+                                    <td>101.99.29.31</td>
+                                    <td>Jakarta, Indonesia</td>
+                                    <td>Firefox on Windows 8.1</td>
+                                    <td>
+                                        <a href="#">Edit</a>
+                                        <a href="#">Delete</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>tiketcom</td>
+                                    <td>febrina@tiket.com</td>
+                                    <td>Tiket</td>
+                                    <td>March 30 at 1:26am</td>
+                                    <td>132.1.349.12</td>
+                                    <td>Ho Chi Minh City, Vietnam</td>
+                                    <td>Chrome on Windows 7</td>
+                                    <td>
+                                        <a href="#">Edit</a>
+                                        <a href="#">Delete</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>alkemisgames</td>
+                                    <td>tedo@alkemisgames.com</td>
+                                    <td>Liputan6</td>
+                                    <td>March 12 at 12:05pm</td>
+                                    <td>191.201.67.23</td>
+                                    <td>Singapore, Singapore</td>
+                                    <td>Chrome on Windows 7</td>
+                                    <td>
+                                        <a href="#">Edit</a>
+                                        <a href="#">Delete</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot class="hide-if-no-paging">
+                                <tr>
+                                    <td colspan="12" style="text-align:center;">
+                                        <div class="pagination pagination-centered"></div>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+
+
+            </div>
+            <!--End Main Content-->
+
+            <div class="footer">
+                <div class="pull-right">
+                    <b>Version</b> 1.1.0
+                </div>
+                <div>
+                    <strong>Copyright &copy; 2016 <a href="http://www.hypergrowth.co"> HyperGrowth Pte Ltd</a>.</strong> All rights reserved.
+                </div>
+            </div>
+
+        </div>
+        <!-- /.content-wrapper -->
+
+    </div>
+    <!-- ./wrapper -->
+
+    <!-- jQuery 2.1.4 -->
+    <script src="plugins/jQuery/jQuery-2.1.4.min.js"></script>
+    <!-- jQuery UI 1.11.4 -->
+    <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+    <script>
+        $.widget.bridge('uibutton', $.ui.button);
+    </script>
+    <!-- Bootstrap 3.3.5 -->
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <!-- Slimscroll -->
+    <script src="plugins/slimScroll/jquery.slimscroll.min.js"></script>
+    <!-- ChartJS 1.0.1 -->
+    <script src="plugins/chartjs/Chart.min.js"></script>
+    <!-- FastClick -->
+    <script src="plugins/fastclick/fastclick.min.js"></script>
+    <!-- Metis Menu -->
+    <script src="plugins/metisMenu/jquery.metisMenu.js"></script>
+    <!-- AdminLTE App -->
+    <script src="dist/js/app.min.js"></script>
+    <script src="dist/js/inspinia.js"></script>
+
+    <!-- Select2 -->
+    <script src="plugins/select2/select2.min.js"></script>
+    <!-- FooTable-->
+    <script src="plugins/footable/footable.js"></script>
+    <!-- FooTable Sorting-->
+    <script src="plugins/footable/footable.sort.js"></script>
+    <!-- FooTable Pagination-->
+    <script src="plugins/footable/footable.paginate.js"></script>
+    <!-- FooTable Pagination-->
+    <script src="plugins/footable/footable.filter.js"></script>
+
+    <script>
+        $(".inputClientMultiple").select2({
+            placeholder: "Select Client that User can access"
+        });
+
+        $(function() {
+            $('.footable-user').footable();
+        });
+    </script>
+
+</body>
+
+</html>

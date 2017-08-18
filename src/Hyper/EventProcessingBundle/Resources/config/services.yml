@@ -1,0 +1,76 @@
+services:
+    hyper_event_processing.sqs_wrapper:
+        class: Hyper\EventProcessingBundle\Service\SqsWrapper\SqsWrapper
+        arguments: [@service_container]
+
+    hyper_event_processing.s3_wrapper:
+        class: Hyper\EventProcessingBundle\Service\S3Wrapper\S3Wrapper
+        arguments: [@service_container]
+
+    hyper_event_processing.logger_wrapper:
+        class: Hyper\EventProcessingBundle\Service\LoggerWrapper\LoggerWrapper
+        arguments: [@service_container]
+
+    hyper_event_processing.redshift_wrapper:
+        class: Hyper\EventProcessingBundle\Service\RedshiftWrapper\RedshiftWrapper
+        arguments: [@service_container]
+
+    hyper_event_processing.pre_event_handling:
+        class: Hyper\EventProcessingBundle\Service\EventHandling\PreEventHandling
+        arguments:
+            - @service_container
+            - %amazon_sqs_queue_pre_event_handling%
+            - %amazon_sqs_queue_event_handling%
+            - %amazon_s3_bucket_pre_event_handling%
+
+    hyper_event_processing.event_handling:
+        class: Hyper\EventProcessingBundle\Service\EventHandling\EventHandling
+        arguments:
+            - @service_container
+            - %amazon_sqs_queue_event_handling%
+            - %amazon_sqs_queue_post_event_handling%
+            - %amazon_s3_bucket_event_handling%
+
+    hyper_event_processing.post_event_handling:
+        class: Hyper\EventProcessingBundle\Service\EventHandling\PostEventHandling
+        arguments:
+            - @service_container
+            - %amazon_sqs_queue_post_event_handling%
+            - %amazon_s3_bucket_post_event_handling%
+
+    hyper_event_processing.identity_capture_handling:
+        class: Hyper\EventProcessingBundle\Service\EventHandling\IdentityCaptureHandling
+        arguments:
+            - @service_container
+            - %amazon_sqs_queue_identity_capture%
+            - %amazon_s3_bucket_identity_capture%
+
+    # processor
+    hyper_event_processing.processor_manager:
+        class: Hyper\EventProcessingBundle\Service\Processor\ProcessorManager
+        arguments:
+            - @service_container
+
+    hyper_event_processing.android_device_processor:
+        class: Hyper\EventProcessingBundle\Service\Processor\DeviceProcessor\AndroidDeviceProcessor
+        arguments:
+            - @service_container
+            - @android_device_repository
+
+    hyper_event_processing.ios_device_processor:
+        class: Hyper\EventProcessingBundle\Service\Processor\DeviceProcessor\IOSDeviceProcessor
+        arguments:
+            - @service_container
+            - @ios_device_repository
+
+    hyper_event_processing.application_processor:
+        class: Hyper\EventProcessingBundle\Service\Processor\ApplicationProcessor\ApplicationProcessor
+        arguments:
+            - @service_container
+            - @application_repository
+
+    hyper_event_processing.action_processor:
+        class: Hyper\EventProcessingBundle\Service\Processor\ActionProcessor\ActionProcessor
+        arguments:
+            - @service_container
+            - @action_repository

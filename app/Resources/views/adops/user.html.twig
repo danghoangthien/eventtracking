@@ -1,0 +1,250 @@
+{% extends 'base_adops.html.twig' %}
+{% block body %}
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <h1 style="color:white;">
+      Manage Client Access<br/>
+      <small>Authorize applications that Client can access to</small>
+    </h1>
+  </section>
+
+  <!-- Main content -->
+  <section class="content">
+     <!-- Client Access Form -->
+    <div class="box box-danger" style="padding:5px 12px;">
+      <!--Box Header-->
+      <div class="box-header with-border">
+        <h3 class="box-title">Configuration Options</h3>
+        <div class="box-tools pull-right">
+          <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+          <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+        </div>
+        {% if errors is defined %}
+          <div>
+            {% for error in errors %}
+              {{ error.getMessage() }}<br />
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+      <!--Box Body-->
+      <div class="box-body">
+        <div class="row">
+          {{ form_start(form, {'attr': {'class': 'form-horizontal', 'enctype': "multipart/form-data"} }) }}
+            <div class="col-md-6">
+              <div class="form-group">
+                {{ form_label(form.username, 'Username:', {'label_attr': {'class': 'col-sm-12'} }) }}
+                {#<i class="fa fa-user"></i>#}
+                <div class="col-md-6">
+                {{ form_widget(form.username, {'attr': {'class': 'form-control inline-select-long', 'placeholder': 'Enter Username'} }) }}
+                {{ form_errors(form.username) }}
+                </div>
+              </div>
+              <div class="form-group">
+                {{ form_label(form.password, 'Password:', {'label_attr': {'class': 'col-sm-12'} }) }}
+                <div class="col-md-6">
+                {#<i class="fa fa-asterisk"></i>#}
+                {{ form_widget(form.password, {'attr': {'class': 'form-control inline-select-long', 'placeholder': 'Password'} }) }}
+                {{ form_errors(form.password) }}
+                </div>
+              </div>
+              <div class="form-group">
+                {{ form_label(form.type, 'Access Type:', {'label_attr': {'class': 'col-sm-12'} }) }}
+                {#<i class="fa fa-lock"></i>#}
+                <div class="col-md-6">
+                {{ form_widget(form.type, {'attr': {'class': 'form-control inline-select-long'} }) }}
+                {{ form_errors(form.type) }}
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-12">App Access: </label>
+                {#<i class="fa fa-cubes"></i>#}
+                <div class="col-md-6">
+                <select id="form_applications" name="applications[]" class="form-control" multiple>
+                  {% for application in applications %}
+                    <option value="{{application.id}}">{{application.appName}} {{application.platform | capitalize}}</option>
+                  {% endfor %}
+                </select>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                {{ form_label(form.fullname, 'Full name:', {'label_attr': {'class': 'col-sm-12'} }) }}
+                {#<i class="fa fa-comment-o"></i>#}
+                <div class="col-md-6">
+                {{ form_widget(form.fullname, {'attr': {'class': 'form-control inline-select-long', 'placeholder': 'Enter Name'} }) }}
+                {{ form_errors(form.fullname) }}
+                </div>
+              </div>
+              <div class="form-group">
+                {{ form_label(form.team, 'Team name:', {'label_attr': {'class': 'col-sm-12'} }) }}
+                {#<i class="fa fa-comment-o"></i>#}
+                <div class="col-md-6">
+                {{ form_widget(form.team, {'attr': {'class': 'form-control inline-select-long', 'placeholder': 'Enter Name'} }) }}
+                {{ form_errors(form.team) }}
+                </div>
+              </div>
+              <div class="form-group">
+                {{ form_label(form.email, 'Email:', {'label_attr': {'class': 'col-sm-12'} }) }}
+                {#<i class="fa fa-comment-o"></i>#}
+                <div class="col-md-6">
+                {{ form_widget(form.email, {'attr': {'class': 'form-control inline-select-long', 'placeholder': 'Enter Email Address'} }) }}
+                {{ form_errors(form.email) }}
+                </div>
+              </div>
+              <div class="form-group">
+                {{ form_label(form.avatar, 'Profile image:', {'label_attr': {'class': 'col-sm-12'} }) }}
+                {#<i class="fa fa-picture-o"></i>#}
+                {% if form.avatar.vars.data is null %}
+                  <div class="col-md-6">
+                  {{ form_widget(form.avatar, {'attr': {'class': 'form-control inline-select-long', 'placeholder': 'Upload Image'} }) }}
+                  </div>
+                {% else %}
+                  <div class="col-md-6">
+                    <input type="file" id="form_file" name="file" class="form-control inline-select-long" placeholder="Upload Image">
+                  </div>
+              </div>
+              <div class="form-group">
+                  <div class="col-md-12">
+                    <img src="{{ asset('uploads/adops/users/') }}{{ form.vars.data.getId() }}/{{ form.avatar.vars.value }}" width="100" height="100" />
+                  </div>
+                  {{ form_widget(form.avatar, {'attr': {'class': 'form-control inline-select-long', 'placeholder': 'Upload Image'} }) }}
+                {% endif %}
+              </div>
+              <div class="form-group col-md-3">
+                {{ form_widget(form.add_client, {'attr': {'class': 'btn btn-block btn-danger'}}) }}
+              </div>
+            </div>
+            {{ form_widget(form.app_id) }}
+            {{ form_rest(form) }}
+          {{ form_end(form) }}
+          </div>
+      </div>
+    </div> <!--End box1   -->
+    <!-- Client Access Form -->
+
+    <div class="box box-danger" style="padding:5px 12px;">
+      <!--Box Header-->
+      <div class="box-header with-border">
+        <h3 class="box-title">Report</h3>
+        <div class="box-tools pull-right">
+          <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+          <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+        </div>
+      </div>
+      <div class="box-body">
+        {#<table class="footable" data-page-size="7" data-page-navigation=".pagination">#}
+        {#  <thead>#}
+        {#    <tr>#}
+        {#      <th>User Name</th>#}
+        {#      <th data-sort-ignore="true">Email</th>#}
+        {#      <th data-hide="phone,tablet" data-sort-ignore="true">Full Name</th>#}
+        {#      <th data-hide="phone,tablet" data-sort-ignore="true">Is Active</th>#}
+        {#      <th data-hide="phone,tablet" data-sort-ignore="true">Type</th>#}
+        {#      <th data-hide="phone,tablet" data-sort-ignore="true">App Access Ids</th>#}
+        {#      <th data-hide="phone,tablet" data-sort-ignore="true">Avatar</th>#}
+        {#      <th data-sort-ignore="true">Action</th>                          #}
+        {#    </tr>#}
+        {#  </thead> #}
+        {#  <tbody>#}
+        {#    {% if users is not empty%}#}
+        {#      {% for user in users %}#}
+        {#      <tr>#}
+        {#        <td>{{ user.username }}</td>#}
+        {#        <td>{{ user.email }}</td>#}
+        {#        <td>{{ user.fullname }}</td>#}
+        {#        <td>{{ user.isActive }}</td>#}
+        {#        <td>{{ user.type }}</td>#}
+        {#        <td>{{ user.appId }}</td>#}
+        {#        <td><img src=" {{ asset('uploads/adops/users/') }}{{ user.id }}/{{ user.avatar }}" class="img-circle" style="max-width: 50px;" /></td>#}
+        {#        <td>#}
+        {#          <a href="{{ path('adops_users_edit', {'id': user.id}) }}">Edit </a> | #}
+        {#          <a href="javascript:void(0)" data-href="{{ path('adops_users_delete', {'id': user.id}) }}" class="delete-user">Delete</a>#}
+        {#          </td>#}
+        {#      </tr>#}
+        {#      {% endfor %}#}
+        {#    {% endif %}#}
+        {#  </tbody>#}
+        {#  <tfoot class="hide-if-no-paging">#}
+        {#    <tr>#}
+        {#      <td colspan="12" style="text-align:center;">#}
+        {#        <div class="pagination pagination-centered"></div>#}
+        {#      </td>#}
+        {#    </tr>#}
+        {#  </tfoot>    #}
+        {#</table>#}
+        <table class="table table-bordered default footable" data-filter="#filter" data-page-size="5" data-page-previous-text="prev" data-page-next-text="next">
+          <thead>
+            <tr>
+              <th data-toggle="true" class="footable-first-column">User Name</th>
+              <th>Email</th>
+              <th data-hide="phone,tablet">Full Name</th>
+              <th data-hide="phone,tablet">Is Active</th>
+              <th data-hide="phone,tablet">Type</th>
+              <th data-hide="phone,tablet">App Access</th>
+              <th data-hide="phone,tablet">Avatar</th>
+              <th data-hide="phone" class="footable-last-column">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% if users is not empty%}
+              {% for user in users %}
+              <tr class="footable-detail-show">
+                <td class="footable-first-column"><span class="footable-toggle"></span>{{ user.username }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.fullname }}</td>
+                <td>{% if user.isActive %}Yes{% else %}No {% endif %}</td>
+                <td>{{ user.type | capitalize }}</td>
+                <td>
+                  {% if user.appAccess is defined %}
+                  {% for app in user.appAccess %}
+                    {{app}}<br />
+                  {% endfor %}
+                  {% endif %}
+                </td>
+                <td>
+                  <img src="{{asset('uploads/adops/users/')}}{{ user.id }}/{{ user.avatar }}" class="img-circle" style="width: 50px; height: 50px;" />
+                </td>
+                <td class="footable-last-column">
+                  <a href="{{ path('adops_users_edit', {'id': user.id}) }}">Edit </a> |
+                  <a href="javascript:void(0)" data-href="{{ path('adops_users_delete', {'id': user.id}) }}" class="delete-user">Delete</a>
+                </td>
+              </tr>
+              {% endfor %}
+            {% endif %}
+          </tbody>
+        </table>
+      </div>
+      <!--Box Body-->
+      <div class="box-body"></div>
+    </div>
+  </section><!-- /.content -->
+  <script>
+    $(function () {
+      $('table').bind('footable_breakpoint', function() {
+        $('table').trigger('footable_expand_first_row');
+      }).footable();
+    });
+    // $('table').trigger('footable_expand_first_row');
+    // $('table').bind('footable_breakpoint', function() {
+    //   $('table').trigger('footable_expand_first_row');
+    // });
+
+    $(".delete-user").click(function() {
+      var r = confirm("Are you sure delete ?");
+      if (r) {
+        var dataHref = $(this).attr('data-href');
+        $.post(
+          dataHref,
+          function(results){
+            if (results) {
+              alert('Delete successfully!');
+              location.reload();
+            }
+          }
+        );
+      }
+    });
+  </script>
+{% endblock %}

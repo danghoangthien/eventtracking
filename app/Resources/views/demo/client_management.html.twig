@@ -1,0 +1,99 @@
+{% extends 'base2.html.twig' %}
+{% block body %}
+<section class="content-header" style="margin: -2em -1em 0 0 !important;">
+    <!--<h1>
+      Edit Profile
+    </h1>-->
+    <ol class="breadcrumb" style="margin: 0 -16.5em 0 0;">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Client Management</li>
+    </ol>
+</section>  
+<h1 style="font-size: 24px; margin: 0 0 1em 0;">Client Management</h1>
+<!-- First Panel -->
+<div class="row">
+    <div class="col-md-6">
+        <div class="box box-danger">
+            <div class="box-header with-border">
+                <h3 class="box-title">Create New Client</h3>
+            </div><!-- /.box-header -->
+            <!-- form start -->
+            <form role="form">
+                <div class="box-body">
+                    <div class="form-group">
+                        <label for="exampleInputName">Client Name</label>
+                        <input type="text" class="form-control" id="exampleInputName" placeholder="Enter Client Name">
+                    </div>
+                    <div class="form-group">
+                        <label>Client App</label>
+                        <select class="form-control">
+                            <option>Bukalapak Android</option>
+                            <option>Bukalapak iOS</option>
+                            <option>Asian Poker Android</option>
+                            <option>Asian Poker iOS</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Account Type</label>
+                        <select class="form-control">
+                            <option>E-commerce</option>
+                            <option>Gaming</option>
+                            <option>Branding</option>
+                        </select>
+                    </div>
+                </div><!-- /.box-body -->
+                <div class="box-footer">
+                    <button type="submit" class="btn btn-danger">Add Client</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <table class="table table-bordered">
+            <tr>
+                <th class="text-red" style="width: 90px">Client</th>
+                <th class="text-red">App Access</th>
+                <th class="text-red" style="width: 150px">App Type</th>
+                <th class="text-red" style="width: 100px">Action</th>
+            </tr>
+            <tr>
+                <td>Bukalapak</td>
+                <td>Bukalapak Android, Bukalapak iOS</td>
+                <td>E-commerce</td>
+                <td>
+                    <a href="#">Edit</a>
+                    <a href="#">Delete</a>
+                </td>
+            </tr>
+            <tr>
+                <td>Asian Poker</td>
+                <td>Asian Poker Android, Asian Poker iOS</td>
+                <td>Gaming</td>
+                <td>
+                    <a href="#">Edit</a>
+                    <a href="#">Delete</a>
+                </td>
+            </tr>
+            <tr>
+                <td>Brave Frontier</td>
+                <td>Brave Frontier Android, Brave Frontier iOS</td>
+                <td>Gaming</td>
+                <td>
+                    <a href="#">Edit</a>
+                    <a href="#">Delete</a>
+                </td>
+            </tr>
+            <tr>
+                <td>Lipputan</td>
+                <td>Lipputan Android</td>
+                <td>Branding</td>
+                <td>
+                    <a href="#">Edit</a>
+                    <a href="#">Delete</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<!-- END First Panel-->   
+{% endblock %}

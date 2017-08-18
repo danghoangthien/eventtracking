@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>{% block head_title %}Hypergrowth event tracking system - Dashboard {% endblock %}</title>
+        <!-- Tell the browser to be responsive to screen width -->                 
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+    {% block stylesheets %}              
+        <!-- Bootstrap 3.3.5 -->
+        <link rel="stylesheet" href="{{ asset('assets/lte2/bootstrap/css/bootstrap.min.css') }}">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+        <!-- Ionicons -->
+        <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+        <!-- Theme style -->
+        <link rel="stylesheet" href="{{ asset('assets/lte2/dist/css/style.css') }}" />
+        <link rel="stylesheet" href="{{ asset('assets/lte2/dist/css/animate.css') }}" />
+        <link rel="stylesheet" href="{{ asset('assets/lte2/dist/css/AdminLTE.min.css') }}">
+        <!-- AdminLTE Skins. Choose a skin from the css/skins
+             folder instead of downloading all of them to reduce the load. -->
+        <link rel="stylesheet" href="{{ asset('assets/lte2/dist/css/skins/_all-skins.min.css') }}">
+        
+        
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+            <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+    {% endblock %}
+
+    {% block javascript_libraries %}                                    
+
+        <!-- jQuery 2.1.4 -->
+        <script src="{{ asset('assets/lte/plugins/jQuery/jQuery-2.1.4.min.js') }}"></script>
+        <!-- jQuery UI 1.11.4 -->
+        <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+        <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+        <script>
+        $.widget.bridge('uibutton', $.ui.button);
+        </script>
+        <!-- Bootstrap 3.3.5 -->
+        <script src="{{ asset('assets/lte2/bootstrap/js/bootstrap.min.js') }}"></script>
+        <!-- Slimscroll -->
+        <script src="{{ asset('assets/lte2/plugins/slimScroll/jquery.slimscroll.min.js') }}"></script>
+        <!-- ChartJS 1.0.1 -->
+        <script src="{{ asset('assets/lte2/plugins/chartjs/Chart.min.js') }}"></script>
+        <!-- FastClick -->
+        <script src="{{ asset('assets/lte2/plugins/fastclick/fastclick.min.js') }}"></script>
+        <!-- Metis Menu -->
+        <script src="{{ asset('assets/lte2/plugins/metisMenu/jquery.metisMenu.js') }}"></script>
+        <!-- AdminLTE App -->
+        <script src="{{ asset('assets/lte2/dist/js/app.min.js') }}"></script>
+        <script src="{{ asset('assets/lte2/dist/js/inspinia.js') }}"></script>
+    		
+        
+
+    {% endblock %}       
+    {% if authentication.getLoggedAuthentication() == null or authentication.getLoggedAuthentication() == "" %}
+        <script>window.location.href = "{{ path('dashboard_client_login') }}";</script>
+    {% endif %}
+            </head>
+            <body class="fixed-sidebar">
+                <div id="wrapper">
+                    {% block left_menu %}
+                         {% set auth = authentication.getLoggedAuthentication()%}
+                         {% if auth is not null %}
+                             {% set userType = auth.getUserType()  %}
+                             {% if userType is not null %}
+                                 {% if userType == 1 or userType == 1000 %}
+                                 
+                                     
+                                     {% include 'lte_menu/admin2.html.twig' ignore missing %}
+                                 {% endif %}
+                                 {% if userType == 0 or userType == 2 %}
+                                     {% include 'lte_menu/client.html.twig' ignore missing %}
+                                 {% endif %}
+                             {% endif %}    
+                         {% endif %}
+
+                     {% endblock %}
+                    <!-- Content Wrapper. Contains page content -->
+                    <div id="page-wrapper" class="content-wrapper">
+                        <!--top bar-->
+                    	<div class="row">
+                    		<nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+                    			<div class="navbar-header">
+                    				<a class="navbar-minimalize  minimalize-styl-2 btn btn-default" href="#"><i class="fa fa-bars"></i> </a></div>
+                    			<ul class="nav navbar-top-links navbar-right">
+                    				<li>
+                    					<span class="m-r-sm welcome-message">Welcome to 
+                    					{% if authentication.getLoggedUserType() == 1 or authentication.getLoggedUserType() == 1000  %}
+                    					    Data Warehouse Admin
+                    					{% elseif authentication.getLoggedUserType() == 0 %}
+                        					{% if authentication.getClientName() == "All Clients" %}
+                                                {{ authentication.getClientName() }}
+                                            {% else %}
+                                                {{ authentication.getClientName() }}
+                                            {% endif %}
+                                            Audience Kit
+                                        {% endif %}
+                    					</span>
+                    				</li>
+                    				<li>
+                    					<a href="{{ path('dashboard_logout') }}">
+                    						<i class="fa fa-sign-out"></i> Log out
+                    					</a>
+                    				</li>
+                    			</ul>
+                    		</nav>
+                    	</div>
+                    	<!--End top bar-->
+                    	<div class="wrapper wrapper-content animated fadeInRight">
+                            {#<section class="content">#}
+                            <!--<div class="{% block body_grid_size %}col-xs-10{% endblock %}">-->
+                            {% block body %} {% endblock %}                    
+                            {#</section><!-- /.content -->#}
+                        </div>
+                        <div class="footer">
+            				<div class="pull-right">
+            					<b>Version</b> 1.1.0
+            				</div>
+            				<div>
+            					<strong>Copyright &copy; 2016 <a href="http://www.hypergrowth.co"> HyperGrowth Pte Ltd</a>.</strong> All rights reserved.
+            				</div>
+            			</div>
+                    </div><!-- /.content-wrapper -->
+                    {#<footer class="main-footer">#}
+                    {#    <div class="pull-right hidden-xs">#}
+                    {#        <b>Version</b> 1.1.0#}
+                    {#    </div>#}
+                    {#    <strong>Copyright &copy; 2015 <a href="http://www.hypergrowth.co"> HyperGrowth Pte Ltd</a>.</strong> All rights reserved.#}
+                    {#</footer>#}
+                </div><!-- ./wrapper -->
+        <style>
+            #userlogin 
+            { 
+                display: inline-block;                
+            }
+            
+            .separator { margin: 1em 0.5em 0 0; }
+            #logout { margin: 1em 0.5em 0 0; }
+            
+        </style>
+    </body>
+</html>

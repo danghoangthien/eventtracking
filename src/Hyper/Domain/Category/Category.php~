@@ -1,0 +1,219 @@
+<?php
+
+namespace Hyper\Domain\Category;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
+
+/**
+ * Category
+ *
+ * @ORM\Table(name="categories")
+ * @ORM\Entity(repositoryClass="Hyper\DomainBundle\Repository\Category\DTCategoryRepository")
+ * @ExclusionPolicy("all")
+ */
+class Category
+{
+    /**
+     * @var string
+     * @ORM\Column(name="id", type="string")
+     * @ORM\Id
+     * @Expose
+     */
+    private $id;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="app_id", type="string")
+     * @Expose
+     */
+    private $appId;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="parent_id", type="string")
+     * @Expose
+     */
+    private $parentId;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="code", type="string")
+     * @Expose
+     */
+    private $code;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string")
+     * @Expose
+     */
+    private $name;
+    
+    /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="Hyper\Domain\Item\InCategoryItem", mappedBy="category", fetch="EXTRA_LAZY", cascade={"persist"})
+     */
+    private $inCategoryItems;
+    
+    public function __construct()
+    {
+        $this->id = uniqid('',true);
+        $this->inCategoryItems = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Set id
+     *
+     * @param string $id
+     * @return Category
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Get id
+     *
+     * @return string 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set appId
+     *
+     * @param string $appId
+     * @return Category
+     */
+    public function setAppId($appId)
+    {
+        $this->appId = $appId;
+
+        return $this;
+    }
+
+    /**
+     * Get appId
+     *
+     * @return string 
+     */
+    public function getAppId()
+    {
+        return $this->appId;
+    }
+
+    /**
+     * Set parentId
+     *
+     * @param integer $parentId
+     * @return Category
+     */
+    public function setParentId($parentId)
+    {
+        $this->parentId = $parentId;
+
+        return $this;
+    }
+
+    /**
+     * Get parentId
+     *
+     * @return integer 
+     */
+    public function getParentId()
+    {
+        return $this->parentId;
+    }
+
+    /**
+     * Set code
+     *
+     * @param string $code
+     * @return Category
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+
+        return $this;
+    }
+
+    /**
+     * Get code
+     *
+     * @return string 
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     * @return Category
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string 
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Add inCategoryItems
+     *
+     * @param \Hyper\Domain\Item\InCategoryItem $inCategoryItems
+     * @return Category
+     */
+    public function addInCategoryItem(\Hyper\Domain\Item\InCategoryItem $inCategoryItems)
+    {
+        $this->inCategoryItems[] = $inCategoryItems;
+
+        return $this;
+    }
+
+    /**
+     * Remove inCategoryItems
+     *
+     * @param \Hyper\Domain\Item\InCategoryItem $inCategoryItems
+     */
+    public function removeInCategoryItem(\Hyper\Domain\Item\InCategoryItem $inCategoryItems)
+    {
+        $this->inCategoryItems->removeElement($inCategoryItems);
+    }
+
+    /**
+     * Get inCategoryItems
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getInCategoryItems()
+    {
+        return $this->inCategoryItems;
+    }
+}

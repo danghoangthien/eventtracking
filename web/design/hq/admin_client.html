@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<!--
+This is a starter template page. Use this page to start your new project from
+scratch. This page gets rid of all links and provides the needed markup only.
+-->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>HQ Admin</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.5 -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="css/AdminLTE.css">
+    <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
+          page. However, you can choose any other skin. Make sure you
+          apply the skin class to the body tag so the changes take effect.
+    -->
+    <link rel="stylesheet" href="css/skins/skin-red.css">
+    
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <!--
+  BODY TAG OPTIONS:
+  =================
+  Apply one or more of the following classes to get the
+  desired effect
+  |---------------------------------------------------------|
+  | SKINS         | skin-blue                               |
+  |               | skin-black                              |
+  |               | skin-purple                             |
+  |               | skin-yellow                             |
+  |               | skin-red                                |
+  |               | skin-green                              |
+  |---------------------------------------------------------|
+  |LAYOUT OPTIONS | fixed                                   |
+  |               | layout-boxed                            |
+  |               | layout-top-nav                          |
+  |               | sidebar-collapse                        |
+  |               | sidebar-mini                            |
+  |---------------------------------------------------------|
+  -->
+  <body class="hold-transition skin-red sidebar-mini sidebar-collapse">
+    <div class="wrapper">
+
+      <!-- Main Header -->
+      <header class="main-header">
+
+        <!-- Logo -->
+        <a href="index.html" class="logo">
+          <!-- mini logo for sidebar mini 50x50 pixels -->
+          <span class="logo-mini"><b>HQ</b></span>
+          <!-- logo for regular state and mobile devices -->
+          <span class="logo-lg"><img src="img/logo_inv2.png" alt="hypergrowth_logo" style="width:45px; margin-right:12px; margin-left:-12px;"><b>HQ</b>Admin</span>
+        </a>
+
+        <!-- Header Navbar -->
+        <nav class="navbar navbar-static-top" role="navigation">
+          <!-- Sidebar toggle button-->
+          <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+            <span class="sr-only">Toggle navigation</span>
+          </a>
+          <!-- Navbar Right Menu -->
+          <div class="navbar-custom-menu">
+            <ul class="nav navbar-nav">
+              <!-- Messages: style can be found in dropdown.less-->
+
+              <!-- User Account Menu -->
+              <li class="dropdown user user-menu">
+                <!-- Menu Toggle Button -->
+                <a href="index.html" class="dropdown-toggle" data-toggle="dropdown">
+                  
+                  <!-- hidden-xs hides the username on small devices so only the image appears. -->
+                  <i class="fa fa-sign-out"></i><span>Sign Out</span>
+                </a>
+        
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </header>
+      <!-- Left side column. contains the logo and sidebar -->
+      <aside class="main-sidebar">
+
+        <!-- sidebar: style can be found in sidebar.less -->
+        <section class="sidebar">
+
+          <!-- Sidebar user panel (optional) -->
+          <div class="user-panel">
+            <div class="pull-left image">
+              <img src="img/user2-160x160.jpg" class="img-circle" alt="User Image">
+            </div>
+            <div class="pull-left info">
+              <p>Alexander Pierce</p>
+              <!-- Status -->
+              <a href="#">HQ Admin Guy</a>
+            </div>
+          </div>
+
+          <!-- Sidebar Menu -->
+          <ul class="sidebar-menu">
+            <li class="header">MENU</li>
+            <!-- Optionally, you can add icons to the links -->
+            <li class="active"><a href="admin_dash.html"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
+            <li><a href="admin_app.html"><i class="fa fa-th-large"></i> <span>Applications</span></a></li>
+            <li><a href="admin_client.html"><i class="fa fa-user-secret"></i> <span>Client Access</span></a></li>
+            <li class="treeview">
+              <a href="#">
+                <i class="fa fa-wrench"></i> <span>Settings</span> 
+                <i class="fa fa-angle-left pull-right"></i>
+              </a>
+              <ul class="treeview-menu">
+                <li><a href="admin_manage_iav.html">In-app Event</a></li>
+                <li><a href="admin_manage_pub.html">Publishers</a></li>
+                <li><a href="admin_manage_camp.html">Campaign</a></li>
+                <li><a href="admin_manage_post.html">Postback</a></li>
+              </ul>
+            </li>
+            <li><a href="admin_report_gen.html"><i class="fa fa-briefcase"></i> <span>Report Generator</span></a></li>
+          </ul><!-- /.sidebar-menu -->
+        </section>
+        <!-- /.sidebar -->
+      </aside>
+
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1 style="color:white;">
+            Manage Client Access<br/>
+            <small>Authorize applications that Client can access to</small>
+          </h1> 
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+           <!-- Client Access Form -->
+            <div class="box box-danger" style="padding:5px 12px;">
+                <!--Box Header-->
+                <div class="box-header with-border">
+                    <h3 class="box-title">Configuration Options</h3>
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                        <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+                    </div>
+                </div>
+                <!--Box Body-->
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-6">              
+                          <div class="form-group">
+                            <label>Username:</label><br/>
+                            <i class="fa fa-user"></i>
+                            <input type="text" class="form-control inline-select-long" placeholder="Enter Username" style="width: 50%; display:inline-block; margin-left:20px;">        
+                          </div>
+                          <div class="form-group">
+                            <label>Password:</label><br/>
+                            <i class="fa fa-asterisk"></i>
+                            <input type="password" class="form-control inline-select-long" placeholder="Enter Password" style="width: 50%; display:inline-block; margin-left:20px;">        
+                          </div>
+                          <div class="form-group">
+                            <label>Client Type:</label><br/>
+                            <i class="fa fa-lock"></i>
+                            <select name="campaign_select" class="form-control inline-select-long" style="width: 50%; display:inline-block; margin-left:20px;">
+                              <option value="all">Choose Access Type</option>
+                              <option value="non">Limited</option>
+                              <option value="inc">Transparent</option>
+                              <option value="bbm">Admin</option>                                  
+                            </select>   
+                          </div>
+                          <div class="form-group">
+                            <label>App Access:</label><br/>
+                            <i class="fa fa-cubes"></i>
+                            <select name="campaign_select" multiple class="form-control inline-select-long" style="width: 50%; display:inline-block; margin-left:20px;vertical-align: top;">
+                              <option>Asian Poker Ios</option>
+                              <option>Asian Poker Android</option>
+                              <option>Brave Frontier Android</option>
+                              <option>Brave Frontier Ios</option>
+                              <option>Big Hero 6 Android</option>
+                              <option>Bukalapak Android</option>
+                              <option>Bukalapak Ios</option>
+                              <option>Chain Chronicle Android</option>
+                              <option>Chain Chronicle Ios</option>
+                              <option>Liputan6 Android</option>
+                              <option>Liputan 6 Ios</option>
+                              <option>Raider Quest Ios</option>
+                              <option>Tiket Android</option>
+                              <option>Tiket Ios</option>
+                              <option>Tokopedia Android</option>
+                              <option>Tokopedia Ios</option>
+                              <option>Wakfu Raiders Android</option>
+                              <option>Wakfu Raiders Ios</option>
+                              <option>Yogrt Android</option>
+                              <option>Yogrt Ios</option>
+                            </select>   
+                          </div>
+                        </div>
+                        <div class="col-md-6">              
+                          <div class="form-group">
+                            <label>Full Name:</label><br/>
+                            <i class="fa fa-comment-o"></i>
+                            <input type="text" class="form-control inline-select-long" placeholder="Enter Name" style="width: 50%; display:inline-block; margin-left:20px;">        
+                          </div>
+                          <div class="form-group">
+                            <label>Email Address:</label><br/>
+                            <i class="fa fa-comment-o"></i>
+                            <input type="text" class="form-control inline-select-long" placeholder="Enter Email Address" style="width: 50%; display:inline-block; margin-left:20px;">        
+                          </div>
+                          <div class="form-group">
+                            <label>Profile Image:</label><br/>
+                            <i class="fa fa-picture-o"></i>
+                            <input type="file" class="form-control inline-select-long" placeholder="Upload Image" style="width: 50%; display:inline-block; margin-left:20px;">        
+                          </div>
+                          <div class="form-group col-md-3">
+                                <button class="btn btn-block btn-danger" style="margin:20px;">Add Client</button>    
+                          </div>
+                        </div>
+                    </div>
+                </div>
+            </div> <!--End box1   -->
+            <!-- Client Access Form -->
+        </section><!-- /.content -->
+      </div><!-- /.content-wrapper -->
+
+      <!-- Main Footer -->
+      <footer class="main-footer">
+        <!-- To the right -->
+        <div class="pull-right hidden-xs">
+          <strong><a href="http://hypergrowth.co" style="color:#fff";">HyperGrowth Pte Ltd</a> &copy; 2014-2016.</strong>
+        </div>
+        <!-- Default to the left -->
+        <strong><br/></strong>
+      </footer>
+    </div><!-- ./wrapper -->
+
+    <!-- REQUIRED JS SCRIPTS -->
+
+    <!-- jQuery 2.1.4 -->
+    <script src="plugins/jQuery/jQuery-2.1.4.min.js"></script>
+    <!-- Bootstrap 3.3.5 -->
+    <script src="js/bootstrap.min.js"></script>
+    
+    <!-- AdminLTE App -->
+        <script src="js/app.min.js"></script>
+
+    <!-- Optionally, you can add Slimscroll and FastClick plugins.
+         Both of these plugins are recommended to enhance the
+         user experience. Slimscroll is required when using the
+         fixed layout. -->
+  </body>
+</html>

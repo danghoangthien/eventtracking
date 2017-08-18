@@ -1,0 +1,300 @@
+<?php
+
+namespace Hyper\Domain\Application;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
+
+/**
+ * Application
+ *
+ * @ORM\Table(name="applications")
+ * @ORM\Entity(repositoryClass="Hyper\DomainBundle\Repository\Application\DTApplicationRepository")
+ * @ExclusionPolicy("all")
+ */
+class Application
+{
+    /**
+     * @var string
+     * @ORM\Column(name="id", type="string")
+     * @ORM\Id
+     * @Expose
+     */
+    private $id;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="app_id", type="string")
+     * @Expose
+     */
+    private $appId;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="app_name", type="string")
+     * @Expose
+     */
+    private $appName;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="app_version", type="string")
+     * @Expose
+     */
+    private $appVersion;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="platform", type="integer", nullable=true)
+     * @Expose
+     */
+    private $platform;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="created", type="integer")
+     * @Expose
+     */
+    private $created;    
+    
+    /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="Hyper\Domain\Item\Item", mappedBy="application", fetch="EXTRA_LAZY", cascade={"persist"})
+     */
+     private $items;
+     
+     /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="Hyper\Domain\Action\Action", mappedBy="application", fetch="EXTRA_LAZY", cascade={"persist"})
+     */
+     private $actions;
+     
+     
+    
+    
+    public function __construct($applicationId = null)
+    {
+        if (!empty($applicationId)) {
+            $this->id = $applicationId;
+        } else {
+            $this->id = uniqid('',true);
+        }
+        $this->created = time();
+    }
+    
+
+    /**
+     * Set id
+     *
+     * @param string $id
+     * @return Application
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Get id
+     *
+     * @return string 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set appId
+     *
+     * @param string $appId
+     * @return Application
+     */
+    public function setAppId($appId)
+    {
+        $this->appId = $appId;
+
+        return $this;
+    }
+
+    /**
+     * Get appId
+     *
+     * @return string 
+     */
+    public function getAppId()
+    {
+        return $this->appId;
+    }
+
+    /**
+     * Set appName
+     *
+     * @param string $appName
+     * @return Application
+     */
+    public function setAppName($appName)
+    {
+        $this->appName = $appName;
+
+        return $this;
+    }
+
+    /**
+     * Get appName
+     *
+     * @return string 
+     */
+    public function getAppName()
+    {
+        return $this->appName;
+    }
+
+    /**
+     * Set appVersion
+     *
+     * @param string $appVersion
+     * @return Application
+     */
+    public function setAppVersion($appVersion)
+    {
+        $this->appVersion = $appVersion;
+
+        return $this;
+    }
+
+    /**
+     * Get appVersion
+     *
+     * @return string 
+     */
+    public function getAppVersion()
+    {
+        return $this->appVersion;
+    }
+    
+    /**
+     * Set platform
+     *
+     * @param integer $platform
+     * @return Applcation
+     */
+    public function setPlatform ($platform)
+    {
+        $this->platform = $platform;
+
+        return $this;
+    }
+
+    /**
+     * Get platform
+     *
+     * @return integer 
+     */
+    public function getPlatform()
+    {
+        return $this->platform;
+    }
+
+
+    /**
+     * Set created
+     *
+     * @param integer $created
+     * @return Application
+     */
+    public function setCreated ($created)
+    {
+        $this->created = $created;
+
+        return $this;
+    }
+
+    /**
+     * Get created
+     *
+     * @return integer 
+     */
+    public function getCreated()
+    {
+        return $this->created;
+    }
+
+    /**
+     * Add items
+     *
+     * @param \Hyper\Domain\Item\Item $items
+     * @return Application
+     */
+    public function addItem(\Hyper\Domain\Item\Item $items)
+    {
+        $this->items[] = $items;
+
+        return $this;
+    }
+
+    /**
+     * Remove items
+     *
+     * @param \Hyper\Domain\Item\Item $items
+     */
+    public function removeItem(\Hyper\Domain\Item\Item $items)
+    {
+        $this->items->removeElement($items);
+    }
+
+    /**
+     * Get items
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getItems()
+    {
+        return $this->items;
+    }
+
+    /**
+     * Add actions
+     *
+     * @param \Hyper\Domain\Action\Action $actions
+     * @return Application
+     */
+    public function addAction(\Hyper\Domain\Action\Action $actions)
+    {
+        $this->actions[] = $actions;
+
+        return $this;
+    }
+
+    /**
+     * Remove actions
+     *
+     * @param \Hyper\Domain\Action\Action $actions
+     */
+    public function removeAction(\Hyper\Domain\Action\Action $actions)
+    {
+        $this->actions->removeElement($actions);
+    }
+
+    /**
+     * Get actions
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getActions()
+    {
+        return $this->actions;
+    }
+}

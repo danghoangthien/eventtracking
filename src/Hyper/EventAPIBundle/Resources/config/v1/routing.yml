@@ -1,0 +1,128 @@
+userjouney:
+    pattern:     /userjourney
+    defaults: { _controller: HyperEventAPIBundle:V1/UserJourney:index }
+    options: {check_access_token: false, check_access_app: false}
+list_access_app:
+    pattern:     /list-access-app
+    defaults: { _controller: HyperEventAPIBundle:V1/Application:listAccessApp }
+
+application:
+    pattern:     /applications
+    defaults: { _controller: HyperEventAPIBundle:V1/Application:index }
+    options: {check_access_token: true, check_access_app: false}
+
+analytic_metadata_count_device_by_country:
+    pattern:     /analytic/metadata/count_device_by_country
+    defaults: { _controller: HyperEventAPIBundle:V1/AnalyticMetadata/CountDeviceByCountry:index }
+    options: {check_access_token: false, check_access_app: false}
+
+analytic_metadata_count_device_by_platform:
+    pattern:     /analytic/metadata/count_device_by_platform
+    defaults: { _controller: HyperEventAPIBundle:V1/AnalyticMetadata/CountDeviceByPlatform:index }
+    options: {check_access_token: false, check_access_app: false}
+
+analytic_metadata_count_device_by_app_title:
+    pattern:     /analytic/metadata/count_device_by_app_title
+    defaults: { _controller: HyperEventAPIBundle:V1/AnalyticMetadata/CountDeviceByAppTitle:index }
+    options: {check_access_token: false, check_access_app: false}
+
+analytic_metadata_count_device_and event_by_app_title:
+    pattern:     /analytic/metadata/count_device_and_event_by_app_title
+    defaults: { _controller: HyperEventAPIBundle:V1/AnalyticMetadata/CountDeviceAndEventByAppTitle:index }
+    options: {check_access_token: false, check_access_app: false}
+
+analytic_metadata_recent_in_app_event:
+    pattern:     /analytic/metadata/recent_in_app_event
+    defaults: { _controller: HyperEventAPIBundle:V1/AnalyticMetadata/RecentInAppEvent:index }
+    options: {check_access_token: false, check_access_app: false}
+
+user_registration_client_info:
+    pattern:     /user/registration/client_info
+    defaults: { _controller: HyperEventAPIBundle:V1/User/Registration/ClientInfo:index }
+    options: {check_access_token: false, check_access_app: false}
+
+user_registration_signup:
+    pattern:     /user/registration/signup
+    defaults: { _controller: HyperEventAPIBundle:V1/User/Registration/Signup:index }
+    options: {check_access_token: false, check_access_app: false}
+
+trendcard_iae_stats_card_send_to_cache:
+    pattern:     /trend_card/iae_stats
+    defaults: { _controller: HyperEventAPIBundle:V1/TrendCard/IAEStatsCard:sendToCache }
+    options: {check_access_token: false, check_access_app: false}
+
+trendcard_iae_stats_card_retrieve_from_cache:
+    pattern:     /trend_card/iae_stats/queue/{queue_id}
+    defaults: { _controller: HyperEventAPIBundle:V1/TrendCard/IAEStatsCard:retrieveFromCache }
+    options: {check_access_token: false, check_access_app: false}
+
+trendcard_highest_sales_card_send_to_cache:
+    pattern:     /trend_card/highest_sales
+    defaults: { _controller: HyperEventAPIBundle:V1/TrendCard/HighestSalesCard:sendToCache }
+    options: {check_access_token: false, check_access_app: false}
+
+trendcard_highest_sales_card_retrieve_from_cache:
+    pattern:     /trend_card/highest_sales/queue/{queue_id}
+    defaults: { _controller: HyperEventAPIBundle:V1/TrendCard/HighestSalesCard:retrieveFromCache }
+    options: {check_access_token: false, check_access_app: false}
+
+trendcard_purchase_rate_card_send_to_cache:
+    pattern:     /trend_card/purchase_rate
+    defaults: { _controller: HyperEventAPIBundle:V1/TrendCard/PurchaseRateCard:sendToCache }
+    options: {check_access_token: false, check_access_app: false}
+
+trendcard_purchase_rate_card_retrieve_from_cache:
+    pattern:     /trend_card/purchase_rate/queue/{queue_id}
+    defaults: { _controller: HyperEventAPIBundle:V1/TrendCard/PurchaseRateCard:retrieveFromCache }
+    options: {check_access_token: false, check_access_app: false}
+
+trendcard_dormant_rate_card_send_to_cache:
+    pattern:     /trend_card/dormant_rate
+    defaults: { _controller: HyperEventAPIBundle:V1/TrendCard/DormantRateCard:sendToCache }
+    options: {check_access_token: false, check_access_app: false}
+
+trendcard_dormant_rate_card_retrieve_from_cache:
+    pattern:     /trend_card/dormant_rate/queue/{queue_id}
+    defaults: { _controller: HyperEventAPIBundle:V1/TrendCard/DormantRateCard:retrieveFromCache }
+    options: {check_access_token: false, check_access_app: false}
+
+trendcard_ghost_rate_card_send_to_cache:
+    pattern:     /trend_card/ghost_rate
+    defaults: { _controller: HyperEventAPIBundle:V1/TrendCard/GhostRateCard:sendToCache }
+    options: {check_access_token: false, check_access_app: false}
+
+trendcard_ghost_rate_card_retrieve_from_cache:
+    pattern:     /trend_card/ghost_rate/queue/{queue_id}
+    defaults: { _controller: HyperEventAPIBundle:V1/TrendCard/GhostRateCard:retrieveFromCache }
+    options: {check_access_token: false, check_access_app: false}
+
+trendcard_mode_of_sales_card_send_to_cache:
+    pattern:     /trend_card/mode_of_sales
+    defaults: { _controller: HyperEventAPIBundle:V1/TrendCard/ModeOfSalesCard:sendToCache }
+    options: {check_access_token: false, check_access_app: false}
+
+trendcard_mode_of_sales_retrieve_from_cache:
+    pattern:     /trend_card/mode_of_sales/queue/{queue_id}
+    defaults: { _controller: HyperEventAPIBundle:V1/TrendCard/ModeOfSalesCard:retrieveFromCache }
+    options: {check_access_token: false, check_access_app: false}
+
+trendcard_total_sales_card_send_to_cache:
+    pattern:     /trend_card/total_sales
+    defaults: { _controller: HyperEventAPIBundle:V1/TrendCard/TotalSalesCard:sendToCache }
+    options: {check_access_token: false, check_access_app: false}
+
+trendcard_total_sales_retrieve_from_cache:
+    pattern:     /trend_card/total_sales/queue/{queue_id}
+    defaults: { _controller: HyperEventAPIBundle:V1/TrendCard/TotalSalesCard:retrieveFromCache }
+    options: {check_access_token: false, check_access_app: false}
+
+trendcard_install_city_card_send_to_cache:
+    pattern:     /trend_card/install_city
+    defaults: { _controller: HyperEventAPIBundle:V1/TrendCard/InstallCityCard:sendToCache }
+    options: {check_access_token: false, check_access_app: false}
+
+trendcard_install_city_retrieve_from_cache:
+    pattern:     /trend_card/install_city/queue/{queue_id}
+    defaults: { _controller: HyperEventAPIBundle:V1/TrendCard/InstallCityCard:retrieveFromCache }
+    options: {check_access_token: false, check_access_app: false}
+

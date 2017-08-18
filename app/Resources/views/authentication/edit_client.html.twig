@@ -1,0 +1,502 @@
+{% extends 'layout_ak/base.html.twig' %}
+{% block sub_head_title %}Dashboard - User Access Management{% endblock %}
+
+{% block body %}
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <section class="content-header" style="margin: -2em 0 0 -2em !important;">
+            <h1 style="font-size: 24px; margin: 0 0 1em 0.5em;">
+              Edit Client
+            </h1>
+            <ol class="breadcrumb">
+              <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+              <li class="active">Edit Client</li>
+            </ol>
+        </section>
+        
+        <div class="row">  
+            <!--
+            <div class="col-md-3">        
+                <div class="box box-danger">
+                    <div class="box-body box-profile">
+                        
+                        <h3 class="profile-username text-center">Client</h3>
+                        <p class="text-muted text-center">
+                            
+                        </p>
+                    </div>
+                </div>
+            </div>
+            -->
+            <div class="col-md-10">
+                <div class="box box-danger">
+                    <div class="box-header with-border">
+                            <h3 class="box-title">Edit Client</h3>
+                    </div><!-- /.box-header -->
+                    <div class="box-body">
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <label for="inputName" class="col-sm-2 control-label">Client</label>
+                                <div class="col-sm-10" id="{{ record.id }}">
+                                    <input type="text" class="form-control" id="client" 
+                                           value="{{ record.clientName }}">
+                                </div>
+                            </div>
+                                
+                            <div class="form-group">
+                                <label for="inputName" class="col-sm-2 control-label">Account Type</label>
+                                <div class="col-sm-10">
+                                    <select id="account_type" class="form-control">
+                                        <option>E-commerce</option>
+                                        <option>Gaming</option>
+                                        <option>Branding</option>
+                                    </select>
+                                </div>
+                            </div>
+                                
+                            <div class="form-group">
+                                <label for="inputName" class="col-sm-2 control-label">Client App</label>
+                            </div>
+                            
+                            <div class="form-group">
+                                <table style="margin: 0 0 0 12em; display: inline-block;">
+                                    <tr>
+                                        <td>
+                                            <label>Select Apps</label>
+                                            <select id="applications" multiple class="form-control">
+                                                {% if all_apps is defined %}
+                                                    {% for all in all_apps %}
+                                                    <option value="{{ all.app_id }}">{{ all.app_id }}</option>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </select>
+                                        </td>
+                                        <td class="separator"></td>
+                                        <td style="padding-top: 2em;">
+                                            <input type="button" name="authEntry" id="addAll" value="Select All >>" class="btn-xs btn-default"/><br />
+                                            <input type="button" name="authEntry" id="addSingle" value="Select >" class="btn-xs btn-default"/><br />
+                                            <input type="button" name="authEntry" id="removeSingle" value="< Remove" class="btn-xs btn-default"/><br />
+                                            <input type="button" name="authEntry" id="removeAll" value="<< Remove All" class="btn-xs btn-default"/><br />
+                                        </td>
+                                        <td class="separator"></td>
+                                        <td>
+                                            <label>Selected</label>
+                                            <select id="app_id" multiple class="form-control" style="margin: 0.4 0 0 -0.5em;">      
+                                            {% if client_apps is defined %}
+                                                {% for client in client_apps %}
+                                                <option value="{{ client.app_id }}">{{ client.app_id }}</option>
+                                                {% endfor %}
+                                            {% endif %}
+                                            </select>
+                                        </td>
+                                    </tr>
+                                </table>                        
+                            </div>
+        
+                            <div id="divSendBtn" class="form-group">
+                                <input type="button" name="authEntry" id="btnCancel" value="Cancel" class="btn btn-danger"/>
+                                <input type="button" name="authEntry" id="btnUpdate" value="Update" class="btn btn-primary"/>
+                                <!--<input type="button" name="authEntry" id="btnNew" value="Add New" class="btn btn-primary"/>-->
+                            </div>
+                        </form>
+                    </div>            
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block stylesheets_inline %}
+    <style>
+        .separator
+        {
+            width: 2em;
+            display: inline-block;
+        }
+        
+        #addAll, #addSingle, #removeAll, #removeSingle
+        {
+            margin-bottom: 0.5em;
+            width: 8em;
+            color: white;
+        }
+    
+        #app_id, #applications
+        {
+            width: 14em;
+            min-height: 10em;
+            overflow-x: scroll;
+        }   
+    
+        #addSelected, #removeSelected
+        {
+            text-decoration: underline;
+            font-weight: bold;
+            font-size: 10px;
+            margin: 1em 0 0 1em;
+            cursor: pointer;
+        }    
+    
+        #divSendBtn
+        {
+            float: left;
+            width: 13em;
+            margin: 2em 0 2em 11em !important;           
+            display: inline-block;
+        }
+        
+    </style>
+{% endblock %}
+
+{% block javascript_inline %}
+    <script>   
+        function addSuffix(element)
+        {
+            $("#"+element).children("option").each(function()
+            {
+                var prefix = $(this).val();
+                var html   = $(this).html();
+                if(prefix.indexOf("id") == 0)
+                {
+                    console.log(prefix + "-" + html + " iOS");
+                    $(this).html(html + " - iOS");
+                }
+                else
+                {
+                    console.log(prefix + "-" + html + " Android");
+                    $(this).html(html + " - Android");
+                }
+            });   
+        }
+    
+        function sortOption(el)
+        {
+            var options = $('#'+ el + ' option');
+            var arr = options.map(function(_, o) { return { t: $(o).text(), v: o.value }; }).get();
+            arr.sort(function(o1, o2) { return o1.t > o2.t ? 1 : o1.t < o2.t ? -1 : 0; });
+            options.each(function(i, o) {
+              o.value = arr[i].v;
+              $(o).text(arr[i].t);
+            });
+        }
+    
+        function removeFromSelection()
+        {
+            var All = new Array();
+            var cnt;
+    
+            $("#app_id").children("option").each(function()
+            {
+                All.push({ "value": $(this).val(), "text": $(this).html() });
+            });
+    
+            if(All.length > 0)
+            {
+                cnt = All.length;
+            }        
+    
+            var applications = new Array();
+            $("#applications").children("option").each(function()
+            {
+                applications.push($(this).val());
+            });
+    
+            //console.log(All); console.log(applications); //return false;
+    
+            for(var i = 0; i < cnt; i++)
+            {                
+                if(jQuery.inArray(All[i].value, applications) != -1)
+                {
+                    console.log("Found " + All[i].text);
+                    console.log(All[i].value);
+    
+                    //$("#applications").children("option:contains('"+All[i].value+"')").remove();   
+                    $("#applications").children("option").each(function()
+                    {
+                        if($(this).val() == All[i].value)
+                        {
+                            $(this).remove();
+                            console.log("should remove");
+                        }
+                    });
+                }
+            }                    
+        }
+    
+        function error(el)
+        {
+            $(el).css("background-color", "red").css("color","yellow").val("Should not be blank");
+    
+            setTimeout(function()
+            {
+                $(el).css("background-color", "white").css("color","black");
+                $(el).val("");
+            }, 2000);
+        }
+    
+        function triggerMe(el)
+        {
+            var e = jQuery.Event("keydown");
+            e.which = 50; // # Some key code value
+            e.keyCode = 50;
+            $(el).trigger(e);
+        }
+    
+        $(document).ready(function()
+        {      
+            $.all_apps  = new Array();
+            
+            $("#applications").children("option").each(function()
+            {
+                $.all_apps.push({ "value": $(this).val(), "html": $(this).html() });
+            }); 
+                   
+            removeFromSelection();
+    
+            /* Set input css thru class */
+            $(".tr1 >td >input").attr("class","form-control");                        
+            sortOption("applications");
+            sortOption("app_id");
+    
+            //addSuffix("applications");
+            //addSuffix("app_id");
+    
+            /* GET INITIAL VALUES OF AVAILABLE APPS */
+            var original_apps = new Array();
+            var selected_apps = new Array();
+                    
+            
+            $("#applications").children("option").each(function()
+            {
+                original_apps.push({ "value": $(this).val(), "html": $(this).html() });
+            });          
+            
+            $("#app_id").children("option").each(function()
+            {
+                selected_apps.push({ "value": $(this).val(), "html": $(this).html() });
+            });                
+            
+            /* Global Vars */                        
+            var client;
+            var account_type;
+            var client_id;
+                          
+            $("#app_id").keyup(function(e)
+            {
+                if(e.which == 13) 
+                {                                   
+                    $(".tm-tag").children('span').addClass('for_height');                                                        
+    
+                    $(".for_height").css("text-align","center")
+                            .css("padding","0 0 0 2px")
+                            .css("color","#336699");
+                    $(".tm-tag-remove").css("padding","0 2px 0 0").css("font-weight", "bold");        
+    
+                   //alert($(this).val());
+                }
+                //console.log("enter");
+            });                         
+    
+            $("#btnClick").on("click", this, function()
+            {                                                        
+                $(this).focus();
+                var ex = jQuery.Event("keyup");
+                ex.which = 13;                                
+                $(this).trigger(ex);
+            }).click();       
+    
+            $("#btnCancel").on("click",this, function()
+            {
+                window.location.href = "{{ path('dashboard_client_access') }}";            
+            });
+    
+            $("#addAll").on("click", this, function()
+            {
+                $("#applications").children("option").remove();
+                $("#app_id").children("option").remove();                        
+                
+                for(var i in $.all_apps)
+                {
+                    $("#app_id").append("<option value='"+$.all_apps[i].value+"'>"+$.all_apps[i].html+"</option>");
+                }                       
+                console.log($.all_apps);
+                
+                sortOption("app_id");
+            });
+    
+            $("#removeAll").on("click", this, function()
+            {
+               $("#applications").children("option").remove();
+                $("#app_id").children("option").remove();
+    
+                for(var i in $.all_apps)
+                {
+                    $("#applications").append("<option value='"+$.all_apps[i].value+"'>"+$.all_apps[i].html+"</option>");
+                }
+    
+                sortOption("applications");
+            });
+    
+            $("#removeSingle").on("click", this, function()
+            {
+                var All = new Array();
+                var cnt;
+                var selected = $("#app_id").val(); 
+                var selected_cnt;
+                if(selected != null)
+                {
+                    selected_cnt = selected.length;
+                }    
+    
+                $("#app_id").children("option").each(function()
+                {
+                    All.push({ "value": $(this).val(), "text": $(this).html() });
+                });
+    
+                if(All.length > 0)
+                {
+                    cnt = All.length;
+                }            
+    
+                var applications = new Array();
+                $("#applications").children("option").each(function()
+                {
+                    applications.push($(this).val());
+                });
+    
+                for(var i = 0; i < selected_cnt; i++)
+                {                
+                    if(jQuery.inArray(selected[i], applications) != -1)
+                    {
+                        console.log("Found " + selected[i]);
+                    }
+                    else
+                    {                  
+                        for(var x in All)
+                        {
+                            if(All[x].value == selected[i])
+                            {
+                                console.log(All[x].text);
+                                console.log(All[x].value);
+                                $("#applications").append("<option value='"+All[x].value+"'>"+All[x].text+"</option>");
+                                //$("#app_id").children("option:contains('"+All[x].value+"')").remove();                                            
+                                $("#app_id").children("option").each(function()
+                                {
+                                    if($(this).val() == All[x].value)
+                                    {
+                                        $(this).remove();
+                                        console.log("should remove");
+                                    }
+                                });
+                            }
+                        }                  
+                    }
+                }       
+    
+                sortOption("applications");
+            });
+    
+            $("#addSingle").on("click", this, function()
+            {
+                var All = new Array();
+                var cnt;
+                var selected = $("#applications").val(); 
+                var selected_cnt;
+                if(selected != null)
+                {
+                    selected_cnt = selected.length;
+                }               
+    
+                $("#applications").children("option").each(function()
+                {
+                    All.push({ "value": $(this).val(), "text": $(this).html() });
+                });
+    
+                if(All.length > 0)
+                {
+                    cnt = All.length;
+                }  
+    
+                var app_id = new Array();
+                $("#app_id").children("option").each(function()
+                {
+                    app_id.push($(this).val());
+                });
+    
+                for(var i = 0; i < selected_cnt; i++)
+                {                
+                    if(jQuery.inArray(selected[i], app_id) != -1)
+                    {
+                        console.log("Found " + selected[i]);
+                    }
+                    else
+                    {                  
+                        for(var x in All)
+                        {
+                            if(All[x].value == selected[i])
+                            {
+                                console.log("Transferred: "+All[x].text);
+                                $("#app_id").append("<option value='"+All[x].value+"'>"+All[x].text+"</option>");
+                                //$("#applications").children("option:contains('"+All[x].text+"')").remove();
+                                $("#applications").children("option").each(function()
+                                {
+                                    if($(this).val() == All[x].value)
+                                    {
+                                        $(this).remove();
+                                        console.log("should remove");
+                                    }
+                                });
+                            }
+                        }                                         
+                    }
+                }
+    
+                sortOption("app_id");
+            });
+    
+            $("#btnUpdate").on("click", this, function()
+            {                            
+                //$(this).attr('disabled','disabled');
+    
+                var update_app_ids = new Array();
+                $("#app_id").children("option").each(function()
+                {
+                    update_app_ids.push($(this).val());
+                });                  
+                
+                update_app_ids = update_app_ids.join();
+                client_id = $("#client").parent("div").attr("id");
+                client = $("#client").val();
+                account_type = $("#account_type").val();
+    
+                $.obj = { "client_id": client_id, "client": client, "account_type": account_type, "app_id": update_app_ids };                            
+                
+                $.ajax(
+                {                    
+                    url:"{{ path('dashboard_update_client') }}",
+                    type: "POST",
+                    data: $.obj,
+                    success: function(msg)
+                    {                                    
+                        var message = JSON.parse(msg);
+                        if(message.status == "invalid")
+                        {
+                            alert("Invalid data sent...");
+                            $(this).removeAttr('disabled');
+                        }
+                        else if(message.status == "failed")
+                        {
+                            alert("Error updating client");
+                            $(this).removeAttr('disabled');
+                        }                       
+                        else
+                        {
+                            alert("Client has been updated");
+                            $(this).removeAttr('disabled');
+                            window.location.href = "{{ path('dashboard_client_access') }}";
+                        }
+                    }                    
+                });   
+            });
+        });
+    </script> 
+{% endblock %}

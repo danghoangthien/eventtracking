@@ -1,0 +1,270 @@
+imports:
+    - { resource: parameters.yml }
+    - { resource: security.yml }
+    - { resource: services.yml }
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+    locale: en
+
+framework:
+    #esi:             ~
+    #translator:      { fallbacks: ["%locale%"] }
+    secret:          "%secret%"
+    router:
+        resource: "%kernel.root_dir%/config/routing.yml"
+        strict_requirements: ~
+    form:            ~
+    csrf_protection: ~
+    validation:      { enable_annotations: true }
+    #serializer:      { enable_annotations: true }
+    templating:
+        engines: ['twig']
+        #assets_version: SomeVersionScheme
+    default_locale:  "%locale%"
+    trusted_hosts:   ~
+    trusted_proxies: ~
+    session:
+        # handler_id set to null will use default session handler from php.ini
+        handler_id:  ~
+    fragments:       ~
+    http_method_override: true
+
+# Twig Configuration
+twig:
+    debug:            "%kernel.debug%"
+    strict_variables: "%kernel.debug%"
+    globals:
+        authentication: "@auth.controller"
+        # clover:         "@clover.controller"
+        # promo:          "@promo.controller"
+
+# Assetic Configuration
+assetic:
+    debug:          "%kernel.debug%"
+    use_controller: false
+    bundles:        [ ]
+    #java: /usr/bin/java
+    filters:
+        cssrewrite: ~
+        #closure:
+        #    jar: "%kernel.root_dir%/Resources/java/compiler.jar"
+        #yui_css:
+        #    jar: "%kernel.root_dir%/Resources/java/yuicompressor-2.4.7.jar"
+
+# Doctrine Configuration
+doctrine:
+    dbal:
+        default_connection: default
+        connections:
+            default:
+                driver:   pdo_mysql
+                host:     "%database_host%"
+                port:     "%database_port%"
+                dbname:   "%database_name%"
+                user:     "%database_user%"
+                password: "%database_password%"
+                charset:  UTF8
+                # if using pdo_sqlite as your database driver:
+                #   1. add the path in parameters.yml
+                #     e.g. database_path: "%kernel.root_dir%/data/data.db3"
+                #   2. Uncomment database_path in parameters.yml.dist
+                #   3. Uncomment next line:
+                #     path:     "%database_path%"
+
+                # how you call your additional connection is up to you
+                # for me it is pgsql - you need it in a bit again
+            pgsql:
+                driver:   "%pgsql_database_driver%"
+                host:     "%pgsql_database_host%"
+                port:     "%pgsql_database_port%"
+                dbname:   "%pgsql_database_name%"
+                user:     "%pgsql_database_user%"
+                password: "%pgsql_database_password%"
+                charset:  UTF8
+            adops_pgsql:
+                driver:   "%adops_pgsql_database_driver%"
+                host:     "%adops_pgsql_database_host%"
+                port:     "%adops_pgsql_database_port%"
+                dbname:   "%adops_pgsql_database_name%"
+                user:     "%adops_pgsql_database_user%"
+                password: "%adops_pgsql_database_password%"
+                charset:  UTF8
+
+    orm:
+        auto_generate_proxy_classes: "%kernel.debug%"
+        default_entity_manager: default
+        #naming_strategy: doctrine.orm.naming_strategy.underscore
+        #auto_mapping: false
+
+        entity_managers:
+            default:
+                connection: default
+            pgsql:
+                connection: pgsql
+                mappings:
+                    hyperfactdomain:
+                        type: annotation
+                        dir: %kernel.root_dir%/../src/Hyper/Domain/
+                        prefix: Hyper\Domain\
+                        is_bundle: false
+                        alias: HyperFact
+                    Device:
+                        type: annotation
+                        dir: %kernel.root_dir%/../src/Hyper/Domain/Device
+                        prefix: Hyper\Domain\Device
+                        is_bundle: false
+                        alias: Device
+                    # HyperAdopsWeb:
+                    #     type: annotation
+                    #     dir: %kernel.root_dir%/../src/Hyper/Adops/WebBundle/Domain/
+                    #     prefix: Hyper\Adops\WebBundle\Domain
+                    #     is_bundle: false
+                    #     alias: HyperAdopsWeb
+                    # HyperAdopsAPI:
+                    #     type: annotation
+                    #     dir: %kernel.root_dir%/../src/Hyper/Adops/APIBundle/Domain/
+                    #     prefix: Hyper\Adops\APIBundle\Domain
+                    #     is_bundle: false
+                    #     alias: HyperAdopsAPI
+                    Authentication:
+                        type: annotation
+                        dir: %kernel.root_dir%/../src/Hyper/Domain/Authentication
+                        prefix: Hyper\Domain\Authentication
+                        is_bundle: false
+                        alias: Authentication
+            adops_pgsql:
+                connection: adops_pgsql
+                mappings:
+                    hyperfactdomain:
+                        type: annotation
+                        dir: %kernel.root_dir%/../src/Hyper/Domain/
+                        prefix: Hyper\Domain\
+                        is_bundle: false
+                        alias: HyperFact
+                    Device:
+                        type: annotation
+                        dir: %kernel.root_dir%/../src/Hyper/Domain/Device
+                        prefix: Hyper\Domain\Device
+                        is_bundle: false
+                        alias: Device
+                    HyperAdopsWeb:
+                        type: annotation
+                        dir: %kernel.root_dir%/../src/Hyper/Adops/WebBundle/Domain/
+                        prefix: Hyper\Adops\WebBundle\Domain
+                        is_bundle: false
+                        alias: HyperAdopsWeb
+                    HyperAdopsAPI:
+                        type: annotation
+                        dir: %kernel.root_dir%/../src/Hyper/Adops/APIBundle/Domain/
+                        prefix: Hyper\Adops\APIBundle\Domain
+                        is_bundle: false
+                        alias: HyperAdopsAPI
+                    Authentication:
+                        type: annotation
+                        dir: %kernel.root_dir%/../src/Hyper/Domain/Authentication
+                        prefix: Hyper\Domain\Authentication
+                        is_bundle: false
+                        alias: Authentication
+
+
+# Doctrine Mongo Configuration
+# doctrine_mongodb:
+#     connections:
+#         default:
+#             server: mongodb://test:test@ds053312.mongolab.com:53312
+#             options: {db: bklp}
+#     default_database: bklp
+#     document_managers:
+#         default:
+#             auto_mapping: true
+# Amazon S3 by KNP Gaufrete
+knp_gaufrette:
+    adapters:
+        event_log:
+            amazon_s3:
+                amazon_s3_id: hyper_event.amazon_s3
+                bucket_name:  %amazon_s3_bucket_name%
+                create:       false
+                options:
+                    create: true
+    filesystems:
+        event_log:
+            adapter:    event_log
+            alias:      event_log_filesystem
+
+hyper_event:
+    amazon_s3:
+        aws_key:        %amazon_aws_key%
+        aws_secret_key: %amazon_aws_secret_key%
+        base_url:       %amazon_s3_base_url%
+
+# Swiftmailer Configuration
+swiftmailer:
+    transport:  "%mailer_transport%"
+    encryption: ~
+    host:       "%mailer_host%"
+    port:       "%mailer_port%"
+    username:   "%mailer_user%"
+    password:   "%mailer_password%"
+    spool:     { type: memory }
+#Lsw Memcache
+#lsw_memcache:
+#    session:
+#        pool: default
+#    pools:
+#        default:
+#            servers:
+#              - { host: localhost, tcp_port: 11211 }
+
+# fos_rest:
+#     param_fetcher_listener: true
+#     view:
+#         view_response_listener: 'force'
+#         formats:
+#             xml: true
+#             json: true
+#         templating_formats:
+#             html: false
+#     # format_listener:
+#     #     rules:
+#     #         - { path: '/adops/api/^', priorities: [ 'json' ], fallback_format: json, prefer_extension: false }
+#     # allowed_methods_listener: true
+#     # body_listener: true
+#     # disable_csrf_role: ROLE_API
+#     # routing_loader:
+#     #     default_format: json
+#     format_listener: true
+#     routing_loader:
+#         default_format: json
+#         include_format: false
+
+# Geoip maxmind
+maxmind_geoip:
+    data_file_path: "%kernel.root_dir%/../web/GeoLiteCity.dat"
+
+# Knp Paginator
+knp_paginator:
+    page_range: 10                      # default page range used in pagination control
+    default_options:
+        page_name: page                # page query parameter name
+        sort_field_name: sort          # sort field query parameter name
+        sort_direction_name: direction # sort direction query parameter name
+        distinct: true                 # ensure distinct results, useful when ORM queries are using GROUP BY statements
+    template:
+        pagination: layout_ak/_pagination.html.twig     # sliding pagination controls template
+        sortable: layout_ak/_sortable_link.html.twig # sort link template
+
+monolog:
+    channels: [event_api, trend_card_api]
+
+    handlers:
+        event_api:
+            type: stream
+            path: %kernel.logs_dir%/%kernel.environment%.event_api.log
+            channels: [event_api]
+        trend_card_api:
+            type: stream
+            path: %kernel.logs_dir%/%kernel.environment%.trend_card_api.log
+            channels: [trend_card_api]

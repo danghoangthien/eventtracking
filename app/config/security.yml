@@ -1,0 +1,94 @@
+security:
+
+    providers:
+        # chain_provider:
+        #     chain:
+        #         providers: [in_memory, ak_user_provider]
+        in_memory:
+            memory:
+                users:
+                    test:
+                        password: $2y$13$u5XU6iyjiRXDDSX24toE/e3myPQPif4prNbueuRN2Ml1JEA9hQAYC #devteam
+                        roles: 'ROLE_USER'
+        # adops_user_provider:
+        #     id: adops.webservice.user.provider
+
+        ak_user_provider:
+            id: user_provider_service
+
+    encoders:
+        Hyper\Domain\Authentication\Authentication: bcrypt
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt|error)|css|images|js)/
+            security: false
+
+        login:
+            pattern: ^/(dashboard|dashboard/auth/validate_login)$
+            security: false
+
+        # main:
+        #     pattern: ^/adops/*
+        #     provider: adops_user_provider
+        #     # http_basic:
+        #     #     realm: 'Secured Demo Area'
+        #     #     provider: in_memory
+        #     anonymous: ~
+        #     form_login:
+        #         check_path:                     /adops/login
+        #         login_path:                     /adops/login
+        #         always_use_default_target_path: false
+        #         default_target_path:            /adops/dashboard
+        #         target_path_parameter:          _target_path
+        #         use_referer:                    true
+        #         failure_path:                   /adops/login_fail
+        #         username_parameter:             _username
+        #         password_parameter:             _password
+        #         csrf_parameter:                 _csrf_token
+        #         intention:                      authenticate
+        #         csrf_provider:                  security.csrf.token_manager
+        #         post_only:                      true
+        #         remember_me:                    false
+        #         require_previous_session:       true
+
+        #     logout:
+        #         path:   /adops/logout
+        #         target: /adops/login
+        #         invalidate_session: false
+
+        user_secured_area:
+            pattern: ^/(dashboard/*|audience-spotlight/*)
+            stateless: false
+            form_login:
+                use_referer: true
+                login_path: /dashboard
+                check_path: /dashboard
+            # logout:
+            #     path:   /dashboard/auth/logout
+            #     target: /dashboard
+
+
+    # role_hierarchy:
+    #     ROLE_USER_LIMITED: [ROLE_USER]
+    #     ROLE_USER_TRANSPARENT: [ROLE_USER_LIMITED]
+    #     ROLE_USER_ADMIN: [ROLE_ADMIN]
+
+    access_control:
+        # - { path: ^/adops/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        # - { path: ^/adops/api, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        # - { path: ^/adops/client/*, roles: ROLE_USER }
+        # - { path: ^/adops/dashboard, roles: ROLE_USER }
+        # - { path: ^/adops/*, roles: ROLE_ADMIN }
+        # - { path: ^/adops/clients/*, roles: ROLE_USER }
+        # - { path: ^/adops/*, roles: ROLE_USER_ADMIN }
+
+        # AK dashboard
+        - { path: ^/dashboard/access/*, roles: ROLE_AK_ADMIN }
+        - { path: ^/dashboard/user-access-management/*, roles: ROLE_AK_ADMIN }
+        - { path: ^/dashboard/client-management/*, roles: ROLE_AK_ADMIN }
+        - { path: ^/dashboard/app-title-management/*, roles: ROLE_AK_ADMIN }
+        - { path: ^/dashboard/filterV2/*, roles: ROLE_AK_CLIENT }
+        - { path: ^/dashboard/main/*, roles: ROLE_AK_CLIENT }
+        - { path: ^/audience-spotlight/*, roles: ROLE_AK_CLIENT }
+        - { path: ^/dashboard/data-acquisition/*, roles: ROLE_AK_ADMIN }

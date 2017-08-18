@@ -1,0 +1,40 @@
+	<div class="modal-dialog" role="document">
+		<div class="modal-content animated flipInY">
+			{% if listUnattachedPresetFilter is not empty %}
+			<div class="modal-body">
+				<h3 style="padding:15px 0px">
+					Please choose from below which card you want to add this user to:
+				</h3>
+				<div id="add2card">
+					{% for presetFilter in listUnattachedPresetFilter %}
+						{% set cardBgStyle = '' %}
+						{% if presetFilter['card_bg_color_code'] is defined and  presetFilter['card_bg_color_code'] is not empty %}
+							{% set cardBgStyle = 'background-color: '~ presetFilter['card_bg_color_code'] ~ ';' %}
+						{% endif %}
+						{% set cardTextColorStyle = '' %}
+						{% if presetFilter['card_text_color_code'] is defined and  presetFilter['card_text_color_code'] is not empty %}
+							{% set cardTextColorStyle = 'color: '~ presetFilter['card_text_color_code'] ~ ';' %}
+						{% endif %}
+					<button value ="{{ presetFilter['id'] }}" type="button" class="btn" style="margin:10px;padding:10px;{{ cardBgStyle }}{{ cardTextColorStyle }}">
+						{{ presetFilter['preset_name'] }}
+						<i></i>
+					</button>
+					{% endfor %}
+                </div>
+	      	</div>
+	      	<div class="modal-footer">
+	        	<button type="button" class="btn btn-white cancel" data-dismiss="modal">Cancel</button>
+	        	<button id="attach_preset_filter" type="button" class="btn btn-primary save">Save changes</button>
+	      	</div>
+	      	{% else %}
+	      	<div class="modal-body">
+				<h3 style="padding:15px 0px">
+					>Sorry! No audience card available for this user
+				</h3>
+			<div>
+			<div class="modal-footer">
+	        	<button type="button" class="btn btn-white cancel_add2card" data-dismiss="modal">Cancel</button>
+			</div>
+			{% endif %}
+		</div>
+    </div>
