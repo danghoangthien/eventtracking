@@ -31,6 +31,14 @@ class SearchAction
      * @Expose
      */
     private $deviceId;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="app_id", type="string", nullable=true)
+     * @Expose
+     */
+    private $appId;
 
 
     /**
@@ -49,6 +57,22 @@ class SearchAction
      * @Expose
      */
     private $searchString;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="search_log_content_type", type="string", nullable=true)
+     * @Expose
+     */
+    private $searchLogContentType;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="metadata", type="string", length=13107, nullable=true)
+     * @Expose
+     */
+    private $metadata;
     
     /**
      * @var integer
@@ -98,6 +122,29 @@ class SearchAction
     {
         return $this->deviceId;
     }
+    
+    /**
+     * Set appId
+     *
+     * @param string $appId
+     * @return SearchAction
+     */
+    public function setAppId($appId)
+    {
+        $this->appId = $appId;
+
+        return $this;
+    }
+
+    /**
+     * Get appId
+     *
+     * @return string 
+     */
+    public function getAppId()
+    {
+        return $this->appId;
+    }
 
     /**
      * Set applicationId
@@ -143,6 +190,52 @@ class SearchAction
     public function getSearchString()
     {
         return $this->searchString;
+    }
+    
+    /**
+     * Set searchLogContentType
+     *
+     * @param string $searchLogContentType
+     * @return SearchAction
+     */
+    public function setSearchLogContentType($searchLogContentType)
+    {
+        $this->searchLogContentType = $searchContentType;
+
+        return $this;
+    }
+
+    /**
+     * Get searchLogContentType
+     *
+     * @return string 
+     */
+    public function getSearchLogContentType()
+    {
+        return $this->searchLogContentType;
+    }
+    
+    /**
+     * Set metadata
+     *
+     * @param string $metadata
+     * @return SearchAction
+     */
+    public function setMetadata($metadata)
+    {
+        $this->metadata = serialize($metadata);
+
+        return $this;
+    }
+
+    /**
+     * Get metadata
+     *
+     * @return string 
+     */
+    public function getMetadata()
+    {
+        return unserialize($this->metadata);
     }
 
     /**

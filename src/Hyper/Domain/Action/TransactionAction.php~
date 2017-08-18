@@ -11,7 +11,7 @@ use JMS\Serializer\Annotation\Expose;
  * TransactionAction
  *
  * @ORM\Table(name="transaction_actions")
- * @ORM\Entity(repositoryClass="Hyper\DomainBundle\Repository\DTTransactionActionRepository")
+ * @ORM\Entity(repositoryClass="Hyper\DomainBundle\Repository\Action\DTTransactionActionRepository")
  * @ExclusionPolicy("all")
  */
 class TransactionAction
@@ -31,7 +31,15 @@ class TransactionAction
      * @Expose
      */
     private $deviceId;
-
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="app_id", type="string", nullable=true)
+     * @ORM\Id
+     * @Expose
+     */
+    private $appId;
 
     /**
      * @var string
@@ -85,7 +93,7 @@ class TransactionAction
     
     /**
      * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="Hyper\Domain\Item\TransactedItem", mappedBy="transacted_actions", fetch="EXTRA_LAZY", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Hyper\Domain\Item\TransactedItem", mappedBy="transaction", fetch="EXTRA_LAZY", cascade={"persist"})
      */
      private $transactedItems;
     
@@ -96,4 +104,245 @@ class TransactionAction
         $this->transactedItems = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
+
+    /**
+     * Set deviceId
+     *
+     * @param string $deviceId
+     * @return TransactionAction
+     */
+    public function setDeviceId($deviceId)
+    {
+        $this->deviceId = $deviceId;
+
+        return $this;
+    }
+
+    /**
+     * Get deviceId
+     *
+     * @return string 
+     */
+    public function getDeviceId()
+    {
+        return $this->deviceId;
+    }
+    
+    /**
+     * Set appId
+     *
+     * @param string $appId
+     * @return TransactionAction
+     */
+    public function setAppId($appId)
+    {
+        $this->appId = $appId;
+
+        return $this;
+    }
+
+    /**
+     * Get appId
+     *
+     * @return string 
+     */
+    public function getAppId()
+    {
+        return $this->appId;
+    }
+
+
+    /**
+     * Set applicationId
+     *
+     * @param string $applicationId
+     * @return TransactionAction
+     */
+    public function setApplicationId($applicationId)
+    {
+        $this->applicationId = $applicationId;
+
+        return $this;
+    }
+
+    /**
+     * Get applicationId
+     *
+     * @return string 
+     */
+    public function getApplicationId()
+    {
+        return $this->applicationId;
+    }
+
+    /**
+     * Set transactedPrice
+     *
+     * @param float $transactedPrice
+     * @return TransactionAction
+     */
+    public function setTransactedPrice($transactedPrice)
+    {
+        $this->transactedPrice = $transactedPrice;
+
+        return $this;
+    }
+
+    /**
+     * Get transactedPrice
+     *
+     * @return float 
+     */
+    public function getTransactedPrice()
+    {
+        return $this->transactedPrice;
+    }
+
+    /**
+     * Set quantity
+     *
+     * @param integer $quantity
+     * @return TransactionAction
+     */
+    public function setQuantity ($quantity)
+    {
+        $this->quantity = $quantity;
+
+        return $this;
+    }
+
+    /**
+     * Get quantity
+     *
+     * @return integer 
+     */
+    public function getQuantity()
+    {
+        return $this->quantity;
+    }
+
+    /**
+     * Set currency
+     *
+     * @param string $currency
+     * @return TransactionAction
+     */
+    public function setCurrency($currency)
+    {
+        $this->currency = $currency;
+
+        return $this;
+    }
+
+    /**
+     * Get currency
+     *
+     * @return string 
+     */
+    public function getCurrency()
+    {
+        return $this->currency;
+    }
+
+    /**
+     * Set transacted_time
+     *
+     * @param integer $transactedTime
+     * @return TransactionAction
+     */
+    public function setTransactedTime ($transactedTime)
+    {
+        $this->transacted_time = $transactedTime;
+
+        return $this;
+    }
+
+    /**
+     * Get transacted_time
+     *
+     * @return integer 
+     */
+    public function getTransactedTime()
+    {
+        return $this->transacted_time;
+    }
+
+    /**
+     * Set created
+     *
+     * @param integer $created
+     * @return TransactionAction
+     */
+    public function setCreated ($created)
+    {
+        $this->created = $created;
+
+        return $this;
+    }
+
+    /**
+     * Get created
+     *
+     * @return integer 
+     */
+    public function getCreated()
+    {
+        return $this->created;
+    }
+
+    /**
+     * Set action
+     *
+     * @param \Hyper\Domain\Action\Action $action
+     * @return TransactionAction
+     */
+    public function setAction(\Hyper\Domain\Action\Action $action)
+    {
+        $this->action = $action;
+
+        return $this;
+    }
+
+    /**
+     * Get action
+     *
+     * @return \Hyper\Domain\Action\Action 
+     */
+    public function getAction()
+    {
+        return $this->action;
+    }
+
+    /**
+     * Add transactedItems
+     *
+     * @param \Hyper\Domain\Item\TransactedItem $transactedItems
+     * @return TransactionAction
+     */
+    public function addTransactedItem(\Hyper\Domain\Item\TransactedItem $transactedItems)
+    {
+        $this->transactedItems[] = $transactedItems;
+
+        return $this;
+    }
+
+    /**
+     * Remove transactedItems
+     *
+     * @param \Hyper\Domain\Item\TransactedItem $transactedItems
+     */
+    public function removeTransactedItem(\Hyper\Domain\Item\TransactedItem $transactedItems)
+    {
+        $this->transactedItems->removeElement($transactedItems);
+    }
+
+    /**
+     * Get transactedItems
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTransactedItems()
+    {
+        return $this->transactedItems;
+    }
 }

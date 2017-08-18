@@ -1,0 +1,213 @@
+/* entire container, keeps perspective */
+.card-container {
+	  -webkit-perspective: 800px;
+   -moz-perspective: 800px;
+     -o-perspective: 800px;
+        perspective: 800px;
+        margin-bottom: 30px;
+}
+/* flip the pane when hovered */
+.card-container:not(.manual-flip):hover .audience-card,
+.card-container.hover.manual-flip .audience-card{
+	-webkit-transform: rotateY( 180deg );
+-moz-transform: rotateY( 180deg );
+ -o-transform: rotateY( 180deg );
+    transform: rotateY( 180deg );
+}
+
+
+.card-container.static:hover .audience-card,
+.card-container.static.hover .audience-card {
+	-webkit-transform: none;
+-moz-transform: none;
+ -o-transform: none;
+    transform: none;
+}
+/* flip speed goes here */
+.audience-card {
+	 -webkit-transition: -webkit-transform .5s;
+   -moz-transition: -moz-transform .5s;
+     -o-transition: -o-transform .5s;
+        transition: transform .5s;
+-webkit-transform-style: preserve-3d;
+   -moz-transform-style: preserve-3d;
+     -o-transform-style: preserve-3d;
+        transform-style: preserve-3d;
+	position: relative;
+}
+
+/* hide back of pane during swap */
+.front, .back {
+	-webkit-backface-visibility: hidden;
+   -moz-backface-visibility: hidden;
+     -o-backface-visibility: hidden;
+        backface-visibility: hidden;
+	position: absolute;
+	top: 0;
+	left: 0;
+	background-color: #FFF;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.14);
+}
+
+/* front pane, placed above back */
+.front {
+	z-index: 2;
+}
+
+/* back, initially hidden pane */
+.back {
+		-webkit-transform: rotateY( 180deg );
+   -moz-transform: rotateY( 180deg );
+     -o-transform: rotateY( 180deg );
+        transform: rotateY( 180deg );
+        z-index: 3;
+}
+
+.back .btn-simple{
+    position: absolute;
+    left: 0;
+    bottom: 4px;
+}
+/*        Style       */
+
+
+.audience-card{
+    background: none repeat scroll 0 0 #FFFFFF;
+    border-radius: 4px;
+    color: #444444;
+}
+.card-container, .front, .back {
+	width: 100%;
+	height: 420px;
+	border-radius: 4px;
+}
+.audience-card .cover{
+    height: 105px;
+    overflow: hidden;
+    border-radius: 4px 4px 0 0;
+}
+.audience-card .cover img{
+    width: 100%;
+}
+.audience-card .user{
+    border-radius: 50%;
+    display: block;
+    height: 120px;
+    margin: -55px auto 0;
+    overflow: hidden;
+    width: 120px;
+    padding: 20px 0px 0px 33px;
+    border: #eee solid 1px;
+    background: #fff;
+}
+.audience-card .user img{
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 4px solid #FFFFFF;
+    width: 100%;
+}
+
+.audience-card .content{
+    background-color: rgba(0, 0, 0, 0);
+    box-shadow: none;
+    padding: 10px 20px 20px;
+}
+.audience-card .content .main {
+    min-height: 160px;
+}
+.audience-card .back .content .main {
+    height: 215px;
+}
+.audience-card .name {
+    font-size: 22px;
+    line-height: 28px;
+    margin: 10px 0 0;
+    text-align: center;
+    text-transform: capitalize;
+}
+.audience-card h5{
+    margin: 5px 0;
+    font-weight: 400;
+    line-height: 20px;
+}
+.audience-card .profession{
+    color: #999999;
+    text-align: center;
+    margin-bottom: 20px;
+}
+.audience-card .footer {
+    border-top: 1px solid #EEEEEE;
+    color: #999999;
+    margin: 30px 0 0;
+    padding: 10px 0 0;
+    text-align: center;
+}
+.audience-card .footer .social-links{
+    font-size: 18px;
+}
+.audience-card .footer .social-links a{
+    margin: 0 7px;
+}
+.audience-card .footer .btn-simple{
+    margin-top: -6px;
+}
+.audience-card .header {
+    padding: 10px 15px 0px 0px;
+    height: 5px;
+}
+.audience-card .motto{
+    border-bottom: 1px solid #EEEEEE;
+    color: #999999;
+    font-size: 14px;
+    font-weight: 400;
+    padding-bottom: 10px;
+    text-align: center;
+}
+
+.audience-card .stats-container{
+	width: 100%;
+	margin-top: 50px;
+}
+.audience-card .stats{
+	display: block;
+	float: left;
+	width: 33.333333%;
+	text-align: center;
+}
+
+.audience-card .stats:first-child{
+	border-right: 1px solid #EEEEEE;
+}
+.audience-card .stats:last-child{
+	border-left: 1px solid #EEEEEE;
+}
+.audience-card .stats h4{
+	font-weight: 300;
+	margin-bottom: 5px;
+}
+.audience-card .stats p{
+	color: #777777;
+}
+
+
+
+/*       Fix bug for IE      */
+
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+    .front, .back{
+        -ms-backface-visibility: visible;
+        backface-visibility: visible;
+    }
+
+    .back {
+        visibility: hidden;
+        -ms-transition: all 0.2s cubic-bezier(.92,.01,.83,.67);
+    }
+    .front{
+        z-index: 4;
+    }
+    .card-container:not(.manual-flip):hover .back,
+    .card-container.manual-flip.hover .back{
+        z-index: 5;
+        visibility: visible;
+    }
+}

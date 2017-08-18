@@ -35,7 +35,7 @@ class StorageController extends Controller
             $content = $this->getValidContent($request);
             if(!empty($content)){
                 $filePath = $this->storeEventS3($request);
-                $this->storeEventMemCached($content);
+                //$this->storeEventMemCached($content);
                 if(!empty($filePath)){
                     return new Response(
                         json_encode(
@@ -52,7 +52,7 @@ class StorageController extends Controller
             $contents = $this->parseCSVContent($request);
             //print_r($content);//die;
             if (!empty($contents) && is_array($contents)) {
-                $this->storeEventMongoDB($contents);
+                //$this->storeEventMongoDB($contents);
                 return new Response(
                     json_encode(
                         array(

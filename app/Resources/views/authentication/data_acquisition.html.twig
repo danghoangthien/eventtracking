@@ -1,0 +1,61 @@
+{% extends 'layout_ak/base.html.twig' %}
+{% block sub_head_title %}Admin Dashboard - Data Acquisition{% endblock %}
+{% block body %} 
+<div class="wrapper wrapper-content animated fadeInRight">
+	{#<section class="content-header" style="margin: -2em 0 0 -2em !important;">#}
+	{#    <h1 style="font-size: 24px; margin: 0 0 1em 0.5em;">#}
+	{#      Data Acquisition#}
+	{#    </h1>#}
+	{#    <ol class="breadcrumb">#}
+	{#      <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>#}
+	{#      <li class="active">Data Acquisition</li>#}
+	{#    </ol>#}
+	{#</section>#}
+	
+	<div class="row">
+	  <div class="col-md-12">
+	    <div id="container">
+	    	
+	    </div>
+	  </div><!-- /.col -->
+	</div><!-- /.row -->
+</div>
+{% endblock %}
+
+{% block javascript_inline %}
+	<script>
+		$(document).ready(function()
+		{
+			{% if jasper is defined %}
+					
+			{% endif %}
+			
+			// console.log(name);
+			// console.log(pass);
+			// console.log(org);
+			/*
+			visualize({
+					auth: {
+						  name: "angie",
+						  password: "g7sixlcID2Gn",
+						  organization: "organization_1"
+							//name: name,
+							//password: pass,
+							//organization: org
+					}
+			}, function (v) 
+			{
+					v("#container").dashboard({
+						// resource: "/Hypergrowth/WarehouseAdmin/Dashboard/DataAcquisition",
+						resource: "/Hypergrowth/AudienceKit/Dashboard/DataAcquisition",
+						error: handleError
+					});
+			
+					function handleError(err) {
+						console.log("error msg",err.message);
+					}
+			});
+			*/
+		});				
+	</script>
+{% endblock %}

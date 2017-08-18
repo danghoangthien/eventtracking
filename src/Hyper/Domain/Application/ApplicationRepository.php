@@ -1,7 +1,7 @@
 <?php 
 
-namespace Hyper\Domain\Action;
+namespace Hyper\Domain\Application;
 
-interface ApplicationActionRepository {
+interface ApplicationRepository {
 
 }

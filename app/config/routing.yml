@@ -1,3 +1,8 @@
+hyper_event_api:
+    resource: "@HyperEventAPIBundle/Resources/config/routing.yml"
+    type: rest
+    prefix:   /api
+
 hyper_domain:
     resource: "@HyperDomainBundle/Resources/config/routing.yml"
     prefix:   /
@@ -17,3 +22,12 @@ hyper_event:
 app:
     resource: "@AppBundle/Controller/"
     type:     annotation
+
+# hyper_adops_web:
+#     resource: "@HyperAdopsWebBundle/Controller/"
+#     type:     annotation
+
+# hyper_adops_api:
+#     resource: "@HyperAdopsAPIBundle/Resources/config/adops_routing.yml"
+#     type: rest
+#     prefix: /adops/api/v1

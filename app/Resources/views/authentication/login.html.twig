@@ -1,0 +1,132 @@
+{% extends 'lte_base.html.twig' %}
+{% block body %}
+            
+<div id="mainContainer">
+<div id="server_message"></div>
+<div id="loginDiv">Login Page</div>
+<div id="formHandler">
+    <form id="formSubmitAuth" name="formSubmitAuth" method="POST">
+    <table id="tblAuth">
+        <tr class="tr1">
+            <td><label class="heads">Username</label></td>
+            <td><input type="text" id="username" name="username" placeholder=""/></td>
+        </tr>
+        <tr class="tr1">
+            <td><label class="heads">Password</label></td>
+            <td><input type="password" id="password" name="password" /></td>
+        </tr>                          
+    </table>
+    </form>
+    <div id="divSendBtn">
+        <input type="button" name="authEntry" id="btnSend" value="Login" class="btn btn-primary"/>
+    </div>
+</div>
+</div>
+
+<script>         
+    function error(el)
+    {
+        $(el).css("background-color", "red").css("color","yellow").val("Should not be blank");
+        
+        setTimeout(function()
+        {
+            $(el).css("background-color", "white").css("color","black");
+            $(el).val("");
+        }, 2000);
+    }
+    
+    $(document).ready(function()
+    {                  
+        {% if user is defined %}
+            window.location.href = "{{ path('dashboard_filter_showlist') }}";
+        {% endif %}
+        //alert("'i'm at login page");
+        $(".tr1 >td >input").attr("class","form-control");
+                                                
+        /* Global Vars */
+        var username;
+        var password;                                                                                                  
+        
+        $("#btnSend").on("click", this, function()
+        {
+            username = $("#username").val();
+            password = $("#password").val();
+            
+            if( "" == username){ error($("#username")); return false; }
+            if( "" == password){ error($("#password")); return false; }
+            
+            $.obj = { "username": username, "password": password };                        
+            
+            $.ajax(
+            {                                                        
+                url:"{{ path('dashboard_validate_login') }}",
+                type: "POST",
+                data: $.obj,
+                success: function(msg)
+                {
+                    var message = JSON.parse(msg);
+                    console.log(message);                                                                
+                    
+                    if(message.status == "success")
+                    {
+                        //$("#server_message").html("Session Id: "+ message.session_id +"<br />Authentication Id: "+message.username );
+                        window.location.href = "{{ path('dashboard_filter_showlist') }}";
+                        $("#username").val("");
+                        $("#password").val("");
+                    }
+                    else if(message.status == "failed")
+                    {
+                        alert(message.error);
+                    }                                  
+                }
+            });
+        });
+    });
+</script>
+<style>     
+#loginDiv, #server_message
+{
+    margin: 1em 0 0 1em;
+    font-weight: bold;
+    font-size: 17px;
+}
+
+.heads
+{
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0.9em 0 0 0;
+}
+
+#divSendBtn
+{
+    width: 8em;
+    margin: 2em 0 0 16.7em;                
+}
+
+#btnSend { width: 7em; display: inline-block; }
+
+input:not([type='button'])
+{
+    width: 17em;
+    height: 2.5em;
+    margin: 0.9em 0 0 1em;
+}
+
+#mainContainer
+{
+    width: 45em;
+    height: 22em;
+    border: 1px solid #e83948;
+    margin: 6em auto;
+}
+
+#formHandler
+{
+    width: 25em;
+    height: 17em;
+    margin: 3em auto;
+    background-color: transparent;
+}
+</style>        
+{% endblock %}

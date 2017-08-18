@@ -1,0 +1,77 @@
+<table class="footable list_auth">
+    <thead>
+        <tr>
+            <th class="footable-sortable{% if list_auth.isSorted('au.username') %}{% if app.request.get('direction') == 'desc' %} footable-sorted-desc{% else %} footable-sorted{% endif %}{% endif %}">
+                {{ knp_pagination_sortable(list_auth, 'Username', 'au.username') }}
+                <span class="footable-sort-indicator"></span>
+            </th>
+            <th data-sort-ignore="true">Email</th>
+            <th data-sort-ignore="true">Client Access</th>
+            <th data-sort-ignore="true">Last Login</th>
+            <th data-sort-ignore="true">IP Address</th>
+            <th data-sort-ignore="true">Location</th>
+            <th data-sort-ignore="true">Device Type</th>
+            <th data-sort-ignore="true">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% if list_auth %}
+        {% for auth in list_auth %}
+            {#process client name#}
+            {% set client_of_auth = auth.clientId|split(',') %}
+            {% set client_name = [] %}
+            {% set total_client_of_auth = client_of_auth|length %}
+            {% if total_client != 0 and total_client == total_client_of_auth %}
+                {% set client_name = client_name|merge(['All Clients']) %}
+            {% else %}
+                {% for client in client_of_auth %}
+                    {% if list_client[client] is defined and list_client[client] is not empty %}
+                        {% set client_name = client_name|merge([list_client[client]]) %}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            {#process device#}
+            {% set device_type = '' %}
+            {% if
+                auth.browserName is not empty
+                and auth.osName is not empty
+                and auth.osVersion is not empty
+            %}
+                {% set device_type = auth.browserName ~ ' on ' ~ auth.osName ~ ' ' ~ auth.osVersion %}
+            {% endif %}
+            <tr style="display: table-row;">
+                <td><span class="footable-toggle"></span>{{ auth.username }}</td>
+                <td>{{ auth.email }}</td>
+                <td>{{ client_name|join(', ') }}</td>
+                <td>
+                    {% if auth.lastLogin is not empty %}
+                        {{ auth.lastLogin|date("F j \\a\\t g:ia") }}
+                    {% endif %}
+                </td>
+                <td>{{ auth.ip }}</td>
+                <td>{{ auth.location }}</td>
+                <td>{{ device_type }}</td>
+                <td>
+                  <a href="{{ path('dashboard_user_access_management_update', {user_id: auth.id }) }}">Edit</a>
+                  <a href="javascript:void(0);" class="delete" data-username="{{ auth.username }}" data-authid="{{ auth.id }}">Delete</a>
+                </td>
+            </tr>
+        {% else %}
+        	<tr>
+        		<td colspan="8">
+	        		<div class="text-center">
+			           No records found
+			        </div>
+        		</td>
+        	</tr>
+        {% endfor %}
+    {% endif %}
+    </tbody>
+    <tfoot class="hide-if-no-paging">
+        <tr>
+            <td colspan="12" style="text-align:center;">
+                {{ knp_pagination_render(list_auth) }}
+            </td>
+        </tr>
+    </tfoot>
+</table>

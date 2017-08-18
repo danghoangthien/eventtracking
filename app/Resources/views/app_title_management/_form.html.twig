@@ -1,0 +1,73 @@
+<div class="row">
+    <div class="ibox float-e-margins">
+        <div class="ibox-title">
+			<div class="form-group">
+				<h1>{{ mode == 1 ? 'Edit' : 'Create' }} App Title</h1>
+			</div>
+		</div>
+        <div class="ibox-content">
+            <div class="panel" style="margin:0px">
+				<form action="{{ app.request.uri }}" method="post" id="frm-app-title" novalidate>
+					<div class="panel-body">
+						{% if app.session.flashbag.has('notice') %}
+							{% set notice = app.session.flashbag.get('notice').0 %}
+							<div class="row">
+								<div class="alert alert-{{ notice.status }}">
+								  	{{ notice.msg }}
+								</div>
+							</div>
+						{% endif %}
+						<div class="row">
+							<div class="form-group custom-input">
+								<div class="input-group col-sm-12">
+									<span style="width: 130px" class="input-group-addon">Title</span>
+									{{ form_widget(form.title, {'attr': {'class': 'form-control', 'placeholder': 'Enter Title' }}) }}
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group custom-input">
+								<div class="input-group col-sm-12">
+									<span style="width: 130px" class="input-group-addon">Description</span>
+									{{ form_widget(form.description, {'attr': {'class': 'form-control', 'placeholder': 'Enter Description' }}) }}
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group custom-input">
+								<div class="input-group col-sm-12">
+									<span style="width: 130px" class="input-group-addon">Folder</span>
+									{{ form_widget(form.folder, {'attr': {'class': 'form-control', 'placeholder': 'Enter Folder' }}) }}
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group custom-input">
+								<div class="input-group col-sm-12">
+									<span style="width: 130px" class="input-group-addon">List App ID</span>
+									{{ form_widget(form.appId, {'attr': {'class': 'form-control list-app-id' }}) }}
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group custom-input">
+								<div class="input-group col-sm-12">
+									<span style="width: 130px" class="input-group-addon">Status</span>
+									{{ form_widget(form.status, {'attr': {'class': 'form-control' }}) }}
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row" style="padding-top: 20px;">
+						<div class="col-md-2"> </div>
+						<div class="col-md-9 no-padding">
+							<button type="submit" class="btn btn-primary pull-right">{{ mode == 1 ? 'Edit' : 'Create' }} App Title</button>
+						</div>
+						<div class="col-md-1"> </div>
+					</div>
+					{{ form_widget(form._token) }}
+				</form>
+			</div>
+        </div><!-- end box-body -->
+    </div>
+</div>

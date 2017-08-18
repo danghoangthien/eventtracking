@@ -1,0 +1,99 @@
+{% extends 'base2.html.twig' %}
+{% block body %}
+<!-- Content Header (Page header) -->
+<section class="content-header" style="margin: -2em 0 0 -2em !important;">
+    <h1 style="font-size: 24px; margin: 0 0 1em 0.5em;">
+        User Access Management
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">User Access Management</li>
+    </ol>
+</section>
+<!-- First Panel -->
+<div class="row">
+    <div class="col-md-6">
+        <div class="box box-danger">
+            <div class="box-header with-border">
+                <h3 class="box-title">Create User</h3>
+            </div><!-- /.box-header -->
+            <!-- form start -->
+            <form role="form">
+                <div class="box-body">
+                    <div class="form-group">
+                        <label for="exampleInputUsername">Username</label>
+                        <input type="text" class="form-control" id="exampleInputUsername" placeholder="Enter username">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputPassword">Password</label>
+                        <input type="password" class="form-control" id="exampleInputPassword" placeholder="Password">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputEmail">Email address</label>
+                        <input type="email" class="form-control" id="exampleInputEmail" placeholder="Enter email">
+                    </div>
+                    <div class="form-group">
+                        <label>Access to Client</label>
+                        <select class="form-control">
+                            <option>Bukalapak</option>
+                            <option>Asian Poker</option>
+                            <option>Brave Frontier</option>
+                            <option>Chain Chornicle</option>
+                        </select>
+                    </div>
+                </div><!-- /.box-body -->
+                <div class="box-footer">
+                    <button type="submit" class="btn btn-danger">Create User</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <table class="table table-bordered">
+            <tr>
+                <th class="text-red" style="width: 90px">Username</th>
+                <th class="text-red" style="width: 150px">Email</th>
+                <th class="text-red">Client Access</th>
+                <th class="text-red" style="width: 100px">Action</th>
+            </tr>
+            <tr>
+                <td>samuel</td>
+                <td>samuel@hypergrowth.co</td>
+                <td>All Clients</td>
+                <td>
+                    <a href="#">Edit</a>
+                    <a href="#">Delete</a>
+                </td>
+            </tr>
+            <tr>
+                <td>bklpadmin</td>
+                <td>admin@bukalapak.co.id</td>
+                <td>Bukalapak</td>
+                <td>
+                    <a href="#">Edit</a>
+                    <a href="#">Delete</a>
+                </td>
+            </tr>
+            <tr>
+                <td>hypeadops</td>
+                <td>adops@hypergrowth.co</td>
+                <td>Bukalapak, Asian Poker, ...</td>
+                <td>
+                    <a href="#">Edit</a>
+                    <a href="#">Delete</a>
+                </td>
+            </tr>
+            <tr>
+                <td>artoncode</td>
+                <td>ua@artoncode.co.id</td>
+                <td>Asian Poker</td>
+                <td>
+                    <a href="#">Edit</a>
+                    <a href="#">Delete</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<!-- END First Panel-->
+{% endblock %}

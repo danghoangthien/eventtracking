@@ -14,5 +14,17 @@ use Hyper\Domain\Action\AddToCartAction;
  */
 class DTAddToCartActionRepository extends EntityRepository implements AddToCartActionRepository
 {
-
+    public function save(AddToCartAction $addToCartAction){
+        $this->_em->persist($addToCartAction);
+        //$this->_em->flush();
+    }
+    
+    public function completeTransaction(){
+        $this->_em->flush();
+        $this->_em->clear();
+    }
+    
+    public function closeConnection(){
+        $this->_em->close();
+    }
 }

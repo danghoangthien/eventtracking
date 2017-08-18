@@ -1,0 +1,5 @@
+services:
+    adops.api.log.repository:
+        class: Hyper\Adops\APIBundle\DomainBundle\Repository\DTLogRepository
+        factory: [@doctrine.orm.pgsql_entity_manager, getRepository]
+        arguments: [Hyper\Adops\APIBundle\Domain\AdopsLog]

@@ -14,5 +14,19 @@ use Hyper\Domain\Action\SearchAction;
  */
 class DTSearchActionRepository extends EntityRepository implements SearchActionRepository
 {
-
+    public function save(SearchAction $searchAction) {
+        //\Doctrine\Common\Util\Debug::dump($searchAction);
+        $this->_em->persist($searchAction);
+        //echo "search action persisted";
+        //$this->_em->flush();
+    }
+    
+    public function completeTransaction() {
+        $this->_em->flush();
+        $this->_em->clear();
+    }
+    
+    public function closeConnection() {
+        $this->_em->close();
+    }
 }

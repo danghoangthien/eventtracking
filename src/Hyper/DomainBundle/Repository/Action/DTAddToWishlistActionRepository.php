@@ -14,5 +14,18 @@ use Hyper\Domain\Action\AddToWishlistAction;
  */
 class DTAddToWishlistActionRepository extends EntityRepository implements AddToWishlistActionRepository
 {
-
+    public function save(AddToWishlistAction $addToWishlistAction){
+        $this->_em->persist($addToWishlistAction);
+        //$this->_em->flush();
+    }
+    
+    public function completeTransaction(){
+        $this->_em->flush();
+        $this->_em->clear();
+    }
+    
+    public function closeConnection(){
+        $this->_em->close();
+    }
+    
 }

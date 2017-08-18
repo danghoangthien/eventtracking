@@ -1,0 +1,195 @@
+{% extends 'base_adops.html.twig' %}
+{% block body %}
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <h1 style="color:white;">Manage Postback</h1> 
+  </section>
+
+  <!-- Main content -->
+  <section class="content">
+     <!-- Client Access Form -->
+    <div class="box box-danger" style="padding:5px 12px;">
+      <!--Box Header-->
+      <div class="box-header with-border">
+        <h3 class="box-title"></h3>
+        <div class="box-tools pull-right">
+          <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+          <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+        </div>
+      </div>
+      <div class="box-body">
+        {{ form_start(form, {'attr': {'class': 'form-horizontal'} }) }}
+          {{ form_errors(form) }}
+          {% for flash_message in app.session.flashbag.get('notice') %}
+              <div class="flash-notice">
+                  {{ flash_message }}
+              </div>
+          {% endfor %}
+          
+          <div class="form-group">
+            <div class="col-sm-2 control-label">
+              {{ form_label(form.publisher) }}
+            </div>
+            <div class="col-sm-10">
+              {{ form_widget(form.publisher, {'attr': {'class': 'form-control'} }) }}
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <div class="col-sm-2 control-label">
+              {{ form_label(form.campaign) }}
+            </div>
+            <div class="col-sm-10">
+              {{ form_widget(form.campaign, {'attr': {'class': 'form-control'} }) }}
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <div class="col-sm-2 control-label">
+              {{ form_label(form.application) }}
+            </div>
+            <div class="col-sm-10">
+              {{ form_widget(form.application, {'attr': {'class': 'form-control'} }) }}
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <div class="col-sm-2 control-label">
+              {{ form_label(form.eventType) }}
+            </div>
+            <div class="col-sm-10">
+              {{ form_widget(form.eventType, {'attr': {'class': 'form-control'} }) }}
+            </div>
+          </div>
+          
+          {% if form.inappevent is defined %}
+            <div class="form-group inappevent-group">
+              <div class="col-sm-2 control-label">
+                {{ form_label(form.inappevent) }}
+              </div>
+              <div class="col-sm-10">
+                {{ form_widget(form.inappevent, {'attr': {'class': 'form-control'} }) }}
+                {{ form_errors(form.inappevent) }}
+              </div>
+            </div>
+          {% endif %}
+          
+          <div class="form-group">
+            <div class="col-sm-2 control-label">
+              {{ form_label(form.postbackUrl) }}
+            </div>
+            <div class="col-sm-10">
+              {{ form_widget(form.postbackUrl, {'attr': {'class': 'form-control', 'placeholder': 'http://mysite.com'} }) }}
+              {{ form_errors(form.postbackUrl) }}
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <div class="col-sm-2 control-label"></div>
+            <div class="col-sm-10">
+              {{ form_widget(form.save, {'attr': {'class': 'btn btn-danger btn-flat'} }) }}
+            </div>
+          </div>
+          {{ form_rest(form) }}
+        {{ form_end(form) }}
+      </div>
+    </div>
+    
+    <div class="box box-danger" style="padding:5px 12px;">
+      <!--Box Header-->
+      <div class="box-header with-border">
+        <h3 class="box-title"></h3>
+        <div class="box-tools pull-right">
+          <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+          <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+        </div>              
+      </div>
+      <div class="box-body">
+        <table class="footable" data-page-size="7" data-page-navigation=".pagination">
+          <thead>
+            <tr>
+              <th>Publisher</th>
+              <th>Campaign</th>
+              <th>Application</th>
+              <th>Event</th>
+              <th>In App Event</th>
+              <th>URL</th>
+              <th>Action</th>
+            </tr>
+          </thead> 
+          <tbody>
+            {% if adops_postbacks is not empty%}
+              {% for adops_postback in adops_postbacks %}
+              <tr {% if adops_postback.campaign.status == 0 %}class="hilight"{% endif%}>
+                <td>{{ adops_postback.publisher.name }}</td>
+                <td>{{ adops_postback.campaign.name }}</td>
+                <td>{{ adops_postback.application.appName }}</td>
+                <td>{{ adops_postback.eventType }}</td>
+                <td>{% if adops_postback.inappevent.name is defined %} {{ adops_postback.inappevent.name }} {% endif %}</td>
+                <td>{{ adops_postback.postbackUrl }}</td>
+                <td><a href="{{ path('postbacks_edit', {'event_type': adops_postback.eventType , 'id': adops_postback.id}) }}">Edit</a> | 
+                <a class="btn-delete" data-href="{{ path('postbacks_delete', {'event_type': adops_postback.eventType, 'id': adops_postback.id}) }}">Delete</a></td>
+              </tr>
+              {% else %}
+                  <tr>
+                      <td colspan="7" align="center">Not found!</td>
+                 </tr>
+              {% endfor %}
+            {% endif %}
+          </tbody>
+          <tfoot class="hide-if-no-paging">
+            <tr>
+              <td colspan="12" style="text-align:center;">
+                <div class="pagination pagination-centered"></div>
+              </td>
+            </tr>
+          </tfoot>    
+        </table>
+      </div>
+    </div>
+  </section>
+
+<script>
+    $(document).ready(function()
+    {
+      $('.btn-delete').click(function(){
+        var deleteHref = $(this).attr('data-href');
+        var r = confirm("Are you sure delete ?");
+        if (r) {
+              window.location = deleteHref;
+          }
+      });
+      $('select[name*="form[eventType]"]').prop('selected', true).change(function(){
+        if (0 == $(this).val()) {
+          $('.inappevent-group').hide();
+        }
+        if (1 == $(this).val()) {
+          $('.inappevent-group').show();
+        }
+      });
+      $('select[name*="form[application]"]').prop('selected', true).change(function(){
+        var appId = $(this).val();
+        var url = '{{ url('inappevents_by_application') }}';
+
+        $.post(
+          url, 
+          {'app_id': appId}, 
+          function(results){
+            console.log(results, 'results');
+            var inappevent = $('select[name*="form[inappevent]"]');
+            inappevent.empty();
+            $.each(results , function(key, value) { 
+                inappevent
+                .append($("<option></option>")
+                .attr("value",value.id)
+                .text(value.name)); 
+            });
+          });
+        });
+    });
+</script>
+<style>
+  .hilight td{background: #eaeaea !important;}
+  .inappevent-group {display: none;}
+  </style>
+{% endblock %}

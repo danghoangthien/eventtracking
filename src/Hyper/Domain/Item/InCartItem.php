@@ -32,6 +32,13 @@ class InCartItem
      */
     private $deviceId;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="app_id", type="string", nullable=true)
+     * @Expose
+     */
+    private $appId;
 
     /**
      * @var string
@@ -42,15 +49,15 @@ class InCartItem
     private $applicationId;
     
     /**
-     * @ORM\ManyToOne(targetEntity="Hyper\Domain\Action\AddToCartAction", fetch="EXTRA_LAZY", inversedBy="in_cart_items")
-     * @ORM\JoinColumn()
+     * @ORM\ManyToOne(targetEntity="Hyper\Domain\Action\AddToCartAction", fetch="EXTRA_LAZY", inversedBy="inCartItems")
+     * @ORM\JoinColumn(name="cart_id", referencedColumnName="id")
      * @Expose
      */
     private $cart;
     
     /**
-     * @ORM\ManyToOne(targetEntity="Hyper\Domain\Item\Item", fetch="EXTRA_LAZY", inversedBy="in_cart_items")
-     * @ORM\JoinColumn()
+     * @ORM\ManyToOne(targetEntity="Hyper\Domain\Item\Item", fetch="EXTRA_LAZY")
+     * @ORM\JoinColumn(name="item_id", referencedColumnName="id")
      * @Expose
      */
     private $item;
@@ -129,6 +136,29 @@ class InCartItem
     public function getApplicationId()
     {
         return $this->applicationId;
+    }
+    
+    /**
+     * Set appId
+     *
+     * @param string $appId
+     * @return InCartItem
+     */
+    public function setAppId($appId)
+    {
+        $this->appId = $appId;
+
+        return $this;
+    }
+
+    /**
+     * Get appId
+     *
+     * @return string 
+     */
+    public function getAppId()
+    {
+        return $this->appId;
     }
 
     /**

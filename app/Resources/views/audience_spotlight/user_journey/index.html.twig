@@ -1,0 +1,621 @@
+{% extends 'layout_ak/base.html.twig' %}
+{% block sub_head_title %}Dashboard - Audience Spotlight - User Journey{% endblock %}
+{% block body %}
+<!-- Notify modal -->
+<div id="notify_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12" id="notify_text"></div>
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!-- Detach Dialog modal -->
+<div class="modal fade" id="confirm_detach_preset_filter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p>You are about to remove this user from   <b><i class="title"></i></b>.</p>
+                <p>Do you want to proceed?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-danger btn-ok">Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Attach Dialog modal -->
+<div class="modal fade" id="confirm_attach_preset_filter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+</div>
+<!--/ Attach Dialog modal -->
+<!--Search bar at the top-->
+<div class="row">
+    <form class="frm-user-id" action="{{ app.request.uri }}" method="get">
+    	<div class="topsearch" style="margin-bottom: 0; min-height: 60px">
+    		<div class="col-sm-12">
+    			<input type="text" placeholder="Enter an email or user ID and hit 'Enter'" name="user_id" spellcheck="false" class="form-control sleek-search user_id" id="sleek-search">
+    		</div>
+    	</div>
+	</form>
+</div>
+<!-- Main Content -->
+<div class="wrapper wrapper-content" style="padding-top:0">
+    <div class="row animated fadeInRight">
+        <div class="col-md-3 col-lg-3 col-sm-6">
+            <div id="profile"></div>
+        </div>
+        <div class="col-md-5 col-lg-5 col-sm-6">
+            <div id="preset-filter"></div>
+        </div>
+        <div class="col-md-4 col-lg-4 col-sm-12">
+		    <div id="timeline">&nbsp;</div>
+		</div>
+    </div>
+</div>
+{% endblock %}
+{% block stylesheets_inline %}
+    <link rel="stylesheet" href="{{ asset('bundles/hyperevent/plugins/flik/flik-timeline.min.css') }}">
+    <style>
+    	#loading-profile, #loading-timeline {
+    		color: #2F4050;
+    	}
+    	.modal.loading .modal-content:before {
+          content: 'Loading...';
+          text-align: center;
+          line-height: 155px;
+          font-size: 20px;
+          background: rgba(0, 0, 0, .8);
+          position: absolute;
+          top: 55px;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          color: #EEE;
+          z-index: 1000;
+        }
+    </style>
+{% endblock %}
+{% block javascript_inline %}
+	<script src="{{ asset('bundles/hyperevent/plugins/flik/custom.min.js') }}"></script>
+	<script src="{{ asset('assets/js/jquery.validate.min.js') }}"></script>
+    <script>
+    	var UserJourney = {
+    		validator: '',
+    		userId: '',
+    		userType: '',
+    		pageCurrent: 0,
+    		xhrLoadMoneySpent: [],
+    		init: function() {
+    			this.initFlikTimelime();
+    			this.fireEventSubmitUserId();
+    			this.fireEventLoadTimeline();
+    			{% if deviceLatest %}
+        			this.resetParams();
+        			this.userId = '{{deviceLatest}}';
+        			$('.frm-user-id').find('.user_id').val('{{deviceLatest}}');
+    				this.loadProfile();
+    				this.loadPresetFilter();
+    				this.loadTimeline($('#timeline'));
+    			{% endif %}
+    		},
+    		resetParams: function() {
+    			this.validator = '';
+    			this.userId = [];
+    			this.pageCurrent = 0;
+    			$('#profile').empty();
+				$('#timeline').empty();
+    		},
+    		initFlikTimelime: function() {
+    			$('.flik-timeline').flikScrollEffect();
+    		},
+    		fireEventSubmitUserId: function () {
+    			var self = this;
+                self.validator = $('.frm-user-id').validate({
+                	errorPlacement: function(error, element) {
+                        if (element.attr('name') == 'user_id') {
+                            error.insertAfter(element.parent());
+                        } else {
+                            error.insertAfter(element);
+                        }
+                    },
+                	rules : {
+                        'user_id': {
+                            required: true,
+                            remote: {
+                                url: '{{ path('dashboard_audience_spotlight_user_journey_validate') }}',
+                                type: "get",
+                                data: {
+                                    value: function() {
+                                        return $('.user_id').val();
+                                    },
+                                    type: function() {
+                                        var userId = $('.user_id').val();
+                                        if (self.isValidIDFA(userId)) {
+                                            self.userType = 'idfa';
+                                        } else if (self.isValidEmailAddress(userId)) {
+                                            self.userType = 'email';
+                                        } else if (self.isValidAndroidId(userId)) {
+                                            self.userType = 'android_id';
+                                        } else {
+                                            self.userType = 'device';
+                                        }
+
+                                        return self.userType;
+                                    }
+                                },
+                                dataFilter: function(resp) {
+                                    var json = JSON.parse(resp);
+                                    if(json.msg) {
+                                        return "\"" + json.msg + "\"";
+                                    } else {
+                                        self.userId = json.device_id;
+                                    }
+
+                                    return '"true"';
+                                }
+                            }
+                        }
+                    },
+                    submitHandler: function(form) {
+                        var userId = self.userId;
+						self.resetParams();
+						self.userId = userId;
+						self.loadProfile();
+						self.loadPresetFilter();
+						self.loadTimeline($('#timeline'));
+
+                        return false;
+                    }
+                });
+    		},
+    		isValidAndroidId: function(deviceId) {
+    		    if (deviceId.length <= 16) {
+    		        return true;
+    		    } else {
+    		        return false;
+    		    }
+    		},
+    		isValidIDFA: function(idfa) {
+    		    var pattern = /^[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}$/;
+    		    return pattern.test(idfa);
+    		},
+    		isValidEmailAddress: function(emailAddress) {
+    		    var pattern = /^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i;
+                return pattern.test(emailAddress);
+    		},
+    		fireEventLoadTimeline: function() {
+    			var self = this;
+    			$(document).on('click', '.loadmore',function() {
+    				self.loadTimeline($(this));
+    			});
+    		},
+    		loadProfile: function() {
+    			var self = this;
+    			var obj =  $('.frm-user-id');
+    			if (obj.data("disabled")) {
+			        return false;
+			    }
+    			$.ajax({
+                    url : "{{ path('dashboard_audience_spotlight_user_journey_load_profile') }}",
+                    type: 'GET',
+                    dataType: 'json',
+                    data: {
+                        user_journey_id: self.userId
+                    },
+                    beforeSend: function() {
+                        obj.data("disabled", "disabled");
+                        $('#profile').html('<span id="loading-profile">Loading...</span>');
+                    },
+                    success: function(resp) {
+                    	if (resp.status == 1) {
+                    		$('#profile').append(resp.content);
+                    		self.loadTotalMoneySpent();
+                    		self.loadLastTransaction();
+                    		self.loadLastActivity();
+
+                    	}
+                    },
+                    error: function() {
+                    	obj.removeData("disabled");
+                    	$('#loading-profile').remove();
+                    },
+                    complete: function() {
+                        obj.removeData("disabled");
+                        $('#loading-profile').remove();
+                    }
+                });
+    		},
+    		loadTotalTransaction: function() {
+    			var self = this;
+    			$.ajax({
+                    url : "{{ path('dashboard_audience_spotlight_user_journey_load_total_transaction') }}",
+                    type: 'GET',
+                    dataType: 'json',
+                    data: {
+                        user_journey_id: self.userId
+                    },
+                    beforeSend: function() {
+                        $('.total-transaction').html('<span id="loading-total-transaction">Loading...</span>');
+                    },
+                    success: function(resp) {
+                    	if (resp.status == 1) {
+                    		$('.total-transaction').html(resp.total);
+                    	}
+                    },
+                    error: function() {
+                    	$('#loading-total-transaction').remove();
+                    },
+                    complete: function() {
+                        $('#loading-total-transaction').remove();
+                    }
+                });
+    		},
+    		loadTotalMoneySpent: function() {
+    			var self = this;
+    			$.ajax({
+                    url : "{{ path('dashboard_audience_spotlight_user_journey_load_total_money_spent') }}",
+                    type: 'GET',
+                    dataType: 'json',
+                    data: {
+                        user_journey_id: self.userId
+                    },
+                    beforeSend: function() {
+                        $('.total-money-spent').html('<span id="loading-total-money-spent">Loading...</span>');
+                    },
+                    success: function(resp) {
+                    	if (resp.status == 1
+                    	&& resp.result
+                    	&& resp.result.total_amount
+                    	&& resp.result.total_transaction
+                    	) {
+                    		var totalAmount = parseFloat(resp.result.total_amount);
+                    		var totalTransactionText = resp.result.total_transaction > 1 ? resp.result.total_transaction + ' transactions' : resp.result['total_transaction'] + ' transaction';
+                    		$('.total-money-spent').html(self.currencyFormat(totalAmount) + ' across ' + totalTransactionText);
+                    	} else {
+                    	    $('.total-money-spent').html("$0.00");
+                    	}
+                    },
+                    error: function() {
+                    	$('#loading-total-money-spent').remove();
+                    },
+                    complete: function() {
+                        $('#loading-total-money-spent').remove();
+                    }
+                });
+    		},
+    		loadLastTransaction: function() {
+    			var self = this;
+    			$.ajax({
+                    url : "{{ path('dashboard_audience_spotlight_user_journey_load_last_transaction') }}",
+                    type: 'GET',
+                    dataType: 'json',
+                    data: {
+                        user_journey_id: self.userId
+                    },
+                    beforeSend: function() {
+                        $('.last-transaction').html('<span id="loading-last-transaction">Loading...</span>');
+                    },
+                    success: function(resp) {
+                    	if (resp.status == 1 && resp.result) {
+                    		$('.last-transaction').html(self.currencyFormat(parseFloat(resp.result.amountUSD)) + ' on ' + resp.result.happenedAt);
+                    	} else {
+                    	    $('.last-transaction').html("Not available");
+                    	}
+                    },
+                    error: function() {
+                    	$('#loading-last-transaction').remove();
+                    },
+                    complete: function() {
+                        $('#loading-last-transaction').remove();
+                    }
+                });
+    		},
+    		loadLastActivity: function() {
+    			var self = this;
+    			$.ajax({
+                    url : "{{ path('dashboard_audience_spotlight_user_journey_load_last_activity') }}",
+                    type: 'GET',
+                    dataType: 'json',
+                    data: {
+                        user_journey_id: self.userId
+                    },
+                    beforeSend: function() {
+                        $('.last-activity').html('<span id="loading-last-activity">Loading...</span>');
+                    },
+                    success: function(resp) {
+                    	if (resp.status == 1 && resp.lastActivity) {
+                    		$('.last-activity').html(resp.lastActivity);
+                    	} else {
+                    	    $('.last-activity').html("Not available");
+                    	}
+                    },
+                    error: function() {
+                    	$('#loading-last-activity').remove();
+                    },
+                    complete: function() {
+                        $('#loading-last-activity').remove();
+                    }
+                });
+    		},
+    		loadTimeline: function(obj) {
+    			var self = this;
+    			if (obj.data("disabled")) {
+			        return false;
+			    }
+    			self.pageCurrent++;
+    			$.ajax({
+                    url : "{{ path('dashboard_audience_spotlight_user_journey_load_timeline') }}",
+                    type: 'GET',
+                    dataType: 'json',
+                    data: {
+                        user_journey_id: self.userId,
+                        page: self.pageCurrent
+                    },
+                    beforeSend: function() {
+                    	obj.data("disabled", "disabled");
+                    	if (self.pageCurrent == 1) {
+                    		$('#timeline').html('<span id="loading-timeline">Loading...</span>');
+                    	} else {
+                    	    $('.loadmore').find('.loadmore-text').html("Loading...");
+                    	}
+
+                    },
+                    success: function(resp) {
+                    	if (resp.status == 1) {
+                    		if (self.pageCurrent == 1) {
+                    			$('#timeline').append(resp.content);
+                    		} else {
+                    			$('.flik-timeline').append(resp.content);
+                    			self.initFlikTimelime();
+                    		}
+                    		$('.loadmore').find('.loadmore-text').html(" Load more");
+                    		if (resp.isLastPage) {
+                    			$('.loadmore').remove();
+                    		}
+                    	}
+                    },
+                    error: function() {
+                    	obj.removeData("disabled");
+                    	if (self.pageCurrent == 1) {
+                    		$('#loading-timeline').remove();
+                    	}
+                    	self.pageCurrent--;
+                    },
+                    complete: function() {
+                    	obj.removeData("disabled");
+                    	if (self.pageCurrent == 1) {
+                    		$('#loading-timeline').remove();
+                    	}
+                    }
+                });
+    		},
+    		loadPresetFilter: function() {
+                var self = this;
+    			$.ajax({
+                    url : "{{ path('dashboard_audience_spotlight_user_journey_load_preset_filter') }}",
+                    type: 'GET',
+                    dataType: 'json',
+                    data: {
+                        user_journey_id: self.userId
+                    },
+                    beforeSend: function() {
+                        $('#preset-filter').html('<span id="loading-preset-filter">Loading...</span>');
+                    },
+                    success: function(resp) {
+                        $('#preset-filter').html(resp.content);
+                    	if (resp.status == 1 && resp.result) {
+                    		$('#preset-filter').html(resp.result);
+                    		self.fireConfirmDetachPresetFilter();
+                    		self.firePromtAttachPresetFilter();
+                    	}
+                    },
+                    error: function() {
+                    	$('#loading-preset-filter').remove();
+                    },
+                    complete: function() {
+                        $('#loading-preset-filter').remove();
+                    }
+                });
+    		},
+    		loadUnAttachedPresetFilter: function() {
+                var self = this;
+    			$.ajax({
+                    url : "{{ path('dashboard_audience_spotlight_user_journey_load_unattached_preset_filter') }}",
+                    type: 'GET',
+                    dataType: 'json',
+                    data: {
+                        user_journey_id: self.userId
+                    },
+                    beforeSend: function() {
+                        $('#promt_attach_preset_filter_section').hide();
+                       // $('#attach_preset_filter_section').html('<span id="loading-unattached-preset-filter">Loading available unassigned audience cards...</span>').show();
+                    },
+                    success: function(resp) {
+                        //$('#preset-filter').html(resp.content);
+                    	if (resp.status == 1 && resp.result) {
+                    		self.fireConfirmAttachPresetFilter(resp.result);
+
+                    	}
+                    },
+                    error: function() {
+                        $('#promt_attach_preset_filter_section').show();
+                    	//$('#loading-unattached-preset-filter').remove();
+                    	//$('#attach_preset_filters_section').hide();
+                    },
+                    complete: function() {
+                        //$('#loading-unattached-preset-filter').remove();
+                        //$('#attach_preset_filters_section').show();
+                        //$('#promt_attach_preset_filter_section').hide();
+                    }
+                });
+    		},
+    		currencyFormat: function(num) {
+			    return "$" + num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")
+			},
+			fireConfirmDetachPresetFilter: function() {
+			    var self = this;
+			    // Bind to modal opening to set necessary data properties to be used to make request
+			    $('#confirm_detach_preset_filter').off('show.bs.modal');
+			    $('#confirm_detach_preset_filter').off('click','.btn-ok');
+                $('#confirm_detach_preset_filter').on('show.bs.modal', function(e) {
+                    var data = $(e.relatedTarget).data();
+                    $('.title', this).text(data.preset_filter_name);
+                    $('.btn-ok', this).data('preset_filter_id', data.preset_filter_id);
+                }).on('click', '.btn-ok', function(e) {
+                    var preset_filter_id = $(this).data('preset_filter_id');
+                    var $modalDiv = $(e.delegateTarget);
+                    self.detachPresetFilter(preset_filter_id);
+                    $modalDiv.addClass('loading');
+                    setTimeout(function() {
+                        $modalDiv.modal('hide').removeClass('loading');
+                    }, 1000);
+                });
+
+			},
+			/*
+			fireDetachPresetFilter: function() {
+			    var self = this;
+			    $("a[data-preset_filter_id]").on('click',function(){
+			        var preset_filter_id = $(this).attr('data-preset_filter_id');
+			        self.detachPresetFilter(preset_filter_id);
+			    })
+			},*/
+			detachPresetFilter : function(preset_filter_id){
+			    var self = this;
+			    $.ajax({
+                    url : "{{ path('dashboard_audience_spotlight_user_journey_detach_preset_filter') }}",
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        user_journey_id: self.userId,
+                        preset_filter_id: preset_filter_id
+                    },
+                    async:false,
+                    beforeSend: function() {
+
+                    },
+                    success: function(resp) {
+                        $("div[data-preset_filter_id='"+preset_filter_id+"']").remove();
+                        $("#promt_attach_preset_filter_section").show();
+                        $("#attach_preset_filter_section").empty();
+                    },
+                    error: function() {
+
+                    },
+                    complete: function() {
+
+                    }
+                });
+
+			},
+			firePromtAttachPresetFilter: function() {
+			    var self = this;
+			    $('a#promt_attach_preset_filter').on('click',function(){
+			        $("a[data-preset_filter_id]").hide();
+			        self.loadUnAttachedPresetFilter();
+			    });
+			},
+			fireConfirmAttachPresetFilter: function(html) {
+                var self = this;
+                var preset_filter_ids = [];
+                //console.log('html confirm attach',html);
+			    $('#confirm_attach_preset_filter').html(html);
+
+        		$('#confirm_attach_preset_filter').off('show.bs.modal').off('click','.cancel').off('click','.save');
+        		$('#confirm_attach_preset_filter').on('show.bs.modal', function(e) {
+
+        		}).on('click', '.save', function(e) {
+                    self.attachPresetFilter(preset_filter_ids);
+                    $('#promt_attach_preset_filter_section').show('slow');
+        		}).on('click', '.cancel',function(e){
+                    $('#promt_attach_preset_filter_section').show('slow');
+                    $('#confirm_attach_preset_filter').modal('hide');
+                    $("a[data-preset_filter_id]").show('slow');
+        		});
+        		$('#confirm_attach_preset_filter #add2card button').each(function(){
+        		    $(this).on('click',function(){
+        		        var i = $(this).find('i');
+        		        var preset_filter_id = $(this).val();
+        		        if(i.hasClass('fa fa-check')){
+        		            i.removeClass('fa-check');
+        		            preset_filter_ids.splice( $.inArray(preset_filter_id, preset_filter_ids), 1 );
+        		        } else {
+        		            i.addClass('fa fa-check');
+        		            preset_filter_ids.push(preset_filter_id);
+        		        }
+        		    });
+        		});
+        		$('#confirm_attach_preset_filter').modal('show');
+			},
+			/*
+			fireAttachPresetFilter: function(){
+			    var self = this;
+			    $('#attach_preset_filter').on('click',function(){
+			        self.attachPresetFilter();
+			    });
+			},*/
+			attachPresetFilter: function(preset_filter_ids){
+			    var self = this;
+			    var preset_filter_names = [];
+			    $.each(preset_filter_ids,function(index,preset_filter_id){
+			        var preset_filter_name = $("button[value='"+preset_filter_id+"']").html()
+			        preset_filter_names.push(preset_filter_name);
+			    });
+			    var preset_filter_names_text = preset_filter_names.join(", ");
+			    $.ajax({
+                    url : "{{ path('dashboard_audience_spotlight_user_journey_attach_preset_filter') }}",
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        user_journey_id: self.userId,
+                        preset_filter_ids: preset_filter_ids
+                    },
+                    beforeSend: function() {
+                        $("#attach_preset_filter").attr("disabled","disabled");
+                        $("#unattached_preset_filter").attr("disabled","disabled");
+
+                    },
+                    success: function(resp) {
+                        if(resp.status == 1 && resp.result) {
+                            $('#confirm_attach_preset_filter #add2card').html("User was added to <strong>"+preset_filter_names_text+"</strong> successfully");
+                            setTimeout(function() {
+                                $('#confirm_attach_preset_filter').modal('hide');
+                            }, 1000);
+                            //self.showNotifyModal();
+                        }
+                        $("#promt_attach_preset_filter_section").show();
+                        $("#attach_preset_filter_section").empty();
+                        self.loadPresetFilter();
+
+                    },
+                    error: function() {
+                        $("#attach_preset_filter_section").empty();
+                        $("a[data-preset_filter_id]").removeAttr("disabled");
+                    },
+                    complete: function() {
+                        $("#attach_preset_filter_section").empty();
+                        $("a[data-preset_filter_id]").show();
+                    }
+                });
+
+			},
+		    showNotifyModal : function(message) {
+                $("#notify_modal").on('show.bs.modal', function (event) {
+        		        $(this).find('#notify_text').html(message)
+        		    }).modal('show');
+            }
+
+    	};
+    	$(document).ready(function() {
+            UserJourney.init();
+        });
+    </script>
+
+{% endblock %}

@@ -1,0 +1,131 @@
+<?php
+
+namespace Hyper\Domain\Authentication;
+
+use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
+
+/**
+ * Authentication
+ *
+ * @ORM\Table(name="authentication")
+ * @ORM\Entity(repositoryClass="Hyper\DomainBundle\Repository\Authentication\DTAuthenticationRepository")
+ * @ExclusionPolicy("all")
+ */
+class Authentication
+{
+    const USER_TYPE_ADMIN = 1;
+    const USER_TYPE_CLIENT = 0;
+    const STATUS_ACTIVE = 1;
+    const STATUS_INACTIVE = 0;
+    
+    public function __construct()
+    {
+        $this->id = uniqid('',true);    
+        $this->updated = strtotime(date('Y-m-d h:i:s'));
+    }
+    
+    /**
+     * @ORM\Column(name="id", type="string", length=255, nullable=false)")
+     * @ORM\Id
+     * @Expose
+     */
+    protected $id;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="username", type="string", length=255, nullable=false)
+     * @Expose
+     */
+    private $username;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=255, nullable=true)
+     * @Expose
+     */
+    private $name;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="img_path", type="string", length=255, nullable=true)
+     * @Expose
+     */
+    private $imgPath;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="password", type="string", length=255, nullable=false)
+     * @Expose
+     */
+    private $password;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="email", type="string",nullable=false, length=255)
+     * @Expose
+     */
+    private $email;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="application_id", type="string", length=13107, nullable=true)
+     * @Expose
+     */
+    private $application_id;        
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="client_id", type="string", length=13107, nullable=true)
+     * @Expose
+     */    
+    private $clientId;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="user_type", type="integer",options={"default"=0})
+     * @Expose
+     */
+    private $userType;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="status", type="integer",options={"default"=0})
+     * @Expose
+     */
+    private $status;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="api_key", type="string", length=255, nullable=true)
+     * @Expose
+     */
+    private $apiKey;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="created", type="integer", nullable=false)
+     * @Expose
+     */
+    private $created;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="updated", type="integer", nullable=false,)
+     * @Expose
+     */
+    private $updated;
+}

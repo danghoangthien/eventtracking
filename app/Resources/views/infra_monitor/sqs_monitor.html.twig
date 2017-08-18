@@ -1,0 +1,580 @@
+{% extends 'layout_ak/base.html.twig' %}
+{% block sub_head_title %}Admin - Infrastructure Monitor - Simple Queue Service (SQS){% endblock %}
+{% block body %}
+	<div class="wrapper wrapper-content">
+        <form class="form-inline">
+            <fieldset>
+                <div class="form-group">
+                    <label for="timezone_select" class="control-label">Timezone</label>
+                    <select id="timezone_select" onchange="updateDashboard();" class="form-control">
+                        <option value="US/Pacific" selected>US/Pacific</option>
+                        <option value="US/Mountain">US/Mountain</option>
+                        <option value="US/Central">US/Central</option>
+                        <option value="US/Eastern">US/Eastern</option>
+                        <option value="UTC">UTC</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="range_select" class="control-label">Interval</label>
+                    <select id="range_select" onchange="updateDashboard();" class="form-control">
+                        <option value="336">14 days</option>
+                        <option value="168">7 days</option>
+                        <option value="120">5 days</option>
+                        <option value="72">3 days</option>
+                        <option value="48">2 days</option>
+                        <option value="24" selected>24 hours</option>
+                        <option value="12">12 hours</option>
+                        <option value="6">6 hours</option>
+                        <option value="4">4 hours</option>
+                        <option value="2">2 hours</option>
+                        <option value="1">1 hour</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="period_select" class="control-label">Period</label>
+                    <select id="period_select" onchange="updateDashboard();" class="form-control">
+                        <option value="60">1 minute</option>
+                        <option value="300" selected>5 minutes</option>
+                        <option value="900">15 minutes</option>
+                        <option value="3600">1 hour</option>
+                        <option value="86400">1 day</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="refresh_select" class="control-label">Redraw</label>
+                    <select id="refresh_select" onchange="updateDashboard();" class="form-control">
+                        <option value="60000" selected>1 minute</option>
+                        <option value="300000">5 minutes</option>
+                        <option value="900000">15 minutes</option>
+                        <option value="3600000">1 hour</option>
+                    </select>
+                </div>
+            </fieldset>
+        </form>
+
+        <div class="container-fluid">
+
+            <ul class="nav nav-pills hide" id="tab-monitor">
+                <li class=""><a href="#group-elb" data-toggle="tab" aria-expanded="true">Elastic Load Balancer
+                    (ELB)</a>
+                </li>
+                <li class=""><a href="#group-ec2" data-toggle="tab" aria-expanded="false">Elastic Cloud Compute (EC2)</a>
+                </li>
+                <li class="active"><a href="#group-sqs" data-toggle="tab" aria-expanded="false">Simple Queue Service (SQS)</a>
+                </li>
+                <li class=""><a href="#group-redshift" data-toggle="tab" aria-expanded="false">RedShift</a></li>
+            </ul>
+
+            <div id="dashboard-contents" class="tab-content">
+                <div class="tab-pane fade" id="group-elb">
+
+                    <div class="panel panel-primary" style="margin-top: 24px;">
+                        <!-- Audience Kit -->
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Audience Kit</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Healthy Host Count</h3>
+                                        </div>
+                                        <div class="panel-body" id="healthyhost">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Unhealthy Host Count</h3>
+                                        </div>
+                                        <div class="panel-body" id="unhealthyhost">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Production ELB HTTP4XX Errors</h3>
+                                        </div>
+                                        <div class="panel-body" id="4xxerror">
+                                        </div>
+                                        <div class="panel-footer" id="4xxerror-footer">Loading...</div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Production ELB HTTP5XX Errors</h3>
+                                        </div>
+                                        <div class="panel-body" id="5xxerror">
+                                        </div>
+                                        <div class="panel-footer" id="5xxerror-footer">Loading...</div>
+                                    </div>
+                                </div>
+        			<div class="col-xs-6 col-md-4">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Production ELB HTTP Errors Share</h3>
+                                        </div>
+                                        <div class="panel-body" id="error_share">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">ELB Latency</h3>
+                                        </div>
+                                        <div class="panel-body" id="latency">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">ELB Request Count</h3>
+                                        </div>
+                                        <div class="panel-body" id="elb-request-count">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tracking Kit -->
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Tracking Kit</h3>
+                        </div>
+                        <div class="panel-body">
+
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Healthy Host Count</h3>
+                                        </div>
+                                        <div class="panel-body" id="tk-healthy-hosts">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Unhealthy Host Count</h3>
+                                        </div>
+                                        <div class="panel-body" id="tk-unhealthy-hosts">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Production ELB HTTP4XX Errors</h3>
+                                        </div>
+                                        <div class="panel-body" id="tk-4xxerror">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Production ELB HTTP5XX Errors</h3>
+                                        </div>
+                                        <div class="panel-body" id="tk-5xxerror">
+                                        </div>
+                                    </div>
+                                </div>
+        			<!--
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Production ELB HTTP Errors Share</h3>
+                                        </div>
+                                        <div class="panel-body" id="tk-error_share">
+                                            Temporarily Unavailable
+                                        </div>
+                                    </div>
+                                </div>
+        			-->
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">ELB Latency</h3>
+                                        </div>
+                                        <div class="panel-body" id="tk-latency">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">ELB Request Count</h3>
+                                        </div>
+                                        <div class="panel-body" id="tk-elb-request-count">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <div class="tab-pane fade" id="group-ec2">
+                    <div class="panel panel-primary" style="margin-top: 24px;">
+                        <!-- Audience Kit -->
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Audience Kit</h3>
+                        </div>
+                        <div class="panel-body">
+
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Production Site CPU Utilisation</h3>
+                                        </div>
+                                        <div class="panel-body" id="filercpu">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">IP Counter</h3>
+                                        </div>
+                                        <div class="panel-body" id="ipcounter">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Production Site Network Receive</h3>
+                                        </div>
+                                        <div class="panel-body" id="networkin">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Production Site Network Transmit</h3>
+                                        </div>
+                                        <div class="panel-body" id="networkout">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Dev Site CPU Utilisation</h3>
+                                        </div>
+                                        <div class="panel-body" id="dev-ak-cpu">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Dev Site Network Receive</h3>
+                                        </div>
+                                        <div class="panel-body" id="dev-ak-networkin">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Dev Site Network Transmit</h3>
+                                        </div>
+                                        <div class="panel-body" id="dev-ak-networkout">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Production Memory Utilisation</h3>
+                                        </div>
+                                        <div class="panel-body" id="prod-ak-mem-util">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tracking Kit -->
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Tracking Kit</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Production Site CPU Utilisation</h3>
+                                        </div>
+                                        <div class="panel-body" id="tk-filercpu">
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--
+        			<div class="col-xs-6">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">IP Counter</h3>
+                                        </div>
+                                        <div class="panel-body" id="tk-ipcounter">
+                                            Temporarily Unavailable
+                                        </div>
+                                    </div>
+                                </div>
+        			-->
+        			<div class="col-xs-6">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Production Memory Utilisation</h3>
+                                        </div>
+                                        <div class="panel-body" id="prod-tk-mem-util">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Production Site Network Receive</h3>
+                                        </div>
+                                        <div class="panel-body" id="tk-networkin">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Production Site Network Transmit</h3>
+                                        </div>
+                                        <div class="panel-body" id="tk-networkout">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+
+        			<!--
+                                <div class="col-xs-6">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Production Disk Utilisation</h3>
+                                        </div>
+                                        <div class="panel-body" id="prod-tk-disk-util">
+                                            Temporarily Unavailable
+                                        </div>
+                                    </div>
+                                </div>
+        			-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade in active" id="group-sqs">
+                    <div class="panel panel-primary" style="margin-top: 24px;">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Amazon Simple Queue Service</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Post-Queue Delayed Messages</h3>
+                                        </div>
+                                        <div class="panel-body" id="post-queue-delayed-messages">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Post-Queue Not Visible Messages</h3>
+                                        </div>
+                                        <div class="panel-body" id="post-queue-not-visible-messages">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Post-Queue Visible Messages</h3>
+                                        </div>
+                                        <div class="panel-body" id="post-queue-visible-messages">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Post-Queue Messages Received</h3>
+                                        </div>
+                                        <div class="panel-body" id="post-queue-messages-received">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Post-Queue Messages Sent</h3>
+                                        </div>
+                                        <div class="panel-body" id="post-queue-messages-sent">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="group-redshift">
+                    <div class="panel panel-primary" style="margin-top: 24px;">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">RedShift</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Event Production DB Network Receive</h3>
+                                        </div>
+                                        <div class="panel-body" id="dbnetworkin">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Event Production DB Network Transmit</h3>
+                                        </div>
+                                        <div class="panel-body" id="dbnetworkout">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Event Prod DB CPU Utilisation</h3>
+                                        </div>
+                                        <div class="panel-body" id="rscpuutilisation">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Event Clustering Prod DB Disk Space</h3>
+                                        </div>
+                                        <div class="panel-body" id="db-disk-space">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--<div class="row">-->
+                                <!--<div class="col-xs-6">-->
+                                    <!--<div class="panel panel-default">-->
+                                        <!--<div class="panel-heading">-->
+                                            <!--<h3 class="panel-title">AWS Billing</h3>-->
+                                        <!--</div>-->
+                                        <!--<div class="panel-body" id="billings-aws">-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="my-modal-dialog" tabindex="-1" role="dialog"
+             aria-labelledby="HyperGrowth AWS Dashboard">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content ">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"
+                                                                                                          style="color: #FFF">&times;</span>
+                        </button>
+                        <h4 class="modal-title" id="my-modal-title">HyperGrowth AWS Dashboard</h4>
+                    </div>
+                    <div class="modal-body" id="modal-body">
+                        <div class="progress progress-striped active center-block" style="width: 50%; margin-top: 150px;">
+                            <div class="progress-bar" style="width: 100%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+	</div>
+{% endblock %}
+{% block stylesheets_inline %}
+{% endblock %}
+{% block javascript_inline %}
+    <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+    <script type="text/javascript" src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
+    <script type="text/javascript">
+        google.load('visualization', '1', {
+            packages: ['corechart', 'controls']
+        });
+    </script>
+    <!-- Async and custom -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/async/1.5.2/async.min.js"></script>
+    <script>
+        const CLOUD_VIZ_PATH = '{{path('dashboard_infrastructure_monitor_cloudviz') }}';
+    </script>
+    <script src="{{ asset('bundles/hyperevent/dist/js/infra_monitor.js') }}"></script>
+{% endblock %}

@@ -11,11 +11,26 @@ use JMS\Serializer\Annotation\Expose;
  * Action
  *
  * @ORM\Table(name="actions")
- * @ORM\Entity(repositoryClass="Hyper\DomainBundle\Repository\DTActionRepository")
+ * @ORM\Entity(repositoryClass="Hyper\DomainBundle\Repository\Action\DTActionRepository")
  * @ExclusionPolicy("all")
  */
 class Action
 {
+    const BEHAVIOURS = array(
+        'INSTALL_BEHAVIOUR_ID' => 1,
+        'ADD_TO_WISHLIST_BEHAVIOUR_ID' => 2,
+        'ADD_TO_CART_BEHAVIOUR_ID' => 3,
+        'PURCHASE_BEHAVIOUR_ID' => 4,
+        'LAUNCH_BEHAVIOUR_ID' => 5,
+        'SHARE_CONTENT_BEHAVIOUR_ID' => 6,
+        'MISC_BEHAVIOUR_ID' => 7
+    );
+    
+    const ACTION_TYPES = array(
+        'INSTALL_ACTION_TYPE' => 1,
+        'IN_APP_EVENT_ACTION_TYPE' => 2
+    );
+    
     /**
      * @var string
      * @ORM\Column(name="id", type="string")
@@ -26,20 +41,28 @@ class Action
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Hyper\Domain\Device\Device", fetch="EXTRA_LAZY", inversedBy="identities")
-     * @ORM\JoinColumn()
+     * @ORM\ManyToOne(targetEntity="Hyper\Domain\Device\Device", fetch="EXTRA_LAZY", inversedBy="actions")
+     * @ORM\JoinColumn(name="device_id", referencedColumnName="id")
      * @Expose
      */
     private $device;
-
-
+    
     /**
      * @var string
      *
-     * @ORM\Column(name="application_id", type="string")
+     * @ORM\Column(name="app_id", type="string")
+     * @ORM\Id
      * @Expose
      */
-    private $applicationId;
+    private $appId;
+
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Hyper\Domain\Application\Application", fetch="EXTRA_LAZY", inversedBy="actions")
+     * @ORM\JoinColumn(name="application_id", referencedColumnName="id")
+     * @Expose
+     */
+    private $application;
 
 
     /**
@@ -57,6 +80,22 @@ class Action
      * @Expose
      */
     private $behaviourId;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="provider_id", type="integer", options={"default" = 0})
+     * @Expose
+     */
+    private $providerId;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="s3_log_file", type="string",nullable=true)
+     * @Expose
+     */
+    private $s3LogFile;
     
     /**
      * @var integer
@@ -83,4 +122,234 @@ class Action
         $this->created = time();
     }
     
+
+    /**
+     * Set id
+     *
+     * @param string $id
+     * @return Action
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Get id
+     *
+     * @return string 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set actionType
+     *
+     * @param integer $actionType
+     * @return Action
+     */
+    public function setActionType ($actionType)
+    {
+        $this->actionType = $actionType;
+
+        return $this;
+    }
+
+    /**
+     * Get actionType
+     *
+     * @return integer 
+     */
+    public function getActionType()
+    {
+        return $this->actionType;
+    }
+
+    /**
+     * Set behaviourId
+     *
+     * @param integer $behaviourId
+     * @return Action
+     */
+    public function setBehaviourId ($behaviourId)
+    {
+        $this->behaviourId = $behaviourId;
+
+        return $this;
+    }
+
+    /**
+     * Get behaviourId
+     *
+     * @return integer 
+     */
+    public function getBehaviourId()
+    {
+        return $this->behaviourId;
+    }
+
+    /**
+     * Set happenedAt
+     *
+     * @param integer $happenedAt
+     * @return Action
+     */
+    public function setHappenedAt ($happenedAt)
+    {
+        $this->happenedAt = $happenedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get happenedAt
+     *
+     * @return integer 
+     */
+    public function getHappenedAt()
+    {
+        return $this->happenedAt;
+    }
+
+    /**
+     * Set created
+     *
+     * @param integer $created
+     * @return Action
+     */
+    public function setCreated ($created)
+    {
+        $this->created = $created;
+
+        return $this;
+    }
+
+    /**
+     * Get created
+     *
+     * @return integer 
+     */
+    public function getCreated()
+    {
+        return $this->created;
+    }
+
+    /**
+     * Set device
+     *
+     * @param \Hyper\Domain\Device\Device $device
+     * @return Action
+     */
+    public function setDevice(\Hyper\Domain\Device\Device $device = null)
+    {
+        $this->device = $device;
+
+        return $this;
+    }
+
+    /**
+     * Get device
+     *
+     * @return \Hyper\Domain\Device\Device 
+     */
+    public function getDevice()
+    {
+        return $this->device;
+    }
+
+    /**
+     * Set providerId
+     *
+     * @param integer $providerId
+     * @return Action
+     */
+    public function setProviderId($providerId)
+    {
+        $this->providerId = $providerId;
+
+        return $this;
+    }
+
+    /**
+     * Get providerId
+     *
+     * @return integer 
+     */
+    public function getProviderId()
+    {
+        return $this->providerId;
+    }
+    
+    /**
+     * Set appId
+     *
+     * @param string $appId
+     * @return Action
+     */
+    public function setAppId($appId)
+    {
+        $this->appId = $appId;
+
+        return $this;
+    }
+
+    /**
+     * Get appId
+     *
+     * @return string 
+     */
+    public function getAppId()
+    {
+        return $this->appId;
+    }
+
+    /**
+     * Set application
+     *
+     * @param \Hyper\Domain\Application\Application $application
+     * @return Action
+     */
+    public function setApplication(\Hyper\Domain\Application\Application $application = null)
+    {
+        $this->application = $application;
+
+        return $this;
+    }
+
+    /**
+     * Get application
+     *
+     * @return \Hyper\Domain\Application\Application 
+     */
+    public function getApplication()
+    {
+        return $this->application;
+    }
+
+    /**
+     * Set s3LogFile
+     *
+     * @param string $s3LogFile
+     * @return Action
+     */
+    public function setS3LogFile($s3LogFile)
+    {
+        $this->s3LogFile = $s3LogFile;
+
+        return $this;
+    }
+
+    /**
+     * Get s3LogFile
+     *
+     * @return string 
+     */
+    public function getS3LogFile()
+    {
+        return $this->s3LogFile;
+    }
 }

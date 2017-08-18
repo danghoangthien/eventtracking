@@ -1,0 +1,989 @@
+{% extends 'base2.html.twig' %}
+{% block body %}
+{% if exception is defined %}
+<h3 style="text-align:center">{{ exception }}</h3>
+{% else %}
+<section class="content-header" style="margin: -2em 0 0 -2em !important;">
+    <h1 style="font-size: 24px; margin: 0 0 1em 0.5em;">
+      Audience Deck
+    </h1>
+    <ol class="breadcrumb">
+      <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li class="active">Audience Deck</li></li>
+    </ol>
+</section> 
+
+{#{% for data in preset_filters_by_auth_session %}#}
+{#    {% if data.filterMetadata["\\Hyper\\Domain\\Device\\Device.platformId"] is defined %}#}
+{#        {% for platformValue in data.filterMetadata["\\Hyper\\Domain\\Device\\Device.platformId"]["value"] %}#}
+{#        <h5>platform id :#}
+{#         {{ platformValue }}#}
+{#        </h5>#}
+{#        {% endfor %}#}
+{#    {% endif %} #}
+{#{% endfor %}#}
+
+<!-- Main content -->
+<div class="row">
+    <div class="col-md-12">
+		<form class="form-horizontal" id="action_data_form" action="{{ path('dashboard_client_action_show',{'page' : 'client'}) }}" method="post" enctype="multipart/form-data">
+		<input type="hidden" name="last_preset_filter_id" value="{{ last_preset_filter_id }}">
+        <input type="hidden" name="last_behaviour_id" value="{{ last_behaviour_id }}">
+        <input type="hidden" name="last_sort_field" value="{{ last_sort_field }}" id="last_sort_field">
+        <input type="hidden" name="sort_field" value="{{ sort_field }}" id="sort_field">
+        <input type="hidden" name="sort_order" value="{{ sort_order }}" id="sort_order">
+        <input type="hidden" name="preset_filter_id" id="preset_filter_id" value="" />
+        <input type="hidden" name="page" value="client" />
+        <input type="hidden" name="last_preset_name" value="{{ last_preset_name }}" id="last_preset_name"/>
+        <input type="hidden" name="sql" value="{% if sql is defined %} {{ sql }} {% endif %}" id="sql"/>        
+        
+        {#<input type="hidden" name="row_number" id="row_number" value="500" />#}
+			<div class="form-group">
+				<div class="col-md-12">
+					<div id="cont">
+						<div class="carousel-container">
+							<div id="icarousel">
+								{% if count_card > 0 %}
+								{% for preset_filter in preset_filters_by_auth_session %}
+									<div 
+									{% if preset_filter.id == last_preset_filter_id %} 
+									    class="slide current" 
+									{% else %}
+									    class="slide"
+								    {% endif %}
+									    id="{{preset_filter.id}}" 
+									    name="preset_filter_id__">
+										<div class="card">
+											<div class="row" style="padding-bottom: 5px;font-size:2rem">
+												<div class="col-sm-6 text-left">
+												    {% if preset_filter.filterMetadata["\\Hyper\\Domain\\Device\\Device.platform"] is defined %}
+                                                        {% for platformValue in preset_filter.filterMetadata["\\Hyper\\Domain\\Device\\Device.platform"]["value"] %}
+                                                            {% if platformValue == 1 %}
+                                                                <i class="fa fa-apple"></i>
+                                                            {% else %}
+                                                                <i class="fa fa-android"></i>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    {% else %}
+                                                        <i class="fa fa-android"></i>
+                                                    {% endif %}
+											    </div>
+												<div class="col-sm-6 text-right">
+												    {% if preset_filter.filterMetadata["\\Hyper\\Domain\\Device\\Device.countryCode"] is defined %}
+												        {% for data in preset_filter.filterMetadata["\\Hyper\\Domain\\Device\\Device.countryCode"]["value"] %}
+                                                        {{ data }}
+                                                        {% endfor %}
+												    {% endif %}
+											    </div>
+											</div>
+											{#<h4>{{ preset_filter.presetName }}</h4>#}
+											<div class="card-des">{{ preset_filter.presetName }}</div>
+											<div style="font-size:4rem;text-align:center">
+												<i class="fa fa-music"></i>
+											</div>
+										</div>
+									</div>
+								{% endfor %}
+								{% endif %}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-md-2 control-label" style="padding-top:0px;">Audience Card Selected</label>
+				<div class="col-md-10">
+					<div id="carddisplay"></div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-md-2 control-label">Event Type</label>
+				<div class="col-md-10">
+					<select name="behaviour_id" class="form-control" id="behaviour_id">
+	                    {% for key,type in behaviour_ids %}
+	                        <option value="{{ key }}" {% if type.is_selected == 1 %} selected {% endif %}>{{ type.name }}</option>
+	                    {% endfor %}
+                    </select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-md-2 control-label">Time range</label>
+				<div class="col-md-10">
+					<select name="transaction_day" class="form-control" id="transaction_day">
+                        {% for key,day_range in transaction_days %}
+                            <option value="{{ key }}" {% if day_range.is_selected == 1 %} selected {% endif %}>{{ day_range.name }}</option>
+                        {% endfor %}
+                    </select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-md-2 control-label">Records per Page</label>
+				<div class="col-md-10">
+					<select name="row_number" class="form-control">
+					    <option value="10" {% if row_number == 10 %} selected {% endif %}>10</option>
+                        <option value="50" {% if row_number == 50 %} selected {% endif %}>50</option>
+                        <option value="100" {% if row_number == 100 %} selected {% endif %}>100</option>
+                        <option value="200" {% if row_number == 200 %} selected {% endif %}>200</option>
+                        <option value="500" {% if row_number == 500 %} selected {% endif %}>500</option>
+                        <option value="1000" {% if row_number == 1000 %} selected {% endif %}>1000</option>
+                    </select>
+                </div>
+            </div>
+			<button type="button" class="btn btn-danger pull-right" id="btnSubmit">Show Audience Data</button>
+            <br /><br />
+			{% if record_count > 0 %}
+			<div class="form-group">
+			    <label class="col-md-2 control-label">Record count</label>
+			    <div class="col-md-4">
+			        <input type="text" class="form-control" value="{{ record_count|number_format(0, '', ',') }}" />
+			    </div>
+			</div>
+			    
+    	    <div class="form-group">
+    	        <label class="col-md-2 control-label">Page Number</label>
+    	        <div class="col-md-4">
+        	        <select id="page_num" class="form-control" name="page_num" onchange="flipPage({% if sort_field != "" %} '{{ sort_field }}', '{{ sort_order }}' {% else %} '', '' {% endif %})">
+                        {#{% for i in 1..page_count %}#}
+                        {% for i in 1..50 %}
+                            <option value="{{ i }}" {% if page_num == i %} selected {% endif %}>{{ i }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+    	        {#<ul id="paginate">  #}
+             {#       <li>#}
+                    {#{% for i in 1..page_count %}#}
+             {#       {% for x in 1..20 %}#}
+             {#           <a id="aa" name="aa" onClick="flipPage({% if sort_field != "" %} '{{ sort_field }}', '{{ sort_order }}'#}
+             {#           {% else %} '', '' {% endif %})" {% if page_num == x %} class="selected" {% endif %} value="{{ x }}">#}
+             {#               {{ x }}#}
+             {#           </a>#}
+             {#           <input type="hidden" value="{{ x }}" name="page_num"/>#}
+             {#       {% endfor %}#}
+             {#       </li>#}
+             {#   </ul>#}
+    	    </div>
+    	    <div class="form-group">
+    	        <label class="col-md-2 control-label">Search</label>
+    	        <div class="col-md-8">
+    	            <table>
+    	                <tr>
+    	                    <td>
+    	                        <select id="search_field" name="search_field" class="form-control">
+                                    {% for column in search_fields %}
+                                        <option value="{{ column }}" {% if column == search_field %} selected {% endif %}>{{ column }}</option>
+                                    {% endfor %}
+                                </select>
+    	                    </td>
+    	                    <td style="width: 1.2em;"></td>
+    	                    <td>
+    	                        <input id="search_string" type="text" name="search_string" value="{{ search_string }}" class="form-control">
+    	                    </td>
+    	                    <td style="width: 1.2em;"></td>
+    	                    <td><input type="button" value="Search" class="btn btn-danger" name="btn_search" onClick="setSearch()"></td>
+    	                </tr>
+    	            </table>
+                </div>
+    	    </div>
+    	    
+    	    {#<div class="form-group pull-right">#}
+    	    {#    <label style="visibility: hidden;" class="col-md-2 control-label">Export</label>#}
+    	    {#    <div class="col-md-4">#}
+			        <input class="btn btn-danger pull-right" type="submit" value="Export Data" name="export" />
+			    {#</div>#}
+    	  {#  </div>#}
+			{% endif %}
+			{#{% if record_count > 0 %}#}
+   {#         <br/>#}
+   {#         <table>#}
+   {#             <tr>#}
+   {#                 <td>Record Count</td>#}
+   {#                 <td>:</td>#}
+   {#                 <td>{{ record_count|number_format(0, '', ',') }}</td>#}
+   {#                 <td>&nbsp;</td>#}
+   {#             </tr>#}
+   {#             <tr>#}
+   {#                 <td>Page Number</td>#}
+   {#                 <td>:</td>#}
+   {#                 <td>#}
+   {#                     <select id="page_num" name="page_num" onchange="flipPage({% if sort_field != "" %} '{{ sort_field }}', '{{ sort_order }}' {% else %} '', '' {% endif %})">#}
+   {#                         {% for i in 1..page_count %}#}
+   {#                             <option value="{{ i }}" {% if page_num == i %} selected {% endif %}>{{ i }}</option>#}
+   {#                         {% endfor %}#}
+
+   {#                     </select>#}
+   {#                 </td>#}
+   {#                 <td>&nbsp;</td>#}
+   {#             </tr>#}
+   {#             <tr>#}
+   {#                 <td>#}
+   {#                     <select id="search_field" name="search_field">#}
+   {#                         {% for column in search_fields %}#}
+   {#                             <option value="{{ column }}" {% if column == search_field %} selected {% endif %}>{{ column }}</option>#}
+   {#                         {% endfor %}#}
+   {#                     </select>#}
+   {#                 </td>#}
+   {#                 <td></td>#}
+   {#                 <td>#}
+   {#                     <input id="search_string" type="text" name="search_string" value="{{ search_string }}">#}
+   {#                 </td>#}
+   {#                 <td>#}
+   {#                     <input type="button" value="Search" name="btn_search" onClick="setSearch()">#}
+   {#                 </td>#}
+   {#             </tr>#}
+	  {#          <tr>#}
+	  {#              <td colspan="3" align="right"><input type="submit" value="Export Data" name="export"></td>#}
+	  {#          </tr>#}
+   {#     	</table>#}
+   {#         {% endif %}#}
+		</form>
+	</div>
+</div><!-- /.row -->
+
+<div class="row" style="margin-top:20px">
+	<div class="col-md-12">
+		<div class="box box-danger">
+			<div class="box-body">
+				<table id="example" class="table table-bordered table-striped">
+					<thead>
+						<tr>
+				            {% for column in column_names %}
+				                <th align="center" onclick="setSort('{{ column }}', '{% if column == last_sort_field %} {{ sort_order }} {% else %} 0 {% endif %}')" >{{ column }}</th>
+				            {% endfor %}
+				        </tr>
+					</thead>
+					<tbody>
+						
+						{% for key, row in result_data %}
+				        <tr>
+				            <!--
+				            <td>
+				                <a href="#" class="btn btn-block btn-danger btn-xs" data-toggle="modal" data-target="">
+    				                        TWS
+    				                    </a>
+				            </td>
+				            -->
+				            {% for key2, val in row %}
+				                {% if key2 == "device_id" %}
+				                    <td class="td_hype">
+				                        {% set test = val|split('.') %}
+				                        {% set ids = test[0] %}
+    				                    {#<a href="#" class="hypid" data-toggle="modal" data-target="{{ val }}">#}
+    				                    <a href="#" class="hypid" data-toggle="modal" data-target="{{ '#'~ids }}">
+    				                        {% if val is empty %} &nbsp; {% else %} {{ val }} {% endif %}
+    				                    </a>
+    				                </td>
+				                {% else %}
+    				                <td>{% if val is empty %} &nbsp; {% else %} {{ val }} {% endif %} 
+    				                </td>
+				                {% endif %}
+				                {#<td>#}
+				                {#    <a href="#" class="btn btn-block btn-danger btn-xs" data-toggle="modal" data-target="#04875454">#}
+				                {#        {% if val is empty %} &nbsp; {% else %} {{ val }} {% endif %}#}
+				                {#    </a>#}
+				                {#</td>#}
+				            {% endfor %}
+				        </tr>
+				        {% endfor %}
+				        
+						{#<tr>#}
+						{#	<td>2015-02-17 23:48:20</td>#}
+						{#	<td>#}
+						{#		<a href="#" class="btn btn-block btn-danger btn-xs" data-toggle="modal" data-target="#04875454">04875454</a>#}
+						{#	</td>#}
+						{#	<td>07026770</td>#}
+						{#	<td>Bukalapak Android</td>#}
+						{#	<td>Purchase</td>#}
+						{#	<td>167000</td>#}
+						{#</tr>#}
+						{#<tr>#}
+						{#	<td>2015-09-25 13:04:38</td>#}
+						{#	<td>73449196</td>#}
+						{#	<td>97797477</td>#}
+						{#	<td>Bukalapak iOS</td>#}
+						{#	<td>Install</td>#}
+						{#	<td>0</td>#}
+						{#</tr>#}
+						{#<tr>#}
+						{#	<td>2015-09-25 13:05:10</td>#}
+						{#	<td>73449196</td>#}
+						{#	<td>97797477</td>#}
+						{#	<td>Bukalapak iOS</td>#}
+						{#	<td>Add to Cart</td>#}
+						{#	<td>172000</td>#}
+						{#</tr>#}
+					</tbody>
+					<tfoot>
+						<tr>
+				            {% for column in column_names %}
+				                <th align="center" onclick="setSort('{{ column }}', '{% if column == last_sort_field %} {{ sort_order }} {% else %} 0 {% endif %}')" >{{ column }}</th>
+				            {% endfor %}
+				        </tr>
+					</tfoot>
+				</table>
+			</div><!-- /.box-body -->
+		</div><!-- /.box -->
+	</div>
+</div>
+
+{% if result_data is defined %}
+{% for id in result_data %}
+{% if id['device_id'] is defined %}
+    {% set test2 = id['device_id']|split('.') %}
+    {% set ids2 = test2[0] %}
+<div class="modal fade modals" id="{{ ids2 }}" data-hypid="{{ id['device_id'] }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" class="divFrm">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content" style="background-color: #ab0808; background-image: url(http://www.transparenttextures.com/patterns/crossword.png);">
+			<div class="modal-body" style="height:535px; max-height:535px;">
+				<img class="profile-user-img img-responsive img-circle" src="https://s3-us-west-2.amazonaws.com/testhasoffer/user_images/user.png" alt="User profile picture">
+				<h4 class="text-center" style="color:#ffffff;">Hypid #{{ id['device_id'] }} </h4>
+				
+				<div class="nav-tabs-custom">
+					<ul class="nav nav-tabs">
+						<li class="active">
+							<a href="#tab_1" data-toggle="tab" aria-expanded="true" class="forTab1" id="{{ id['device_id'] }}">
+								<b>User Info</b>
+							</a>
+						</li>
+						<li class="">
+							<a href="#tab_2" data-toggle="tab" aria-expanded="false" class="forTab2" id="{{ id['device_id'] }}">
+								<b>Intent Score</b>
+							</a>
+						</li>
+					</ul>
+					
+					<div class="tab-content pop_tab" style="height: 320px; max-height: 320px;" id="{{ id['device_id'] }}">
+						<div class="tab-pane active tabs1" id="tab_1" one="{{ id['device_id'] }}">
+							<ul class="list-group list-group-unbordered">
+								<li class="list-group-item">
+									<p><b>Platform</b> <a class="pull-right platform__"></a></p>
+									<i class="fa fa-android pull-left icon_android"></i> <h6 style="margin:0px" class="text-muted android__"></h6><br/>
+									<i class="fa fa-apple pull-left icon_apple"></i> <h6 style="margin:0px" class="text-muted iOS__"></h6>
+								<li class="list-group-item">
+									<b>Country</b> <a class="pull-right">Indonesia</a>
+								</li>
+								<li class="list-group-item">
+									<b>Total Transaction</b> <a class="pull-right t_transaction__"></a>
+								</li>
+								<li class="list-group-item">
+									<b>Total Money Spent</b> <a class="pull-right t_spent__"></a>
+								</li>
+								<li class="list-group-item">
+									<b>Last Transaction</b> <a class="pull-right l_transaction__"></a>
+								</li>
+								<li class="list-group-item">
+									<b>Last Activity</b> <a class="pull-right l_activity__"></a>
+								</li>
+							</ul>
+						</div><!-- /.tab-pane -->
+						
+						<div class="tab-pane tabs2" id="tab_2" two="{{ id['device_id'] }}">
+							{#<b>Intent score by transactions</b>#}
+							{#<span class="pull-right badge bg-blue intent_transaction" style="margin-right: 10px;">0</span>#}
+							{#<br /><br />#}
+							{#<b>Intent score by Interest</b>#}
+							{#<span class="pull-right badge bg-blue intent_interest" style="margin-right: 10px;">0</span>#}
+							{#<div id="tableintent_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">#}
+							{#	<div class="row"><div class="col-sm-6"></div>#}
+							{#		<div class="col-sm-6"></div>#}
+							{#	</div>#}
+							{#	<div class="row">#}
+							{#		<div class="col-sm-12">#}
+							{#			<table id="tableintent" class="table dataTable no-footer" role="grid">											 										#}
+							{#				<tbody>	#}
+							{#				    <tr role="row" class="cat">#}
+							{#						<td></td>#}
+							{#						<td style="width:100px">#}
+							{#							<span class="pull-right badge bg-green"></span>#}
+							{#						</td>#}
+							{#					</tr>#}
+							{#				</tbody>#}
+							{#			</table>#}
+							{#		</div>#}
+							{#	</div>#}
+							{#</div>#}
+						</div><!-- /.tab-pane -->
+					</div><!-- /.tab-content -->
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endif %}
+{% endfor %}
+{% endif %}
+
+<script>
+    $(document).ready(function()
+    {
+        $.device_id;
+        
+        $('#icarousel > div').each(function()
+        {
+            // var lastClass = $(this).attr('class').split(' ').slice(2, 5); 
+            $(this).removeClass().addClass('slide');
+            
+            if($("#last_preset_filter_id").val() == $(this).attr('id'))
+            {
+                $(this).addClass('current');
+                console.log("Matched: " + $("#last_preset_filter_id").val() + ":" + $(this).attr('id'))
+            }
+            
+        // 	if($(this).attr("class") == "slide current")
+        // 	{
+        // 		//console.log("found");
+        // 		//console.log($(this).attr("id"));
+        		
+        // 		$("#preset_filter_id").val($(this).attr("id"));
+        // 	}
+        });
+        
+        console.log($("#sql").val());
+        console.log("Preset: "+$("#preset_filter_id").val());
+        console.log("Action Type: "+$("#action_type").val());
+        console.log("Time Range: "+$("#transaction_day").val());
+        
+        // $(".slide").each(function()
+        // {
+        //     $(this).removeClass("current");
+        //     //$(this).removeClass('current');
+        //     //console.log($(this).attr('id') +" -- " + "{{last_preset_filter_id}}");
+        //     if( $(this).attr('id') == "{{last_preset_filter_id}}")
+        //     {
+        //         $(this).addClass("current");
+                
+                
+        //         var p = "{{last_preset_filter_id}}";
+        //         console.log(p);
+        //         $('#'+p).click();
+        //     }
+        // });
+        
+        
+        $(".forTab2").on('click', this,function()
+        {
+            var two = $(this).attr("id")
+            
+            console.log(two);
+            
+            $(".tabs2").each(function()
+            {
+                if(two == $(this).attr('two'))
+                {
+                    console.log("tab: " + two);
+                    console.log("div: " + $(this).attr('two'));
+                    
+                    $(".tabs1").each(function()
+                    {
+                        if($(this).attr('one') == two)
+                        {
+                            $(this).removeClass('active');
+                        }
+                    });
+                    //$(".tabs1").removeClass('active');
+                    $(this).addClass('active');
+                }
+                
+                //console.log($(this).attr('two'));
+            });
+            // $("#tab_2").addClass("active");
+        });
+        
+        $(".forTab1").on('click', this,function()
+        {
+            var one = $(this).attr("id")
+            
+            console.log(one);
+            
+            $(".tabs1").each(function()
+            {
+                if(one == $(this).attr('one'))
+                {
+                    console.log("tab: " + one);
+                    console.log("div: " + $(this).attr('one'));
+                    
+                    $(".tabs2").each(function()
+                    {
+                        if($(this).attr('two') == one)
+                        {
+                            $(this).removeClass('active');
+                        }
+                    });
+                    //$(".tabs1").removeClass('active');
+                    $(this).addClass('active');
+                }
+            });
+        });
+        
+        $(".hypid").each(function()
+        {
+             $(this).hover(function()
+             {
+                 $(".hypid").removeClass("btn btn-block btn-danger btn-xs");
+                 $(this).addClass("btn btn-block btn-danger btn-xs");
+             }).click(function()
+             {
+                 $(".hypid").removeClass("btn btn-block btn-danger btn-xs");
+                 $(this).addClass("btn btn-block btn-danger btn-xs");
+             });
+            //  .mouseout(function()
+            //  {
+            //      $(this).removeClass("btn btn-block btn-danger btn-xs");
+            //  });
+        });
+        
+        $(".hypid").on('click', this, function()
+        {
+            $.device_id = $(this).html().trim();
+            
+            // $.device_id = $.device_id.split(":")
+            // $.device_id = $.device_id[1].trim();
+            console.log("device_id: " + $.device_id);
+            
+            $.obj = { "device_id": $.device_id };
+            
+            $.ajax(
+            {                
+                url:"{{ path('dashboard_audience') }} ",
+                type: "POST",
+                data: $.obj,
+                success: function(msg)
+                {
+                    //alert(msg); return false;
+                    
+                    var data = JSON.parse(msg);
+                    //console.log(msg);
+                    console.log(data);
+                    
+                    var counter = data.device_transaction_information.count;
+                    var obj = data.device_transaction_information.frm_score;
+                    
+                    var plat          = data.user.device_platform_id.platform;
+                    var ios_plat      = data.user.device_platform_id.ios_idfv;
+                    var android_plat  = data.user.device_platform_id.android_advertising_id;
+                    var t_transaction = data.user.total_transactions;
+                    var t_spent       = data.user.total_amount;
+                    var l_transaction = "";
+                    var l_activity    = data.user.last_activitiy;
+                    
+                    if(counter != 0)
+                    {
+                        l_transaction = data.user.last_transaction_time;
+                        //l_activity    = data.user.last_activitiy;
+                    }
+                    else
+                    {
+                        l_transaction = "00:00:00";
+                        //l_activity    = "00:00:00";
+                    }
+                    
+                    var app_name      = "";
+                    // var intent_trans  = data.device_transaction_information.banting.transactionFrmScore;
+                    // var intent_inter  = data.device_transaction_information.banting.categoryFrm.cn.frm_score;
+                    // var cat           = "CN";
+                    // var cat_score     = data.device_transaction_information.banting.categoryFrm.cn.frm_score;
+                    var intent_trans  = "";
+                    var intent_inter  = "";
+                    var cat           = "";
+                    var cat_score     = "";
+                    
+                    console.log("before condition");
+                    console.log(counter);
+                    
+                    if(counter != 0)
+                    {
+                        console.log("first condition");
+                        for(key in obj)
+                        {
+                            var app_name = key;
+                            
+                            for(key2 in obj[key])
+                            {
+                                if(key2 == 'transactionFrmScore')
+                                {
+                                    intent_trans = obj[key][key2];
+                                }
+                                
+                                if(key2 == "categoryFrm")
+                                {
+                                    for(key3 in obj[key][key2])
+                                    {
+                                        cat = key3;
+                                        
+                                        for(key4 in obj[key][key2][key3])
+                                        {
+                                            if(key4 == 'frm_score')
+                                            {
+                                                intent_inter = obj[key][key2][key3][key4];
+                                                cat_score    = obj[key][key2][key3][key4];
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            
+                            if(cat == "000000000000") { cat = "Uncategorized"; } 
+                            
+                            $(".tabs2").each(function()
+                            {
+                                //consolel.log($(this).attr('two') + "--" + $.device_id);
+                                
+                                if($(this).attr('two') == $.device_id)
+                                {
+                                    $(this).empty();
+                                    
+                                    $(this).append('<table style="margin-bottom: 0.5em;"><tr style="font-size: 14px;"><td><b>App&nbsp;:&nbsp; </b></td><td><b style="color: #336699;">'+app_name+'</b></td></tr></table>\n\
+                                    \n\
+                                    <b>Intent score by transactions</b>\n\
+                                    <span class="pull-right badge bg-blue intent_transaction" style="margin-right: 10px;">'+intent_trans+'</span>\n\
+                                    <br /><br />\n\
+                                    <b>Intent score by Interest</b>\n\
+                                    <span class="pull-right badge bg-blue intent_interest" style="margin-right: 10px;">'+intent_inter+'</span>\n\
+                                    <div id="tableintent_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">\n\
+                                        <div class="row"><div class="col-sm-6"></div>\n\
+                                            <div class="col-sm-6"></div>\n\
+                                        </div>\n\
+                                        <div class="row">\n\
+                                            <div class="col-sm-12">\n\
+                                                <table id="tableintent" class="table dataTable no-footer" role="grid">\n\
+                                                    <tbody>\n\
+                                                        <tr role="row" class="cat">\n\
+                                                            <td>'+cat+'</td>\n\
+                                                            <td style="width:100px">\n\
+                                                                <span class="pull-right badge bg-green">'+cat_score+'</span>\n\
+                                                            </td>\n\
+                                                        </tr>\n\
+                                                    </tbody>\n\
+                                                </table>\n\
+                                            </div>\n\
+                                        </div>\n\
+                                    </div>\n\
+                                    ');
+                                }
+                            });
+                        }
+                    }
+                    else
+                    {
+                        console.log("second condition");
+                        /* Default to 0*/
+                        $(".tabs2").each(function()
+                        {
+                            $(this).empty();
+                            
+                            $(this).append('<table style="margin-bottom: 0.5em;"><tr style="font-size: 14px;"><td><b>App&nbsp;:&nbsp; </b></td><td><b style="color: #336699;">No Data</b></td></tr></table>\n\
+                            \n\
+                            <b>Intent score by transactions</b>\n\
+                            <span class="pull-right badge bg-blue intent_transaction" style="margin-right: 10px;">0</span>\n\
+                            <br /><br />\n\
+                            <b>Intent score by Interest</b>\n\
+                            <span class="pull-right badge bg-blue intent_interest" style="margin-right: 10px;">0</span>\n\
+                            <div id="tableintent_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">\n\
+                            </div>\n\
+                            ');
+                        });
+                    }
+                    
+                    if(plat == 1)
+                    {
+                        $(".platform__").html("iOS");
+                        // $(".icon_android").remove();
+                        $(".icon_android").css("display", "none");
+                        $(".icon_apple").css("display", "block");
+                        $(".android__").html("");
+                        $(".iOS__").html(ios_plat);
+                    }
+                    else if(plat == 2)
+                    {
+                        $(".platform__").html("Android");
+                        // $(".icon_apple").remove();
+                        $(".icon_apple").css("display", "none");
+                        $(".icon_android").css("display", "block");
+                        $(".iOS__").html("");
+                        $(".android__").html(android_plat);
+                    }
+                    else
+                    {
+                        $(".icon_apple").css("display", "none");
+                        $(".icon_android").css("display", "none");
+                    }
+                    
+                    $(".t_transaction__").html(t_transaction);
+                    $(".t_spent__").html("$"+t_spent);
+                    $(".l_transaction__").html(l_transaction);
+                    $(".l_activity__").html(l_activity);
+                    // $(".intent_transaction").html(intent_trans);
+                    // $(".intent_interest").html(intent_inter);
+                    // $(".cat td:nth-child(1)").html(cat);
+                    // $(".cat td:nth-child(2) > span ").html(cat_score);
+                }
+            });
+        });
+        
+        //data-target
+        // $("a[data-target]").on('click', this, function()
+        // {
+        //     $.popupIndentifier = $(this).attr("data-target");
+        //     console.log( $.popupIndentifier);
+        //     $('div[data-hypid="'+$.popupIndentifier+'"]').modal('show'); 
+        // });
+        /*
+        
+    	$('#example').DataTable( 
+        {
+            "pageLength": 10,
+    
+            // "initComplete": function(settings, json) 
+            // {
+            //     //$("#CMS2_length").css("display", "none");
+            //     $("#CMS_length").css("margin", "0.5em 0 0 0.5em");
+            //     $("#CMS_filter").css("margin", "0.5em 0.5em 0 0");
+                
+            //     $("#CMS2_filter").find("input").css("margin", "0 0 0 0.5em");
+            // },
+            "fnDrawCallback" : function(oSettings)
+            {
+                var total_count = oSettings.fnRecordsTotal();
+                var columns_in_row = $(this).children('thead').children('tr').children('th').length;
+                var show_num = oSettings._iDisplayLength;
+                var tr_count = $(this).children('tbody').children('tr').length;
+                var missing = show_num - tr_count;
+                if (show_num < total_count && missing > 0){
+                  for(var i = 0; i < missing; i++){
+                    $(this).append('<tr class="space"><td colspan="' + columns_in_row + '">&nbsp;</td></tr>'); 
+                  }
+                }
+                if (show_num > total_count) {
+                  for(var i = 0; i < (total_count - tr_count); i++) {
+                    $(this).append('<tr class="space"><td colspan="' + columns_in_row + '">&nbsp;</td></tr>'); 
+                  }
+                }
+             }
+        });
+        */
+        
+    	var hash_preset_filter_id = null;
+        var hash = window.location.hash.slice(1);
+        
+        if (hash) {
+            hash_preset_filter_id = hash;
+            $('select[name=preset_filter_id] option[value="'+hash_preset_filter_id+'"]').attr('selected','selected');;
+            $( "#action_data_form" ).submit();
+        }
+        
+        $( "#action_data_form" ).submit(function( e ) {
+            //alert('submitting');
+            var display_data_path = "{{ path('dashboard_client_action_show',{'page' : 'client'}) }}";
+            var export_path = "{{ path('dashboard_client_action_export') }}";
+            $(this).attr('action', display_data_path);
+            var $btn = $(document.activeElement);
+
+            if($btn.attr('name') == 'export'){
+                $(this).attr('action', export_path);
+                console.log("trace",'exporting function');
+                //reset native form action
+                setTimeout(function() {
+                    $('#action_data_form').attr('action', display_data_path);
+                },100);
+                return true;
+            }
+            if($btn.attr('name') == 'show_data'){
+                $('#search_field').val("");
+                $('#search_string').val("");
+                $(this).attr('action', display_data_path);
+                console.log("trace",'show data function');
+                return true;
+            }
+        });
+        
+        $('#icarousel').iCarousel({
+                autoPlay: false,
+                easing: 'ease-in-out',
+                slides: 10,
+                slidesSpace: 180,
+                make3D: true,
+                touchNav: true,
+                animationSpeed: 800,
+                directionNav: false,
+                timer: "false",
+                mouseWheel: false
+        });
+        
+        //("#preset_filter_id").val("");
+        
+        $("#btnSubmit").on('click', this, function()
+        {
+       		$('#icarousel > div').each(function()
+	        {
+	        	if($(this).attr("class") == "slide current")
+	        	{
+	        		// console.log("found");
+	        		// console.log($(this).attr("class"));
+	        		$("#preset_filter_id").val($(this).attr("id"));
+	        	}
+	        });
+	        
+	        console.log("Preset: "+$("#preset_filter_id").val());
+	        console.log("Event Type: "+$("#behaviour_id").val());
+	        console.log("Time Range: "+$("#transaction_day").val());
+	        //return false;
+	        $("#action_data_form").submit();
+        });
+
+        //var original_cardcontent = $('.current .card h4').text()+''+$('.current .card .card-des').text();
+        
+        $( "#carddisplay" ).empty();
+        var original_cardcontent = "";
+        console.log("Hidden Name: " + $("#last_preset_name").val());
+        
+        if($("#last_preset_name").val() != "")
+        {
+            original_cardcontent = $("#last_preset_name").val();
+        }
+        else
+        {
+            original_cardcontent = $('.current .card .card-des').html();
+        }
+        
+        $( '#carddisplay').html(original_cardcontent);
+        
+        //console.log($('h4',this).text()+''+$('.card-des',this).text());
+        
+        $('.slide').click(function (){
+            var cardcontent = $('h4',this).text()+''+$('.card-des',this).text();
+            $( "#carddisplay" ).empty();
+            $( '#carddisplay').append(cardcontent);
+            $("#last_preset_name").val(cardcontent);
+            $("#preset_filter_id").val($(this).attr("id"));
+            
+            console.log("Hidden: "+$("#last_preset_name").val());
+        })
+        /*
+        .bind('mousewheel', function(){
+                $( "#carddisplay" ).empty();
+                var cardcontent = $('.current .card h4').text()+': '+$('.current .card .card-des').text();
+                $( '#carddisplay').append(cardcontent);
+        })
+        */
+        
+        // $("#example").DataTable();
+        // $('#tableintent').DataTable
+        //   "paging": true,
+        //   "lengthChange": false,
+        //   "searching": false,
+        //   "ordering": false,
+        //   "info": false,
+        //   "autoWidth": false,
+        //   "pageLength": 50,
+        //   "pagingType":"simple",
+        //   "scrollCollapse": false,
+        //   "columns": [
+        //         { "width": "50%" },
+        //         { "width": "50%" }
+        //   ],
+        //   "language": {
+        //         "paginate": {
+        //           "next": ">",
+        //           "previous": "<"
+        //         }
+        //   }
+        // });
+    });
+    
+    $(function () {
+            // $("#example").DataTable();
+            // $('#tableintent').DataTable({
+            //   "paging": true,
+            //   "lengthChange": false,
+            //   "searching": false,
+            //   "ordering": false,
+            //   "info": false,
+            //   "autoWidth": false,
+            //   "pageLength": 5,
+            //   "pagingType":"simple",
+            //   "scrollCollapse": false,
+            //   "columns": [
+            //         { "width": "50%" },
+            //         { "width": "50%" }
+            //   ],
+            //   "language": {
+            //         "paginate": {
+            //           "next": ">",
+            //           "previous": "<"
+            //         }
+            //   }
+            // });
+            //$("#tableintent thead").remove()
+    });
+    
+    function setSort(field, order) {
+        $('#sort_field').val(field);
+        if (order == '') {
+            order = 0;
+        } else if (order == 0) {
+            order = 1;
+        } else if (order == 1) {
+            order = '';
+        }
+        $('#sort_order').val(order);
+        $('#action_data_form').submit();
+    }
+
+    function setSearch() {
+        if ($('#search_string').val() != "") {
+            $('#page_num').val(1);
+            $('#action_data_form').submit();
+        }
+    }
+
+    function flipPage(field, order) {
+        $('#sort_field').val(field);
+        $('#sort_order').val(order);
+        $('#action_data_form').submit();
+    }
+        
+    
+</script>
+<style>
+    
+    .td_hype { overflow: hidden;  table-layout:fixed; text-align:center;}
+    
+    thead tr th, tfoot tr th { text-align: center; }
+    
+    #paginate
+    {            
+        padding: 0.3em 0 0 1em;
+        list-style-type: none !important;
+        /*border-radius: 25px;*/
+        /*background-color: #333333;      */
+        height: 30px;
+        width: 100%;
+    }
+
+    #paginate li
+    {            
+        display: inline !important;            
+        margin-right: 0.5em;            
+    }
+        
+    #aa { color: #ab0808; }
+    #aa:hover { cursor: pointer; }
+    
+    .selected
+    {
+        color: #336699;
+    }
+    
+    #example1
+    {
+        width: 100%;
+        max-width: 100%;
+    }
+    .progress.progress-small {
+		height: 10px;
+		line-height: 10px;
+	}
+</style>
+{% endif %} 
+{% endblock %}

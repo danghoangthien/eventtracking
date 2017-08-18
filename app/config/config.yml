@@ -35,6 +35,10 @@ framework:
 twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
+    globals:
+        authentication: "@auth.controller"
+        # clover:         "@clover.controller"
+        # promo:          "@promo.controller"
 
 # Assetic Configuration
 assetic:
@@ -68,7 +72,7 @@ doctrine:
                 #   2. Uncomment database_path in parameters.yml.dist
                 #   3. Uncomment next line:
                 #     path:     "%database_path%"
-        
+
                 # how you call your additional connection is up to you
                 # for me it is pgsql - you need it in a bit again
             pgsql:
@@ -79,13 +83,21 @@ doctrine:
                 user:     "%pgsql_database_user%"
                 password: "%pgsql_database_password%"
                 charset:  UTF8
+            adops_pgsql:
+                driver:   "%adops_pgsql_database_driver%"
+                host:     "%adops_pgsql_database_host%"
+                port:     "%adops_pgsql_database_port%"
+                dbname:   "%adops_pgsql_database_name%"
+                user:     "%adops_pgsql_database_user%"
+                password: "%adops_pgsql_database_password%"
+                charset:  UTF8
 
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
         default_entity_manager: default
         #naming_strategy: doctrine.orm.naming_strategy.underscore
         #auto_mapping: false
-        
+
         entity_managers:
             default:
                 connection: default
@@ -104,18 +116,69 @@ doctrine:
                         prefix: Hyper\Domain\Device
                         is_bundle: false
                         alias: Device
-                        
-                    
+                    # HyperAdopsWeb:
+                    #     type: annotation
+                    #     dir: %kernel.root_dir%/../src/Hyper/Adops/WebBundle/Domain/
+                    #     prefix: Hyper\Adops\WebBundle\Domain
+                    #     is_bundle: false
+                    #     alias: HyperAdopsWeb
+                    # HyperAdopsAPI:
+                    #     type: annotation
+                    #     dir: %kernel.root_dir%/../src/Hyper/Adops/APIBundle/Domain/
+                    #     prefix: Hyper\Adops\APIBundle\Domain
+                    #     is_bundle: false
+                    #     alias: HyperAdopsAPI
+                    Authentication:
+                        type: annotation
+                        dir: %kernel.root_dir%/../src/Hyper/Domain/Authentication
+                        prefix: Hyper\Domain\Authentication
+                        is_bundle: false
+                        alias: Authentication
+            adops_pgsql:
+                connection: adops_pgsql
+                mappings:
+                    hyperfactdomain:
+                        type: annotation
+                        dir: %kernel.root_dir%/../src/Hyper/Domain/
+                        prefix: Hyper\Domain\
+                        is_bundle: false
+                        alias: HyperFact
+                    Device:
+                        type: annotation
+                        dir: %kernel.root_dir%/../src/Hyper/Domain/Device
+                        prefix: Hyper\Domain\Device
+                        is_bundle: false
+                        alias: Device
+                    HyperAdopsWeb:
+                        type: annotation
+                        dir: %kernel.root_dir%/../src/Hyper/Adops/WebBundle/Domain/
+                        prefix: Hyper\Adops\WebBundle\Domain
+                        is_bundle: false
+                        alias: HyperAdopsWeb
+                    HyperAdopsAPI:
+                        type: annotation
+                        dir: %kernel.root_dir%/../src/Hyper/Adops/APIBundle/Domain/
+                        prefix: Hyper\Adops\APIBundle\Domain
+                        is_bundle: false
+                        alias: HyperAdopsAPI
+                    Authentication:
+                        type: annotation
+                        dir: %kernel.root_dir%/../src/Hyper/Domain/Authentication
+                        prefix: Hyper\Domain\Authentication
+                        is_bundle: false
+                        alias: Authentication
+
+
 # Doctrine Mongo Configuration
-doctrine_mongodb:
-    connections:
-        default:
-            server: mongodb://test:test@ds053312.mongolab.com:53312
-            options: {db: bklp}
-    default_database: bklp
-    document_managers:
-        default:
-            auto_mapping: true
+# doctrine_mongodb:
+#     connections:
+#         default:
+#             server: mongodb://test:test@ds053312.mongolab.com:53312
+#             options: {db: bklp}
+#     default_database: bklp
+#     document_managers:
+#         default:
+#             auto_mapping: true
 # Amazon S3 by KNP Gaufrete
 knp_gaufrette:
     adapters:
@@ -136,13 +199,15 @@ hyper_event:
         aws_key:        %amazon_aws_key%
         aws_secret_key: %amazon_aws_secret_key%
         base_url:       %amazon_s3_base_url%
-            
+
 # Swiftmailer Configuration
 swiftmailer:
-    transport: "%mailer_transport%"
-    host:      "%mailer_host%"
-    username:  "%mailer_user%"
-    password:  "%mailer_password%"
+    transport:  "%mailer_transport%"
+    encryption: ~
+    host:       "%mailer_host%"
+    port:       "%mailer_port%"
+    username:   "%mailer_user%"
+    password:   "%mailer_password%"
     spool:     { type: memory }
 #Lsw Memcache
 #lsw_memcache:
@@ -152,4 +217,54 @@ swiftmailer:
 #        default:
 #            servers:
 #              - { host: localhost, tcp_port: 11211 }
-    
+
+# fos_rest:
+#     param_fetcher_listener: true
+#     view:
+#         view_response_listener: 'force'
+#         formats:
+#             xml: true
+#             json: true
+#         templating_formats:
+#             html: false
+#     # format_listener:
+#     #     rules:
+#     #         - { path: '/adops/api/^', priorities: [ 'json' ], fallback_format: json, prefer_extension: false }
+#     # allowed_methods_listener: true
+#     # body_listener: true
+#     # disable_csrf_role: ROLE_API
+#     # routing_loader:
+#     #     default_format: json
+#     format_listener: true
+#     routing_loader:
+#         default_format: json
+#         include_format: false
+
+# Geoip maxmind
+maxmind_geoip:
+    data_file_path: "%kernel.root_dir%/../web/GeoLiteCity.dat"
+
+# Knp Paginator
+knp_paginator:
+    page_range: 10                      # default page range used in pagination control
+    default_options:
+        page_name: page                # page query parameter name
+        sort_field_name: sort          # sort field query parameter name
+        sort_direction_name: direction # sort direction query parameter name
+        distinct: true                 # ensure distinct results, useful when ORM queries are using GROUP BY statements
+    template:
+        pagination: layout_ak/_pagination.html.twig     # sliding pagination controls template
+        sortable: layout_ak/_sortable_link.html.twig # sort link template
+
+monolog:
+    channels: [event_api, trend_card_api]
+
+    handlers:
+        event_api:
+            type: stream
+            path: %kernel.logs_dir%/%kernel.environment%.event_api.log
+            channels: [event_api]
+        trend_card_api:
+            type: stream
+            path: %kernel.logs_dir%/%kernel.environment%.trend_card_api.log
+            channels: [trend_card_api]

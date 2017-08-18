@@ -1,0 +1,116 @@
+{% extends 'base2.html.twig' %}
+{% block body %}
+<section class="content-header" style="margin: -2em 0 0 0 !important;">
+    <!--<h1>
+      Edit Profile
+    </h1>-->
+    <ol class="breadcrumb" style="margin: 0 -16.5em 0 0;">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Logs</li>
+    </ol>
+</section>  
+<h1 style="font-size: 24px; margin: 0 0 1em 0;">Logs</h1>
+
+        <!-- First Panel -->
+        <div class="row">
+            <div class="col-md-6">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Select Client</label>
+                        <div class="col-md-9">
+                            <select class="form-control">
+                                <option>Bukalapak Android</option>
+                                <option>Bukalapak iOS</option>
+                                <option>Asian Poker Android</option>
+                                <option>Asian Poker iOS</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Action Type</label>
+                        <div class="col-md-9">
+                            <select class="form-control">
+                                <option>Install</option>
+                                <option>Add to cart</option>
+                                <option>Purchase</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Time range</label>
+                        <div class="col-md-9">
+                            <select class="form-control">
+                                <option>24 hours</option>
+                                <option>3 days</option>
+                                <option>1 week</option>
+                                <option>1 month</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-danger pull-right">Generate Logs</button>
+                </form>
+            </div>
+        </div>
+        <div class="row" style="margin-top:20px">
+            <div class="col-md-12">
+                <div class="box box-danger">
+                    <div class="box-body">
+                        <table id="example" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Hypid</th>
+                                    <th>Device ID</th>
+                                    <th>Mobile App</th>
+                                    <th>Event Type</th>
+                                    <th>Event Value</th>
+                                    <th>Currency</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>2015-02-17 23:48:20</td>
+                                    <td>04875454</td>
+                                    <td>07026770</td>
+                                    <td>Bukalapak Android</td>
+                                    <td>Purchase</td>
+                                    <td>167000</td>
+                                    <td>IDR</td>
+                                </tr>
+                                <tr>
+                                    <td>2015-09-25 13:04:38</td>
+                                    <td>73449196</td>
+                                    <td>97797477</td>
+                                    <td>Bukalapak iOS</td>
+                                    <td>Install</td>
+                                    <td>0</td>
+                                    <td>IDR</td>
+                                </tr>
+                                <tr>
+                                    <td>2015-09-25 13:05:10</td>
+                                    <td>73449196</td>
+                                    <td>97797477</td>
+                                    <td>Bukalapak iOS</td>
+                                    <td>Add to Cart</td>
+                                    <td>172000</td>
+                                    <td>IDR</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Hypid</th>
+                                    <th>Device ID</th>
+                                    <th>Mobile App</th>
+                                    <th>Event Type</th>
+                                    <th>Event Value</th>
+                                    <th>Currency</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div><!-- /.box-body -->
+                </div><!-- /.box -->
+            </div>
+        </div>
+        <!-- END First Panel-->
+{% endblock %}

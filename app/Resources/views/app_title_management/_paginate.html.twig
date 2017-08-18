@@ -1,0 +1,55 @@
+<table class="footable">
+    <thead>
+        <tr>
+            <th data-sort-ignore="true">Title</th>
+            <th data-sort-ignore="true">Folder</th>
+            <th data-sort-ignore="true">List App ID</th>
+            <th data-sort-ignore="true">Status</th>
+            <th data-sort-ignore="true">Edit</th>
+            <th data-sort-ignore="true">Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for appTitle in listAppTitle %}
+            <tr>
+                <td>{{ appTitle['title'] }}</td>
+                <td>{{ appTitle['s3Folder'] }}</td>
+                <td>
+                    {% if listAppId[appTitle['id']] is defined and listAppId[appTitle['id']] is not empty %}
+                        {{ listAppId[appTitle['id']]|join(', ') }}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if appTitle['status'] == 1 %}
+                        Enable
+                    {% elseif appTitle['status'] == 0 %}
+                        Disable
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{{ path('dashboard_app_title_management', app.request.query.all|merge({'app_title_id': appTitle['id']})) }}">Edit</a>
+                </td>
+                <td>
+                    <a href="#" data-toggle="modal" data-target="#confirm-delete" data-href="{{ path('dashboard_app_title_management_delete', app.request.query.all|merge({'app_title_id': appTitle['id']})) }}">Delete</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">
+	        		<div class="text-center">
+			           No records found
+			        </div>
+        		</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+    {% if listAppTitle.getPageCount() > 1 %}
+    <tfoot class="hide-if-no-paging">
+        <tr>
+            <td colspan="6" style="text-align:center;">
+                {{ knp_pagination_render(listAppTitle) }}
+            </td>
+        </tr>
+    </tfoot>
+    {% endif %}
+</table>

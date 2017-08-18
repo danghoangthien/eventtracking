@@ -1,0 +1,349 @@
+{% extends 'layout_ak/base.html.twig' %}
+{% block sub_head_title %}Admin Dashboard - Client Management{% endblock %}
+{% block body %}
+<div class="wrapper wrapper-content animated fadeInRight">
+    {% if message is defined %}
+        {% if message == "success" %}
+            <script>window.location = "{{ path("dashboard_client_access") }}";</script>
+        {% elseif message == "failed" %}
+            <script>alert("Error while deleting client.");</script>    
+        {% else %}
+            <script>alert("No client to delete");</script>
+        {% endif %}
+    {% endif %}
+    <div class="row buffer-bottom-s">
+        <div class="col-md-4">
+            <h1>Client's Authorization</h1>
+        </div>
+        <label class="col-md-2 control-label" style="color:#333;text-align:right;margin-top:25px;">Search: </label>
+        <div class="col-md-2">
+            <input type="text" class="form-control" id="filter" style="margin-top:25px;">
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+    <div class="row buffer-bottom-s">
+        <div class="col-lg-8">
+            <div class="row buffer-bottom-s">
+                <div class="col-md-12">
+                    <table class="footable">
+                        <thead>
+                            <tr>
+                                <th>Client</th>
+                                <th>Client App</th>
+                                <th>Client Type</th>
+                                <th data-sort-ignore="true">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if list is defined %}
+                                {% for records in list %}
+                                    <tr class="clickable" id="{{ records.id }}" style="display: table-row;">                    
+                                        <td>
+                                            <input type="hidden" id="hidden_id" value="{{ records.id }}"/>
+                                            <label>{{ records.clientName }}</label>
+                                        </td>
+                                        <td id="td_client_app">{{ records.clientApp }}</td>
+                                        <td>
+                                            {% if records.accountType == 1 %}
+                                                {{ "E-commerce" }}
+                                            {% elseif records.accountType == 2 %}
+                                                {{ "Gaming" }}
+                                            {% else %}
+                                                {{ "Branding" }}
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <a href="{{ path('dashboard_edit_client') ~ "?id=" ~ records.id }}" class="edit_data">Edit</a>
+                                            <a href="#" class="delete_data">Delete</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            {% endif %}
+                        </tbody>
+                        <tfoot class="hide-if-no-paging">
+                            <tr>
+                                <td colspan="12" style="text-align:center;">
+                                    <div class="pagination pagination-centered">
+                                        {% if total is defined %}
+                                            <ul>            
+                                            {% set pages = total + 1 %}
+                                            {% for i in 1..pages%}      
+                                                <li class="footable-page{{ cur == i ? ' active' : ''}}"> 
+                                                    <a href="{{ path('dashboard_client_access', { 'page': i }) }}">
+                                                        {{ i }}
+                                                    </a>
+                                                </li>
+                                            {% endfor %}            
+                                            </ul>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="ibox float-e-margins" style="padding:20px">
+                <div class="ibox-title-transparent">
+                    <h3 class="font-bold">Add Client</h3>
+                </div>
+                <div class="ibox-content-transparent">
+                    <div class="panel" style="margin:0px">
+                        <form role="form">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="form-group">
+                                        <label for="exampleInputName">Client Name</label>
+                                        <input type="text" class="form-control" id="client_name" placeholder="Enter Client Name">
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="form-group">
+                                        <label>Client App</label>
+                                        <select class="form-control" multiple id="client_app">
+                                            {% if apps is defined %}
+                                            {% for data in apps %}
+                                                <option value="{{ data.app_id }}">{{ data.app_id }}</option>    
+                                            {% endfor %}  
+                                            {% endif %}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="form-group">
+                                        <label>Account Type</label>
+                                        <select class="form-control" id="account_type">
+                                            <option>E-commerce</option>
+                                            <option>Gaming</option>
+                                            <option>Branding</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <button type="submit" class="btn btn-primary" id="btnSend">Add Client</button>
+                                </div>
+                            </div>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- END First Panel-->   
+{% endblock %}
+
+{% block stylesheets_inline %}
+    <!-- FooTable -->
+    <link rel="stylesheet" href="{{ asset('bundles/hyperevent/plugins/footable/footable.core.css') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/hyperevent/plugins/footable/footable.metro.css') }}">
+    <style>
+        #edit_data { margin: 0 0.6em 0 0; }
+        
+        #paginate
+        {            
+            padding: 0.3em 0 0 1em;
+            list-style-type: none !important;
+            border-radius: 25px;
+            background-color: #333333;      
+            height: 30px;
+            width: 100%;
+        }
+    
+        #paginate li
+        {            
+            display: inline !important;            
+            margin-right: 0.5em;            
+        }
+    
+        #paginate li a
+        {
+            color: #FFFFFF;
+        }
+        
+        .added
+        {
+            color: transparent;
+        }
+    
+        .currentPage
+        {
+            text-decoration: underline;
+            font-weight: bold;
+            color: white !important;
+        }
+    </style>
+{% endblock %}
+
+{% block javascript_inline %}
+    <script>
+        $(document).ready(function()
+        {
+            {% if user is defined %}
+            //window.location.href = "{{ path('dashboard_filter_showlist') }}";
+            {% else %}
+                window.location.href = "{{ path('dashboard_admin_login') }}";
+            {% endif %}
+                
+            //addSuffix("client_app");
+            sortOption("client_app");                        
+            
+            $.current = $("#current").val();                              
+            
+            $(".delete_data").each(function()
+            {                    
+                $(this).click(function()
+                {                            
+                    var id = $(this).parent("td").parent("tr").attr("id");
+                    var client = $(this).parent("td").parent("tr").children("td:nth-child(1)").children("label").html();
+                    
+                    if(confirm("Are you sure you want to delete this client: "+client+"?"))
+                    {
+                        //alert($(this).parent("td").parent("tr").attr("id"));                    
+                        window.location = "{{ path('dashboard_delete_client') }}?id="+id;
+                    }
+                });
+            });
+            
+            if($("#paginate").children("li").children("a").length > 0)
+            {               
+                console.log("pagination link seen seen");
+    
+                $("#paginate").children("li").children("a").each(function()
+                {
+                    $(this).html($.trim($(this).html()));
+    
+                    $(this).html($(this).html().replace(/\s+$/, ""));
+    
+                    //console.log("Pagination value: "+$(this).html());
+    
+                    if($(this).html() == $.current)
+                    {
+                        $(this).addClass("currentPage");
+                        console.log($(this).html());
+                        console.log($.current);
+                    }
+                    else
+                    {
+                        console.log("Values did not match");
+                    }
+                    //$(this).html().trim();
+                });
+    
+                var per_page = $("#per_page").val();
+                var counter = ($("#tblUsers tbody").children("tr").length) -1;
+                
+                if(counter < per_page)
+                {
+                    var add_row = per_page - counter;
+    
+                    for(var q = 0; q < add_row; q++)
+                    {
+                        $("#tblUsers").append("<tr>\n\
+                        <td class='added'>1</td><td class='added'>1</td><td class='added'>1</td><td class='added'>1</td>\n\
+                        </tr>");
+                    }
+                }
+            }
+            
+            $("#btnSend").on("click", this, function()
+            {
+                var client_name  = $("#client_name").val();
+                var client_app   = $("#client_app").val();
+                var account_type = $("#account_type").val();                                                
+                
+                if( "" == client_name){ error($("#client_name")); return false; }
+                if( "" == client_app || null == client_app)
+                {
+                    error($("#client_app")); 
+                    return false; 
+                }
+                else
+                {
+                    client_app = client_app.join();
+                }
+                if( "" == account_type){ error($("#account_type")); return false; }
+                
+                $(this).attr('disabled','disabled');
+                
+                $.obj = { "client_name": client_name, "client_app": client_app, "account_type": account_type };
+                
+                //console.log($.obj);
+                
+                $.ajax(
+                {               
+                    url:"{{ path('dashboard_client_save') }}",
+                    type: "POST",
+                    data: $.obj,
+                    success: function(msg)
+                    {
+                        var message = JSON.parse(msg);
+                        console.log(message);
+                        //console.log(message.message);
+                        //console.log("User successfully saved");
+    
+                        alert(message.message);                                        
+                        
+                        if(message.message == "Client successfully saved")
+                        {                                                
+                            window.location.href = "{{ path('dashboard_client_access') }}";                        
+                        }
+                        else
+                        {
+                            $("#btnSend").removeAttr('disabled');
+                        }
+                    }
+                });
+            });
+        });
+        
+        function error(el)
+        {
+            $(el).css("background-color", "red").css("color","yellow").val("Should not be blank");
+    
+            setTimeout(function()
+            {
+                $(el).css("background-color", "white").css("color","black");
+                $(el).val("");
+            }, 2000);
+        }
+        
+        function sortOption(el)
+        {
+            var options = $('#'+ el + ' option');
+            var arr = options.map(function(_, o) { return { t: $(o).text(), v: o.value }; }).get();
+            arr.sort(function(o1, o2) { return o1.t > o2.t ? 1 : o1.t < o2.t ? -1 : 0; });
+            options.each(function(i, o) {
+              o.value = arr[i].v;
+              $(o).text(arr[i].t);
+            });
+        }
+            
+        function addSuffix(element)
+        {
+            $("#"+element).children("option").each(function()
+            {
+                var prefix = $(this).val();
+                var html   = $(this).html();
+                if(prefix.indexOf("id") == 0)
+                {
+                    //console.log(prefix + "-" + html + " iOS");
+                    $(this).html(html + " - iOS");
+                }
+                else
+                {
+                    ///console.log(prefix + "-" + html + " Android");
+                    $(this).html(html + " - Android");
+                }
+            });   
+        }            
+    </script>
+{% endblock %}

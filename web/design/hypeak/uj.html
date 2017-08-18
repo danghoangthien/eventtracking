@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Hypergrowth | Admin</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.5 -->
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Theme style -->
+	<link rel="stylesheet" href="dist/css/style.css">
+    <link rel="stylesheet" href="dist/css/animate.css">
+    <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+	<!-- flik timeline -->
+    <link rel="stylesheet" href="plugins/flik/flik-timeline.min.css">
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body class="fixed-sidebar"> <!-- mini-navbar for collapsed sidebar, fixed-sidebar for fixed--> 
+    <div id="wrapper">
+	
+		<!-- sidebar -->
+		<nav class="navbar-default navbar-static-side" role="navigation">
+			<div class="sidebar-collapse">
+				<ul class="nav metismenu" id="side-menu">
+					<li class="nav-header">
+						<div class="dropdown profile-element"> 
+							<div class="user-panel">
+								<span class="image">
+									<img alt="image" class="img-circle" src="img/angiedang.jpg">
+								</span>
+							</div>
+							<a data-toggle="dropdown" class="dropdown-toggle" href="#">
+								<span class="clear"> 
+									<span class="block m-t-xs"> 
+										<strong class="font-bold">Angie Dang</strong>
+									 </span> 
+									 <small>Member since Jun. 2015</small>
+									 <span class="text-xs block">War of Warriors Team 
+										<b class="caret"></b>
+									</span> 
+								</span> 
+							</a>
+							<ul class="dropdown-menu animated fadeInRight m-t-xs">
+								<li><a href="#">Edit Profile</a></li>
+								<li><a href="#">Sign Out</a></li>
+							</ul>
+						</div>
+						<div class="logo-element">
+							<span class="logo-mini"><img src="img/hypergrowth_small_transparent_16x35.png"></span>
+						</div>
+					</li>
+					<li>
+						<a href="md.html">
+							<i style="padding-bottom:5px"><img src="img/dashboard.png" width="35px"></i> 
+							<span>Dashboard</span>
+						</a>
+					</li>
+					<li>
+						<a href="bs.html">
+							<i style="padding-bottom:5px"><img src="img/card-creator.png" width="30px"></i> <span>Card Builder</span>
+						</a>
+					</li>
+					<li>
+						<a href="ad.html">
+							<i style="padding-bottom:5px"><img src="img/card-deck.png" width="35px"></i> <span>Audience Deck</span>
+						</a>
+					</li>
+					<li class="active">
+						<a href="uj.html">
+							<i style="padding-bottom:5px"><img src="img/audience-spotlight.png" width="35px"></i> 
+							<span class="nav-label">Audience Spotlight</span> 
+						</a>
+					</li>
+				</ul>
+			</div>
+		</nav>
+		<!-- /.sidebar -->
+
+		<!-- Content Wrapper. Contains page content -->
+		<div id="page-wrapper" class="content-wrapper">
+			
+			<!--top bar-->
+			<div class="row">
+				<nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+					<div class="navbar-header">
+						<a class="navbar-minimalize  minimalize-styl-2 btn btn-default" href="#"><i class="fa fa-bars"></i> </a>
+					</div>
+					<ul class="nav navbar-top-links navbar-right">
+						<li>
+							<span class="m-r-sm welcome-message">Welcome to War of Warriors Audience Kit</span>
+						</li>
+						<li>
+							<a href="index.html">
+								<i class="fa fa-sign-out" style="display: inline-block;"></i> Log out
+							</a>
+						</li>
+					</ul>
+				</nav>
+			</div>
+			<!--End top bar-->
+			
+			<!--Search bar at the top-->
+			<div class="row">
+				<div class="topsearch" style="margin-bottom: 0; min-height: 60px">
+					<div class="col-sm-12">
+						<input type="text" placeholder="Enter an email or user ID and hit 'Enter'" spellcheck="false" class="form-control sleek-search" id="sleek-search"> 
+					</div>
+				</div>
+			</div>
+			
+			<!-- Main Content -->
+			<div class="wrapper wrapper-content" style="padding-top:0">
+				<div class="row animated fadeInRight">
+					<div class="col-md-3 col-lg-3 col-sm-6">
+						<dl class="basic_profile">
+							<dt>Originating Country</dt>
+							<dd>Indonesia</dd>
+							<br/>
+							<dt>Platform</dt>
+							<dd>Android</dd>
+							<br/>
+							<dt>Most Active</dt>
+							<dd>9pm - 10pm</dd>
+							<br/>
+							<dt>Last Active</dt>
+							<dd>2015-11-17</dd>
+							<br/>
+							<dt>Lifetime Value</dt>
+							<dd>$543.02 across 6 transactions</dd>
+							<br/>
+							<dt>Last Transaction</dt>
+							<dd>$12.99 on 2015-11-17</dd>
+							<br/>
+							<dt>Device Model</dt>
+							<dd>Samsung Galaxy Note 3</dd>
+							<br/>
+							<dt>Email</dt>
+							<dd>samuel@hypergrowth.co</dd>
+						</dl>
+					</div>
+					
+					<div class="col-md-5 col-lg-5 col-sm-6">
+						<div class="uj_card_holder">
+							<div class="uj_cards row buffer-bottom">
+								<div class="col-md-8 col-sm-10 bg-navy-5">
+									<div class="col-md-9 col-sm-9">
+										<span class="uj_card_add">Add to an Audience Card</span>		
+									</div>
+									<div class="col-md-3 col-sm-3">
+										<span class="uj_plus">
+											<a href="#">
+											<i class="fa fa-plus"></i>
+											</a>
+										</span>
+									</div>	
+								</div>
+							</div>
+							<div class="uj_cards row">
+								<div class="col-md-8 col-sm-10 bg-navy">
+									<div class="col-md-9 col-sm-9">
+										<span class="uj_card_title">Train Traveler, $$</span>		
+									</div>
+									<div class="col-md-3 col-sm-3">
+										<span class="uj_x">
+											<a href="#">
+											<i class="fa fa-remove"></i>
+											</a>
+										</span>
+									</div>	
+								</div>
+							</div>
+							<div class="uj_cards row">
+								<div class="col-md-8 col-sm-10 bg-navy-2">
+									<div class="col-md-9 col-sm-9">
+										<span class="uj_card_title">Paying User, ID</span>		
+									</div>
+									<div class="col-md-3 col-sm-3">
+										<span class="uj_x">
+											<a href="#">
+											<i class="fa fa-remove"></i>
+											</a>
+										</span>
+									</div>	
+								</div>
+							</div>
+							<div class="uj_cards row">
+								<div class="col-md-8 col-sm-10 bg-navy-3">
+									<div class="col-md-9 col-sm-9">
+										<span class="uj_card_title">Air Traveler, $$$$</span>		
+									</div>
+									<div class="col-md-3 col-sm-3">
+										<span class="uj_x">
+											<a href="#">
+											<i class="fa fa-remove"></i>
+											</a>
+										</span>
+									</div>	
+								</div>
+							</div>
+							<div class="uj_cards row">
+								<div class="col-md-8 col-sm-10 bg-navy-4">
+									<div class="col-md-9 col-sm-9">
+										<span class="uj_card_title">Loyal 45 days+</span>		
+									</div>
+									<div class="col-md-3 col-sm-3">
+										<span class="uj_x">
+											<a href="#">
+											<i class="fa fa-remove"></i>
+											</a>
+										</span>
+									</div>	
+								</div>
+							</div>
+						</div>
+						
+					</div>
+					
+					<div class="col-md-4 col-lg-4 col-sm-12">
+						<div class="row">
+						<!-- BEGIN TIMELINE -->
+						<div class="flik-content">
+							<ul class="flik-timeline flik-timeline-1" data-scroll-effect="default-effect">
+								<li class="event event_date" data-date="2015-11-16">
+  									<span class="event event_time" data-time="21:05"></span>
+					                <span class="event_name">af_ticket_search</span>
+					                <p class="event-content">
+					                    </p><ul class="event_parameters">
+				                    		<li>af_price:99$</li>
+				                    		<li>af_content_type:flight</li>
+				                        	<li>af_search_string: DJB to JKT</li>
+				                    	</ul>
+					                <p></p>
+					            </li>
+					            <li class="event event_date" data-date="2015-11-16">
+  									<span class="event" data-time="21:05" style="font-size:1em;"></span>
+					                <span class="event_name">af_ticket_search</span>
+					                <p class="event-content">
+					                    </p><ul class="event_parameters">
+				                    		<li>af_price:99$</li>
+				                    		<li>af_content_type:flight</li>
+				                        	<li>af_search_string: DJB to JKT</li>
+				                    	</ul>
+					                <p></p>
+					            </li>
+					            <li class="event event_date" data-date="2015-11-16">
+  									<span class="event" data-time="21:05" style="font-size:1em;"></span>
+					                <span class="event_name">af_ticket_search</span>
+					                <p class="event-content">
+					                    </p><ul class="event_parameters">
+				                    		<li>af_price:99$</li>
+				                    		<li>af_content_type:flight</li>
+				                        	<li>af_search_string: DJB to JKT</li>
+				                    	</ul>
+					                <p></p>
+					            </li>
+					            <li class="event event_date" data-date="2015-11-16">
+  									<span class="event" data-time="21:05" style="font-size:1em;"></span>
+					                <span class="event_name">af_ticket_search</span>
+					                <p class="event-content">
+					                    </p><ul class="event_parameters">
+				                    		<li>af_price:99$</li>
+				                    		<li>af_content_type:flight</li>
+				                        	<li>af_search_string: DJB to JKT</li>
+				                    	</ul>
+					                <p></p>
+					            </li>
+					            <li class="event event_date" data-date="2015-11-16">
+  									<span class="event" data-time="21:05" style="font-size:1em;"></span>
+					                <span class="event_name">af_ticket_search</span>
+					                <p class="event-content">
+					                    </p><ul class="event_parameters">
+				                    		<li>af_price:99$</li>
+				                    		<li>af_content_type:flight</li>
+				                        	<li>af_search_string: DJB to JKT</li>
+				                    	</ul>
+					                <p></p>
+					            </li>
+					            <li class="event event_date" data-date="2015-11-16">
+  									<span class="event" data-time="21:05" style="font-size:1em;"></span>
+					                <span class="event_name">af_ticket_search</span>
+					                <p class="event-content">
+					                    </p><ul class="event_parameters">
+				                    		<li>af_price:99$</li>
+				                    		<li>af_content_type:flight</li>
+				                        	<li>af_search_string: DJB to JKT</li>
+				                    	</ul>
+					                <p></p>
+					            </li>
+					            <li class="event event_date" data-date="2015-11-16">
+  									<span class="event" data-time="21:05" style="font-size:1em;"></span>
+					                <span class="event_name">af_ticket_search</span>
+					                <p class="event-content">
+					                    </p><ul class="event_parameters">
+				                    		<li>af_price:99$</li>
+				                    		<li>af_content_type:flight</li>
+				                        	<li>af_search_string: DJB to JKT</li>
+				                    	</ul>
+					                <p></p>
+					            </li>
+					            <li class="event event_date" data-date="2015-11-16">
+  									<span class="event" data-time="21:05" style="font-size:1em;"></span>
+					                <span class="event_name">af_ticket_search</span>
+					                <p class="event-content">
+					                    </p><ul class="event_parameters">
+				                    		<li>af_price:99$</li>
+				                    		<li>af_content_type:flight</li>
+				                        	<li>af_search_string: DJB to JKT</li>
+				                    	</ul>
+					                <p></p>
+					            </li>
+							</ul>
+						</div>
+						<!-- END TIMELINE-->
+						</div>
+						<div class="row buffer-bottom">
+							<div class="col-md-4" style="top:-30px;">
+								<span class="uj_card_add">Load More</span><span style="margin-left: 10px"><i class="fa fa-plus"></i></span>	
+							</div>
+							<div class="col-xs-4"></div>
+							<div class="col-xs-4"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+			</div>
+			<!-- END Main Content -->
+			
+			<div class="footer">
+				<div class="pull-right">
+					<b>Version</b> 1.1.0
+				</div>
+				<div>
+					<strong>Copyright &copy; 2016 <a href="http://www.hypergrowth.co"> HyperGrowth Pte Ltd</a>.</strong> All rights reserved.
+				</div>
+			</div>
+			
+		</div><!-- /.content-wrapper -->
+    </div><!-- ./wrapper -->
+
+    <!-- jQuery 2.1.4 -->
+    <script src="plugins/jQuery/jQuery-2.1.4.min.js"></script>
+    <!-- jQuery UI 1.11.4 -->
+    <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+    <script>
+      $.widget.bridge('uibutton', $.ui.button);
+    </script>
+    <!-- Bootstrap 3.3.5 -->
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <!-- Slimscroll -->
+    <script src="plugins/slimScroll/jquery.slimscroll.min.js"></script>
+	<!-- Metis Menu -->
+    <script src="plugins/metisMenu/jquery.metisMenu.js"></script>
+    <!-- AdminLTE App -->
+    <script src="dist/js/app.min.js"></script>
+	<script src="dist/js/inspinia.js"></script>
+	<!-- FastClick -->
+    <script src="plugins/fastclick/fastclick.min.js"></script>
+	<!-- page script -->
+	<script src="plugins/flik/custom.min.js"></script>
+    <script>
+      $('.flik-timeline').flikScrollEffect();
+    </script>
+
+  </body>
+</html>

@@ -1,0 +1,63 @@
+<nav class="navbar-default navbar-static-side" role="navigation">
+	<div class="sidebar-collapse">
+		<ul class="nav metismenu" id="side-menu" style="display: block;">
+			{{ render(controller('HyperEventBundle:SharedLayout:renderProfile', {request: app.request})) }}
+			<li{% if active is defined and active == 'data_acquisition' %} class="active"{% endif %}>
+				<a href="{{ path('dashboard_data_acquisition') }}">
+					<i class="fa fa-bar-chart-o"></i> <span>Data Acquisition</span>
+				</a>
+			</li>
+			<li{% if active is defined and active == 'app_title_management' %} class="active"{% endif %}>
+				<a href="{{ path('dashboard_app_title_management') }}">
+					<i class="fa  fa-clone"></i> <span>Client App Title</span>
+				</a>
+			</li>
+			<li{% if active is defined and active == 'client_management' %} class="active"{% endif %}>
+				<a href="{{ path('dashboard_client_management') }}">
+					<i class="fa fa-user-secret"></i> <span>Client Management</span>
+				</a>
+			</li>
+			<li{% if active is defined and active == 'user_access_management' %} class="active"{% endif %}>
+				<a href="{{ path('dashboard_user_access_management') }}">
+					<i class="fa fa-sitemap"></i> <span>User Access Management</span>
+				</a>
+			</li>
+			{#<li{% if active is defined and active == 'data_logs' %} class="active"{% endif %}>#}
+			{#	<a href="{{ path('dashboard_client_action_show') }}">#}
+			{#		<i class="fa fa-database"></i> <span>Data Logs</span>#}
+			{#	</a>#}
+			{#</li>#}
+			{#<li{% if active is defined and (active == 'csv_upload' or active == 'csv_upload_logs') %} class="active"{% endif %}>#}
+			{#	<a href="#">#}
+			{#		<i class="fa fa-magic"></i>#}
+			{#		<span class="nav-label">Import Data</span>#}
+   {#                 <span class="fa arrow"></span>#}
+			{#	</a>#}
+			{#	<ul class="nav nav-second-level collapse">#}
+   {#                 <li{% if active is defined and active == 'csv_upload' %} class="active"{% endif %}><a href="{{ path('dashboard_import_data_csvupload') }}">Upload CSV</a></li>#}
+   {#                 <li{% if active is defined and active == 'csv_upload_logs' %} class="active"{% endif %}><a href="{{ path('dashboard_import_data_csvupload_logs') }}">Upload Logs</a></li>#}
+   {#             </ul>#}
+
+			{#</li>#}
+			<li{% if active is defined and (active == 'infrastructure_monitor_elb' or active == 'infrastructure_monitor_ec2' or active == 'infrastructure_monitor_sqs' or active == 'infrastructure_monitor_rs') %} class="active"{% endif %}>
+				<a href="{{ path('dashboard_server_monitor') }}">
+					<i class="fa fa-laptop"></i>
+					<span class="nav-label">Infrastructure Monitor</span>
+					<span class="fa arrow"></span>
+				</a>
+				<ul class="nav nav-second-level collapse">
+					<li {% if active is defined and active == 'infrastructure_monitor_elb' %} class="active"{% endif %}><a href="{{ path('dashboard_infrastructure_monitor_elb') }}">ELB</a></li>
+					<li {% if active is defined and active == 'infrastructure_monitor_ec2' %} class="active"{% endif %}><a href="{{ path('dashboard_infrastructure_monitor_ec2') }}">EC2</a></li>
+					<li {% if active is defined and active == 'infrastructure_monitor_rs' %} class="active"{% endif %}><a href="{{ path('dashboard_infrastructure_monitor_rs') }}">Redshift</a></li>
+					<li {% if active is defined and active == 'infrastructure_monitor_sqs' %} class="active"{% endif %}><a href="{{ path('dashboard_infrastructure_monitor_sqs') }}">SQS</a></li>
+				</ul>
+			</li>
+			{#<li{% if active is defined and (active == 'analytics_display' or active == 'analytics_display') %} class="active"{% endif %}>#}
+			{#	<a href="{{ path('dashboard_analytics_display') }}">#}
+			{#		<i class="fa fa-laptop"></i> #}
+			{#		<span class="nav-label">Analytics Metadata</span>#}
+			{#	</a>#}
+			{#</li>#}
+		</ul>
+	</div>
+</nav>

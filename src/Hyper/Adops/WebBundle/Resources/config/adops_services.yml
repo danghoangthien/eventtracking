@@ -1,0 +1,48 @@
+services:
+    adops.web.application.repository:
+        class: Hyper\Adops\WebBundle\DomainBundle\Repository\DTApplicationRepository
+        factory: [@doctrine.orm.pgsql_entity_manager, getRepository]
+        arguments: [Hyper\Adops\WebBundle\Domain\AdopsApplication]
+
+    adops.web.inappevent.repository:
+        class: Hyper\Adops\WebBundle\DomainBundle\Repository\DTInappeventRepository
+        factory: [@doctrine.orm.pgsql_entity_manager, getRepository]
+        arguments: [Hyper\Adops\WebBundle\Domain\AdopsInappevent]
+
+    adops.web.publisher.repository:
+        class: Hyper\Adops\WebBundle\DomainBundle\Repository\DTPublisherRepository
+        factory: [@doctrine.orm.pgsql_entity_manager, getRepository]
+        arguments: [Hyper\Adops\WebBundle\Domain\AdopsPublisher]
+
+    adops.web.campaign.repository:
+        class: Hyper\Adops\WebBundle\DomainBundle\Repository\DTCampaignRepository
+        factory: [@doctrine.orm.pgsql_entity_manager, getRepository]
+        arguments: [Hyper\Adops\WebBundle\Domain\AdopsCampaign]
+
+    adops.web.user.repository:
+        class: Hyper\Adops\WebBundle\DomainBundle\Repository\DTUserRepository
+        factory: [@doctrine.orm.pgsql_entity_manager, getRepository]
+        arguments: [Hyper\Adops\WebBundle\Domain\AdopsUser]
+
+    adops.web.postback.repository:
+        class: Hyper\Adops\WebBundle\DomainBundle\Repository\DTPostbackRepository
+        factory: [@doctrine.orm.pgsql_entity_manager, getRepository]
+        arguments: [Hyper\Adops\WebBundle\Domain\AdopsPostback]
+        calls:
+            - [getConnection, ['@doctrine.dbal.pgsql_connection']]
+
+    adops.web.report.repository:
+        class: Hyper\Adops\WebBundle\DomainBundle\Repository\DTReportRepository
+        factory: [@doctrine.orm.pgsql_entity_manager, getRepository]
+        arguments: [Hyper\Adops\WebBundle\Domain\AdopsReport]
+        calls:
+            - [getConnection, ['@doctrine.dbal.pgsql_connection']]
+
+    adops.web.profile.repository:
+        class: Hyper\Adops\WebBundle\DomainBundle\Repository\DTProfileRepository
+        factory: [@doctrine.orm.pgsql_entity_manager, getRepository]
+        arguments: [Hyper\Adops\WebBundle\Domain\AdopsProfile]
+
+    adops.webservice.user.provider:
+        class: Hyper\Adops\WebBundle\DomainBundle\WebserviceUserProvider
+        arguments: [@service_container]

@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Hypergrowth | Admin</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.5 -->
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="dist/css/style.css">
+    <link rel="stylesheet" href="dist/css/animate.css">
+	<link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+	
+	<!-- Select2 -->
+    <link href="plugins/select2/select2.min.css" rel="stylesheet" />
+    <!-- iCheck -->
+    <link href="plugins/iCheck/square/blue.css" rel="stylesheet">
+    <!-- Datepicker -->
+    <link href="plugins/datepicker/css/datepicker.css" rel="stylesheet">
+    <!-- Colorpicker -->
+    <link href="plugins/colorpicker/bootstrap-colorpicker.min.css" rel="stylesheet">
+    <!-- Colorselector -->
+    <link href="plugins/colorpicker/bootstrap-colorselector.css" rel="stylesheet">
+    
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body class="fixed-sidebar"> <!-- mini-navbar for collapsed sidebar, fixed-sidebar for fixed--> 
+    <div id="wrapper">
+
+		<!-- sidebar -->
+		<nav class="navbar-default navbar-static-side" role="navigation">
+			<div class="sidebar-collapse">
+				<ul class="nav metismenu" id="side-menu">
+					<li class="nav-header">
+						<div class="dropdown profile-element"> 
+							<div class="user-panel">
+								<span class="image">
+									<img alt="image" class="img-circle" src="img/angiedang.jpg">
+								</span>
+							</div>
+							<a data-toggle="dropdown" class="dropdown-toggle" href="#">
+								<span class="clear"> 
+									<span class="block m-t-xs"> 
+										<strong class="font-bold">Angie Dang</strong>
+									 </span> 
+									 <small>Member since Jun. 2015</small>
+									 <span class="text-xs block">War of Warriors Team 
+										<b class="caret"></b>
+									</span> 
+								</span> 
+							</a>
+							<ul class="dropdown-menu animated fadeInRight m-t-xs">
+								<li><a href="#">Edit Profile</a></li>
+								<li><a href="#">Sign Out</a></li>
+							</ul>
+						</div>
+						<div class="logo-element">
+							<span class="logo-mini"><img src="img/hypergrowth_small_transparent_16x35.png"></span>
+						</div>
+					</li>
+					<li>
+						<a href="md.html">
+							<i style="padding-bottom:5px"><img src="img/dashboard.png" width="35px"></i> 
+							<span>Dashboard</span>
+						</a>
+					</li>
+					<li class="active">
+						<a href="bs.html">
+							<i style="padding-bottom:5px"><img src="img/card-creator.png" width="30px"></i> <span>Card Creator</span>
+						</a>
+					</li>
+					<li>
+						<a href="ad.html">
+							<i style="padding-bottom:5px"><img src="img/card-deck.png" width="35px"></i> <span>Audience Deck</span>
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<i style="padding-bottom:5px"><img src="img/audience-spotlight.png" width="35px"></i> 
+							<span class="nav-label">Audience Spotlight</span> 
+						</a>
+					</li>
+				</ul>
+			</div>
+		</nav>
+		<!-- /.sidebar -->
+
+		<!-- Content Wrapper. Contains page content -->
+		<div id="page-wrapper" class="content-wrapper">
+			
+			<!--top bar-->
+			<div class="row">
+				<nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+					<div class="navbar-header">
+						<a class="navbar-minimalize  minimalize-styl-2 btn btn-default" href="#"><i class="fa fa-bars"></i> </a>
+					</div>
+					<ul class="nav navbar-top-links navbar-right">
+						<li>
+							<span class="m-r-sm welcome-message">Welcome to War of Warriors Audience Kit</span>
+						</li>
+						<li>
+							<a href="index.html">
+								<i class="fa fa-sign-out" style="display: inline-block;"></i> Log out
+							</a>
+						</li>
+					</ul>
+				</nav>
+			</div>
+			<!--End top bar-->
+			
+			<!-- Main Content -->
+			<div class="wrapper wrapper-content animated fadeInRight">
+				<div class="row">
+					<div class="col-md-8">
+						<div class="ibox float-e-margins">
+							<div class="ibox-title">
+								<div class="form-group">
+									<h1>Audience Card Creator</h1>
+								</div>
+							</div>
+							<div class="ibox-content">
+								<div class="panel" style="margin:0px">
+									<form action="" class="">
+										<div class="panel-body">
+											<div class="row">
+												<div class="form-group input-group col-sm-12">
+													<span style="width: 130px;" class="input-group-addon">Card Name</span> 
+												    <input type="text" class="form-control" id="preset_name" placeholder="Active Paying Users" onkeyup="CardPreviewName(this.value);">
+												</div>
+											</div>
+											<div class="row">
+												<div class="form-group input-group col-sm-12">
+													<span style="width: 130px;" class="input-group-addon">Card Description</span> 
+												    <input type="text" class="form-control" id="preset_description" placeholder="Android users who purchase more than four times in the last two weeks (for Easter Sale)" onkeyup="CardPreviewDes(this.value);">
+												</div>
+											</div>
+											
+											<div class="row">
+					    						<label class="col-md-2 control-label left-padding">Card Color
+					    						</label>
+					    						<div class="col-md-2 no-padding">	
+												    <input type="text" class="form-control card-bg-color" id="set_cardbgcolor" placeholder="#f1f3f4" disabled />
+					    						</div>
+					    						<div  class="col-md-1" style="padding-top: 5px; text-align: left;">
+	                                                <select id="cardcolorselector">
+													    <option value="#093145" data-color="#093145">#093145</option>
+													    <option value="#0d3d56" data-color="#0d3d56">#0d3d56</option>
+													    <option value="#3c6478" data-color="#3c6478">#3c6478</option>
+													    <option value="#107896" data-color="#107896" selected>#107896</option>
+													    <option value="#1496bb" data-color="#1496bb">#1496bb</option>
+													    <option value="#43abc9" data-color="#43abc9">#43abc9</option>
+													    <option value="#829356" data-color="#829356">#829356</option>
+													    <option value="#a3b86c" data-color="#a3b86c">#a3b86c</option>
+													    <option value="#b5c689" data-color="#b5c689">#b5c689</option>
+													    <option value="#bca136" data-color="#bca136">#bca136</option>
+													    <option value="#ebc944" data-color="#ebc944">#ebc944</option>
+													    <option value="#efd469" data-color="#efd469">#efd469</option>
+													    <option value="#c2571a" data-color="#c2571a">#c2571a</option>
+													    <option value="#f26d21" data-color="#f26d21">#f26d21</option>
+													    <option value="#f58b4c" data-color="#f58b4c">#f58b4c</option>
+													    <option value="#9a2617" data-color="#9a2617">#9a2617</option>
+													    <option value="#c02f1d" data-color="#c02f1d">#c02f1d</option>
+													    <option value="#cd594a" data-color="#cd594a">#cd594a</option>
+													    <option value="#107896" data-color="#107896">#107896</option>
+													    <option value="#f1f3f4" data-color="#f1f3f4">#f1f3f4</option>
+													</select>
+	                                            </div>
+	                                            
+					    						<label class="col-md-3 control-label right-padding">Card Text Color</label>
+												<div class="col-md-2 no-padding">	
+												    <input type="text" class="form-control card-text-color" id="set_cardtextcolor" placeholder="#f5f5f5" disabled />
+					    						</div>
+												<div  class="col-md-1" style="padding-top: 5px; text-align: left;">
+	                                                <select id="textcolorselector">
+													    <option value="#f5f5f5" data-color="#f5f5f5" selected >#f5f5f5</option>
+													    <option value="#333333" data-color="#333333" >#333333</option>
+													    <option value="#131516" data-color="#131516">#131516</option>
+													    <option value="#efd469" data-color="#efd469">#efd469</option>
+													</select>
+	                                            </div>
+					    					</div>
+											<div class="row">
+					    						<label class="col-md-2 control-label left-padding">Country: </label>
+					    						<div class="col-md-10 no-padding">
+					    							<select id="country_codes" class="inputCountryMultiple" multiple="multiple" style="width:100%">
+					    							    <option id="countrySG" value="countrySG">Singapore</option>
+					    							    <option id="countryID" value="countryID">Indonesia</option>
+					    							    <option id="countryMY" value="countryMY">Malaysia</option>
+					    							    <option id="countryTH" value="countryTH">Thailand</option>
+					    							    <option id="countryPH" value="countryPH">Philippines</option>
+													</select>
+					    						</div>
+					    					</div>
+					    					<div class="row">
+					    						<label class="col-md-2 control-label left-padding">Platform</label>
+												<div class="col-md-10 no-padding">	
+												    <label class="col-md-3 no-padding" style="margin-top:8px">
+												    	<input class="platform_codes" name="platform_android" type="checkbox" value="android"> Android
+												    	</input>
+					    							</label>
+					    							<label class="col-md-3 no-padding" style="margin-top:8px">
+					    								<input class="platform_codes" name="platform_ios" type="checkbox" value="ios"> iOS </input>
+					    							</label>
+					    						</div>
+					    					</div>
+					    					<div class="row">
+					    						<div class="col-md-2 no-padding"></div>
+					    						<div class="col-md-10" style="font-weight:bold;border-top: #7E8892 dotted 1px;padding: 10px 0px 0px 0px;">That consisting profiles matching
+					    							<select name="expression" class="form-control inline-select" style="width: 70px;    margin: 0px 10px;">
+					    								<option value="All">All</option>
+					    								<option value="Any">Any</option>
+					    							</select>
+					    						of the following:
+					    						</div>
+					    					</div>
+					    					<div class="row buffer-top-s">
+					    						<div class="col-md-2 no-padding"></div>
+					    						<div class="col-md-10 no-padding">
+					    							<div class="col-md-1 no-padding"></div>
+						    						<label class="col-md-3 control-label">User Since: </label>
+						    						<div class="col-md-8">
+						    							<div class="input-group date" data-provide="datepicker" style="width:140px">
+						    								<div class="input-group-addon">
+						    									<span class="fa fa-calendar"></span>
+						    								</div>
+						    								<input data-group="required_if_all" readonly="readonly" name="install_time_since" data-provide="datepicker" class="datepicker form-control" data-date-format="dd/mm/yyyy" placeholder="dd/mm/yyyy" style="margin-top:0;" >
+						    							</div>
+						    						</div>
+						    					</div>
+					    					</div>
+					    					<div class="row buffer-top-s">
+					    						<div class="col-md-2 no-padding"></div>
+					    						<div class="col-md-10 no-padding">
+					    							<div class="col-md-1 no-padding"></div>
+					    							<label class="col-md-3 control-label">Last Login Before: </label>
+						    						<div class="col-md-8">
+						    							<div class="input-group date" data-provide="datepicker" style="width:140px">
+						    								<div class="input-group-addon">
+						    									<span class="fa fa-calendar"></span>
+						    								</div>
+						    								<input data-group="required_if_all" readonly="readonly" name="last_happened_at" data-provide="datepicker" class="datepicker form-control" data-date-format="dd/mm/yyyy" placeholder="dd/mm/yyyy" style="margin-top:0;" >
+						    							</div>
+						    						</div>
+						    					</div>
+					    					</div>
+					    					<!-- start in-app detail -->
+					    					<!-- start action 0 -->
+					    					<div data-seq="0" data-group="in-app-detail"  class="row buffer-top-s">
+					    						<div class="row">
+						    						<div class="col-md-2 no-padding"></div>
+						    						<div class="col-md-10 no-padding">
+						    							<div class="col-md-1 no-padding"></div>
+						    							<div class="col-md-1 no-padding">
+						    								<a data-action="add_more_action_filter" class="btn btn-default" style="width: 40px;margin-right:10px;">
+						    								<i class="fa fa-plus"></i>
+						    							</a> 
+						    							</div>
+						    							<div class="col-md-10 no-padding">
+						    								<label class="control-label"> Who </label>
+							    							<select data-group="required_if_all" name="actions[0][behaviour_id]" data-associated-cat-select="actions[0][cat_id]" class="form-control inline-select-long" style="width: 160px;margin-left: 10px;">
+							    							    <option value="">select in-app event</option>
+							    							    <option value="Complete Tutorial">Complete Tutorial</option>
+							    							    <option value="Purchase">Purchase</option>
+							    							    <option value="Add to Cart">Add to Cart</option>
+							    							</select> 
+							    							<select data-group="required_if_all" name="actions[0][frequent][expression]" class="form-control inline-select-long" style="width: 105px;">
+							    								<option value=">">More than</option>
+							    								<option value="<">Less than</option>
+							    								<option value="=">Exactly</option>
+							    							</select> 
+							    							<input name="actions[0][frequent][value]" type="text" class="form-control inline-short numeric_only" placeholder="1" style="display:inline;width: 50px;    margin-right: 5px;"> times
+						    							</div>
+						    						</div>
+						    					</div>
+						    					<div class="row">
+				    								<div class="col-md-2"> </div>
+					    							<div class="col-md-10">
+					    								<div class="col-md-1 no-padding"></div>
+					    								<div class="col-md-1 no-padding" style="border-left: #7E8892 dotted 1px;height: 45px;">
+					    									<hr style="border-top: #7E8892 dotted 1px;">
+					    								</div>
+					    								<label class="col-md-2 control-label" style="text-align:right;">with interest in</label>
+					    								<div class="col-md-6">
+					    									<select data-group="required_if_all" name="actions[0][cat_id]" class="form-control inline-select-long" style="width: 140px;">
+						    									<option value="">select interest</option>
+						    									<option value="">Football</option></option>
+						    									<option value="">Business</option>
+						    									<option value="">Fashion</option>
+						    								</select>
+						    							</div>
+					    							</div>
+				    							</div>
+				    							<div class="row">
+				    								<div class="col-md-2"> </div>
+					    							<div class="col-md-10">
+					    								<div class="col-md-1 no-padding"></div>
+					    								<div class="col-md-1 no-padding" style="border-left: #7E8892 dotted 1px;height: 45px;">
+					    									<hr style="border-top: #7E8892 dotted 1px;">
+					    								</div>
+					    								<label class="col-md-2 control-label" style="text-align:right;">from</label>
+					    								<div class="col-md-6">
+							    							<div class="input-group date" data-provide="datepicker" style="width:140px;">
+							    								  <div class="input-group-addon">
+							    									<span class="fa fa-calendar"></span>
+							    								  </div>
+							    								  <input data-group="required_if_all" readonly="readonly" name="happened_at_from" data-provide="datepicker" class="datepicker form-control" data-date-format="dd/mm/yyyy" placeholder="dd/mm/yyyy" style="margin-top:0;" >
+							    							</div>
+							    						</div>
+					    							</div>
+				    							</div>
+				    							<div class="row">
+				    								<div class="col-md-2"> </div>
+					    							<div class="col-md-10">
+					    								<div class="col-md-1 no-padding"></div>
+					    								<div class="col-md-1 no-padding" style="border-left: #7E8892 dotted 1px;height: 20px;">
+					    									<hr style="border-top: #7E8892 dotted 1px;">
+					    								</div>
+					    								<label class="col-md-2 control-label" style="text-align:right;">to</label>
+					    								<div class="col-md-6">
+							    							<div class="input-group date" data-provide="datepicker" style="width:140px">
+							    								  <div class="input-group-addon">
+							    									<span class="fa fa-calendar"></span>
+							    								  </div>
+							    								  <input data-group="required_if_all" readonly="readonly" name="happened_at_from" data-provide="datepicker" class="datepicker form-control" data-date-format="dd/mm/yyyy" placeholder="dd/mm/yyyy" style="margin-top:0;" >
+							    							</div>
+							    						</div>
+							    					</div>
+							    				</div>
+					    					</div>
+					    					<!-- end action 0 -->
+					    					<!-- end in-app detail -->
+										</div>
+										<div class="row" style="padding-top: 20px;">
+		    								<div class="col-md-2"> </div>
+			    							<div class="col-md-9 no-padding">
+												<button type="submit" class="btn btn-primary pull-right">Create Audience Card</button>
+											</div>
+											<div class="col-md-1"> </div>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 small-box bg-navy-card">
+						<div class="bg-cl"> <!--CARD ELEMENT-->
+							<div class="row no-margin nosum">
+								<div class="col-md-12">
+									<div id="card-platform-space" style="padding: 5px 0px 5px;text-align:right;font-size: 25px;">
+										<div id="card-platform-preview"></div>
+									</div>
+								</div>
+							</div>
+							<div class="row no-margin">
+								<div class="col-md-12" style="padding:10px">
+									<div id="card-title-space"> 
+										<div id="card-title-preview"></div>
+									</div>
+								</div>
+							</div>
+							<div class="row no-margin nosum" style="min-height: 65px;">
+								<div class="col-md-12">
+									<div id="card-description-space"> 
+										<div id="card-description-preview"></div>
+									</div>
+								</div>
+							</div>
+							<div class="row no-margin">
+								<div class="col-md-12">
+									<div id="card-est-space" style="text-align:center">
+										<p class="no-margin">Estimated Reach</p>
+										<h3>16,229,110</h3>
+									</div>
+								</div>
+							</div>
+							<div class="row no-margin">
+								<div class="col-md-12" style="padding-bottom:40px">
+									<div id="card-countries-space"> 
+										<div id="card-countries-preview"></div>
+									</div>
+								</div>
+							</div>
+						</div> <!--END CARD ELEMENT-->
+					</div>
+				</div>
+				
+			</div>
+			<!-- END Main Content -->
+			
+			<div class="footer">
+				<div class="pull-right">
+					<b>Version</b> 1.1.0
+				</div>
+				<div>
+					<strong>Copyright &copy; 2016 <a href="http://www.hypergrowth.co"> HyperGrowth Pte Ltd</a>.</strong> All rights reserved.
+				</div>
+			</div>
+			
+			
+			
+		</div><!-- /.content-wrapper -->
+    </div><!-- ./wrapper -->
+
+    <!-- jQuery 2.1.4 -->
+    <script src="plugins/jQuery/jQuery-2.1.4.min.js"></script>
+    <!-- jQuery UI 1.11.4 -->
+    <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+    <script>
+      $.widget.bridge('uibutton', $.ui.button);
+    </script>
+    <!-- Bootstrap 3.3.5 -->
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <!-- Slimscroll -->
+    <script src="plugins/slimScroll/jquery.slimscroll.min.js"></script>
+    <!-- FastClick -->
+    <script src="plugins/fastclick/fastclick.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="dist/js/inspinia.js"></script>
+	<script src="dist/js/app.min.js"></script>
+	<!-- Metis Menu -->
+    <script src="plugins/metisMenu/jquery.metisMenu.js"></script>
+	
+	<!-- Select2 -->
+	<script src="plugins/select2/select2.min.js"></script>
+	<!-- iCheck -->
+	<script src="plugins/iCheck/icheck.min.js"></script>
+	<!-- datepicker -->
+	<script src="plugins/datepicker/js/bootstrap-datepicker.js"></script>
+	<!-- Color picker -->
+    <script src="plugins/colorpicker/bootstrap-colorpicker.min.js"></script>
+	<!-- Color selector -->
+    <script src="plugins/colorpicker/bootstrap-colorselector.js"></script>
+	
+    <script>
+    
+    var cardStyle = $('.bg-navy-card .bg-cl')[0].style;
+    
+    $('#cardcolorselector').colorselector({
+          callback: function (value, color, title) {
+              $("#set_cardbgcolor").val(color);
+              cardStyle.backgroundColor = color;
+          }
+    });
+    $('#textcolorselector').colorselector({
+          callback: function (value, color, title) {
+              $("#set_cardtextcolor").val(color);
+              cardStyle.color = color;
+          }
+    });
+
+
+		// var cardStyle = $('.bg-navy-card .bg-cl')[0].style;
+		// var HighlightStyle = $('.ct-bg')[0].style;
+  // 	$('.card-bg-color').colorpicker({
+  //      	color: cardStyle.backgroundColor,
+  //      	format: 'hex'
+  //      }).on('changeColor', function(ev) {
+  //              cardStyle.backgroundColor = ev.color.toHex();
+  //              document.getElementById('set_cardbgcolor').setAttribute('value', ev.color.toHex());
+  //          });
+  //      $('.card-box-color').colorpicker({
+  //      	color: HighlightStyle.backgroundColor,
+  //      	format: 'hex'
+  //      }).on('changeColor', function(ev) {
+  //              HighlightStyle.backgroundColor = ev.color.toHex();
+  //              document.getElementById('set_hightlightbox').setAttribute('value', ev.color.toHex());
+  //          });
+  //      $('.card-text-color').colorpicker({
+  //      	color: cardStyle.color,
+  //      	format: 'hex'
+  //      }).on('changeColor', function(ev) {
+  //              cardStyle.color = ev.color.toHex();
+  //              document.getElementById('set_cardtextcolor').setAttribute('value', ev.color.toHex());
+  //          });
+		
+		$(".inputCountryMultiple").select2({
+			placeholder:"Input name of countries"
+		});
+		$('input').iCheck({
+    		checkboxClass: 'icheckbox_square-blue',
+    		radioClass: 'iradio_square-blue',
+    		increaseArea: '20%'
+  		});
+  		$('.datepicker').datepicker({
+    	format: 'mm/dd/yyyy',
+    	startDate: '-3d'
+		});
+		
+		var defaultCardName = $("#preset_name").attr('placeholder');
+		var defaultCardDes = $("#preset_description").attr('placeholder');
+		
+		$("#card-title-preview").text(defaultCardName);
+		$("#card-description-preview").text(defaultCardDes);
+		
+		function CardPreviewName(typingText) {
+			$("#card-title-preview").text(typingText);
+	   		if(typingText == ""){
+	   			$("#card-title-preview").text(defaultCardName)
+	   		}
+	   		
+	   		//Auto Resize Text
+	   		var TitleSpace = $('#card-title-space').height();
+	   		var TitleText = $('#card-title-preview').height();
+	   		var TitleWidth = $('.bg-navy-card').width();
+	   		var TitleVerticalAlign = (TitleSpace-TitleText)/2;
+	   		
+	   		$('#card-title-space div').css({
+	   			'padding-top': TitleVerticalAlign,
+	   			'width':TitleWidth-'30',
+	   			'font-size': '2em'
+	   		});
+	   		
+	   		while( $('#card-title-space div').height() > $('#card-title-space').height() ) {
+		    	$('#card-title-space div').css('font-size', (parseInt($('#card-title-space div').css('font-size')) - 1) + "px" );
+		    }
+	   		
+		}
+		function CardPreviewDes(typingText) {
+		   $("#card-description-preview").text(typingText);
+		   if(typingText == ""){
+	   			$("#card-description-preview").text(defaultCardDes)
+	   		}
+	   		
+	   		///Auto Resize Text
+	   		var DesSpace = $('#card-description-space').height();
+	   		var DesText = $('#card-description-preview').height();
+	   		var DesWidth = $('.bg-navy-card').width();
+	   		var DesVerticalAlign = (DesSpace-DesText)/2;
+	   		
+	   		$('#card-description-space div').css({
+	   			'padding-top': DesVerticalAlign,
+	   			'width':DesWidth-'30',
+	   			'font-size': '1em'
+	   		});
+	   		
+	   		while( $('#card-description-space div').height() > $('#card-description-space').height() ) {
+		    	$('#card-description-space div').css('font-size', (parseInt($('#card-description-space div').css('font-size')) - 1) + "px" );
+		    }
+		}
+		$( "#country_codes" ).change(function() {
+			// get reference to display textarea
+		    var CardCountries = document.getElementById('card-countries-preview');
+		    CardCountries.innerHTML = ''; // reset
+		   	var selected = $( ".select2-selection__choice" ).get();
+		   	
+		   	var selectedText = [];
+		   	var countries = [];
+			var bg = "rgba(0,0,0,0.2)";
+			for ( var i = 0; i < selected.length; i++ ) {
+				selectedText.push( "<span class='card-countries-preview-box' style='background-color:"+bg+"'>"+selected[ i ].innerText.replace('×','')+"</span>" );
+			}
+			
+			var DesWidth = $('.bg-navy-card').width();
+			$('#card-countries-space div').css({
+				'width':DesWidth-'70',
+				'word-wrap': 'break-word',
+				'line-height':'50px'
+			})
+			
+			$( "#card-countries-preview" ).html(selectedText);
+			
+		});
+		
+		var pf_ios='';
+		var pf_android='';
+		
+		$('.platform_codes').on('ifChecked', function(event){
+			var platform = event.target.value;
+			if (platform == 'android' && pf_ios == ''){
+				$( "#card-platform-preview" ).html("<i class='fa fa-android'></i>");
+				pf_android = 'android';
+			}
+			if (platform == 'ios' && pf_android == 'android'){
+				$( "#card-platform-preview" ).html("<i class='fa fa-apple' style='padding-right:10px'></i><i class='fa fa-android'></i>");
+				pf_android = 'android';
+				pf_ios = 'ios';
+			}
+			if (platform == 'ios' && pf_android == ''){
+				$( "#card-platform-preview" ).html("<i class='fa fa-apple'></i>");
+				pf_ios = 'ios';
+			}
+			if (platform == 'android' && pf_ios == 'ios'){
+				$( "#card-platform-preview" ).html("<i class='fa fa-android' style='padding-right:10px'></i><i class='fa fa-apple'></i>");
+				pf_android = 'android';
+				pf_ios = 'ios';
+			}
+		});
+		
+		
+		
+		$('.platform_codes').on('ifUnchecked', function(event){
+			var platform = event.target.value
+			if (platform == 'android' && pf_ios == ''){
+				$( "#card-platform-preview" ).html("");
+				pf_android = '';
+			}
+			if (platform == 'android' && pf_ios == 'ios'){
+				$( "#card-platform-preview" ).html("<i class='fa fa-apple'></i>");
+				pf_android = '';
+			}
+			if (platform == 'ios' && pf_android == ''){
+				$( "#card-platform-preview" ).html("");
+				pf_ios = '';
+			}
+			if (platform == 'ios' && pf_android == 'android'){
+				$( "#card-platform-preview" ).html("<i class='fa fa-android'></i>");
+				pf_ios = '';
+			}
+		})
+	</script>
+  </body>
+</html>

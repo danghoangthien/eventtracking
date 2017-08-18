@@ -1,0 +1,59 @@
+{% extends 'base_clover.html.twig' %}
+{% block body %} 
+
+<section class="content-header" style="margin: -2em 0 0 -2em !important;">
+    <h1 style="font-size: 24px; margin: 0 0 1em 0.5em;">
+      Main Dashboard
+    </h1>
+    <ol class="breadcrumb">
+      <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li class="active">Main Dashboard</li>
+    </ol>
+</section>
+
+<div class="row">
+  <div class="col-md-12">
+    <div id="container">
+    	
+    </div>
+  </div><!-- /.col -->
+</div><!-- /.row -->
+			
+<script>
+$(document).ready(function()
+{
+		console.log("{{ l }}");
+		console.log("{{ xyz }}");
+		console.log("{{ pub }}");
+		
+		var name = "{{l}}";
+		var pass = "{{xyz}}";
+		var org  = "{{pub}}";
+		
+		visualize({
+				auth: {
+					  // name: "angie",
+					  // password: "g7sixlcID2Gn",
+					  // organization: "organization_1"
+						name: name,
+						password: pass,
+						organization: org
+				}
+		}, function (v) 
+		{
+				//render report from provided resource
+				v("#container").report({
+					resource: "/Hypergrowth/Clover/Reports/AKinstall_Report",
+					error: handleError
+				});
+		
+				//show error
+				function handleError(err) {
+					console.log("error msg",err.message);
+					// alert(err.message);
+				}
+		});
+});				
+</script>
+
+{% endblock %}

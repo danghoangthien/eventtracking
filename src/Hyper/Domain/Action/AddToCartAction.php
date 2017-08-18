@@ -31,7 +31,14 @@ class AddToCartAction
      * @Expose
      */
     private $deviceId;
-
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="app_id", type="string", nullable=true)
+     * @Expose
+     */
+    private $appId;
 
     /**
      * @var string
@@ -51,12 +58,12 @@ class AddToCartAction
     private $totalItems;
     
     /**
-     * @var integer
+     * @var string
      *
-     * @ORM\Column(name="quantity", type="integer")
+     * @ORM\Column(name="metadata", type="string", length=13107, nullable=true)
      * @Expose
      */
-    private $quantity;
+    private $metadata;
     
     /**
      * @var integer
@@ -78,7 +85,7 @@ class AddToCartAction
     
     /**
      * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="Hyper\Domain\Item\InCartItem", mappedBy="add_to_cart_actions", fetch="EXTRA_LAZY", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Hyper\Domain\Item\InCartItem", mappedBy="addToCartActionId", fetch="EXTRA_LAZY", cascade={"persist"})
      */
      private $inCartItems;
     
@@ -102,6 +109,30 @@ class AddToCartAction
 
         return $this;
     }
+    
+    /**
+     * Set appId
+     *
+     * @param string $appId
+     * @return AddToCartAction
+     */
+    public function setAppId($appId)
+    {
+        $this->appId = $appId;
+
+        return $this;
+    }
+
+    /**
+     * Get appId
+     *
+     * @return string 
+     */
+    public function getAppId()
+    {
+        return $this->appId;
+    }
+
 
     /**
      * Get deviceId
@@ -158,28 +189,28 @@ class AddToCartAction
     {
         return $this->totalItems;
     }
-
+    
     /**
-     * Set quantity
+     * Set metadata
      *
-     * @param integer $quantity
+     * @param string $metadata
      * @return AddToCartAction
      */
-    public function setQuantity ($quantity)
+    public function setMetadata($metadata)
     {
-        $this->quantity = $quantity;
+        $this->metadata = serialize($metadata);
 
         return $this;
     }
 
     /**
-     * Get quantity
+     * Get metadata
      *
-     * @return integer 
+     * @return string 
      */
-    public function getQuantity()
+    public function getMetadata()
     {
-        return $this->quantity;
+        return unserialize($this->metadata);
     }
 
     /**

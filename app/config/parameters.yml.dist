@@ -1,19 +1,26 @@
-# This file is a "template" of what your parameters.yml file should look like
-# Set parameters here that may be different on each deployment target of the app, e.g. development, staging, production.
-# http://symfony.com/doc/current/best_practices/configuration.html#infrastructure-related-configuration
+# This file is auto-generated during the composer install
 parameters:
-    database_host:     127.0.0.1
-    database_port:     ~
-    database_name:     symfony
-    database_user:     root
-    database_password: ~
-    # You should uncomment this if you want use pdo_sqlite
-    # database_path: "%kernel.root_dir%/data.db3"
-
-    mailer_transport:  smtp
-    mailer_host:       127.0.0.1
-    mailer_user:       ~
-    mailer_password:   ~
-
-    # A secret key that's used to generate certain security-related tokens
-    secret:            ThisTokenIsNotSoSecretChangeIt
+# MySQL settings
+    database_host: 127.0.0.1
+    database_port: null
+    database_name: symfony
+    database_user: root
+    database_password: null
+# Postgre SQL settings
+    pgsql_database_driver: pdo_pgsql
+    pgsql_database_host: eventtrackingclusteringtesting.c2gig7jzhviw.us-west-2.redshift.amazonaws.com
+    pgsql_database_port: 5439
+    pgsql_database_name: hypereventtrackingtesting
+    pgsql_database_user: hypergrowth
+    pgsql_database_password: Hypergrowth2015testing
+# Mail settings    
+    mailer_transport: smtp
+    mailer_host: 127.0.0.1
+    mailer_user: null
+    mailer_password: null
+    secret: fc5a94f25205a27817e285a142ab27c1b30b352f
+# Amazon AWS setting    
+    amazon_aws_key: AKIAIGWJT5KRNLWD5TQQ
+    amazon_aws_secret_key: 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
+    amazon_s3_base_url: hypermaterials.s3-website-ap-southeast-1.amazonaws.com
+    amazon_s3_bucket_name: hypermaterials

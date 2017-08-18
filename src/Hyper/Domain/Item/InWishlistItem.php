@@ -31,6 +31,14 @@ class InWishlistItem
      * @Expose
      */
     private $deviceId;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="app_id", type="string",nullable=true)
+     * @Expose
+     */
+    private $appId;
 
 
     /**
@@ -42,15 +50,15 @@ class InWishlistItem
     private $applicationId;
     
     /**
-     * @ORM\ManyToOne(targetEntity="Hyper\Domain\Action\AddToWishlistAction", fetch="EXTRA_LAZY", inversedBy="in_wishlist_items")
-     * @ORM\JoinColumn()
+     * @ORM\ManyToOne(targetEntity="Hyper\Domain\Action\AddToWishlistAction", fetch="EXTRA_LAZY", inversedBy="inWishlistItems")
+     * @ORM\JoinColumn(name="wishlist_id", referencedColumnName="id")
      * @Expose
      */
     private $wishlist;
     
     /**
-     * @ORM\ManyToOne(targetEntity="Hyper\Domain\Item\Item", fetch="EXTRA_LAZY", inversedBy="in_wishlist_items")
-     * @ORM\JoinColumn()
+     * @ORM\ManyToOne(targetEntity="Hyper\Domain\Item\Item", fetch="EXTRA_LAZY")
+     * @ORM\JoinColumn(name="item_id", referencedColumnName="id")
      * @Expose
      */
     private $item;
@@ -109,6 +117,29 @@ class InWishlistItem
     }
 
     /**
+     * Set appId
+     *
+     * @param string $appId
+     * @return InWishlistItem
+     */
+    public function setAppId($appId)
+    {
+        $this->appId = $appId;
+
+        return $this;
+    }
+
+    /**
+     * Get appId
+     *
+     * @return string 
+     */
+    public function getAppId()
+    {
+        return $this->appId;
+    }
+
+    /**
      * Set applicationId
      *
      * @param string $applicationId
@@ -134,10 +165,10 @@ class InWishlistItem
     /**
      * Set wishlist
      *
-     * @param \Hyper\Domain\Action\AddTowishlist $wishlist
+     * @param \Hyper\Domain\Action\AddToWishlistAction $wishlist
      * @return InWishlistItem
      */
-    public function setWishList(\Hyper\Domain\Action\AddToWishlistAction $wishlist = null)
+    public function setWishlist(\Hyper\Domain\Action\AddToWishlistAction $wishlist = null)
     {
         $this->wishlist = $wishlist;
 

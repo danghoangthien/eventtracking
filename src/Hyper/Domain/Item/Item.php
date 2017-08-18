@@ -23,7 +23,14 @@ class Item
      * @Expose
      */
     private $id;
-
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="app_id", type="string",nullable=true)
+     * @Expose
+     */
+    private $appId;
 
     /**
      * @ORM\ManyToOne(targetEntity="Hyper\Domain\Application\Application", fetch="EXTRA_LAZY", inversedBy="items")
@@ -220,6 +227,30 @@ class Item
     {
         return $this->created;
     }
+    
+    /**
+     * Set appId
+     *
+     * @param string $appId
+     * @return Item
+     */
+    public function setAppId($appId)
+    {
+        $this->appId = $appId;
+
+        return $this;
+    }
+
+    /**
+     * Get appId
+     *
+     * @return string 
+     */
+    public function getAppId()
+    {
+        return $this->appId;
+    }
+
 
     /**
      * Set application

@@ -1,0 +1,25 @@
+{
+  "id": {
+    "type":"string",
+    "index": "not_analyzed"
+  },
+  "idfa": {
+    "type":"string",
+    "index": "not_analyzed"
+  },
+  "idfv": {
+    "type":"string",
+    "index": "not_analyzed"
+  },
+  "device_name": {
+    "type":"string",
+    "index": "not_analyzed"
+  },
+  "device_type": {
+    "type":"string",
+    "index": "not_analyzed"
+  },
+  "created": {
+    "type":"long"
+  }
+}

@@ -1,0 +1,191 @@
+{
+  "id": {
+    "type":"string",
+    "index": "not_analyzed"
+  },
+  "device_id": {
+    "type":"string",
+    "index": "not_analyzed"
+  },
+  "application_id": {
+    "type":"string",
+    "index": "not_analyzed"
+  },
+  "action_type": {
+    "type":"integer"
+  },
+  "behaviour_id": {
+    "type":"integer"
+  },
+  "provider_id": {
+    "type":"integer"
+  },
+  "s3_log_file": {
+    "type":"string",
+    "index": "not_analyzed"
+  },
+  "happened_at": {
+    "type":"integer"
+  },
+  "created": {
+    "type":"integer"
+  },
+  "app_id": {
+    "type":"string",
+    "index": "not_analyzed"
+  },
+  "af_revenue": {
+    "type":"float"
+  },
+  "af_price": {
+    "type":"float"
+  },
+  "af_level": {
+    "type":"integer"
+  },
+  "af_success": {
+    "type":"integer"
+  },
+  "af_content_type": {
+    "type":"string",
+    "index": "not_analyzed"
+  },
+  "af_content_list": {
+    "type":"string",
+    "index": "not_analyzed"
+  },
+  "af_content_id": {
+    "type":"string",
+    "index": "not_analyzed"
+  },
+  "af_currency": {
+    "type":"string",
+    "index": "not_analyzed"
+  },
+  "af_registration_method": {
+    "type":"string",
+    "index": "not_analyzed"
+  },
+  "af_quantity": {
+    "type":"integer"
+  },
+  "af_payment_info_available": {
+    "type":"integer"
+  },
+  "af_rating_value": {
+    "type":"float"
+  },
+  "af_max_rating_value": {
+    "type":"float"
+  },
+  "af_search_string": {
+    "type":"string"
+  },
+  "af_description": {
+    "type":"string",
+    "index": "not_analyzed"
+  },
+  "af_score": {
+    "type":"string",
+    "index": "not_analyzed"
+  },
+  "af_destination_a": {
+    "type":"string",
+    "index": "not_analyzed"
+  },
+  "af_destination_b": {
+    "type":"string",
+    "index": "not_analyzed"
+  },
+  "af_class": {
+    "type":"string",
+    "index": "not_analyzed"
+  },
+  "af_date_a": {
+    "type":"string",
+    "index": "not_analyzed"
+  },
+  "af_date_b": {
+    "type":"string",
+    "index": "not_analyzed"
+  },
+  "af_event_start": {
+    "type":"string",
+    "index": "not_analyzed"
+  },
+  "af_event_end": {
+    "type":"string",
+    "index": "not_analyzed"
+  },
+  "af_lat": {
+    "type":"string",
+    "index": "not_analyzed"
+  },
+  "af_long": {
+    "type":"string",
+    "index": "not_analyzed"
+  },
+  "af_customer_user_id": {
+    "type":"string",
+    "index": "not_analyzed"
+  },
+  "af_validated": {
+    "type":"string",
+    "index": "not_analyzed"
+  },
+  "af_receipt_id": {
+    "type":"string",
+    "index": "not_analyzed"
+  },
+  "af_param_1": {
+    "type":"string",
+    "index": "not_analyzed"
+  },
+  "af_param_2": {
+    "type":"string",
+    "index": "not_analyzed"
+  },
+  "af_param_3": {
+    "type":"string",
+    "index": "not_analyzed"
+  },
+  "af_param_4": {
+    "type":"string",
+    "index": "not_analyzed"
+  },
+  "af_param_5": {
+    "type":"string",
+    "index": "not_analyzed"
+  },
+  "af_param_6": {
+    "type":"string",
+    "index": "not_analyzed"
+  },
+  "af_param_7": {
+    "type":"string",
+    "index": "not_analyzed"
+  },
+  "af_param_8": {
+    "type":"string",
+    "index": "not_analyzed"
+  },
+  "af_param_9": {
+    "type":"string",
+    "index": "not_analyzed"
+  },
+  "af_param_10": {
+    "type":"string",
+    "index": "not_analyzed"
+  },
+  "event_value_text": {
+    "type":"string",
+    "index": "not_analyzed"
+  },
+  "event_name": {
+    "type":"string",
+    "index": "not_analyzed"
+  },
+  "amount_usd": {
+    "type":"float"
+  }
+}

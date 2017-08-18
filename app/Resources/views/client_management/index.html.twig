@@ -1,0 +1,149 @@
+{% extends 'layout_ak/base.html.twig' %}
+{% block sub_head_title %}Admin Dashboard - Client Management{% endblock %}
+{% block body %}
+<div class="wrapper wrapper-content animated fadeInRight">
+    {% if app.session.flashbag.has('notice') %}
+		{% set notice = app.session.flashbag.get('notice').0 %}
+		<div class="row">
+			<div class="alert alert-{{ notice.status }}">
+			  	{{ notice.msg }}
+			</div>
+		</div>
+	{% endif %}
+    <div class="row buffer-bottom-s">
+        <div class="col-md-4">
+            <h1>Client's Authorization</h1>
+        </div>
+        <label class="col-md-2 control-label" style="color:#333;text-align:right;margin-top:25px;">Search: </label>
+        <div class="col-md-2">
+            <input type="text" class="form-control" id="filter" style="margin-top:25px;">
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+    <div class="row buffer-bottom-s">
+        <div class="col-lg-8">
+            <div class="row buffer-bottom-s">
+                <div class="col-md-12">
+                    <table class="footable">
+                        <thead>
+                            <tr>
+                                <th>Client</th>
+                                <th>App Title</th>
+                                <th>Client Type</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for client in listClient %}
+                                <tr>
+                                    <td>{{ client['client_name'] }}</td>
+                                    <td>
+                                        {% if listAppTitle[client['id']] is defined and listAppTitle[client['id']] is not empty %}
+                                            {{ listAppTitle[client['id']]|join(',') }}
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if client['account_type'] == 1 %}
+                                            {{ "E-commerce" }}
+                                        {% elseif client['account_type'] == 2 %}
+                                            {{ "Gaming" }}
+                                        {% else %}
+                                            {{ "Branding" }}
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <a href="{{ path('dashboard_client_management', app.request.query.all|merge({'client_id': client['id']})) }}">Edit</a>
+                                    </td>
+                                    <td>
+                                        <a  href="#" data-toggle="modal" data-target="#confirm-delete" data-href="{{ path('dashboard_client_management_delete', app.request.query.all|merge({'client_id': client['id']})) }}">Delete</a>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="4">
+                    	        		<div class="text-center">
+                    			           No records found
+                    			        </div>
+                            		</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                        {% if listClient.getPageCount() > 1 %}
+                        <tfoot class="hide-if-no-paging">
+                            <tr>
+                                <td colspan="5" style="text-align:center;">
+                                    {{ knp_pagination_render(listClient) }}
+                                </td>
+                            </tr>
+                        </tfoot>
+                        {% endif %}
+                    </table>
+                </div>
+            </div>
+        </div>
+		{% include 'client_management/_form.html.twig' %}
+    </div>
+</div>
+<!-- END First Panel-->
+{% endblock %}
+
+{% block stylesheets_inline %}
+    <link rel="stylesheet" href="{{ asset('bundles/hyperevent/plugins/footable/footable.core.css') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/hyperevent/plugins/footable/footable.metro.css') }}">
+    <link href="{{ asset('bundles/hyperevent/plugins/select2/select2.min.css') }}" rel="stylesheet" />
+{% endblock %}
+
+{% block javascript_inline %}
+    <script src="{{ asset('bundles/hyperevent/plugins/select2/select2.min.js') }}"></script>
+    <script src="{{ asset('assets/js/jquery.validate.min.js') }}"></script>
+    <script>
+	    var ClientManagement =  {
+	        userLimit: '{{form.userLimit.vars.value}}',
+	        usagePlanType: '{{form.usagePlanType.vars.value}}',
+	        init: function() {
+	        	this.initSelect2();
+	        	this.disabledAllUsagePlanType();
+	        	this.loadUsagePlanType();
+	        	this.fireEventChangeUsagePlanType();
+	        },
+	        initSelect2: function() {
+	        	$(".list-app-title").select2({
+				  	placeholder:"Each app title separate by comma"
+				});
+	        },
+	        fireEventChangeUsagePlanType: function() {
+	            var self = this;
+	            $(document).on('ifChecked', "input[type=radio][name='client[usagePlanType]']", function(event) {
+	                //console.log('debug','fireEventChangeUsagePlanType');
+	                self.disabledAllUsagePlanType();
+	                var parent = $(this).closest('[data-usagePlanType]');
+	                self.enabledUsagePlanType(parent);
+	            });
+	        },
+	        disabledAllUsagePlanType: function() {
+	            $('[data-usagePlanType]').each(function() {
+	                //console.log('debug', 'disabledAllUsagePlanType');
+	                $(this).find('.row').hide();
+	                $(this).find("input[type=text][name='client[userLimit]']").prop('disabled', true);
+	            });
+	        },
+	        enabledUsagePlanType: function(parent) {
+	            parent.find('.row').show();
+                parent.find("input[type=text][name='client[userLimit]']").prop('disabled', false);
+	        },
+	        loadUsagePlanType: function() {
+	            var checkedObj = $("input[type=radio][name='client[usagePlanType]']:checked");
+	            var parent = checkedObj.closest('[data-usagePlanType]');
+	            if (this.userLimit) {
+	                parent.find("input[type=text][name='client[userLimit]']").val(this.userLimit);
+	            }
+	            this.enabledUsagePlanType(parent);
+	        }
+	    };
+
+	    $(document).ready(function() {
+	        ClientManagement.init();
+	    });
+    </script>
+{% endblock %}

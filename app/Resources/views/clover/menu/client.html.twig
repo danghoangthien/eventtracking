@@ -1,0 +1,96 @@
+<aside class="main-sidebar">
+    <form class="form-horizontal" id="form1" action="{{ path('clover_main_dashboard') }}" method="post" enctype="multipart/form-data">
+        {#<input type="hidden" name="jasper_id" id="jasper_id" value="{{ clover.refreshJasperAction().getId() }}" />#}
+        {#<input type="hidden" name="user" id="user" value="{{ clover.refreshJasperAction().getUsername() }}" />#}
+        {#<input type="hidden" name="pass" id="pass" value="{{ clover.refreshJasperAction().getPassword() }}" />#}
+        {#<input type="hidden" name="org" id="org" value="{{ clover.refreshJasperAction().getOrganization() }}" />#}
+        <input type="hidden" name="jasper_id" id="jasper_id" value="" />
+        <input type="hidden" name="l" id="user" value="" />
+        <input type="hidden" name="xyz" id="pass" value="" />
+        <input type="hidden" name="pub" id="org" value="" />
+    
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">        
+        <!-- sidebar menu: : style can be found in sidebar.less -->
+        <ul class="sidebar-menu">
+            <!--<li class="header">MAIN NAVIGATION</li>-->   
+            {% set image = "" %}
+            {% if clover.refreshImageAction == "" %}
+                {% set image = clover.getImagePath() ~ '/user.png' %}
+            {% else %}
+                {% set image = clover.getImagePath() ~ '/' ~ clover.refreshImageAction %}
+            {% endif %}
+            <div class="user-panel">
+            <div class="pull-left image">
+              <img src="{{ image }}" class="img-circle" alt="User Image">
+            </div>
+            <div class="pull-left info">
+              <p>{{authentication.refreshNameAction}}</p>
+              <a href="#"><i class="fa  fa-hand-peace-o"></i> 
+              {% set client = clover.getClientName() %}
+              {% if client == "All Clients" %}
+                  {{ "All Clients" }}
+              {% else %}
+                  {{ client }} Client
+              {% endif %}
+              </a>
+            </div>
+          </div>
+            <li class="treeview" id="main_dashboard">
+                <a href="#" id="main">
+                    <i class="fa fa-dashboard"></i> <span>Main Dashboard</span> <i class="fa fa-angle-left pull-right"></i>
+                </a>                    
+            </li>                                  
+            <li class="treeview" id="user_history">
+                <a href="{{ path('clover_user_history') }}">
+                    <i class="fa fa-user-secret"></i> <span>User History</span> <i class="fa fa-angle-left pull-right"></i>
+                </a>
+            </li>
+            {#<li class="treeview" id="custom_audience">#}
+            {#    <a href="{{ path('dashboard_filter_showadd') }}">#}
+            {#        <i class="fa fa-list"></i> <span>Custom Audience</span> <i class="fa fa-angle-left pull-right"></i>#}
+            {#    </a>#}
+            {#</li>#}
+            {#<li class="treeview" id="audience_deck">#}
+            {#    <a href="{{ path('dashboard_client_action_show') }}">#}
+                {#<a href="{{ path('dashboard_audience') }}">#}
+            {#        <i class="fa fa-list"></i> <span>Audience Deck</span> <i class="fa fa-angle-left pull-right"></i>#}
+            {#    </a>#}
+            {#</li>   #}
+        </ul>
+    </section>    <!-- /.sidebar --></form>
+    <!-- /.sidebar -->
+</aside>
+<!-- page script -->
+<script>
+    $(document).ready(function()
+    {        
+        {% if active is defined %}
+            {% if active == "test" %}
+                $("#test").addClass("active");
+            {% elseif active == "audience_deck" %}
+                $("#audience_deck").addClass("active");
+            {% elseif active == "custom_audience" %}
+                $("#custom_audience").addClass("active");
+            {% elseif active == "audience_interest" %}
+                $("#audience_interest").addClass("active");
+            {% elseif active == "event_mapping" %}
+                $("#event_mapping").addClass("active");
+            {% elseif active == "main_dashboard" %}
+                $("#main_dashboard").addClass("active");
+            {% elseif active == "category_tree" %}
+                $("#audience_interest").addClass("active");
+            {% endif %}
+        {% endif %}
+        
+        $("#main_dashboard").on('click', this,function()
+        {
+            $("#jasper_id").val("{{ clover.refreshJasperAction().getId() }}");
+            $("#user").val("{{ clover.refreshJasperAction().getUsername() }}");
+            $("#pass").val("{{ clover.refreshJasperAction().getPassword() }}");
+            $("#org").val("{{ clover.refreshJasperAction().getOrganization() }}");
+             
+            $("#form1").submit();
+        });
+    });
+</script>

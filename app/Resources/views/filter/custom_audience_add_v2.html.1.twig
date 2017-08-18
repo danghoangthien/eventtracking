@@ -1,0 +1,683 @@
+{% extends 'base2.html.twig' %}
+{% block body %}  
+{% if exception is defined %}
+    <h3 style="text-align:center">{{ exception }}</h3>
+{% else %}
+<section class="content-header" style="margin: -2em 0 0 -2em !important;">
+    <h1 style="font-size: 24px; margin: 0 0 1em 0.5em;">
+      Custom Audience
+    </h1>
+    <ol class="breadcrumb">
+      <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li class="active">Custom Audience</li>
+    </ol>
+</section>
+
+{% if selected_record is defined %}
+    <input type="hidden" id="id_to_update" name="id_to_update" value="{{ selected_record.id }}"/>
+    <input type="hidden" value="edit" id="indicator" />
+    {#{% for intents in selected_record.filterMetadata["intent_metadata"] %}#}
+    {#        <input type="select" value="{{ intents.intent_key }}" />#}
+    {#{% endfor %}#}
+    
+{% endif %}
+
+<div class="row">
+    <div class="col-md-9">
+        <div class="box box-danger">
+            <div class='fuelux'>
+                <div class='wizard' data-initialize="wizard" id="myWizard">
+                    <div class="box-header with-border">
+                        <div class="form-group">
+                            <label for="exampleInputName">Audience Card Name</label>
+                            <input type="text" name="preset_name" class="form-control" id="preset_name" placeholder="Name Your Audience Card">
+                        </div>
+                        <div class="form-group">
+							<label for="exampleInputName">Card Description</label>
+							<input type="text" class="form-control" name="description" id="description" placeholder="Describe Your Audience Card (16 words only)">
+						</div>
+                        <div class="steps-container">
+                            <ul class='steps'>
+                                <li class='col-md-3 active' data-step='1' data-target='#step1'>
+                                    <span class='step' id="btnWizardSetStep1">1. Country</span>
+                                </li>
+                                <li class='col-md-3' data-step='2' data-target='#step2'>
+                                    <span class='step' id="btnWizardSetStep2">2. Platform</span>
+                                </li>
+                                <li class='col-md-3' data-step='3' data-target='#step3'>
+                                    <span class='step' id="btnWizardSetStep3">3. Interest</span>
+                                </li>
+                                <li class='col-md-3' data-step='4' data-target='#step4' id="last_option">
+                                    <span class='step' id="btnWizardSetStep4">4. Intent</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div><!-- /.box-header -->
+                    <div class="box-body">
+                        <form class="form" name="create_preset" style="margin-bottom: 0;" method="post" action="#" accept-charset="UTF-8"><input type="hidden" />
+                            <div class='step-content'>
+                                <div class='step-pane active' id='step1' style="overflow-y: scroll; max-height: 22em;" data-step='1'>
+                                    <div class="form-group col-md-3">
+                                        <label for="exampleInputName">Select Country</label>
+                                        {% for country in active_country_list %}                                            
+                                            <div class="radio">
+                                                <label><input class="country1" type="radio" name="country1" id="{{country.countryCode}}" value="{{country.countryCode}}">{{country.countryCode|country()}}</label>
+                                            </div>
+                                        {% endfor %}    
+                                    </div>
+                                </div>
+                                <div class='step-pane' id='step2' style="overflow-y: scroll; max-height: 22em;" data-step='2'>
+                                    <div class="form-group col-md-3">
+                                        <label for="exampleInputName">Select Country</label>
+                                        {% for country in active_country_list %}                                            
+                                            <div class="radio">
+                                                <label><input class="country2" type="radio" name="country2" id="{{country.countryCode}}" value="{{country.countryCode}}">{{country.countryCode|country()}}</label>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="exampleInputName">Select Platform</label>
+                                        {% for id,platform_name in active_platform %}                                            
+                                            <div class="radio">
+                                                <label><input class="platform1" type="radio" name="platform1" value="{{ id }}">{{ platform_name }}</label>
+                                            </div>
+                                        {% endfor %}                                        
+                                    </div>
+                                </div>
+                                <div class='step-pane' id='step3' style="overflow-y: scroll; max-height: 22em;" data-step='3'>
+                                    <div class="form-group col-md-3">
+                                        <label for="exampleInputName">Select Country</label>
+                                        {% for country in active_country_list %}                                            
+                                            <div class="radio">
+                                                <label><input class="country3" type="radio" name="country3" id="{{country.countryCode}}" value="{{country.countryCode}}">{{country.countryCode|country()}}</label>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="exampleInputName">Select Platform</label>
+                                        {% for id,platform_name in active_platform %}                                            
+                                            <div class="radio">
+                                                <label><input class="platform2" type="radio" name="platform2" value="{{ id }}">{{ platform_name }}</label>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="exampleInputName">Select Interest</label>
+                                        {% for cat in active_interest %}
+                                            <div class="radio">
+                                                <label><input class="active_interest" type="radio" name="interest"  value="{{ cat.id }}" data-platform="{{ cat.platform }}" >
+                                                    {% if cat.name is not empty %}
+                                                        {{ cat.name }}
+                                                    {% else %}
+                                                        {{ cat.code }}
+                                                    {% endif %}
+                                                </label>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <div class='step-pane' id='step4' style="max-height: 22em;" data-step='4'>
+                                <div class="col-md-12">
+                                    <div class="row">
+                                    	<label class="col-md-3 control-label">Selected Country: </label>
+                                    	<div class="col-md-9">
+                                    		<input type="text" disabled="" placeholder="ID" class="form-control">
+                                    		<input type="hidden" name="country_codes" value="">
+                                    	</div>
+                                    </div>
+                                    <div class="row buffer-top-s">
+                                    	<label class="col-md-3 control-label">Selected Platform: </label>
+                                    	<div class="col-md-9"> 
+                                    		<input type="text" disabled="" placeholder="Android" class="form-control">
+                                    		<input type="hidden" name="platform_ids" value="">
+                                    	</div>
+                                    </div>
+                                    <div class="row buffer-top-s">
+                                    	<hr style="width: 100%;border-top: 1px solid #ddd;">
+                                    </div>
+                                    <div class="row">
+                                    	<div class="col-md-12" style="font-weight:bold">Audience Card consisting profiles matching
+                                    		<select name="expression" class="form-control inline-select" style="width: 15%;">
+                                    			<option value="All">All</option>
+                                    			<option value="Any">Any</option>
+                                    		</select>
+                                    		of the following:
+                                    	</div>
+                                    </div>
+                                    <div class="row buffer-top-s">
+                                    	<label class="col-md-3 control-label">User Since: </label>
+                                    	<div class="col-md-9">
+                                    		<div class="input-group date" data-provide="datepicker" style="width:300px">
+                                    			<div class="input-group-addon">
+                                    				<span class="fa fa-calendar"></span>
+                                    			</div>
+                                    			<input name="install_time_since" data-provide="datepicker" class="datepicker form-control" data-date-format="dd/mm/yyyy" placeholder="dd/mm/yyyy" style="margin-top:0;" >
+                                    		</div>
+                                    	</div>
+                                    </div>
+                                    <div class="row buffer-top-s">
+                                    	<label class="col-md-3 control-label">Last Login Before: </label>
+                                    	<div class="col-md-9">
+                                    		<div class="input-group date" data-provide="datepicker" style="width:300px">
+                                    			<div class="input-group-addon">
+                                    				<span class="fa fa-calendar"></span>
+                                    			</div>
+                                    			<input name="last_happened_at" data-provide="datepicker" class="datepicker form-control" data-date-format="dd/mm/yyyy" placeholder="dd/mm/yyyy" style="margin-top:0;" >
+                                    		</div>
+                                    	</div>
+                                    </div>
+                                    <div class="row buffer-top-s">
+                                    	<hr style="width: 85%;border-top: 1px solid #ddd;">
+                                    </div>
+                                    <!-- In app event and behaviour action -->
+                                    <!-- in-app-event 1 -->
+                                    <div class="row buffer-top-s">
+                                    	<label class="col-md-3 control-label">
+                                    		<a class="btn btn-default" style="width: 40px;margin-right:10px;">
+                                    			<i class="fa fa-plus"></i>
+                                    		</a> Who have made </label>
+                                    	<div class="col-md-9">
+                                    		<select name="actions[0][behaviour_id]" class="form-control inline-select-long" style="width: 35%;">
+                                    			<option value="">select in-app event</option>
+                                    			<option value="">purchase</option>
+                                    			<option value="">af_contentview</option>
+                                    			<option value="">af_tutorialcomplete</option>
+                                    		</select> 
+                                    		<select class="form-control inline-select-long" style="width: 25%;">
+                                    			<option name="actions[0][frequent][expression]" value=">">More than</option>
+                                    			<option value="<">Less than</option>
+                                    			<option value="=">Exactly</option>
+                                    		</select> 
+                                    		<input name="actions[0][frequent][value]" type="text" class="form-control inline-short" placeholder="1"style="display:inline;width: 100px;"> times
+                                    	</div>
+                                    	<div class="col-md-12" style="display:none">
+                                    		<div class="col-md-3"> </div>
+                                    		<div class="col-md-9">
+                                    			<label class="col-md-4 control-label">with interest in</label>
+                                    			<select disabled="disabled" name="actions[0][cat_id]" class="form-control inline-select-long" style="width: 50%;">
+                                    				<option value="">select interest</option>
+                                    				<option value="">Gaming</option>
+                                    				<option value="">Sport &amp; Fitness</option>
+                                    				<option value="">F&B</option>
+                                    				<option value="">Electronics</option>
+                                    				<option value="">Travel</option>
+                                    			</select> 
+                                    		</div>
+                                    	</div>
+                                    </div><!-- end User In-app Detail -->
+                                    <div class="row buffer-top-s">
+                                    <!-- /in-app-event 1 -->
+                                    <!-- in-app-event 2 -->
+                                    <div class="row buffer-top-s">
+                                    	<label class="col-md-3 control-label">
+                                    		<a class="btn btn-default" style="width: 40px;margin-right:10px;">
+                                    			<i class="fa fa-plus"></i>
+                                    		</a> Who have made </label>
+                                    	<div class="col-md-9">
+                                    		<select name="actions[1][behaviour_id]" class="form-control inline-select-long" style="width: 35%;">
+                                    			<option value="">select in-app event</option>
+                                    			<option value="">purchase</option>
+                                    			<option value="">af_contentview</option>
+                                    			<option value="">af_tutorialcomplete</option>
+                                    		</select> 
+                                    		<select class="form-control inline-select-long" style="width: 25%;">
+                                    			<option name="actions[1][frequent][expression]" value=">">More than</option>
+                                    			<option value="<">Less than</option>
+                                    			<option value="=">Exactly</option>
+                                    		</select> 
+                                    		<input name="actions[1][frequent][value]" type="text" class="form-control inline-short" placeholder="1"style="display:inline;width: 100px;"> times
+                                    	</div>
+                                    	<div class="col-md-12" style="display:none">
+                                    		<div class="col-md-3"> </div>
+                                    		<div class="col-md-9">
+                                    			<label class="col-md-4 control-label">with interest in</label>
+                                    			<select disabled="disabled" name="actions[1][cat_id]" class="form-control inline-select-long" style="width: 50%;">
+                                    				<option value="">select interest</option>
+                                    				<option value="">Gaming</option>
+                                    				<option value="">Sport &amp; Fitness</option>
+                                    				<option value="">F&B</option>
+                                    				<option value="">Electronics</option>
+                                    				<option value="">Travel</option>
+                                    			</select> 
+                                    		</div>
+                                    	</div>
+                                    </div><!-- end User In-app Detail -->
+                                    <div class="row buffer-top-s">
+                                    <!-- /in-app-event 2 -->
+                                    
+                                    <!--/In app event and behaviour action -->
+                                    	<hr style="width: 85%;border-top: 1px solid #ddd;">
+                                    </div>
+                                    <div class="row buffer-top-s">
+                                    	<label class="col-md-3 control-label">From</label>
+                                    	<div class="col-md-9">
+                                    		<div class="input-group date" data-provide="datepicker" style="width:300px;">
+                                    			<div class="input-group-addon">
+                                    				<span class="fa fa-calendar"></span>
+                                    			</div>
+                                    			<input name="happened_at_from" data-provide="datepicker" class="datepicker form-control" data-date-format="dd/mm/yyyy" placeholder="dd/mm/yyyy" style="margin-top:0;" >
+                                    		</div>
+                                    	</div>
+                                    </div>
+                                    <div class="row buffer-top-s">
+                                    	<label class="col-md-3 control-label">To</label>
+                                    	<div class="col-md-9">
+                                    		<div class="input-group date" data-provide="datepicker" style="width:300px;">
+                                    			<div class="input-group-addon">
+                                    				<span class="fa fa-calendar"></span>
+                                    			</div>
+                                    			<input name="happened_at_to" data-provide="datepicker" class="datepicker form-control" data-date-format="dd/mm/yyyy" placeholder="dd/mm/yyyy" style="margin-top:0;" >
+                                    		</div>
+                                    	</div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div><!-- /.box-body -->
+                    <div class="box-footer">
+                        <div class='actions'>
+                            <button class='btn btn-prev' id="prev"><i class=' fa fa-caret-left'></i>Prev
+                            </button>
+                            {% if selected_record is defined %}
+                                <button class='btn btn-danger btn-next' data-last='Update Card' id="update_card">Next
+                                <i class='fa fa-caret-right'></i>
+                                </button>
+                            {% else %}
+                            <button class='btn btn-danger btn-next' data-last='Create Card' id="create">Next
+                                <i class='fa fa-caret-right'></i>
+                            </button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="small-box bg-red">
+            <div class="inner">
+                <p>Estimated Reach</p>
+                <h3 id="estimate"></h3>
+                <p>Profiles</p>
+            </div>
+            <div class="icon">
+                <i class="ion ion-pie-graph"></i>
+            </div>
+        </div>
+    </div>
+</div>	
+<script>
+    $(document).ready(function()
+    {
+        console.log("trace"," application start ");
+        $.widget.bridge('uibutton', $.ui.button);
+
+        var platform_selected = "";
+        var country_selected12  = "";
+        var intent_selected   = "";
+        var interest_selected = "";
+        
+        var country_codes = '';
+        var platform_ids  = '';
+        var intent_key = '';
+        var cat_id = '';
+        
+        getEstimate();
+        
+        {% if selected_record is defined %}
+            $("#preset_name").val("{{ selected_record.presetName }}");
+            $("#description").val("{{ selected_record.description }}");
+            
+            {% if selected_record.filterMetadata["\\Hyper\\Domain\\Device\\Device.countryCode"] is defined %}
+                {% for data in selected_record.filterMetadata["\\Hyper\\Domain\\Device\\Device.countryCode"]["value"] %}
+                    country_selected12 = "{{ data }}";
+                    $(".country1").each(function()
+                    {
+                        if($(this).attr('id') == country_selected12)
+                        {
+                            $(this).click();
+                             
+                            if ($(this).is(':checked'))
+                            {
+                                country_codes = $(this).val();
+                                
+                                $("input[class^='country'][class!='country1'][value*='"+country_codes+"']").prop("checked", "checked");
+                            }
+                         }
+                     });
+                {% endfor %}
+            {% endif %}
+            
+            {% if selected_record.filterMetadata["\\Hyper\\Domain\\Device\\Device.platform"] is defined %}
+                {% for plaformValue in selected_record.filterMetadata["\\Hyper\\Domain\\Device\\Device.platform"]["value"] %}
+                    platform_selected = {{ plaformValue }};
+                    $(".platform1").each(function()
+                    {
+                        if($(this).val() == platform_selected)
+                        {
+                            $(this).click();
+                            if ($(this).is(':checked'))
+                            {
+                                platform_ids = $(this).val();
+                                
+                                $("input[class^='platform'][class!='platform1'][value*='"+platform_ids+"']").prop("checked", "checked");
+                                $("input[class^='active_interest'][data-platform='"+platform_ids+"']").show().parent().show();
+                                $("input[class^='active_interest'][data-platform!='"+platform_ids+"']").prop("checked", "").hide().parent().hide();
+                            }
+                        }
+                    });
+                {% endfor %}
+            {% endif %}
+            
+            {% if selected_record.filterMetadata["intent_metadata"] is defined %}
+                {% for intents in selected_record.filterMetadata["intent_metadata"]["intent_key"] %}
+                    intent_selected = {{ intents }};
+                {% endfor %}
+                //$(".active_intent").click();
+                if ($(".active_intent").is(':checked'))
+                {
+                    intent_key = $(this).val();
+                }
+            {% endif %}
+            
+            console.log(country_selected12);
+            console.log(platform_selected);
+            console.log(intent_selected);
+            
+        {% endif %}
+        
+        $("#update_card").on('click', this, function()
+        {
+            if($(this).html().indexOf("Update") >= 0 && $("#last_option").attr("class") == "col-md-3 active")  
+            //if($(this).html() == 'Create Card<i class="fa fa-caret-right"></i>')
+            {                
+                var id_to_update = $("#id_to_update").val();
+                
+                var preset_name = $("#preset_name").val();
+                var description = $("#description").val();
+                // var country_codes_selected = country_codes;
+                // var platform_ids_selected  = platform_ids;
+                // var intent_key_selected = intent_key;
+                // var preset_name_filled = ($("input[name='preset_name']").val() != '');   
+                if(preset_name == "") {
+                    alert('please enter preset name');
+                    return;
+                }
+                
+                if(country_codes == "") {
+                    alert('please select country');
+                    return;
+                }
+                if(platform_ids == "") {
+                    alert('please select platform');
+                    return;
+                }
+                if(intent_key == "") {
+                    alert('please select intent');
+                    return;
+                }
+                if(description == "")
+                {
+                    alert("Please add description");
+                    return false;
+                }
+                var object = "";
+                
+                if(typeof cat_id !== 'undefined'){
+                    object = { "id": id_to_update, "preset_name": preset_name, "country_codes[]": country_codes, "platform_ids[]": platform_ids,"cat_ids[]" : cat_id,'intent_key':intent_key, "description": description };
+                } else {
+                    object = { "id": id_to_update, "preset_name": preset_name, "country_codes[]": country_codes, "platform_ids[]": platform_ids,'intent_key':intent_key, "description": description };
+                }
+                
+                console.log(object);
+                
+                $.ajax({
+                    method: "POST",
+                    url: "{{ path('dashboard_filter_execute_update') }}",
+                    data: object,
+                    success : function(response){
+                        console.log(response); 
+                         
+                        var json = JSON.parse(response);
+                         
+                        if(json.msg == "success")
+                        {
+                            alert("Record successfully updated.");
+                            setTimeout(function(){
+                            window.location.href = "{{ path('dashboard_client_action_show')~"?page=client" }}";
+                            },500);
+                        }
+                        else
+                        {
+                            alert(json.msg);
+                            return false;
+                        }
+                    },
+                    error : function(jqXHR, exception){
+                        if (jqXHR.status === 0) {
+                            console.log('error','Not connect.\n Verify Network.');
+                        } else if (jqXHR.status == 404) {
+                            console.log('error','Requested page not found. [404]');
+                        } else if (jqXHR.status == 500) {
+                            console.log('error','Internal Server Error [500].');
+                        } else if (exception === 'parsererror') {
+                            console.log('error','Requested JSON parse failed.');
+                        } else if (exception === 'timeout') {
+                            console.log('error','Time out error.');
+                        } else if (exception === 'abort') {
+                            console.log('error','Ajax request aborted.');
+                        } else if ( jqXHR.status == 400) {
+                            console.log('jqXHR',jqXHR);
+                        } else {
+                            console.log('error','Uncaught Error.\n' + jqXHR.responseText);
+                        }
+                    }
+                });
+            }
+        });
+        
+        $("#create").click(function(e)
+        {
+            console.log('click','clicked');
+            if($(this).html().indexOf("Create") >= 0 && $("#last_option").attr("class") == "col-md-3 active")  
+            //if($(this).html() == 'Create Card<i class="fa fa-caret-right"></i>')
+            {                
+                e.preventDefault();
+                var preset_name = $("#preset_name").val();
+                var country_codes_selected = country_codes;
+                var platform_ids_selected  = platform_ids;
+                var intent_key_selected = intent_key;
+                var description = $("#description").val();
+                //console.log('preset_name',$("input[name='preset_name']").val());
+                var preset_name_filled = ($("input[name='preset_name']").val() != '');                                
+                
+                if(!preset_name_filled) {
+                    alert('please enter preset name');
+                    return;
+                }
+                
+                if(country_codes_selected == "") {
+                    alert('please select country');
+                    return;
+                }
+                if(platform_ids_selected == "") {
+                    alert('please select platform');
+                    return;
+                }
+                if(intent_key == "") {
+                    alert('please select intent');
+                    return;
+                }
+                if(description == "")
+                {
+                    alert("Please add description");
+                    return false;
+                }
+                if(typeof cat_id !== 'undefined'){
+                    $.obj = { "preset_name": preset_name, "country_codes[]": country_codes, "platform_ids[]": platform_ids,"cat_ids[]" : cat_id,'intent_key':intent_key, "description": description };
+                } else {
+                    $.obj = { "preset_name": preset_name, "country_codes[]": country_codes, "platform_ids[]": platform_ids,'intent_key':intent_key, "description": description };
+                }
+               
+                // console.log($.obj);
+                // return false;
+
+                $.ajax({
+                     method: "POST",
+                     url: "{{ path('dashboard_filter_executeadd') }}",
+                     data: $.obj,
+                     success : function(response){
+                      console.log(response); 
+
+                      alert(response);
+                      setTimeout(function(){
+                          window.location.href = "{{ path('dashboard_filter_showadd') }}";
+                      },500);
+
+                     },
+                     error : function(jqXHR, exception){
+                         if (jqXHR.status === 0) {
+                             console.log('error','Not connect.\n Verify Network.');
+                         } else if (jqXHR.status == 404) {
+                             console.log('error','Requested page not found. [404]');
+                         } else if (jqXHR.status == 500) {
+                             console.log('error','Internal Server Error [500].');
+                         } else if (exception === 'parsererror') {
+                             console.log('error','Requested JSON parse failed.');
+                         } else if (exception === 'timeout') {
+                             console.log('error','Time out error.');
+                         } else if (exception === 'abort') {
+                             console.log('error','Ajax request aborted.');
+                         } else if ( jqXHR.status == 400) {
+                             console.log('jqXHR',jqXHR);
+                         } else {
+                             console.log('error','Uncaught Error.\n' + jqXHR.responseText);
+                         }
+                     }
+                });               
+            }            
+        });
+        
+        $("input[class^='country'][class!='country1']").attr("disabled", "disabled");
+        $("input[class^='platform'][class!='platform1']").attr("disabled", "disabled");
+        $(".active_interest_2").attr("disabled", "disabled");
+        $(".country1").on("click", this, function()
+        {            
+            if ($(this).is(':checked'))
+            {
+                country_codes = $(this).val();
+                getEstimate();
+                $("input[class^='country'][class!='country1'][value*='"+country_codes+"']").prop("checked", "checked");
+            }
+        });
+        
+        $(".platform1").on("click", this, function()
+        {            
+            if ($(this).is(':checked'))
+            {
+                platform_ids = $(this).val();
+                getEstimate();
+                $("input[class^='platform'][class!='platform1'][value*='"+platform_ids+"']").prop("checked", "checked");
+                //$(".platform3[value*='"+platform_ids+"']").prop("checked", "checked");
+                $("input[class^='active_interest'][data-platform='"+platform_ids+"']").show().parent().show();
+                $("input[class^='active_interest'][data-platform!='"+platform_ids+"']").prop("checked", "").hide().parent().hide();
+            }
+        });
+        
+        $(".active_interest").on("click", this, function()
+        {            
+            if ($(this).is(':checked'))
+            {
+                cat_id = $(this).val();
+                getEstimate();
+                $(".active_interest_2[value*='"+cat_id+"']").prop("checked", "checked");
+            }
+        });
+        
+        $(".active_intent").on("click", this, function()
+        {
+            if ($(this).is(':checked'))
+            {
+                intent_key = $(this).val();
+                getEstimate();
+            }
+        });
+        
+        $('#btnWizardSetStep1').on('click', function () {
+            //$("#create").click();
+			$('#myWizard').wizard('selectedItem', {
+				step: 1
+			});
+		});
+		$('#btnWizardSetStep2').on('click', function () {
+		    
+	        if($(".steps li:nth-child(3)").attr('class') == 'col-md-3 active' || $(".steps li:nth-child(4)").attr('class') == 'col-md-3 active')
+	        {
+	            $("#prev").click();
+	        }
+		    else
+		    {
+		        $("#create").click();    
+		    }
+		    
+			$('#myWizard').wizard('selectedItem', {
+				step: 2
+			});
+		});
+		$('#btnWizardSetStep3').on('click', function () {
+		    if($(".steps li:nth-child(4)").attr('class') == 'col-md-3 active')
+	        {
+	            $("#prev").click();
+	        }
+		    else
+		    {
+		        $("#create").click();    
+		    }
+		    
+			$('#myWizard').wizard('selectedItem', {
+				step: 3
+			});
+		});
+		$('#btnWizardSetStep4').on('click', function () {
+		  //  $("#create").click();
+		    $("#create").html("Create Card" + "<i class='fa fa-caret-right'></i>");
+			$('#myWizard').wizard('selectedItem', {
+				step: 4
+			});
+		});
+		function getEstimate() {
+		    $("#estimate").html('...');
+            var data = {};
+            if(country_codes != '') {
+                data.country_codes = [];
+                data.country_codes.push(country_codes);
+            }
+            if(platform_ids != '') {
+                data.platform_ids=[];
+                data.platform_ids.push(platform_ids);
+            }
+            if(cat_id != '') {
+                data.cat_id = [];
+                data.cat_id.push(cat_id);
+            }
+            if(intent_key != '') {
+                data.intent_key=intent_key;
+            }
+            $.ajax({
+                url : '{{ path('dashboard_filter_estimate') }}',
+                data : data,
+                method : 'POST',
+                dataType : 'json',
+                success : function (json){
+                    console.log('response',json);
+                    $("#estimate").html(json.estimate);
+                }
+            })
+        }
+    });
+    
+    
+</script>
+{% endif %}
+{% endblock %}

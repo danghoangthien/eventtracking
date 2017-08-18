@@ -1,0 +1,308 @@
+{% extends 'base2.html.twig' %}
+{% block body %}
+
+<!-- Main Content -->
+<div class="row animated fadeInRight">
+	<div class="col-xs-4">
+		<div class="ibox-title"  style="text-align:center">
+            <h5 class="text-navy"><strong id="user_id">User ID : 55e7f20c85c864.29063652</strong></h5>
+        </div>
+		<div class="ibox-content">
+			<div style="text-align:center;padding-bottom:10px;">
+				<img alt="image" class="img-circle" src="https://s3-us-west-2.amazonaws.com/testhasoffer/user_images/user_journey.png">
+			</div>
+			<div class="user-button">
+				<div class="row">
+					<div class="col-md-6">
+						<button type="button" class="btn btn-default btn-sm btn-block"><i class="fa fa-paper-plane"></i> Send Notification</button>
+					</div>
+					<div class="col-md-6">
+						<button type="button" class="btn btn-default btn-sm btn-block"><i class="fa fa-bullseye"></i> Send Promo Banner</button>
+					</div>
+				</div>
+			</div>
+			<table class="table" style="padding: 10px 0;">
+				<tbody>
+					<tr>
+						
+					</tr>
+				</tbody>
+			</table>
+			<div class="tabs-container">
+				<ul class="nav nav-tabs">
+					<li class="active"><a data-toggle="tab" href="#tab-1"> <i class="fa fa-suitcase"></i>General Profile</a> </li>
+					<li><a data-toggle="tab" href="#tab-2"><i class="fa fa-usd"></i> User Intent</a></li>
+				</ul>
+				<div class="tab-content">
+					<div id="tab-1" class="tab-pane active" one="">
+						<div class="panel-body">
+							<table class="table">
+							<tbody>
+								<tr>
+									<td style="border-top:none">
+										<strong>Platform:</strong><label class="general" id="platform__"></label>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<strong>Country:</strong><label class="general" id="country__">&nbsp;Indonesia</label>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<strong>Total Transaction:</strong><label class="general" id="t_transaction__"></label>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<strong>Total Money Spent:</strong><label class="general" id="t_spent__"></label>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<strong>Last Transaction:</strong><label class="general" id="l_transaction__"></label>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<strong>Last Activity:</strong><label class="general" id="l_activity__"></label>
+									</td>
+								</tr>
+							</tbody>
+							</table>
+						</div>
+					</div>
+					<div id="tab-2" class="tab-pane" two="">
+						<div class="panel-body" id="child2">
+							<!--
+							<p><strong>Intent score by transactions</strong> 33</p>
+							<p><strong>Intent score by Interest</strong></p>
+							<ul class="list-group clear-list">
+								<li class="list-group-item fist-item">
+									<span class="pull-right"> 55 </span>
+									Business
+								</li>
+								<li class="list-group-item">
+									<span class="pull-right"> 80 </span>
+									Fashion
+								</li>
+								<li class="list-group-item">
+									<span class="pull-right"> 65 </span>
+									Electronics
+								</li>
+								<li class="list-group-item">
+									<span class="pull-right"> 44 </span>
+									F & B
+								</li>
+								<li class="list-group-item">
+									<span class="pull-right"> 25 </span>
+									Travel
+								</li>
+							</ul>
+							-->
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-xs-8">
+		<div class="ibox-title">
+			<h5 class="text-navy">User Activities</h5>
+		</div>
+
+		<div class="ibox-content inspinia-timeline" id="activities">
+			{#<div class="timeline-item">#}
+			{#	<div class="row">#}
+			{#		<div class="col-xs-3 date">#}
+			{#			<i class="text-navy">#}
+			{#			2015-11-16 21:05:51#}
+			{#			</i>#}
+			{#			<small class="text-navy">79 days ago</small>#}
+			{#		</div>#}
+			{#		<div class="col-xs-8 content">#}
+			{#			<p class="m-b-xs text-navy"><strong>Purchase</strong></p>#}
+			{#			<strong>Value : </strong>99$#}
+			{#		</div>#}
+			{#	</div>#}
+			{#</div>#}
+		</div>
+	</div>
+</div>
+<!-- END Main Content -->
+<script>
+    $(document).ready(function()
+    {
+    	{% if device_id is defined %}
+    		$.device_id = "{{ device_id }}";
+    		
+    		$("#tab-1").attr("one", $.device_id);
+    		$("#tab-2").attr("two", $.device_id);
+            
+            $.obj = { "device_id": $.device_id };
+            
+            $.ajax(
+            {                
+                url:"{{ path('dashboard_audience') }} ",
+                type: "POST",
+                data: $.obj,
+                success: function(msg)
+                {
+                    var data = JSON.parse(msg);
+                    // console.log(msg);
+                    
+                    var user_activities = data.user_activities;
+                    var user_count = data.user_activities.length;
+                    
+                    console.log(data);
+                    console.log(user_count);
+                	
+                	var user_id = user_activities[0].device_id;
+                	$("#user_id").html("User ID : " + user_id);
+                    
+                    if(user_count > 0)
+                    {
+                    	var user_id = user_activities[0].device_id;
+                    	$("#user_id").html("User ID : " + user_id);
+                    	console.log("Device id: " + user_activities[0].device_id);
+                    	
+                    	for(i in user_activities)
+                    	{
+                    		records = user_activities[i];
+                    		
+	                    	$("#activities").append('\n\
+	                    	<div class="timeline-item">\n\
+	                    		<div class="row">\n\
+	                    			<div class="col-xs-3 date">\n\
+	                    				<i class="text-navy">'+records.display_date+'</i>\n\
+	                    				<small class="text-navy">'+records.diff+'</small>\n\
+	                				</div>\n\
+	                				<div class="col-xs-8 content">\n\
+	                					<p class="m-b-xs text-navy"><strong>'+records.behaviour+'</strong></p>\n\
+	                					<strong>Value : </strong> <br />\n\
+	                					<strong>Added time:  </strong> '+records.added_time+' <br />\n\
+	                					<strong>Total Items: </strong> '+records.total_value+'\n\
+	            					</div>\n\
+	        					</div>\n\
+	    					</div>\n\
+	                    	');
+                    	}
+                    }
+                    
+                    var counter = data.device_transaction_information.count;
+                    var obj = data.device_transaction_information.frm_score;
+                    
+                    var plat          = data.user.device_platform_id.platform;
+                    var ios_plat      = data.user.device_platform_id.ios_idfv;
+                    var android_plat  = data.user.device_platform_id.android_advertising_id;
+                    var t_transaction = data.user.total_transactions;
+                    var t_spent       = data.user.total_amount;
+                    var l_transaction;
+                    var l_activity    = data.user.last_activitiy;
+                    
+                    if(counter != 0)
+                    {
+                        l_transaction = data.user.last_transaction_time;
+                    }
+                    else
+                    {
+                        l_transaction = "00:00:00";
+                    }
+                    
+                    if(plat == 1)
+                    {
+                    	$("#platform__").html("&nbsp;iOS");
+                    }
+                    else if(plat ==2)
+                    {
+                    	$("#platform__").html("&nbsp;Android");
+                    }
+                    
+                    $("#t_transaction__").html("&nbsp;"+t_transaction);
+                    $("#t_spent__").html("&nbsp; $ "+t_spent);
+                    $("#l_transaction__").html("&nbsp;"+l_transaction);
+                    $("#l_activity__").html("&nbsp;"+l_activity);
+                    
+                    var app_name      = "";
+                    var intent_trans  = "";
+                    var intent_inter  = "";
+                    var cat           = "";
+                    var cat_score     = "";
+                    
+                    if(counter != 0)
+                    {
+                        console.log("first condition");
+                        $("#tabs-2").empty();
+                        for(key in obj)
+                        {
+                            var app_name = key;
+                            
+                            for(key2 in obj[key])
+                            {
+                                if(key2 == 'transactionFrmScore')
+                                {
+                                    intent_trans = obj[key][key2];
+                                }
+                                
+                                if(key2 == "categoryFrm")
+                                {
+                                    for(key3 in obj[key][key2])
+                                    {
+                                        cat = key3;
+                                        
+                                        for(key4 in obj[key][key2][key3])
+                                        {
+                                            if(key4 == 'frm_score')
+                                            {
+                                                intent_inter = obj[key][key2][key3][key4];
+                                                cat_score    = obj[key][key2][key3][key4];
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            
+                            if(cat == "000000000000") { cat = "Uncategorized"; } 
+                        	
+                        	$("#child2").append('\n\
+                        		<p class="honor"><strong class="heads">Intent score by transactions:</strong> '+intent_trans+'</p>\n\
+								<p class="honor"><strong class="heads">Intent score by Interest:</strong> '+intent_inter+'</p>\n\
+								<ul class="list-group clear-list">\n\
+									<li class="list-group-item first-item">\n\
+										<span class="pull-right"> '+cat_score+' </span>'+cat+'\n\
+									</li>\n\
+								</ul>');
+                        }
+                    }
+                    else
+                    {
+                        console.log("second condition");
+                        
+                        $("#child2").empty();
+                        
+                        $("#child2").append('\n\
+                        	<p><strong class="heads">Intent score by transactions</strong></p>\n\
+							<p><strong class="heads">Intent score by Interest</strong></p>');
+                    }
+                }
+            });
+    	{% endif %}
+    });
+</script>
+<style>
+	.honor { font-size: 11px;}
+    .general
+    {
+    	font-weight:normal;
+    	font-size: 11px;
+    }
+    
+    .heads
+    {
+    	font-size: 12px;
+    	font-weight: bold;
+    }
+    
+</style>
+
+{% endblock %}

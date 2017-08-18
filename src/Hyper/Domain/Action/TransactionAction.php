@@ -31,7 +31,14 @@ class TransactionAction
      * @Expose
      */
     private $deviceId;
-
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="app_id", type="string", nullable=true)
+     * @Expose
+     */
+    private $appId;
 
     /**
      * @var string
@@ -74,6 +81,14 @@ class TransactionAction
      */
     private $transacted_time;
     
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="metadata", type="string", length=13107, nullable=true)
+     * @Expose
+     */
+    private $metadata;
+    
 
     /**
      * @var integer
@@ -85,7 +100,7 @@ class TransactionAction
     
     /**
      * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="Hyper\Domain\Item\TransactedItem", mappedBy="transacted_actions", fetch="EXTRA_LAZY", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Hyper\Domain\Item\TransactedItem", mappedBy="transaction", fetch="EXTRA_LAZY", cascade={"persist"})
      */
      private $transactedItems;
     
@@ -119,6 +134,30 @@ class TransactionAction
     {
         return $this->deviceId;
     }
+    
+    /**
+     * Set appId
+     *
+     * @param string $appId
+     * @return TransactionAction
+     */
+    public function setAppId($appId)
+    {
+        $this->appId = $appId;
+
+        return $this;
+    }
+
+    /**
+     * Get appId
+     *
+     * @return string 
+     */
+    public function getAppId()
+    {
+        return $this->appId;
+    }
+
 
     /**
      * Set applicationId
@@ -210,6 +249,29 @@ class TransactionAction
     public function getCurrency()
     {
         return $this->currency;
+    }
+    
+    /**
+     * Set metadata
+     *
+     * @param string $metadata
+     * @return TransactionAction
+     */
+    public function setMetadata($metadata)
+    {
+        $this->metadata = serialize($metadata);
+
+        return $this;
+    }
+
+    /**
+     * Get metadata
+     *
+     * @return string 
+     */
+    public function getMetadata()
+    {
+        return unserialize($this->metadata);
     }
 
     /**

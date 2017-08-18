@@ -1,0 +1,429 @@
+{% extends 'layout_ak/base.html.twig' %}
+{% block sub_head_title %}Admin Dashboard - Analytics Metadata{% endblock %}
+{% block body %}
+	<!-- Main Content -->
+    <div class="wrapper wrapper-content animated fadeInRight">
+        {% if status is defined %}
+            {% if status == "success" %}
+                <script>window.location = "{{ path("dashboard_analytics_display") }}";</script>
+            {% elseif status == "failed" %}
+                <script>alert("Error while deleting Analytics.");</script>    
+            {% else %}
+                <script>alert("No analytics to delete");</script>
+            {% endif %}
+        {% endif %}
+        
+        {% if app.request.get('qwerty') is defined %}
+            {% if app.request.get('qwerty') != "" %}
+                <script>alert("{{ app.request.get('qwerty')|unserialize }}");</script>
+            {% endif %}
+        {% endif %}
+        
+        {#<section class="content-header" style="margin: -2em 0 0 -2em !important;">#}
+        {#    <h1 style="font-size: 24px; margin: 0 0 1em 0.5em;">#}
+        {#      Analytics Metadata#}
+        {#    </h1>#}
+        {#    <ol class="breadcrumb">#}
+        {#      <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>#}
+        {#      <li class="active">Analytics Metadata</li>#}
+        {#    </ol>#}
+        {#</section> #}
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="box box-danger">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Create Analytics Metadata</h3>
+                    </div><!-- /.box-header -->
+                    <!-- form start -->
+                    <form method="post" enctype="multipart/form-data" role="form" name="form1" id="form1" action="{{ path('dashboard_analytics_save') }}">
+                        <div class="box-body">
+                            {% if mode is defined %}
+                                {% if mode == "edit" %}
+                                    <div class="form-group">
+                                        <input type="hidden" id="mode" name="mode" />
+                                        <input type="hidden" id="to_edit" name="to_edit" value="{{ selected_record.id }}"/>
+                                        <label for="exampleInputUsername">Key</label>
+                                        <input type="text" class="form-control" id="key" name="key" placeholder="Enter Key" value="{{ selected_record.key }}"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleInputUsername">Query</label>
+                                        <textarea rows="10" class="form-control" id="query" name="query" placeholder="Enter Query">{{ selected_record.query }}</textarea>
+                                    </div>
+                                    
+                                    <div class="box-footer">
+                                        <button type="button" id="btnUpdate" class="btn btn-danger">Update Analytics</button>
+                                        <button type="button" id="btnCancel" class="btn btn-danger">Cancel</button>
+                                    </div>
+                                {% elseif mode == "view" %}
+                                    <div class="form-group">
+                                        <input type="hidden" id="mode" name="mode" />
+                                        <input type="hidden" id="to_edit" name="to_edit" value="{{ selected_record.id }}"/>
+                                        <label for="exampleInputUsername">Key</label>
+                                        <input type="text" class="form-control" id="key" name="key" disabled="disabled" value="{{ selected_record.key }}"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleInputUsername">Query</label>
+                                        <textarea rows="10" class="form-control" id="query" name="query" disabled="disabled">{{ selected_record.query }}</textarea>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="exampleInputUsername">Metadata</label>
+                                        <textarea rows="10" class="form-control" id="meta" name="meta" disabled="disabled">{{ selected_record.metadata }}</textarea>
+                                    </div>
+                                    
+                                    <div class="box-footer">
+                                        <button type="button" id="btnBack" class="btn btn-danger">Back</button>
+                                    </div>
+                                {% endif %}
+                            {% else %}    
+                                <div class="form-group">
+                                    <input type="hidden" id="mode" name="mode" />
+                                    <input type="hidden" id="to_edit" name="to_edit" />
+                                    <label for="exampleInputUsername">Key</label>
+                                    <input type="text" class="form-control" id="key" name="key" placeholder="Enter Key">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputUsername">Query</label>
+                                    <textarea rows="10" class="form-control" id="query" name="query" placeholder="Enter Query"></textarea>
+                                </div>
+                                {#<div class="form-group">#}
+                                {#    <button type="button" id="btnMetadata" class="btn btn-info">Generate Metadata</button>#}
+                                {#    <textarea rows="10" class="form-control" id="metadata" name="metadata" placeholder="Metadata"></textarea>#}
+                                {#</div>#}
+                                
+                                <div class="box-footer">
+                                    <button type="button" id="btnSend" class="btn btn-danger">Create Analytics</button>
+                                </div>
+                            {% endif %}
+                        </div><!-- /.box-body -->
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-6">
+                {% if cur is defined %} <input type='hidden' id='current' value='{{ cur }}' /> {% endif %}        
+                {% if per is defined %} <input type='hidden' id='per_page' value='{{ per }}' />{% endif %}        
+                <table class="table table-bordered" id="tblUsers">
+                    <tr>
+                        <th class="text-red" style="width: 90px">Key</th>
+                        {#<th class="text-red" style="width: 150px">Created</th>#}
+                        <th class="text-red" style="width: 100px">Status</th>
+                        <th class="text-red" style="width: 100px">Action</th>
+                    </tr>
+                    {% if list is defined %}
+                        {% for records in list %}
+                            <tr class="clickable" id="{{ records.id }}">                    
+                                <td class="col-md-7">
+                                    <input type="hidden" id="hidden_id" value="{{ records.id }}"/>
+                                    <label>{{ records.key }}</label>
+                                </td>
+                                <td class="col-md-5">
+                                    {% if records.isProcessing == 1 %}
+                                    <label><span class="label label-primary">processing</span></label>
+                                    {% endif %}
+                                </td>
+                                {#<td class="col-md-2">{{ records.created|date('Y-m-d') }}</td>#}
+                                <td class="col-md-11">
+                                    {#<a href="{{ path('dashboard_show_App_Account') ~ "?id=" ~ records.id ~"&client_name=" ~ records.clientId }}"#}
+                                    <a href="#" class="view_data">View</a>
+                                    <a href="#" class="edit_data">Edit</a>
+                                    <a href="#" class="delete_data">Delete</a>
+                                    <button type="button" class="btn btn-info btnMetadata">Update Meta</button>
+                                </td>
+                            </tr>
+                        {% endfor %}  
+                    {% endif %}
+                </table>
+                <div class="paginator">
+                    {% if total is defined %}
+                    <ul id="paginate">            
+                        {% set pages = total + 1 %}
+                        {% for i in 1..pages%}             
+                            <li> 
+                                <a href="{{ path('dashboard_analytics_display', { 'page': i }) }}">
+                                    {{ i }}
+                                </a>
+                            </li>
+                        {% endfor %}            
+                    </ul>
+                    Total pages : {{total+1}}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END Main Content -->
+{% endblock %}
+
+{% block stylesheets_inline %}
+    <style>
+        .view_data, .delete_data, .edit_data { text-decoration: underline; } 
+        .btnMetadata { color: #000000; }
+        textarea 
+        {
+           resize: none;
+        }
+    	
+        #edit_data { margin: 0 0.6em 0 0; }
+        
+        #paginate
+        {            
+            padding: 0.3em 0 0 1em;
+            list-style-type: none !important;
+            border-radius: 25px;
+            background-color: #333333;      
+            height: 30px;
+            width: 100%;
+        }
+    
+        #paginate li
+        {            
+            display: inline !important;            
+            margin-right: 0.5em;            
+        }
+    
+        #paginate li a
+        {
+            color: #FFFFFF;
+        }
+        
+        .added
+        {
+            color: transparent;
+        }
+    
+        .currentPage
+        {
+            text-decoration: underline;
+            font-weight: bold;
+            color: white !important;
+        }
+    </style>
+{% endblock %}
+
+{% block javascript_inline %}
+    <script>
+        function error(el)
+        {
+            $(el).css("background-color", "red").css("color","yellow").val("Should not be blank");
+    
+            setTimeout(function()
+            {
+                $(el).css("background-color", "white").css("color","black");
+                $(el).val("");
+            }, 2000);            
+        }
+            
+        $(document).ready(function()
+        {
+            $.current = $("#current").val();
+            
+            $("#btnSend").on("click", this, function()
+            {
+                var key   = $("#key").val();
+                var query = $("#query").val();
+                var meta  = $("#meta").val();
+                
+                if(query != "" && key != "" && meta != "")
+                {
+                    $("#form1").submit();
+                }
+                else
+                {
+                    alert("Please complete the fileds");
+                    return false;
+                }
+            });
+            
+            if($("#paginate").children("li").children("a").length > 0)
+            {               
+                console.log("pagination link seen seen");
+    
+                $("#paginate").children("li").children("a").each(function()
+                {
+                    $(this).html($.trim($(this).html()));
+    
+                    $(this).html($(this).html().replace(/\s+$/, ""));
+    
+                    //console.log("Pagination value: "+$(this).html());
+    
+                    if($(this).html() == $.current)
+                    {
+                        $(this).addClass("currentPage");
+                        console.log($(this).html());
+                        console.log($.current);
+                    }
+                    else
+                    {
+                        console.log("Values did not match");
+                    }
+                    //$(this).html().trim();
+                });
+    
+                var per_page = $("#per_page").val();
+                var counter = ($("#tblUsers tbody").children("tr").length) -1;
+                
+                if(counter < per_page)
+                {
+                    var add_row = per_page - counter;
+    
+                    for(var q = 0; q < add_row; q++)
+                    {
+                        $("#tblUsers").append("<tr>\n\
+                        <td class='added'>1</td><td class='added'>1</td><td class='added'>1</td>\n\
+                        </tr>");
+                    }
+                }
+            }
+            
+            $(".edit_data").on("click", this, function()
+            {
+                var id = $(this).parent("td").parent("tr").attr("id");
+                
+                if("" == id || null == id)
+                {
+                    alert("Failed to get record");
+                    return false;
+                }
+                else
+                {
+                    $("#to_edit").val(id);
+                    $("#mode").val("edit");
+                    $("#form1").attr('action', "{{ path('dashboard_analytics_display')}}");
+                    $("#form1").submit();
+                }
+            });
+            
+            $(".view_data").on("click", this, function()
+            {
+                var id = $(this).parent("td").parent("tr").attr("id");
+                
+                if("" == id || null == id)
+                {
+                    alert("Failed to get record");
+                    return false;
+                }
+                else
+                {
+                    $("#to_edit").val(id);
+                    $("#mode").val("view");
+                    $("#form1").attr('action', "{{ path('dashboard_analytics_display')}}");
+                    $("#form1").submit();
+                }
+            });
+            
+            $(".delete_data").on("click", this, function()
+            {
+                var id  = $(this).parent("td").parent("tr").attr("id");
+                var key = $(this).parent("td").parent("tr").children("td").children("label").html();
+                
+                if(id!= "" && key != "")
+                if(confirm("Are you sure you want to delete this key: "+key+"?"))
+                {
+                    var object = { "id": id, "key": key };
+                    
+                    $.ajax(
+                    {               
+                        url:"{{ path('dashboard_analytics_delete') }}",
+                        type: "POST",
+                        data: object,
+                        success: function(msg)
+                        {
+                            var json = JSON.parse(msg);
+                            
+                            if(json.status == "success")
+                            {
+                                alert("Successfully deleted selected Analytics Metadata");
+                                window.location = "{{ path('dashboard_analytics_display') }}";
+                            }
+                            
+                            else
+                            {
+                                alert("Failed to delete record");
+                                window.location = "{{ path('dashboard_analytics_display') }}";
+                            }
+                        }
+                    });
+                }   
+            });
+            
+            $("#btnCancel").on("click", this, function()
+            {
+                window.location = "{{ path('dashboard_analytics_display') }}";
+            });
+            
+            $("#btnBack").on("click", this, function()
+            {
+                window.location = "{{ path('dashboard_analytics_display') }}";
+            });
+            
+            $("#btnUpdate").on("click", this, function()
+            {
+                $.id = $("#to_edit").val();
+                $.key = $("#key").val();
+                $.query = $("#query").val();
+                
+                if("" != $.id && "" != $.key && "" != $.query)
+                {
+                    var object = { "id": $.id, "key": $.key, "query": $.query };
+                    
+                    $.ajax(
+                    {               
+                        url:"{{ path('dashboard_analytics_update') }}",
+                        type: "POST",
+                        data: object,
+                        success: function(msg)
+                        {
+                            var json = JSON.parse(msg);
+                            
+                            if(json.status == "success")
+                            {
+                                alert("Successfully updated Metadata!");
+                                window.location = "{{ path('dashboard_analytics_display') }}";
+                            }
+                            else
+                            {
+                                alert("Failed to update record.");
+                                window.location = "{{ path('dashboard_analytics_display') }}";
+                            }
+                        }
+                    });
+                }
+            });
+            
+            $(".btnMetadata").on("click", this, function()
+            {
+                $(".btnMetadata").attr("disabled", "disabled");
+                var self = $(this);
+                var id  = $(this).parent("td").parent("tr").attr("id");
+                var key = $(this).parent("td").parent("tr").children("td").children("label").html();
+                var obj = { "id": id, "key": key };
+                
+                $.ajax(
+                {               
+                    url:"{{ path('dashboard_analytics_create_meta') }}",
+                    type: "POST",
+                    data: obj,
+                    success: function(msg)
+                    {
+                        var json = JSON.parse(msg);
+                        
+                        console.log(json.meta);
+                        
+                        if(json.status == "success")
+                        {
+                            self.parent().prev().html('<span class="label label-primary">processing</span>');
+                            alert(key + " is processing in the background.");
+                            
+                            $('.btnMetadata').prop("disabled", false); 
+                        }
+                        else
+                        {
+                            alert("An unexpected error has occurred!");
+                        }
+                    }
+                }); 
+            });
+        });
+    </script>
+{% endblock %}

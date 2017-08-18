@@ -1,0 +1,242 @@
+{% extends 'base2.html.twig' %}
+{% block body %}
+
+    <section class="content-header" style="margin: -2em 0 0 -2em !important;">
+          <!--<h1>
+            Edit Profile
+          </h1>-->
+          <ol class="breadcrumb" style="margin: 0 -16.5em 0 0;">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li class="active">Users List</li>
+          </ol>
+    </section>  
+
+    <section class="content-header" style="margin: 0 0 -2em 3em;">
+        <h1 style="font-size: 24px; margin: -0.4em 0 0 -3em;">Users List</h1>
+        <h1 style="float: right; margin: -1.2em 2em 0 0; text-decoration: underline;"><a href="{{ path('dashboard_auth_create')}}">Create</a></h1>
+    </section>
+    
+    <!--MAIN CONTAINER -->
+    <div id="mainContainer">
+        <div id="gridContainer" class="col-md-6">            
+        <input type='hidden' id='current' value='{{ cur }}' />
+        <input type='hidden' id='per_page' value='{{ per }}' />
+            <table id="tblUsers" class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Email</th>                        
+                        <th>Date created</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for records in list %}
+                        <tr class="clickable">
+                            <td id="account_id">{{ records.id }}</td>
+                            <td>{{ records.username }}</td>
+                            <td>{{ records.email }}</td>
+                            <td>
+                                {% if records.created > 99991231 %}
+                                    {{ records.created|date("Y-m-d h:i:s")}}
+                                {% else %}
+                                    {{ records.created }}
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}                                        
+                </tbody>
+            </table>
+            <div class="paginator">
+                <ul id="paginate">
+                {% set correct = paginator|length %}
+                {% set paginator = paginator|slice(0,correct-1)%}
+                {% for page in paginator %}             
+                    <li> 
+                        <a href="{{ path('dashboard_show_paginate', { 'page': page }) }}">
+                            {{ page }}
+                        </a>
+                    </li>
+                {% endfor %}
+                </ul>
+                Total pages : {{total}}
+            </div>
+            </div>
+        </div>    
+    </div>
+    <script>
+        $(document).ready(function()
+        {                    
+            $("tbody").on("click", "tr", function()
+            {
+                $("tbody > tr").removeClass("selected");
+                $(this).addClass("selected");       
+                
+                var id = $(this).children("td:nth-child(1)").html();
+                //alert($(this).children("td:nth-child(1)").html());
+                //alert("Redirecting to edit user page.");
+                if($(this).attr("class") == "added") { return false; }
+                window.location.href = "{{ path('dashboard_show_App_Account') }}?id="+id;
+            });                        
+            
+            /*
+            $('#tblUsers').dataTable( 
+            {
+                "pageLength": 25,
+                
+                "initComplete": function(settings, json) 
+                {
+                    $(".dataTables_length").css("display","none");
+                    //$(".dataTables_info").css("display","none");
+                    
+                    $("#tblUsers_filter").css("margin-right","0.5em");
+                    $("#tblUsers_filter :input")
+                            .attr("placeholder","Filter here...")
+                            .css("margin-right","2em")
+                            .attr("class","form-control");
+                    $("#tblUsers_paginate").css("margin-right","-1em");
+
+                    $("#tblUsers tbody tr").each(function()
+                    {
+                        $(this).hover(function()
+                        {
+                            $(this).css("cursor","pointer");
+                        });
+                    });
+                },
+
+                "oLanguage": {
+                    "sSearch": ""
+                }                
+            });
+            */
+            $.current = $("#current").val();
+               
+            //console.log("This is the current page: "+$.current);
+               
+            if($("#paginate").children("li").children("a").length > 0)
+               {               
+                   console.log("pagination link seen seen");
+                   
+                   $("#paginate").children("li").children("a").each(function()
+                   {
+                       $(this).html($.trim($(this).html()));
+                       
+                       $(this).html($(this).html().replace(/\s+$/, ""));
+
+                       //console.log("Pagination value: "+$(this).html());
+                       
+                       if($(this).html() == $.current)
+                       {
+                           $(this).addClass("currentPage");
+                           console.log($(this).html());
+                           console.log($.current);
+                       }
+                       else
+                       {
+                           console.log("Values did not match");
+                       }
+                       //$(this).html().trim();
+                   });
+                   
+                  
+                   var per_page = $("#per_page").val();
+                   var counter = $("#tblUsers tbody").children("tr").length;
+                   if(counter < per_page)
+                   {
+                       var add_row = per_page - counter;
+                       
+                       for(var q = 0; q < add_row; q++)
+                       {
+                           $("#tblUsers tbody").append("<tr>\n\
+                           <td class='added'>1</td><td class='added'>1</td><td class='added'>1</td><td class='added'>1</td>\n\
+                           </tr>");
+                       }
+                   }
+               }       
+        });
+    </script>
+    <style>
+        .added
+        {
+            color: transparent;
+        }
+        
+        .currentPage
+        {
+            text-decoration: underline;
+            font-weight: bold;
+            color: white !important;
+        }
+        
+        gridContainer
+        {
+            margin-top: -1em;
+        }
+        
+        #paginate
+        {            
+            padding: 0.3em 0 0 1em;
+            list-style-type: none !important;
+            border-radius: 25px;
+            background-color: #333333;      
+            height: 30px;
+            width: 100%;
+        }
+        
+        #paginate li
+        {            
+            display: inline !important;            
+            margin-right: 0.5em;            
+        }
+        
+        #paginate li a
+        {
+            color: #FFFFFF;
+        }
+        
+        tbody tr:hover
+        {
+            color:#0f6ab4;
+            background-color: lightsteelblue !important;
+            cursor: pointer;
+        }
+        
+        .selected
+        {
+            color:#0f6ab4;
+            background-color: lightsteelblue !important;
+            font-weight: bold;
+        }
+        
+        #mainContainer
+        {
+            width: 55em;
+            margin: 3em auto;
+        }
+        /*
+        #tblUsers tbody td
+        { 
+            border-bottom: 1px dotted lightgray;
+            border-right: 1px dotted lightgray;
+            border-left: 1px dotted lightgray;
+        }
+        */
+        #tblUsers th
+        {            
+            color: #ab0808 !important;
+            font-style: bold;
+        }
+        
+        #tblUsers tr, th, td
+        {
+            text-align: center;
+        }
+        
+        #tblUsers
+        {
+            width: 55em;
+            /*border: 2px solid gray;*/
+        }
+    </style>
+{% endblock %}

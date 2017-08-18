@@ -1,0 +1,46 @@
+<dl class="basic_profile">
+	<dt>Originating Country</dt>
+	<dd>
+		{% if device['country_code'] is defined and device['country_code'] is not empty %}
+			{{ device['country_code']|country()|trim|country()|trim }}
+		{% else %}
+			Not available
+		{% endif %}
+	</dd>
+	<br/>
+	<dt>Platform</dt>
+	<dd>
+		{% if device['platform'] is defined and device['platform'] is not empty %}
+			{{ listPlatform[device['platform']]|capitalize }}
+		{% else %}
+			Not available
+		{% endif %}
+	</dd>
+	<br/>
+	<dt>Last Active</dt>
+	<dd><span class="last-activity"></span></dd>
+	<br/>
+	<dt>Lifetime Value</dt>
+	<dd><span class="total-money-spent">$0.00</span></dd>
+	<br/>
+	<dt>Last Transaction</dt>
+	<dd><span class="last-transaction"></span></dd>
+	<br/>
+	<dt>Device Model</dt>
+	<dd>
+		{% if device['model'] is defined and device['model'] is not empty %}
+			{{ device['model'] }}
+		{% else %}
+			Not available
+		{% endif %}
+	</dd>
+	<br/>
+	<dt>Email</dt>
+	<dd>
+		{% if device['email'] is defined and device['email'] is not empty %}
+			{{ device['email'] }}
+		{% else %}
+			Not available
+		{% endif %}
+	</dd>
+</dl>

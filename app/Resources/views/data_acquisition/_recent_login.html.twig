@@ -1,0 +1,32 @@
+{% if list_recent_login|length %}
+<div class="col-lg-3">
+	<div class="ibox float-e-margins">
+		<div class="ibox-content" style="padding-top:20px">
+		  <h2 class="font-bold text-navy">Recent Logins</h2>
+			<ul style="list-style: none outside none;padding:0">
+				<li class="divider"></li>
+				{% for item in list_recent_login %}
+				    {% set device_type = '' %}
+                    {% if 
+                        item.browser_name is not empty 
+                        and item.os_name is not empty 
+                        and item.os_version is not empty  
+                    %}
+                        {% set device_type = item.browser_name ~ ' on ' ~ item.os_name ~ ' ' ~ item.os_version %}
+                    {% endif %}
+				<li>
+					<h3 class="m-b-xs text-navy">{{ item.username }}</h3>
+					<div>{{ item.last_login|date("F j \\a\\t g:ia") }}</div>
+					<div>{{ item.ip }}</div>
+					<div>{{ item.location }}</div>
+					<div>{{ device_type }}</div>
+				</li>
+				{% if not loop.last %}
+				    <li class="divider"></li>
+				{% endif %}
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+</div>
+{% endif %}

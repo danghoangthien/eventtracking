@@ -32,6 +32,13 @@ class TransactedItem
      */
     private $deviceId;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="app_id", type="string",nullable=true)
+     * @Expose
+     */
+    private $appId;
 
     /**
      * @var string
@@ -42,14 +49,14 @@ class TransactedItem
     private $applicationId;
     
     /**
-     * @ORM\ManyToOne(targetEntity="Hyper\Domain\Action\TransactionAction", fetch="EXTRA_LAZY", inversedBy="transacted_items")
+     * @ORM\ManyToOne(targetEntity="Hyper\Domain\Action\TransactionAction", fetch="EXTRA_LAZY", inversedBy="$transactedItems")
      * @ORM\JoinColumn()
      * @Expose
      */
     private $transaction;
     
     /**
-     * @ORM\ManyToOne(targetEntity="Hyper\Domain\Item\Item", fetch="EXTRA_LAZY", inversedBy="transacted_items")
+     * @ORM\ManyToOne(targetEntity="Hyper\Domain\Item\Item", fetch="EXTRA_LAZY")
      * @ORM\JoinColumn()
      * @Expose
      */
@@ -124,6 +131,30 @@ class TransactedItem
     {
         return $this->deviceId;
     }
+    
+    /**
+     * Set appId
+     *
+     * @param string $appId
+     * @return TransactedItem
+     */
+    public function setAppId($appId)
+    {
+        $this->appId = $appId;
+
+        return $this;
+    }
+
+    /**
+     * Get appId
+     *
+     * @return string 
+     */
+    public function getAppId()
+    {
+        return $this->appId;
+    }
+
 
     /**
      * Set applicationId

@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<!--
+This is a starter template page. Use this page to start your new project from
+scratch. This page gets rid of all links and provides the needed markup only.
+-->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>HQ Clients</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.5 -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="css/AdminLTE.css">
+    <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
+          page. However, you can choose any other skin. Make sure you
+          apply the skin class to the body tag so the changes take effect.
+    -->
+    <link rel="stylesheet" href="css/skins/skin-red.css">
+    
+    <!-- Date Range Picker -->
+    <link rel="stylesheet" href="plugins/DateRangePicker/daterangepicker.css">
+    <!-- FooTable -->
+    <link rel="stylesheet" href="plugins/FooTable/footable.core.css">
+    <link rel="stylesheet" href="plugins/FooTable/footable.metro.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <!--
+  BODY TAG OPTIONS:
+  =================
+  Apply one or more of the following classes to get the
+  desired effect
+  |---------------------------------------------------------|
+  | SKINS         | skin-blue                               |
+  |               | skin-black                              |
+  |               | skin-purple                             |
+  |               | skin-yellow                             |
+  |               | skin-red                                |
+  |               | skin-green                              |
+  |---------------------------------------------------------|
+  |LAYOUT OPTIONS | fixed                                   |
+  |               | layout-boxed                            |
+  |               | layout-top-nav                          |
+  |               | sidebar-collapse                        |
+  |               | sidebar-mini                            |
+  |---------------------------------------------------------|
+  -->
+  <body class="hold-transition skin-red sidebar-mini sidebar-collapse">
+    <div class="wrapper">
+
+      <!-- Main Header -->
+      <header class="main-header">
+
+        <!-- Logo -->
+        <a href="index.html" class="logo">
+          <!-- mini logo for sidebar mini 50x50 pixels -->
+          <span class="logo-mini"><b>HQ</b></span>
+          <!-- logo for regular state and mobile devices -->
+          <span class="logo-lg"><img src="img/logo_inv2.png" alt="hypergrowth_logo" style="width:45px; margin-right:12px; margin-left:-12px;"><b>HQ</b>Clients</span>
+        </a>
+
+        <!-- Header Navbar -->
+        <nav class="navbar navbar-static-top" role="navigation">
+          <!-- Sidebar toggle button-->
+          <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+            <span class="sr-only">Toggle navigation</span>
+          </a>
+          <select name="campaign_select" class="form-control inline-select-long" style="width: 20%; display:inline-block; margin-left:20px;margin: 8px;">
+              <option value="all">Select App</option>
+              <option value="non">Tiket.com Android</option>
+              <option value="inc">Tiket.com iOS</option>                                
+          </select>
+          <!-- Navbar Right Menu -->
+          <div class="navbar-custom-menu">
+            <ul class="nav navbar-nav">
+              <!-- Messages: style can be found in dropdown.less-->
+
+              <!-- User Account Menu -->
+              <li class="dropdown user user-menu">
+                <!-- Menu Toggle Button -->
+                <a href="index.html" class="dropdown-toggle" data-toggle="dropdown">
+                  
+                  <!-- hidden-xs hides the username on small devices so only the image appears. -->
+                  <i class="fa fa-sign-out"></i><span>Sign Out</span>
+                </a>
+        
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </header>
+      <!-- Left side column. contains the logo and sidebar -->
+      <aside class="main-sidebar">
+
+        <!-- sidebar: style can be found in sidebar.less -->
+        <section class="sidebar">
+
+          <!-- Sidebar user panel (optional) -->
+          <div class="user-panel">
+            <div class="pull-left image">
+              <img src="img/user2-160x160.jpg" class="img-circle" alt="User Image">
+            </div>
+            <div class="pull-left info">
+              <p>Alexander Pierce</p>
+              <!-- Status -->
+              <a href="#">Tiket.com Mobile Division</a>
+            </div>
+          </div>
+
+          <!-- Sidebar Menu -->
+          <ul class="sidebar-menu">
+            <li class="header">MENU</li>
+            <!-- Optionally, you can add icons to the links -->
+            <li class="active"><a href="main_d.html"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
+            
+            <li class="treeview">
+                <a href="#"><i class="fa fa-briefcase"></i> <span>Reports</span> <i class="fa fa-angle-left pull-right"></i></a>
+                <ul class="treeview-menu">
+                    <li><a href="report_gen.html">Custom Report Generator</a></li>
+                    <li><a href="quality_aud.html">Quality Auditor</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="profile_ed.html"><i class="fa fa-wrench"></i> <span>Settings</span></a>
+                <ul class="treeview-menu">
+                <li><a href="report_gen.html">In-App Events</a></li>
+                <li><a href="quality_aud.html">Creatives</a></li>
+              </ul>
+            </li>
+          </ul><!-- /.sidebar-menu -->
+        </section>
+        <!-- /.sidebar -->
+      </aside>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1 style="color:white;">
+            Custom Report Generator<br/>
+            <small>Customized daily reports based on multiple filter and view options </small>
+          </h1> 
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <!-- Report Configuration Option -->
+            <div class="box box-danger" style="padding:5px 12px;">
+                <!--Box Header-->
+                <div class="box-header with-border">
+                    <h3 class="box-title">Configuration Options</h3>
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                        <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+                    </div>
+                </div>
+                <!--Box Body-->
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-6">              
+                        <!-- Select Campaign -->
+                            <div class="form-group">
+                                <label>Select Campaign:</label><br/>
+                                    <i class="fa fa-paper-plane-o "></i>
+                                    <select name="campaign_select" class="form-control inline-select-long" style="width: 35%; display:inline-block; margin-left:20px;">
+                                        <option value="all">All campaigns</option>
+                                        <option value="non">Non-incent campaigns</option>
+                                        <option value="inc">Incent campaigns</option>
+                                        <option value="bbm">BBM Burst campaign</option>                                  
+                                    </select>           
+                            </div>
+                            <div class="form-group">
+                                <label>Creatives Filter:</label><br/>
+                                    <i class="fa fa-picture-o"></i>
+                                    <select name="creatives_select" class="form-control inline-select-long" style="width: 35%; display:inline-block; margin-left:20px;">
+                                        <option value="all">All creatives</option>
+                                        <option value="non">Null</option>
+                                        <option value="300x250">300 x 250 Male</option>
+                                        <option value="400">400 x 400 Bahasa</option>  
+                                        <option value="300x250">400 x 400 English</option>
+                                        <option value="400">900 x 450 Video</option>                                  
+                                    </select>           
+                            </div>
+                            <div class="form-group">
+                                <label>Quality Benchmark:</label><br/>
+                                    <i class="fa fa-stethoscope"></i>
+                                    <select name="creatives_select" class="form-control inline-select-long" style="width: 35%; display:inline-block; margin-left:20px;">
+                                        <option value="all">All In-App Events</option>
+                                        <option value="iae1">Tutorial Completion</option>
+                                        <option value="iae2">Registration</option>
+                                        <option value="iae3">Content View</option>  
+                                        <option value="iae4">Refer-a-friend</option>
+                                        <option value="iae4">Add to Cart</option>
+                                        <option value="iae5">Purchase</option>                                  
+                                    </select>           
+                            </div>
+                        </div>
+                        <div class="col-md-6">              
+                        <!-- Date range -->
+                            <div class="form-group col-md-12">
+                                <label>Date range:</label><br/>
+                            
+                                    <i class="fa fa-calendar"></i>
+    
+                                <input type="text" name="daterange" value="01/01/2015 1:30 PM - 01/01/2015 2:00 PM" style="width:80%; height:40px; margin-left: 20px; padding:10px; cursor: pointer;" />
+                            </div>
+                            <div class="form-group col-md-8">
+                                <label>Publishers Filter:</label><br/>
+                                    <i class="fa fa-industry"></i>
+                                    <select name="publishers_select" class="form-control inline-select-long" style="width: 50%; display:inline-block; margin-left:20px;">
+                                        <option value="all">All Publishers</option>
+                                        <option value="a">HyperGrowth</option>
+                                        <option value="b">AdWords GDN</option>
+                                        <option value="c">AdWords Universal</option>  
+                                        <option value="d">Twitter</option>
+                                        <option value="e">Facebook</option>                                  
+                                    </select>           
+                            </div>
+                            <div class="form-group col-md-3">
+                                  <button class="btn btn-block btn-danger" style="margin:20px;">Generate</button>    
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> <!--End box1   -->
+            <!-- Report Configuration Option -->
+       
+            <div class="box box-danger" style="padding:5px 12px;">
+                <!--Box Header-->
+                <div class="box-header with-border">
+                     <h3 class="box-title">Report</h3>
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                        <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+                    </div>              
+                </div>
+                <div class="box-body">
+                    <table class="footable" data-page-size="7" data-page-navigation=".pagination">
+                        <thead>
+                            <tr>
+                                <th data-type="numeric">Date</th>
+                                <th data-hide="phone,tablet" data-sort-ignore="true">Paid Installs</th>
+                                <th data-hide="phone,tablet" data-sort-ignore="true">Tutorial Completion</th>
+                                <th data-hide="phone,tablet" data-sort-ignore="true">Registration</th>
+                                <th data-hide="phone,tablet" data-sort-ignore="true">Content View</th>
+                                <th data-hide="phone,tablet" data-sort-ignore="true">Refer-a-friend</th>
+                                <th data-hide="phone,tablet" data-sort-ignore="true">Add to Cart</th>
+                                <th data-hide="phone,tablet" data-sort-ignore="true">Purchase</th>                          
+                            </tr>
+                        </thead> 
+                        <tbody>
+                            <tr>
+                                <td data-value="1457568000">10/3/2016</td>
+                                <td>4,790</td>
+                                <td>173</td>
+                                <td>90</td>
+                                <td>39</td>
+                                <td>52</td>
+                                <td>21</td>
+                                <td>13</td>
+                            </tr>
+                            <tr>
+                                <td data-value="1457654400">11/3/2016</td>
+                                <td>11,030</td>
+                                <td>2,342</td>
+                                <td>810</td>
+                                <td>590</td>
+                                <td>901</td>
+                                <td>20</td>
+                                <td>59</td>
+                            </tr>
+                            <tr>
+                                <td data-value="1457740800">12/3/2016</td>
+                                <td>4,790</td>
+                                <td>173</td>
+                                <td>102</td>
+                                <td>57</td>
+                                <td>24</td>
+                                <td>16</td>
+                                <td>109</td>
+                            </tr>
+                            <tr>
+                                <td data-value="1457827200">13/3/2016</td>
+                                <td>290</td>
+                                <td>171</td>
+                                <td>118</td>
+                                <td>829</td>
+                                <td>30</td>
+                                <td>79</td>
+                                <td>44</td>
+                            </tr>
+                            <tr>
+                                <td data-value="1457913600">14/3/2016</td>
+                                <td>290</td>
+                                <td>82</td>
+                                <td>208</td>
+                                <td>21</td>
+                                <td>83</td>
+                                <td>71</td>
+                                <td>32</td>
+                            </tr>
+                            <tr>
+                                <td data-value="1458000000">15/3/2016</td>
+                                <td>23,239</td>
+                                <td>2,342</td>
+                                <td>810</td>
+                                <td>590</td>
+                                <td>901</td>
+                                <td>20</td>
+                                <td>59</td>
+                            </tr>
+                            <tr>
+                                <td data-value="1458086400">16/3/2016</td>
+                                <td>290</td>
+                                <td>49</td>
+                                <td>68</td>
+                                <td>21</td>
+                                <td>30</td>
+                                <td>19</td>
+                                <td>8</td>
+                            </tr>
+                            <tr>
+                                <td data-value="1458172800">17/3/2016</td>
+                                <td>3,294</td>
+                                <td>3,109</td>
+                                <td>1,023</td>
+                                <td>686</td>
+                                <td>314</td>
+                                <td>39</td>
+                                <td>24</td>
+                            </tr>
+                            <tr>
+                                <td data-value="1458259200">18/3/2016</td>
+                                <td>290</td>
+                                <td>49</td>
+                                <td>68</td>
+                                <td>21</td>
+                                <td>30</td>
+                                <td>19</td>
+                                <td>8</td>
+                            </tr>
+                            <tr>
+                                <td data-value="1458345600">19/3/2016</td>
+                                <td>18,592</td>
+                                <td>5,636</td>
+                                <td>23,054</td>
+                                <td>1,195</td>
+                                <td>553</td>
+                                <td>102</td>
+                                <td>38</td>
+                            </tr>
+                        </tbody>
+                        <tfoot class="hide-if-no-paging">
+                            <tr>
+                                <td colspan="12" style="text-align:center;">
+                                    <div class="pagination pagination-centered"></div>
+                                </td>
+                            </tr>
+                        </tfoot>    
+                    </table>
+                    <div class="form-group col-md-2 pull-right">
+                         <button class="btn btn-block btn-danger fa fa-file-excel-o" style="margin:20px;"> Export to CSV </button>    
+                    </div>
+                </div>
+                <!--Box Body-->
+                <div class="box-body"></div>
+            </div>
+        </section><!-- /.content -->
+    </div><!-- /.content-wrapper -->
+
+      <!-- Main Footer -->
+      <footer class="main-footer">
+        <!-- To the right -->
+        <div class="pull-right hidden-xs">
+          <strong><a href="http://hypergrowth.co" style="color:#fff">HyperGrowth Pte Ltd</a> &copy; 2014-2016.</strong>
+        </div>
+        <!-- Default to the left -->
+        <strong><br/></strong>
+      </footer>
+    </div><!-- ./wrapper -->
+
+    <!-- REQUIRED JS SCRIPTS -->
+
+    <!-- jQuery 2.1.4 -->
+    <script src="plugins/jQuery/jQuery-2.1.4.min.js"></script>
+    <!-- Bootstrap 3.3.5 -->
+    <script src="js/bootstrap.min.js"></script>
+
+    <!-- Moment.JS, dependencies of Date Range Picker-->
+    <script src="plugins/DateRangePicker/moment.min.js"></script>    
+    <!-- Date Range Picker-->
+    <script src="plugins/DateRangePicker/daterangepicker.js"></script>  
+    <!-- FooTable-->
+    <script src="plugins/FooTable/js/footable.js"></script>
+    <!-- FooTable Sorting-->
+    <script src="plugins/FooTable/js/footable.sort.js"></script>
+    <!-- FooTable Pagination-->
+    <script src="plugins/FooTable/js/footable.paginate.js"></script>
+    <!-- Page Script-->
+    <script type="text/javascript">
+        $('input[name="daterange"]').daterangepicker({
+            "timePicker": true,
+            "locale": {
+                format: 'MM/DD/YYYY h:mm A'    
+            },
+            "ranges":{
+                'Today': [moment(), moment()],
+                'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                'This Month': [moment().startOf('month'), moment().endOf('month')],
+                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            },
+            "alwaysShowCalendars": true,
+            "startDate": "02/26/2016",
+            "endDate": "03/03/2016"
+        }, function(start, end, label) {
+        console.log("New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')");
+        });
+        
+        $(function(){
+            $('.footable').footable();
+            $('.footable').bind('footable_breakpoint', function() {
+                $('.footable').trigger('footable_expand_first_row');
+            });
+        })
+        
+    </script> 
+    
+    <!-- AdminLTE App -->
+        <script src="js/app.min.js"></script>
+
+    <!-- Optionally, you can add Slimscroll and FastClick plugins.
+         Both of these plugins are recommended to enhance the
+         user experience. Slimscroll is required when using the
+         fixed layout. -->
+  </body>
+</html>

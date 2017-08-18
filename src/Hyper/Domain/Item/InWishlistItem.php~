@@ -11,7 +11,7 @@ use JMS\Serializer\Annotation\Expose;
  * InWishlistItem
  *
  * @ORM\Table(name="in_wishlist_items")
- * @ORM\Entity(repositoryClass="Hyper\DomainBundle\Repository\DTInWishlistItemRepository")
+ * @ORM\Entity(repositoryClass="Hyper\DomainBundle\Repository\Item\DTInWishlistItemRepository")
  * @ExclusionPolicy("all")
  */
 class InWishlistItem
@@ -31,6 +31,14 @@ class InWishlistItem
      * @Expose
      */
     private $deviceId;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="app_id", type="string",nullable=true)
+     * @Expose
+     */
+    private $appId;
 
 
     /**
@@ -42,15 +50,15 @@ class InWishlistItem
     private $applicationId;
     
     /**
-     * @ORM\ManyToOne(targetEntity="Hyper\Domain\Action\AddToCartAction", fetch="EXTRA_LAZY", inversedBy="in_wishlist_items")
-     * @ORM\JoinColumn()
+     * @ORM\ManyToOne(targetEntity="Hyper\Domain\Action\AddToWishlistAction", fetch="EXTRA_LAZY", inversedBy="inWishlistItems")
+     * @ORM\JoinColumn(name="wishlist_id", referencedColumnName="id")
      * @Expose
      */
-    private $cart;
+    private $wishlist;
     
     /**
-     * @ORM\ManyToOne(targetEntity="Hyper\Domain\Item\Item", fetch="EXTRA_LAZY", inversedBy="in_wishlist_items")
-     * @ORM\JoinColumn()
+     * @ORM\ManyToOne(targetEntity="Hyper\Domain\Item\Item", fetch="EXTRA_LAZY")
+     * @ORM\JoinColumn(name="item_id", referencedColumnName="id")
      * @Expose
      */
     private $item;

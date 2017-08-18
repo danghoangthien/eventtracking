@@ -1,0 +1,21 @@
+{% for recentFilter in listRecentFilter %}
+    {% set cardBgStyle = '' %}
+    {% if recentFilter.cardBgColorCode is defined and  recentFilter.cardBgColorCode is not empty %}
+    	{% set cardBgStyle = 'background-color: '~ recentFilter.cardBgColorCode ~ ';' %}
+    {% endif %}
+    {% set cardTextColorStyle = '' %}
+    {% if recentFilter.cardTextColorCode is defined and  recentFilter.cardTextColorCode is not empty %}
+    	{% set cardTextColorStyle = 'color: '~ recentFilter.cardTextColorCode ~ ';' %}
+    {% endif %}
+<div class="uj_cards row no-margin">
+	<div class="col-md-12" style="{{ cardBgStyle }}">
+		<a href="{{ path('dashboard_filter_showlist_v2') }}"><span class="uj_card_title" style="{{ cardTextColorStyle }}">{{ recentFilter.presetName }}</span></a>
+	</div>
+</div>
+{% else %}
+    <div class="uj_cards row no-margin">
+	<div class="col-md-12" style="text-align: center;">
+
+	</div>
+</div>
+{% endfor %}

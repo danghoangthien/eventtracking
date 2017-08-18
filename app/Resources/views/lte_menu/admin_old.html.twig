@@ -1,0 +1,107 @@
+<aside class="main-sidebar">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">        
+        <!-- sidebar menu: : style can be found in sidebar.less -->
+        <ul class="sidebar-menu" id="menus">
+            <!--<li class="header">MAIN NAVIGATION</li>-->  
+            {% set image = "" %}
+            {% if authentication.refreshImageAction == "" %}
+                {% set image = authentication.getImagePath() ~ '/user.png' %}
+            {% else %}
+                {% set image = authentication.getImagePath() ~ '/' ~ authentication.refreshImageAction %}
+            {% endif %}
+            <div class="user-panel">
+            <div class="pull-left image">
+              <img src="{{ image }}" class="img-circle" alt="User Image">
+            </div>
+            <div class="pull-left info">
+              <p>{{authentication.refreshNameAction}}</p>
+              <a href="#"><i class="fa  fa-hand-peace-o"></i> Admin</a>
+            </div>
+          </div>
+            <li class="treeview" id="data_acquisition">
+                <a href="{{ path('data_acquisition') }}">
+                    <i class="fa fa-dashboard"></i><span>Data Acquisition</span> <i class="fa fa-angle-left pull-right"></i>
+                </a>                    
+            </li>                                   
+            <li class="treeview" id="client_access">
+                <a href="{{ path('dashboard_client_access') }}">
+                    <i class="fa fa-user-secret"></i> <span>Client Management</span> <i class="fa fa-angle-left pull-right"></i>
+                </a>
+            </li>    
+            <li class="treeview" id="user_access">
+                <a href="{{ path('dashboard_user_access') }}">
+                    <i class="fa fa-users"></i> <span>User Access Management</span> <i class="fa fa-angle-left pull-right"></i>
+                </a>
+            </li>
+            <li class="treeview" id="logs">
+                <a href="{{ path('dashboard_client_action_show') }}">
+                    <i class="fa fa-list"></i> <span>Data Logs</span> <i class="fa fa-angle-left pull-right"></i>
+                </a>
+            </li>
+            <li class="treeview" id="adops_postback">
+              <a href="#">
+                <i class="fa fa-th"></i> <span>Import Data</span> <i class="fa fa-angle-left pull-right"></i>
+              </a>
+              <ul class="treeview-menu menu-open">
+                 <li>
+                    <a href="{{ path('hyper_event_csvupload') }}">
+                        <i class="fa fa-circle-o"></i> <span>Upload CSV</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ path('hyper_event_csvupload_logs') }}">
+                        <i class="fa fa-circle-o"></i> <span>Upload Logs</span>
+                    </a>
+                </li>
+              </ul>
+            </li>
+            <li class="treeview" id="server_monitor">
+                <a href="{{ path('dashboard_server_monitor') }}">
+                    <i class="fa fa-dashboard"></i> <span>Server Monitor</span> <i class="fa fa-angle-left pull-right"></i>
+                </a>
+            </li>
+            <li class="treeview" id="analytics">
+                <a href="{{ path('dashboard_analytics_display') }}">
+                    <i class="fa fa-list"></i> <span>Analytics Metadata</span> <i class="fa fa-angle-left pull-right"></i>
+                </a>
+            </li>
+            {#<li class="treeview" id="category">#}
+            {#    <a href="{{ path('dashboard_show_category') }}">#}
+            {#        <i class="fa fa-list"></i> <span>Category Tree</span> <i class="fa fa-angle-left pull-right"></i>#}
+            {#    </a>#}
+            {#</li>#}
+        </ul>
+    </section>    <!-- /.sidebar -->
+    <!-- /.sidebar -->
+</aside>
+<!-- page script -->
+<script>
+    $(document).ready(function()
+    {                    
+        //$("#trip1").click(function(e){ e.preventDefault(); });
+        //$.AdminLTE.tree(".sidebar");
+        {% if active is defined %}
+            {% if active == "data_acquisition" %}
+                $("#data_acquisition").addClass("active");
+            {% elseif active == "user_access" %}
+                $("#user_access").addClass("active");
+            {% elseif active == "client_access" %}
+                $("#client_access").addClass("active");
+            {% elseif active == "logs" %}
+                $("#logs").addClass("active");
+            {% elseif active == "csv" %}
+                $("#upload").addClass("active");
+            {% elseif active == "category_tree" %}
+                $("#category").addClass("active");
+            {% elseif active == "server_monitor" %}
+                $("#server_monitor").addClass("active");
+            {% elseif active == "analytics" %}
+                $("#analytics").addClass("active");
+            {% endif %}
+        {% endif %}
+    });
+</script>
+<style>
+
+</style>

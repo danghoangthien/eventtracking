@@ -1,0 +1,269 @@
+{% extends 'layout_ak/base.html.twig' %}
+{% block sub_head_title %}Admin - User Access Management{% endblock %}
+{% block body %}
+	<div class="wrapper wrapper-content">
+		<div class="row">
+		    {% set mode = form_auth.mode.vars.value %}
+			{% include 'user_access_management/_form_'~ mode ~'_auth.html.twig' %}
+			{{ render(controller('HyperEventBundle:Dashboard/UserAccessManagement/UserAccessManagement:renderRecentLogin', {request: app.request})) }}
+		</div>
+		<div class="row buffer-bottom-s">
+			<div class="col-md-8"></div>
+			<label class="col-md-1 control-label" style="text-align: right">Search: </label>
+	  		<div class="col-md-3">
+	  		    <input type="text" class="form-control" id="search-term" placeholder="Username or Email">
+			</div>
+		</div>
+        <div class="row buffer-bottom">
+		    <div class="col-lg-12">
+                {% include 'user_access_management/_paginate.html.twig' %}
+            </div>
+	    </div>
+	</div>
+{% endblock %}
+{% block stylesheets_inline %}
+    <!-- Select2 -->
+    <link href="{{ asset('bundles/hyperevent/plugins/select2/select2.min.css') }}" rel="stylesheet" />
+    <!-- FooTable -->
+    <link rel="stylesheet" href="{{ asset('bundles/hyperevent/plugins/footable/footable.core.css') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/hyperevent/plugins/footable/footable.metro.css') }}">
+    <style>
+        .custom-input label.error {
+            margin-left: 130px;
+        }
+    </style>
+{% endblock %}
+{% block javascript_inline %}
+        <!-- Select2 -->
+	    <script src="{{ asset('bundles/hyperevent/plugins/select2/select2.min.js') }}"></script>
+        <script src="{{ asset('assets/js/jquery.validate.min.js') }}"></script>
+        <script>
+        var UserAccessManagement =  {
+            processAjax: function(obj, authId) {
+                var self = this;
+                $.ajax({
+                    url : "{{ path('dashboard_user_access_management_delete') }}",
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        auth_id: authId
+                    },
+                    beforeSend: function() {
+                        obj.attr('disabled', true);
+                    },
+                    success: function(resp) {
+                        if (resp.status == 1) {
+                            obj.closest('tr').fadeOut('slow').remove();
+                        }
+                    },
+                    complete: function() {
+                        obj.attr('disabled', false);
+                    }
+                });
+            },
+            fireEventDelete:function() {
+                var self = this;
+                $(document).on('click', '.delete', function(e){
+                    e.preventDefault();
+                    var authId = $(this).data('authid');
+                    var username = $(this).data('username');
+                    if (confirm('Are you sure you want to delete '+ username +'\'s account?')) {
+                        self.processAjax($(this), authId);
+                    }
+                });
+            },
+            validateFormCreateAuth: function() {
+                $('.create-auth-form').validate({
+                    errorPlacement: function(error, element) {
+                        if (element.attr('name') == 'form_create_auth[clientId][]') {
+                            error.insertAfter('.select2');
+                        } else if (element.parent().parent().hasClass('custom-input')) {
+                            error.insertAfter(element.parent());
+                        } else if (element.attr('name') == 'form_create_auth[userType]') {
+                            error.insertAfter(element.parent());
+                        } else {
+                            error.insertAfter(element);
+                        }
+                    },
+                    rules : {
+                        'form_create_auth[name]': {
+                            required: true
+                        },
+                        'form_create_auth[email]': {
+                            required: true,
+                            email: true,
+                            remote: {
+                                url: '{{ path('dashboard_user_access_management_validate') }}',
+                                type: "get",
+                                data: {
+                                    field: 'email',
+                                    value: function() {
+                                        return $('#form_auth_email').val();
+                                    }
+                                },
+                                dataFilter: function(resp) {
+                                    var json = JSON.parse(resp);
+                                    if(json.msg) {
+                                        return "\"" + json.msg + "\"";
+                                    }
+
+                                    return '"true"';
+                                }
+                            }
+                        },
+                        'form_create_auth[username]': {
+                            required: true,
+                            remote: {
+                                url: '{{ path('dashboard_user_access_management_validate') }}',
+                                type: "get",
+                                data: {
+                                    field: 'username',
+                                    value: function() {
+                                        return $('#form_create_auth_username').val();
+                                    }
+                                },
+                                dataFilter: function(resp) {
+                                    var json = JSON.parse(resp);
+                                    if(json.msg) {
+                                        return "\"" + json.msg + "\"";
+                                    }
+
+                                    return '"true"';
+                                }
+                            }
+                        },
+                        'form_create_auth[password]': {
+                            required: true,
+                            minlength : 6
+
+                        },
+                        'form_create_auth[retypePassword]': {
+                            minlength : 6,
+                            equalTo: '#form_create_auth_password'
+
+                        },
+                        'form_create_auth[userType]': {
+                            required: true
+                        },
+                        'form_create_auth[clientId][]': {
+                            required: true
+                        }
+                    }
+                });
+            },
+            validateFormUpdateAuth: function() {
+                $('.update-auth-form').validate({
+                    errorPlacement: function(error, element) {
+                        if (element.attr('name') == 'form_update_auth[clientId][]') {
+                            error.insertAfter('.select2');
+                        } else if (element.parent().parent().hasClass('custom-input')) {
+                            error.insertAfter(element.parent());
+                        } else if (element.attr('name') == 'form_update_auth[userType]') {
+                            error.insertAfter(element.parent());
+                        } else {
+                            error.insertAfter(element);
+                        }
+                    },
+                    rules : {
+                        'form_update_auth[name]': {
+                            required: true
+                        },
+                        'form_update_auth[password]': {
+                            required: false,
+                            minlength : 6
+
+                        },
+                        'form_update_auth[retypePassword]': {
+                            required: false,
+                            minlength : 6,
+                            equalTo: '#form_update_auth_password'
+
+                        },
+                        'form_update_auth[userType]': {
+                            required: true
+                        },
+                        'form_update_auth[clientId][]': {
+                            required: true
+                        }
+                    }
+                });
+            },
+            listAuth: function() {
+                var self = this;
+                $(document).on('click', '.pager, .footable-sortable, .footable-sortable, .footable-sortable', function(e) {
+                    e.preventDefault();
+                    var url = $(this).attr('href');
+                    if (!url) {
+                        url = $(this).find('a').attr('href');
+                    }
+                    if (!url) {
+                        url = $(this).find('span').attr('href');
+                    }
+                    self.listAuthPager(url);
+
+                });
+            },
+            updateQueryStringParameter: function(uri, key, value) {
+                var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
+                var separator = uri.indexOf('?') !== -1 ? "&" : "?";
+                if (uri.match(re)) {
+                    return uri.replace(re, '$1' + key + "=" + value + '$2');
+                } else {
+                    return uri + separator + key + "=" + value;
+                }
+            },
+            listAuthPager: function(url, search_term) {
+                var self = this;
+                if (typeof search_term !== "undefined") {
+                    url = self.updateQueryStringParameter(url, 'search_term', search_term);
+                }
+                $.ajax({
+                    url : url,
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        act: '{{ constant('Hyper\\EventBundle\\Controller\\Dashboard\\UserAccessManagement\\UserAccessManagementController::ACT_PAGINATE') }}'
+                    },
+                    beforeSend: function() {
+
+                    },
+                    success: function(resp) {
+                        if (resp.status == 1) {
+                            $('.list_auth').parent().html(resp.content);
+                            if (history.pushState) {
+                                history.pushState({}, document.title, url);
+                            }
+                        }
+                    },
+                    complete: function() {
+
+                    }
+                });
+            },
+            filterListAuth: function() {
+                var self = this;
+                $(document).on('keypress', '#search-term', function(e){
+                    var code = (e.keyCode ? e.keyCode : e.which);
+                    if(code == 13) { //Enter keycode
+                        var search_term = $(this).val();
+                        self.listAuthPager(window.location.href, search_term);
+                    }
+                });
+            },
+            init: function() {
+                this.fireEventDelete();
+                this.validateFormCreateAuth();
+                this.validateFormUpdateAuth();
+                this.listAuth();
+                this.filterListAuth();
+            }
+        };
+        $(document).ready(function() {
+            $(".inputClientMultiple").select2({
+    			placeholder:"Select Client that User can access",
+    			maximumSelectionLength: 1
+    		});
+            UserAccessManagement.init();
+        });
+    </script>
+{% endblock %}

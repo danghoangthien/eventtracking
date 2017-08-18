@@ -1,0 +1,135 @@
+<html>
+
+<head>
+  <title>AWS Event CloudWatch Dashboard [Dev]</title>
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript" src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
+  <script type="text/javascript">
+    google.load('visualization', '1', {
+      packages: ['corechart']
+    });
+  </script>
+  <script type="text/javascript" src="assets/aws/js/charts.js"></script>
+  <link href='http://fonts.googleapis.com/css?family=Roboto:300' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" type="text/css" href="assets/aws/css/dashboard.css">
+</head>
+
+<body>
+  <h1>Access Monitor Dashboard</h1>
+  <h3>Current time: <span id="clock"></span></h3>
+  <form name="rangeSelect" action="#" class="range-select">
+    Select time zone:
+    <select size="1" id="tzSelector" name="timezone" onchange="updateDash()">
+      <option value="US/Pacific" selected>US/Pacific</option>
+      <option value="US/Mountain">US/Mountain</option>
+      <option value="US/Central">US/Central</option>
+      <option value="US/Eastern">US/Eastern</option>
+      <option value="UTC">UTC</option>
+    </select>
+    Select time interval:
+    <select size="1" id="rangeSelector" name="range" onchange="updateDash()">
+      <option value="336">14 days</option>
+      <option value="168">7 days</option>
+      <option value="120">5 days</option>
+      <option value="72">3 days</option>
+      <option value="48">2 days</option>
+      <option value="24" selected>24 hours</option>
+      <option value="12">12 hours</option>
+      <option value="6">6 hours</option>
+      <option value="4">4 hours</option>
+      <option value="2">2 hours</option>
+      <option value="1">1 hour</option>
+    </select>
+    Select period:
+    <select size="1" id="periodSelector" name="period" onchange="updateDash()">
+      <option value="60">1 minute</option>
+      <option value="300" selected>5 minutes</option>
+      <option value="900">15 minutes</option>
+      <option value="3600">1 hour</option>
+      <option value="86400">1 day</option>
+    </select>
+  </form>
+  <div class="dashboard-container">
+    <div class="item">
+      <span class="dashboard-title">ELB Instance Monitor</span>
+      <iframe class="iframe-child" align="center" seamless frameborder="0" scrolling="yes" src="https://docs.google.com/spreadsheets/d/1HDMr75CW7uBL6jUGgDISpCNKyORpal7DkWZvsL6iQPU/pubchart?oid=2100804433&amp;format=interactive "></iframe>
+    </div>
+    <div class="item">
+      <span class="dashboard-title">EC2 Latency</span>
+      <div id="latency"></div>
+    </div>
+
+    <div class="item">
+      <span class="dashboard-title">EC2 Billing</span>
+      <iframe class="iframe-child" align="center" seamless frameborder="0" scrolling="yes" src="https://docs.google.com/spreadsheets/d/1HDMr75CW7uBL6jUGgDISpCNKyORpal7DkWZvsL6iQPU/pubchart?oid=721254271&amp;format=interactive"></iframe>
+    </div>
+    <div class="item">
+      <span class="dashboard-title">Main EC2 Event Prod CPU Utils (Count)</span>
+      <div id="filercpu"></div>
+    </div>
+
+    <div class="group-container">
+      <!-- Top Errors -->
+      <div class="group">
+        <div class="item">
+          <span class="dashboard-title">Production ELB HTTP4XX Errors (Count)</span>
+          <div id="4xxerror"></div>
+        </div>
+        <div class="item">
+          <span class="dashboard-title">Production ELB HTTP5XX Errors (Count)</span>
+          <div id="5xxerror"></div>
+        </div>
+      </div>
+
+      <!-- Network In and Out -->
+      <div class="group">
+        <div class="item">
+          <span class="dashboard-title">Main EC2 Event Production NetworkIn (Count)</span>
+          <div id="networkin"></div>
+        </div>
+        <div class="item">
+          <span class="dashboard-title">Main EC2 Event Production NetworkOut (Count)</span>
+          <div id="networkout"></div>
+        </div>
+      </div>
+
+      <!-- DB In and Out -->
+      <div class="group">
+        <div class="item">
+          <span class="dashboard-title">Event Prod DB NetworkIn (Count)</span>
+          <div id="dbnetworkin"></div>
+        </div>
+        <div class="item">
+          <span class="dashboard-title">Event Prod DB NetworkOut (Count)</span>
+          <div id="dbnetworkout"></div>
+        </div>
+      </div>
+
+      <!-- Others -->
+      <div class="group">
+        <div class="item">
+          <span class="dashboard-title">Healthy Host</span>
+          <div id="healthyhost"></div>
+        </div>
+
+        <div class="item">
+          <span class="dashboard-title">Unhealthy Host</span>
+          <div id="unhealthyhost"></div>
+        </div>
+
+        <div class="item">
+          <span class="dashboard-title">Event Prod DB CPU Utilization (Count)</span>
+          <div id="rscpuutilization"></div>
+        </div>
+
+        <div class="item">
+          <span class="dashboard-title">IP Counter</span>
+          <div id="ipcounter"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>

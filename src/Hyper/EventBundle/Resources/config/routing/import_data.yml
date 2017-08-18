@@ -1,0 +1,12 @@
+dashboard_import_data_csvupload:
+    path:     /csv-upload/
+    defaults: { _controller: HyperEventBundle:Dashboard/CsvUpload/CsvUpload:index }
+dashboard_import_data_csvupload_logs:
+    path:     /csv-upload/logs/
+    defaults: { _controller: HyperEventBundle:Dashboard/CsvUpload/CsvUpload:log }
+dashboard_import_data_csvupload_logs_delete:
+    path:     /csv-upload/logs/{id}/delete
+    defaults: { _controller: HyperEventBundle:Dashboard/CsvUpload/CsvUpload:log }
+dashboard_import_data_csvupload_logs_view:
+    path:     /csv-upload/logs/{id}/
+    defaults: { _controller: HyperEventBundle:Dashboard/CsvUpload/CsvUpload:view }

@@ -1,0 +1,99 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+            Data Tables
+            </h1>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">                
+                    <div class="box">
+                        <div class="box-header">
+                          <h3 class="box-title">Device Details</h3>
+                        </div><!-- /.box-header -->
+                        <div class="box-body">
+                                <table id="example1" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Hypid</th>
+                    						<th>Date</th>
+                    						<th>Action</th>
+                    						<th>Category</th>
+                    						<th>Game Type</th>
+                    						<th>Product</th>
+                    						<th>Value</th>
+                    						<th>Provider</th>
+                    						<th>Platform</th>
+                    						<th>Country</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                    						<td>
+                    							27577
+                    						</td>
+                    						<td>2015-02-17 23:48:20</td>
+                    						<td>Purchase</td>
+                    						<td>Business</td>
+                    						<td> -</td>
+                    						<td>Wagan 12-Volt Travel Mug</td>
+                    						<td> $13.36 </td>
+                    						<td>Bukalapak</td>
+                    						<td>Android</td>
+                    						<td>Malaysia</td>
+                					    </tr>
+                						<tr><td>46800</td>
+                    						<td>2014-04-17 11:45:49</td>
+                    						<td>Purchase</td>
+                    						<td>Business</td>
+                    						<td> -</td>
+                    						<td>iFlask</td>
+                    						<td> $29.95 </td>
+                    						<td>Lazada</td>
+                    						<td>iOS</td>
+                    						<td>Singapore</td>
+                						</tr>
+                						<tr><td>48181</td>
+                    						<td>2014-11-22 19:56:17</td>
+                    						<td>Add to Wishlist</td>
+                    						<td>Business</td>
+                    						<td> -</td>
+                    						<td>Tumi Monaco - Gusseted Card Case with ID</td>
+                    						<td> $95.00 </td>
+                    						<td>Lazada</td>
+                    						<td>Android</td>
+                    						<td>Singapore</td>
+                						</tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th>Hypid</th>
+                    						<th>Date</th>
+                    						<th>Action</th>
+                    						<th>Category</th>
+                    						<th>Game Type</th>
+                    						<th>Product</th>
+                    						<th>Value</th>
+                    						<th>Provider</th>
+                    						<th>Platform</th>
+                    						<th>Country</th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                        </div><!-- /.box-body -->
+                    </div><!-- /.box -->
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </section><!-- /.content -->
+    <script type = "text/javascript" >
+        $.fn.ready(function() {
+               console.log("trace"," application start ");
+           }
+        );
+    </script>
+{% endblock %}

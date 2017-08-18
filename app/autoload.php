@@ -12,7 +12,7 @@ use Doctrine\DBAL\Types\Type;
  */
 $loader = require __DIR__.'/../vendor/autoload.php';
 AnnotationRegistry::registerFile( __DIR__.'/../src/Hyper/EventBundle/Annotations/CsvMeta.php');
-AnnotationDriver::registerAnnotationClasses();
+//AnnotationDriver::registerAnnotationClasses();
 Type::addType('serial', 'Hyper\CustomDoctrineDataType\Serial');
 AnnotationRegistry::registerLoader(array($loader, 'loadClass'));
 return $loader;

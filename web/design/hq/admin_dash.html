@@ -1,0 +1,562 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>HQ Admin</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.5 -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="css/AdminLTE.css">
+    <link rel="stylesheet" href="css/skins/skin-red.css">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+                                        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+                                        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+                                        <![endif]-->
+</head>
+<!--
+  BODY TAG OPTIONS:
+  =================
+  Apply one or more of the following classes to get the
+  desired effect
+  |---------------------------------------------------------|
+  | SKINS         | skin-blue                               |
+  |               | skin-black                              |
+  |               | skin-purple                             |
+  |               | skin-yellow                             |
+  |               | skin-red                                |
+  |               | skin-green                              |
+  |---------------------------------------------------------|
+  |LAYOUT OPTIONS | fixed                                   |
+  |               | layout-boxed                            |
+  |               | layout-top-nav                          |
+  |               | sidebar-collapse                        |
+  |               | sidebar-mini                            |
+  |---------------------------------------------------------|
+  -->
+
+<body class="hold-transition skin-red sidebar-mini sidebar-collapse">
+    <div class="wrapper">
+        <!-- Main Header -->
+        <header class="main-header">
+            <!-- Logo -->
+            <a href="index2.html" class="logo">
+                <!-- mini logo for sidebar mini 50x50 pixels -->
+                <span class="logo-mini">
+<b>HQ</b>
+</span>
+                <!-- logo for regular state and mobile devices -->
+                <span class="logo-lg">
+<img src="img/logo_inv2.png" alt="hypergrowth_logo" style="width:45px; margin-right:12px; margin-left:-12px;">
+<b>HQ</b>Clients
+</span>
+            </a>
+            <!-- Header Navbar -->
+            <nav class="navbar navbar-static-top" role="navigation">
+                <!-- Sidebar toggle button-->
+                <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                    <span class="sr-only">Toggle navigation</span>
+                </a>
+                <!-- Navbar Right Menu -->
+                <div class="navbar-custom-menu">
+                    <ul class="nav navbar-nav">
+                        <!-- Messages: style can be found in dropdown.less-->
+                        <!-- User Account Menu -->
+                        <li class="dropdown user user-menu">
+                            <!-- Menu Toggle Button -->
+                            <a href="index.html" class="dropdown-toggle" data-toggle="dropdown">
+                                <!-- hidden-xs hides the username on small devices so only the image appears. -->
+                                <i class="fa fa-sign-out"></i>
+                                <span>Sign Out</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <!-- Left side column. contains the logo and sidebar -->
+        <aside class="main-sidebar">
+            <!-- sidebar: style can be found in sidebar.less -->
+            <section class="sidebar">
+                <!-- Sidebar user panel (optional) -->
+                <div class="user-panel">
+                    <div class="pull-left image">
+                        <img src="img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                    </div>
+                    <div class="pull-left info">
+                        <p>Alexander Pierce</p>
+                        <!-- Status -->
+                        <a href="#">HQ Admin Guy</a>
+                    </div>
+                </div>
+                <!-- Sidebar Menu -->
+                <ul class="sidebar-menu">
+                    <li class="header">MENU</li>
+                    <!-- Optionally, you can add icons to the links -->
+                    <li class="active">
+                        <a href="admin_dash.html">
+                            <i class="fa fa-dashboard"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="admin_app.html">
+                            <i class="fa fa-th-large"></i>
+                            <span>Applications</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="admin_client.html">
+                            <i class="fa fa-user-secret"></i>
+                            <span>Client Access</span>
+                        </a>
+                    </li>
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-wrench"></i>
+                            <span>Settings</span>
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li>
+                                <a href="admin_manage_iav.html">In-app Event</a>
+                            </li>
+                            <li>
+                                <a href="admin_manage_pub.html">Publishers</a>
+                            </li>
+                            <li>
+                                <a href="admin_manage_camp.html">Campaign</a>
+                            </li>
+                            <li>
+                                <a href="admin_manage_post.html">Postback</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="admin_report_gen.html">
+                            <i class="fa fa-briefcase"></i>
+                            <span>Report Generator</span>
+                        </a>
+                    </li>
+                </ul>
+                <!-- /.sidebar-menu -->
+            </section>
+            <!-- /.sidebar -->
+        </aside>
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Main content -->
+            <section class="content">
+                <!-- Report Configuration Option -->
+                <div class="row">
+                    <div class="col-md-8">
+                        <section class="content-header">
+                            <h1 style="color:white;">Main Dashboard
+
+            <br/>
+            <small>An executive view on your mobile marketing campaigns</small>
+        </h1>
+                        </section>
+                    </div>
+                    <div class="col-md-4">
+                        <h4 style="color:white;">Reporting Period:</h4>
+                        <i class="fa fa-calendar" style="color:white;"></i>
+                        <input type="text" name="datepicker" id="selecteddate" value="25/03/2015 - 01/04/2016" style="width:60%; height:40px; margin-left: 20px; margin-bottom: 20px; padding:10px; cursor: pointer;" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="box box-danger" style="padding:5px 12px;">
+                            <!--Box Header-->
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Paid Acquisition</h3>
+                                <div class="box-tools pull-right">
+                                    <button class="btn btn-box-tool" data-widget="collapse">
+                                        <i class="fa fa-minus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <!--Box Body-->
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <p style="text-align: center; padding-bottom:10px; padding-top: 10px;">
+                                            <span style="font-size: 1.4em; font-weight: bolder">2,805 </span>
+                                            <br/>
+                                            <span class="lead" style="font-size:0.8em">Installs</span>
+                                        </p>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p style="text-align: center; padding-bottom:10px; padding-top: 10px;">
+                                            <span style="font-size: 1.4em; font-weight: bolder">74% </span>
+                                            <br/>
+                                            <span class="lead" style="font-size:0.8em">of monthly goal</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--End box1   -->
+                    </div>
+                    <div class="col-md-4">
+                        <div class="box box-danger" style="padding:5px 12px;">
+                            <!--Box Header-->
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Acquisition Sources</h3>
+                                <div class="box-tools pull-right">
+                                    <button class="btn btn-box-tool" data-widget="collapse">
+                                        <i class="fa fa-minus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <!--Box Body-->
+                            <div class="box-body">
+                                <div class="col-md-6">
+                                    <p style="text-align: center; padding-bottom:10px; padding-top: 10px;">
+                                        <span style="font-size: 1.4em; font-weight: bolder">36 </span>
+                                        <br/>
+                                        <span class="lead" style="font-size:0.8em">Publishers</span>
+                                    </p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p style="text-align: center; padding-bottom:10px; padding-top: 10px;">
+                                        <span style="font-size: 1.4em; font-weight: bolder">831 </span>
+                                        <br/>
+                                        <span class="lead" style="font-size:0.8em">Sites</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <!--End box1   -->
+                    </div>
+                    <div class="col-md-4">
+                        <div class="box box-danger" style="padding:5px 12px;">
+                            <!--Box Header-->
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Acquisition Hygiene</h3>
+                                <div class="box-tools pull-right">
+                                    <button class="btn btn-box-tool" data-widget="collapse">
+                                        <i class="fa fa-minus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <!--Box Body-->
+                            <div class="box-body">
+                                <p style="text-align: center; padding-bottom:10px; padding-top: 10px;">
+                                    <span style="font-size: 1.4em; font-weight: bolder">94 </span>
+                                    <span class="lead" style="font-size:0.8em">/100
+
+                    <br/>
+                    <span class="lead" style="font-size:0.8em">This put you among the top 5% of all companies scored by HeadQuarters.</span>
+                                </p>
+                            </div>
+                        </div>
+                        <!--End box1   -->
+                    </div>
+                </div>
+                <!--End row   -->
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="box box-danger" style="padding:5px 12px;">
+                            <!--Box Header-->
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Leaderboard</h3>
+                                <div class="box-tools pull-right">
+                                    <button class="btn btn-box-tool" data-widget="collapse">
+                                        <i class="fa fa-minus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <!--Box Body-->
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <p style="text-align: center; padding-bottom:10px; padding-top: 10px;">
+                                            <span style="font-size: 1.4em; font-weight: bolder">PT. Mobile Alliance</span>
+                                            <br/>
+                                            <span class="lead" style="font-size:0.8em">Best Performing Publisher</span>
+                                            <br/>
+                                        </p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p style="text-align: center; padding-bottom:10px; padding-top: 10px;">
+                                            <span style="font-size: 1.4em; font-weight: bolder">Berita Harian (Android)</span>
+                                            <br/>
+                                            <span class="lead" style="font-size:0.8em">Best Performing Site</span>
+                                        </p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div style="margin-top:20px; text-align:center">
+                                            <img src="img/promo_ad.png" alt="" class="img-rounded img-thumbnail" style="max-width: 80%; background-color:#8CB9D3;">
+                                            <br/>
+                                            <span class="lead" style="font-size:0.8em">Best Performing Creative</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <p style="text-align: center; padding-bottom:10px; padding-top: 10px;">
+                                            <span style="font-size: 1.4em; font-weight: bolder">Indopaper GmBH</span>
+                                            <br/>
+                                            <span class="lead" style="font-size:0.8em">Worst Performing Publisher</span>
+                                        </p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p style="text-align: center; padding-bottom:10px; padding-top: 10px;">
+                                            <span style="font-size: 1.4em; font-weight: bolder">iNotebooks.com</span>
+                                            <br/>
+                                            <span class="lead" style="font-size:0.8em">Worst Performing Site</span>
+                                        </p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div style="margin-top:20px; text-align:center">
+                                            <img src="img/promo_ad2.png" alt="" class="img-rounded img-thumbnail" style="max-width: 80%; background-color:#8CB9D3;">
+                                            <br/>
+                                            <span class="lead" style="font-size:0.8em">Worst Performing Creative</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--End box1   -->
+                    </div>
+                    <div class="col-md-4">
+                        <div class="box box-danger" style="padding:5px 12px;">
+                            <!--Box Header-->
+                            <div class="box-header with-border">
+                                <h3 class="box-title">
+                            <i class="fa fa-map-marker"></i> Active Acquisition
+
+                        </h3>
+                                <div class="box-tools pull-right">
+                                    <button class="btn btn-box-tool" data-widget="collapse">
+                                        <i class="fa fa-minus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <!--Box Body-->
+                            <div class="box-body">
+                                <div id="world-map" style="height: 250px; width: 100%;"></div>
+                            </div>
+                            <div class="box-footer no-border">
+                                <div class="row">
+                                    <div class="col-xs-4 text-center">250 installs
+
+                                        <br/>
+                                        <span class="knob-label"> Indonesia </span>
+                                    </div>
+                                    <div class="col-xs-4 text-center">170 installs
+
+                                        <br/>
+                                        <span class="knob-label"> Singapore</span>
+                                    </div>
+                                    <div class="col-xs-4 text-center">90 installs
+
+                                        <br/>
+                                        <span class="knob-label"> North Korea</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--End box1   -->
+                    </div>
+                </div>
+                <!--End row   -->
+                <div class="row">
+                    <div class="col-md-9">
+                        <div class="box box-danger" style="padding:5px 12px;">
+                            <!--Box Header-->
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Goals Metrics</h3>
+                                <div class="box-tools pull-right">
+                                    <button class="btn btn-box-tool" data-widget="collapse">
+                                        <i class="fa fa-minus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <!--Box Body-->
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="info-box bg-aqua bg-hqdark">
+                                            <span class="info-box-icon">
+                                        <i class="fa fa-bookmark-o"></i>
+                                    </span>
+                                            <div class="info-box-content">
+                                                <span class="info-box-text">Add as Bookmark</span>
+                                                <span class="info-box-number">52,109</span>
+                                                <div class="progress">
+                                                    <div class="progress-bar" style="width:55%"></div>
+                                                </div>
+                                                <span class="progress-description" style="font-size:0.8em; font-weight: lighter;">55% of monthly goal
+
+                                            <br/>
+                                            <small style="font-size: 0.8em; font-weight: bolder">Cost-per-Objective of $2.14</small>
+                                        </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-6 col-xs-12">
+                                        <div class="info-box bg-yellow">
+                                            <span class="info-box-icon">
+                                        <i class="fa fa-calendar"></i>
+                                    </span>
+                                            <div class="info-box-content">
+                                                <span class="info-box-text">Event Bookings</span>
+                                                <span class="info-box-number">41,410</span>
+                                                <div class="progress">
+                                                    <div class="progress-bar" style="width: 81%"></div>
+                                                </div>
+                                                <span class="progress-description" style="font-size:0.8em; font-weight: lighter;">81% of monthly goal
+
+                                            <br/>
+                                            <small style="font-size: 0.8em; font-weight: bolder">Cost-per-Objective of $3.39</small>
+                                        </span>
+                                            </div>
+                                            <!-- /.info-box-content -->
+                                        </div>
+                                        <!-- /.info-box -->
+                                    </div>
+                                    <!-- /.col -->
+                                    <div class="col-md-4 col-sm-6 col-xs-12">
+                                        <div class="info-box bg-aqua">
+                                            <span class="info-box-icon">
+                                        <i class="fa fa-shopping-cart"></i>
+                                    </span>
+                                            <div class="info-box-content">
+                                                <span class="info-box-text">Add-to-Cart</span>
+                                                <span class="info-box-number">740</span>
+                                                <div class="progress">
+                                                    <div class="progress-bar" style="width: 34%"></div>
+                                                </div>
+                                                <span class="progress-description" style="font-size:0.8em; font-weight: lighter;">34% of monthly goal
+
+                                            <br/>
+                                            <small style="font-size: 0.8em; font-weight: bolder">Cost-per-Objective of $3.50</small>
+                                        </span>
+                                            </div>
+                                            <!-- /.info-box-content -->
+                                        </div>
+                                        <!-- /.info-box -->
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 col-sm-6 col-xs-12">
+                                        <div class="info-box bg-yellow">
+                                            <span class="info-box-icon">
+                                        <i class="fa fa-thumbs-o-up"></i>
+                                    </span>
+                                            <div class="info-box-content">
+                                                <span class="info-box-text">Event Reviews</span>
+                                                <span class="info-box-number">1,393</span>
+                                                <div class="progress">
+                                                    <div class="progress-bar" style="width: 79%"></div>
+                                                </div>
+                                                <span class="progress-description" style="font-size:0.8em; font-weight: lighter;">79% of monthly goal
+
+                                            <br/>
+                                            <small style="font-size: 0.8em; font-weight: bolder">Cost-per-Objective of $0.25</small>
+                                        </span>
+                                            </div>
+                                            <!-- /.info-box-content -->
+                                        </div>
+                                        <!-- /.info-box -->
+                                    </div>
+                                    <!-- /.col -->
+                                    <div class="col-md-4">
+                                        <div class="info-box bg-aqua bg-hqdark">
+                                            <span class="info-box-icon">
+                                        <i class="fa fa-star-o"></i>
+                                    </span>
+                                            <div class="info-box-content">
+                                                <span class="info-box-text">Mark as Favorite</span>
+                                                <span class="info-box-number">680</span>
+                                                <div class="progress">
+                                                    <div class="progress-bar" style="width:86%"></div>
+                                                </div>
+                                                <span class="progress-description" style="font-size:0.8em; font-weight: lighter;">86% of monthly goal
+
+                                            <br/>
+                                            <small style="font-size: 0.8em; font-weight: bolder">Cost-per-Objective of $2.14</small>
+                                        </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--End box1   -->
+                    </div>
+                    <div class="col-md-3">
+                        <div class="box box-danger" style="padding:5px 12px;">
+                            <!--Box Header-->
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Growth Tools</h3>
+                                <div class="box-tools pull-right">
+                                    <button class="btn btn-box-tool" data-widget="collapse">
+                                        <i class="fa fa-minus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <!--Box Body-->
+                            <div class="box-body" style="height:246px;">
+                                <div style="text-align:center;">
+                                    <img src="img/bot2.png" alt="" style="width:80px;">
+                                    <br/>
+                                    <p style="text-align: center; padding-bottom:10px; padding-top: 10px;">
+                                        <span style="font-size: 1.4em; font-weight: bolder">Growthbot</span>
+                                        <br/>
+                                        <span class="lead" style="font-size:0.8em">A private assistant that care.</span>
+                                        <br/>
+                                    </p>
+                                    <img src="img/add-to-slack.png" style="width:100px" alt="">
+                                    <br/>
+                                    <span class="lead" style="font-size:0.8em">
+                                        <a href="#">Learn more</a>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <!--End box1   -->
+                    </div>
+                </div>
+                <!--End row   -->
+        </div>
+        <!-- /.content-wrapper -->
+        <!-- Main Footer -->
+        <footer class="main-footer">
+            <!-- To the right -->
+            <div class="pull-right hidden-xs">
+                <strong>
+                        <a href="http://hypergrowth.co" style="color:#fff">HyperGrowth Pte Ltd</a> &copy; 2014-2016.
+                    </strong>
+            </div>
+            <!-- Default to the left -->
+            <strong>
+                    <br/>
+                </strong>
+        </footer>
+    </div>
+    <!-- ./wrapper -->
+    <!-- REQUIRED JS SCRIPTS -->
+    <!-- jQuery 2.1.4 -->
+    <script src="plugins/jQuery/jQuery-2.1.4.min.js"></script>
+    <!-- Bootstrap 3.3.5 -->
+    <script src="js/bootstrap.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="js/app.min.js"></script>
+    <!-- Optionally, you can add Slimscroll and FastClick plugins.
+Both of these plugins are recommended to enhance the
+user experience. Slimscroll is required when using the
+fixed layout. -->
+</body>
+
+</html>

@@ -1,0 +1,103 @@
+{% extends 'layout_ak/base.html.twig' %}
+{% block sub_head_title %}Admin Dashboard - App Title Management{% endblock %}
+{% block body %}
+<div class="wrapper wrapper-content animated fadeInRight">
+	{% include 'app_title_management/_form.html.twig' %}
+	<div class="row buffer-bottom">
+	    <div class="col-lg-12">
+            {% include 'app_title_management/_paginate.html.twig' %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block stylesheets_inline %}
+	<link href="{{ asset('bundles/hyperevent/plugins/select2/select2.min.css') }}" rel="stylesheet" />
+	<link rel="stylesheet" href="{{ asset('bundles/hyperevent/plugins/footable/footable.core.css') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/hyperevent/plugins/footable/footable.metro.css') }}">
+	<style>
+		.select2-results {
+		    display: none !important;
+		}
+		.custom-input label.error {
+            margin-left: 130px;
+        }
+	</style>
+{% endblock %}
+
+{% block javascript_inline %}
+    <!-- Select2 -->
+    <script src="{{ asset('bundles/hyperevent/plugins/select2/select2.min.js') }}"></script>
+    <script src="{{ asset('assets/js/jquery.validate.min.js') }}"></script>
+    <script>
+	    var Application =  {
+	        init: function() {
+	        	this.initSelect2();
+	        	this.addMethodAppTitleValidForm();
+	        	this.fireEventAppTitleValidForm();
+	        	this.addRulesAppTitleValidForm();
+	        },
+	        initSelect2: function() {
+	        	$(".list-app-id").select2({
+				  	tags: [],
+				  	placeholder:"Each app ID separate by comma",
+				  	tokenSeparators: [',', ' ']
+				});
+	        },
+	        fireEventAppTitleValidForm: function() {
+	        	$('#frm-app-title').validate({
+	        		errorPlacement: function(error, element) {
+                        if (element.parent().parent().hasClass('custom-input')) {
+                            error.insertAfter(element.parent());
+                        } else {
+                            error.insertAfter(element);
+                        }
+                    }
+	        	});
+	        },
+	        addMethodAppTitleValidForm: function() {
+	        	$.validator.addMethod("valid_app_title_folder", function(value, element) {
+		        	var pattern = /^[a-zA-Z0-9\!\-\_\.\*\'\(\)]+$/;
+    		    	return pattern.test(value);
+
+		        }, "The folder contains alphanumeric characters [0-9a-zA-Z] and special characters !, -, _, ., *, ', (, and )");
+
+	        },
+	        addRulesAppTitleValidForm: function() {
+	        	$('#application_title_title').rules(
+	        		"add"
+	        		, {
+	        			required:true
+	        		}
+	        	);
+	        	$('#application_title_folder').rules(
+	        		"add"
+	        		, {
+	        			required: true
+	        			, valid_app_title_folder: true
+	        			, remote: {
+                            url: '{{ path('dashboard_app_title_management_check_folder_duplication') }}',
+                            type: "get",
+                            data: {
+                                folder: function() {
+                                    return $('#application_title_folder').val();
+                                }
+                            },
+                            dataFilter: function(resp) {
+                                var json = JSON.parse(resp);
+                                if(json.msg) {
+                                    return "\"" + json.msg + "\"";
+                                }
+
+                                return '"true"';
+                            }
+                        }
+                    }
+	        	);
+	        },
+
+	    };
+	    $(document).ready(function() {
+	        Application.init();
+	    });
+    </script>
+{% endblock %}

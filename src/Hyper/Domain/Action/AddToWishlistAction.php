@@ -31,6 +31,14 @@ class AddToWishlistAction
      * @Expose
      */
     private $deviceId;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="app_id", type="string", nullable=true)
+     * @Expose
+     */
+    private $appId;
 
 
     /**
@@ -50,13 +58,14 @@ class AddToWishlistAction
      */
     private $totalItems;
     
-    /**
-     * @var integer
+     /**
+     * @var string
      *
-     * @ORM\Column(name="quantity", type="integer")
+     * @ORM\Column(name="metadata", type="string", length=13107, nullable=true)
      * @Expose
      */
-    private $quantity;
+    private $metadata;
+    
     
     /**
      * @var integer
@@ -77,7 +86,7 @@ class AddToWishlistAction
     
     /**
      * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="Hyper\Domain\Item\InWishlistItem", mappedBy="add_to_wishlist_actions", fetch="EXTRA_LAZY", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Hyper\Domain\Item\InWishlistItem", mappedBy="wishlist", fetch="EXTRA_LAZY", cascade={"persist"})
      */
      private $inWishlistItems;
     
@@ -159,29 +168,6 @@ class AddToWishlistAction
     }
 
     /**
-     * Set quantity
-     *
-     * @param integer $quantity
-     * @return AddToWishlistAction
-     */
-    public function setQuantity ($quantity)
-    {
-        $this->quantity = $quantity;
-
-        return $this;
-    }
-
-    /**
-     * Get quantity
-     *
-     * @return integer 
-     */
-    public function getQuantity()
-    {
-        return $this->quantity;
-    }
-
-    /**
      * Set addedTime
      *
      * @param integer $addedTime
@@ -192,6 +178,29 @@ class AddToWishlistAction
         $this->addedTime = $addedTime;
 
         return $this;
+    }
+    
+    /**
+     * Set metadata
+     *
+     * @param string $metadata
+     * @return AddToWishlistAction
+     */
+    public function setMetadata($metadata)
+    {
+        $this->metadata = serialize($metadata);
+
+        return $this;
+    }
+
+    /**
+     * Get metadata
+     *
+     * @return string 
+     */
+    public function getMetadata()
+    {
+        return unserialize($this->metadata);
     }
 
     /**
@@ -281,5 +290,28 @@ class AddToWishlistAction
     public function getInWishlistItems()
     {
         return $this->inWishlistItems;
+    }
+
+    /**
+     * Set appId
+     *
+     * @param string $appId
+     * @return AddToWishlistAction
+     */
+    public function setAppId($appId)
+    {
+        $this->appId = $appId;
+
+        return $this;
+    }
+
+    /**
+     * Get appId
+     *
+     * @return string 
+     */
+    public function getAppId()
+    {
+        return $this->appId;
     }
 }

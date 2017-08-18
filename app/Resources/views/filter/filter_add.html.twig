@@ -1,0 +1,131 @@
+{% extends 'lte_base.html.twig' %}
+
+{% block body %}
+{% if exception is defined %}
+<h3 style="text-align:center">{{ exception }}</h3>
+{% else %}
+    <section class="content-header" style="margin: -2em 0 0 -2em !important;">
+          <!--<h1>
+            Edit Profile
+          </h1>-->
+          <ol class="breadcrumb" style="margin: 0 -16.5em 0 0;">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li class="active">Custom Audience Add</li>
+          </ol>
+    </section>  
+    <!-- Content Header (Page header) -->
+        <section class="content-header" style="margin-top: 1em;">
+            <h1>
+            Custom Audience
+            </h1>
+            <h1 style="float: right; margin: -1.2em 0 0 0; text-decoration: underline;"><a href="{{ path('dashboard_filter_showlist', {'page':1}) }}">List</a></h1>
+        </section>
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">                
+                    <div class="box" style="margin-top: -1em;">
+                        <div class="box-header">
+                          <h3 class="box-title">Add Custom Audience</h3>
+                        </div><!-- /.box-header -->
+                        <div class="box-body" style="width:50%">
+                            <form name="create_preset" method="POST" action="">
+                                <div class="page" style="margin-top: -2em;">
+                                    <h3>Country selection</h3>
+                                    
+                                    <label>Country</label>
+                                    <select name="country_codes[]" multiple class="form-control">
+                                        {% for country in active_country_list %}
+                                            <option value="{{country.countryCode}}">{{country.countryCode|country()}}</option>
+                                        {% endfor %}    
+                                    </select>
+                                    
+                                </div>
+                                <div class="page">
+                                    <h3>Platform selection</h3>
+                                    
+                                    <label>Platforms</label>
+                                    <select name="platform_ids[]" multiple class="form-control">
+                                        {% for id,platform_name in active_platform %}
+                                        <option value="{{ id }}">{{ platform_name }}</option>
+                                        {% endfor %}    
+                                    </select>
+                                </div>
+                                 <div class="page">
+                                     <h3>Preset name</h3>
+                                     <label>Preset name</label>
+                                     <input name="preset_name" type="text" class="form-control"/>
+                                     <br/>
+                                     <input name="submit" value="Create" type="submit" class="form-control" />
+                                 </div>
+                                 
+                            </form>
+                        </div><!-- /.box-body -->
+                    </div><!-- /.box -->
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </section><!-- /.content -->
+    <script type = "text/javascript" >
+        $.fn.ready(function() {
+               console.log("trace"," application start ");
+               $('form[name="create_preset"]').submit(function(e){
+                   e.preventDefault();
+                   var country_codes_selected = ($("select[name='country_codes[]'] option:selected").length >0);
+                   var platform_ids_selected = ($("select[name='platform_ids[]'] option:selected").length >0);
+                   //console.log('preset_name',$("input[name='preset_name']").val());
+                   var preset_name_filled = ($("input[name='preset_name']").val() != '');
+                   
+                   if(!country_codes_selected) {
+                       alert('please select one or many countries');
+                       return;
+                   }
+                   if(!platform_ids_selected) {
+                       alert('please select one or many platforms');
+                       return;
+                   }
+                   if(!preset_name_filled) {
+                       alert('please enter preset name');
+                       return;
+                   }
+                   
+                   console.log(country_codes_selected+" "+platform_ids_selected+" "+preset_name_filled+" "+$(this).serialize());
+                   return false;
+                   
+                   $.ajax({
+                        method: "POST",
+                        url: "{{ path('dashboard_filter_executeadd') }}",
+                        data: $(this).serialize(),
+                        success : function(response){
+                         console.log(response);
+                         alert(response);
+                         setTimeout(function(){
+                             window.location.href = "{{ path('dashboard_filter_showadd') }}";
+                         },500)
+                         
+                        },
+                        error : function(jqXHR, exception){
+                            if (jqXHR.status === 0) {
+                                console.log('error','Not connect.\n Verify Network.');
+                            } else if (jqXHR.status == 404) {
+                                console.log('error','Requested page not found. [404]');
+                            } else if (jqXHR.status == 500) {
+                                console.log('error','Internal Server Error [500].');
+                            } else if (exception === 'parsererror') {
+                                console.log('error','Requested JSON parse failed.');
+                            } else if (exception === 'timeout') {
+                                console.log('error','Time out error.');
+                            } else if (exception === 'abort') {
+                                console.log('error','Ajax request aborted.');
+                            } else if ( jqXHR.status == 400) {
+                                console.log('jqXHR',jqXHR);
+                            } else {
+                                console.log('error','Uncaught Error.\n' + jqXHR.responseText);
+                            }
+                        }
+                   })
+               })
+           }
+        );
+    </script>
+{% endif %}    
+{% endblock %}

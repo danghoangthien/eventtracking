@@ -1,0 +1,20 @@
+{% if listTimeline is not empty %}
+<div class="row">
+    <!-- BEGIN TIMELINE -->
+    <div class="flik-content">
+    	<ul class="flik-timeline flik-timeline-9" data-scroll-effect="default-effect">
+    	    {% include 'audience_spotlight/user_journey/_paginate_dummy_data.html.twig' %}
+    	</ul>
+    </div>
+    <!-- END TIMELINE-->
+</div>
+{% endif %}
+{% if pageCurrent < totalPage %}
+<div class="row buffer-bottom">
+	<div class="col-md-4 loadmore" style="top:-30px;">
+		<span class="uj_card_add loadmore-text" style="cursor: pointer;">Load More</span><span style="margin-left: 10px"><i class="fa fa-plus"></i></span>
+	</div>
+	<div class="col-xs-4"></div>
+	<div class="col-xs-4"></div>
+</div>
+{% endif %}

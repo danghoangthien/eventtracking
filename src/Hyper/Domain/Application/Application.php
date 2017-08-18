@@ -11,7 +11,7 @@ use JMS\Serializer\Annotation\Expose;
  * Application
  *
  * @ORM\Table(name="applications")
- * @ORM\Entity(repositoryClass="Hyper\DomainBundle\Repository\DTApplicationRepository")
+ * @ORM\Entity(repositoryClass="Hyper\DomainBundle\Repository\Application\DTApplicationRepository")
  * @ExclusionPolicy("all")
  */
 class Application
@@ -50,6 +50,14 @@ class Application
      * @Expose
      */
     private $appVersion;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="platform", type="integer", nullable=true)
+     * @Expose
+     */
+    private $platform;
 
     /**
      * @var integer
@@ -61,14 +69,26 @@ class Application
     
     /**
      * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="Hyper\Domain\Item\Item", mappedBy="applications", fetch="EXTRA_LAZY", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Hyper\Domain\Item\Item", mappedBy="application", fetch="EXTRA_LAZY", cascade={"persist"})
      */
      private $items;
+     
+     /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="Hyper\Domain\Action\Action", mappedBy="application", fetch="EXTRA_LAZY", cascade={"persist"})
+     */
+     private $actions;
+     
+     
     
     
-    public function __construct()
+    public function __construct($applicationId = null)
     {
-        $this->id = uniqid('',true);
+        if (!empty($applicationId)) {
+            $this->id = $applicationId;
+        } else {
+            $this->id = uniqid('',true);
+        }
         $this->created = time();
     }
     
@@ -164,6 +184,30 @@ class Application
     {
         return $this->appVersion;
     }
+    
+    /**
+     * Set platform
+     *
+     * @param integer $platform
+     * @return Applcation
+     */
+    public function setPlatform ($platform)
+    {
+        $this->platform = $platform;
+
+        return $this;
+    }
+
+    /**
+     * Get platform
+     *
+     * @return integer 
+     */
+    public function getPlatform()
+    {
+        return $this->platform;
+    }
+
 
     /**
      * Set created
@@ -219,5 +263,38 @@ class Application
     public function getItems()
     {
         return $this->items;
+    }
+
+    /**
+     * Add actions
+     *
+     * @param \Hyper\Domain\Action\Action $actions
+     * @return Application
+     */
+    public function addAction(\Hyper\Domain\Action\Action $actions)
+    {
+        $this->actions[] = $actions;
+
+        return $this;
+    }
+
+    /**
+     * Remove actions
+     *
+     * @param \Hyper\Domain\Action\Action $actions
+     */
+    public function removeAction(\Hyper\Domain\Action\Action $actions)
+    {
+        $this->actions->removeElement($actions);
+    }
+
+    /**
+     * Get actions
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getActions()
+    {
+        return $this->actions;
     }
 }

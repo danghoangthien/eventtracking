@@ -1,0 +1,25 @@
+{% if pageCount > 1 %}
+{% set currentRoute = app.request.attributes.get('_route') %}
+{% set currentRouteParams = app.request.attributes.get('_route_params') %}
+<div class="pagination pagination-centered">
+    <ul>
+        <li class="footable-page-arrow{% if first is defined and current == first %} disabled{% endif %}">
+            <a class="pager" href="{{ path(route, query|merge({(pageParameterName): first})) }}">«</a>
+        </li>
+        <li class="footable-page-arrow{% if previous is not defined %} disabled{% endif %}">
+            <a class="pager" href="{% if previous is defined %}{{ path(route, query|merge({(pageParameterName): previous})) }}{% endif %}">‹</a>
+        </li>
+        {% for page in pagesInRange %}
+            <li class="footable-page{% if current == page %} active{% endif %}">
+                <a class="pager" href="{{ path(route, query|merge({(pageParameterName): page})) }}">{{ page }}</a>
+            </li>
+        {% endfor %}
+        <li class="footable-page-arrow{% if next is not defined %} disabled{% endif %}">
+            <a class="pager" href="{% if next is defined %}{{ path(route, query|merge({(pageParameterName): next})) }}{% endif %}">›</a>
+        </li>
+        <li class="footable-page-arrow{% if last is defined and current == last %} disabled{% endif %}">
+            <a class="pager" href="{{ path(route, query|merge({(pageParameterName): last})) }}">»</a>
+        </li>
+    </ul>
+</div>
+{% endif %}

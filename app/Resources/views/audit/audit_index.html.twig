@@ -1,0 +1,499 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+            Audit Tables
+            </h1>
+            <ul id="menu">
+                <li class="sub_menu" id="error"><a href="{{ path('hyper_event_displayauditdata', {'audit_type': 1, 'page': 1}) }}">Error</a></li>
+                <li><label>|</label></li>
+                <li class="sub_menu" id="Exc"><a href="{{ path('hyper_event_displayauditdata', {'audit_type': 2, 'page': 1}) }}">Exception</a></li>
+                <!--<li><a href="">Benchmark</a></li>-->
+            </ul>
+        </section>
+        
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">                
+                    <div class="box">
+                        <div class="box-header">
+                          <h3 class="box-title">Device Details</h3>
+                        </div><!-- /.box-header -->
+                        <div class="box-body">
+                            {% if audit_type == '1' %}
+                            <input type='hidden' class='indicator' value='1' />                            
+                            {% elseif audit_type == '2' %}
+                            <input type='hidden' class='indicator' value='2' />                            
+                            {% else %}
+                            <input type='hidden' class='indicator' value='3' 
+                          
+                            {% endif %}
+                            <input type='hidden' id='current' value='{{ cur }}' />
+                                <table id="example1" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Creation</th>
+                                            <th>Request URL</th>
+                                            <th>Request Header</th>
+                                            <th>Request Method</th>
+                                            <th>Request Param</th>
+                                            <th>Response HTTP Code</th>
+                                            
+                                            {% if audit_type == '1' %}
+                                            <th>Error</th>
+                                            {% endif %}
+                                            {% if audit_type == '2' %}
+                                            <th>Exception</th>
+                                            {% endif %}
+                                            {% if audit_type == '3' %}
+                                            <th>Benchmark</th>
+                                            {% endif %}
+                                        </tr>
+                                    </thead>
+                                    <tbody>                                        
+                                        {% for row in rows %}
+                                        <tr>
+                                            <td>{{ row.id }}</td>
+                                            <td>{{ row.created|date("Y-m-d h:i:s") }}</td>
+                                            <td>
+                                                {% set line = row.requestUrl|split('projects') %}
+                                                {% if audit_type == '1' %}
+                                                    {% if 'app_dev.php' in line[1] %}
+                                                        {% set nexts = line[1]|split('app_dev.php/') %}
+                                                        {{ nexts[0]~"app_dev.php/ \n"~nexts[1]}}
+                                                    {% else %}
+                                                        {% set nexts = line[1]|split('app.php/') %}
+                                                        {{ nexts[0]~"app.php/ \n"~nexts[1]}}
+                                                    {% endif %}
+                                                {% else %}
+                                                    {% set next = line[1]|split('event/') %}
+                                                    {{ next[0]~"\n event/"~next[1] }}
+                                                {% endif %}
+                                            </td>
+                                            <td class="reqHeader">
+                                                {% for key1, value1 in row.requestHeader %}
+                                                    {% for key2, value2 in value1 %}
+                                                        {{ value2 }}
+                                                    {% endfor %}
+                                                {% endfor %}
+                                            </td>
+                                            
+                                            <td>{{ row.requestMethod }}</td>
+                                            
+                                            <td class="reqParam">
+                                                {% set message = '' %}
+                                                {% for key, value in row.requestContent %}
+                                                    {% set message = dump(value) %}
+                                                    {{ "Details" }}
+                                                {% endfor %}
+                                                <input type='hidden' id='paramValues' value='{{ message }}' />
+                                            </td>
+                                            </td>
+                                            <td>{{ row.responseHTTPCode }}</td> 
+                                            <td class='errorMessage'>
+                                                Details
+                                                {% if audit_type == '1' %}
+                                                    {% set error = [] %}
+                                                    {% for k, v in row.error %}
+                                                        {% set error = error|merge([v]) %}
+                                                    {% endfor %}
+                                                    {% set str = error|join("||") %}
+                                                    <input type='hidden' id='errors' value='{{ str }}' />
+                                                {% else %}
+                                                    {% set except = [] %}
+                                                    {% for exk, exv in row.exception  %} 
+                                                        {% set except = except|merge([exv]) %}
+                                                    {% endfor %}
+                                                    {% set strError = except|join("||") %}
+                                                    <input type='hidden' id='errors' value='{{ strError }}' />
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        {% endfor %}   
+                                    </tbody>
+                                    <!--<tfoot>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Creation</th>
+                                            <th>Audit Type</th>
+                                            <th>Request URL</th>
+                                            <th>Request Header</th>
+                                            <th>Request Method</th>
+                                            <th>Request Param</th>
+                                            <th>Response HTTP Code</th>
+
+                                            {% if audit_type == '1' %}
+                                            <th>Error</th>
+                                            {% endif %}
+                                            {% if audit_type == '2' %}
+                                            <th>Exception</th>
+                                            {% endif %}
+                                            {% if audit_type == '3' %}
+                                            <th>Benchmark</th>
+                                            {% endif %}
+                                        </tr>
+                                    </tfoot>
+                                    -->
+                                </table>
+                                <div class="paginator">
+                                    <ul id="paginate">
+                                    {% for page in paginator %}                                    
+                                        <li> 
+                                            <a href="{{ path('hyper_event_displayauditdata', {'audit_type': audit_type, 'page':page}) }}">
+                                                {{page}}
+                                            </a>
+                                        </li>
+                                                                            
+                                    {% endfor %}
+                                    </ul
+                                    Total pages : {{total}}
+                                </div>
+                        </div><!-- /.box-body -->
+                    </div><!-- /.box -->
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </section><!-- /.content -->
+        
+        <section>
+            <div id="myModal" class="modal fade">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">                  
+                        </div>
+
+                        <div class="modal-body">
+                            <div style="width: 30em; margin: auto;">
+                                <div id="contents">
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">                            
+                            <button type="button" id="btnClose" class="btn btn-inverse" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    <script type = "text/javascript" >
+        $.fn.ready(function()
+        {
+            console.log("trace"," application start ");               
+               
+            //   var test = $("#example1 tbody").children("tr td:nth-child(3)");
+            //   var data = test.split("projects");
+               
+            //   console.log(data[0]);
+               
+           $(".indicator").each(function()
+           {
+               if($(this).val() == "1")
+               {
+                   $("#menu").children("li:nth-child(1)").addClass("selected");
+               }
+               else if($(this).val() == "2")
+               {
+                   $("#menu").children("li:nth-child(3)").addClass("selected");
+               }
+               
+           });
+               
+
+            $("#btnClose").click(function()
+            {
+                 $("#tbl").remove(); 
+            });
+            
+            $(".errorMessage").on("click", this, function()
+            {
+                 var error = $(this).children("input").val();
+                 var messages = error.split("||");
+                 
+                 var b = "\n";
+                 var position = 40;
+                 var second = 80;
+                 if(messages[2] != "" )
+                 {
+                     if(messages[2].length >= 80)
+                     {
+                         console.log(messages[2].length);
+                         
+                        //  console.log(messages[2]);
+                        //  console.log(one+'\n'+two+'\n'+three);
+                        //  return false;
+                         
+                         if(messages[2].slice(position).length > 40)
+                         {
+                             console.log("Pasok");
+                             var one = messages[2].slice(0, 40);
+                             var two = messages[2].slice(40,80);
+                             var three = messages[2].slice(80);
+                             //var output = [messages[2].slice(0, position), b+messages[2].slice(position)+b, messages[2].slice(80) ].join('');
+                             var output = one+'\n'+two+'\n'+three;
+                         }
+                         else
+                         {
+                             var output = [messages[2].slice(0, position), b, messages[2].slice(position) ].join('');    
+                         }
+                     
+                         messages[2] = output;
+                     }
+                 }
+                 
+                 if(messages[1] != "" && messages[1].length >= 40)
+                 {
+                     var output = [messages[1].slice(0, position), b, messages[1].slice(position)].join('');
+                     messages[1] = output;
+                 }
+                
+                 $("#contents").empty();
+                
+                 $("#contents").append("<table id=tblError>\n\
+                      <tr>\n\
+                          <td>Error</td>\n\
+                          <td>Location</td>\n\
+                      <tr>\n\
+                 </table>");
+                 $("#tblError").append("\n\
+                      <tr>\n\
+                          <td style='width:12em;'>"+messages[1]+"</td>\n\
+                          <td>"+messages[2]+"</td>\n\
+                          <tr>\n\
+                 </table>");
+                 
+                 $("#contents").css("width", "30em").css("margin-left","-6em");
+                 $(".modal-content").css("width","50em").css("margin-left","-3em");
+                 $("#myModal").modal('show');
+            });
+            
+            $(".reqParam").on("click", this, function()
+            {
+                $("#contents").css("width", "30em").css("margin-left","0");
+                $(".modal-content").css("width","45em").css("margin-left","4em");
+                
+                $("#contents").empty();
+                
+                var data = $(this).children("input").val();
+                //$("#contents").append($("#paramValues").val());
+                $("#contents").append(data);
+                $("#myModal").modal('show');
+            });
+              
+              $(".reqHeader").on("click", this, function()
+              {
+                  $(this).click(function()
+                  {
+                      $("#contents").empty();
+                      
+                      $("#contents").append("<table id=tbl>\n\
+                      <tr>\n\
+                          <td>Host</td>\n\
+                          <td>Connection</td>\n\
+                          <td>Content-length</td>\n\
+                          <td>Cache-control</td>\n\
+                          <td>Origin</td>\n\
+                          <td>Content-type</td>\n\
+                          <td>User-agent</td>\n\
+                          <td>Postman-token</td>\n\
+                          <td>Accept</td>\n\
+                          <td>Accept-encoding</td>\n\
+                          <td>Accept-language</td>\n\
+                          <td>X-php-ob-level</td>\n\
+                      <tr>\n\
+                      </table>");
+                      
+                      var data = $(this).html();
+                      var split = data.replace(/\s{2,}/g, ' ').split(' ');
+                      
+                      $.trim(split[1]);
+                       
+                      split[1].replace(/\s+$/, "");
+                       
+                      var b = "\n";
+                      var position = 25;
+                      var output = [split[5].slice(0, position), b, split[5].slice(position)].join('');
+                      
+                      var output4 = [split[4].slice(0, 35), b, split[4].slice(35)].join('');
+                      split[5] = output;
+                      split[4] = output4;
+                      
+                      $("#tbl").append("\n\
+                      <tr>\n\
+                          <td style='width: 2em;'>"+split[1]+"</td>\n\
+                          <td>"+split[2]+"</td>\n\
+                          <td>"+split[3]+"</td>\n\
+                          <td>"+split[4]+"</td>\n\
+                          <td style='width: 5em;word-wrap:break-word;'>"+split[5]+"</td>\n\
+                          <td>"+split[6]+"</td>\n\
+                          <td>"+split[7]+"</td>\n\
+                          <td>"+split[8]+"</td>\n\
+                          <td>"+split[9]+"</td>\n\
+                          <td>"+split[10]+"</td>\n\
+                          <td>"+split[11]+"</td>\n\
+                          <td>"+split[12]+"</td>\n\
+                      <tr>\n\
+                      ");
+                      
+                      $("#contents").css("width", "85em").css("margin-left","-27.5em");
+                      $(".modal-content").css("width","90em").css("margin-left","-23em");
+                      $("#myModal").modal('show');
+                  });                   
+              });
+                              
+               //$("#myModal").modal('show');
+               $.current = $("#current").val();
+               
+               console.log("This is the current page: "+$.current);
+               
+               if($("#paginate").children("li").children("a").length > 0)
+               {               
+                   console.log("pagination link seen seen");
+                   $("#paginate").children("li").children("a").each(function()
+                   {
+                       $(this).html($.trim($(this).html()));
+                       
+                       $(this).html($(this).html().replace(/\s+$/, ""));
+
+                       console.log("Pagination value: "+$(this).html());
+                       
+                       if($(this).html() == $.current)
+                       {
+                           $(this).addClass("currentPage");
+                           console.log($(this).html());
+                           console.log($.current);
+                       }
+                       else
+                       {
+                           console.log("Values did not match");
+                       }
+                       //$(this).html().trim();
+                   });
+                   
+                   //$("#paginate").children("a").each(function()
+                   //{
+                   //   console.log($(this).text); 
+                   //});
+               }               
+           }
+        );
+    </script>
+    <style>
+        #example1 tbody tr td:nth-child(6), #example1 tbody tr td:nth-child(8)
+        {
+            cursor:pointer;
+            color: blue;
+        }
+        
+        .reqHeader, .reqParam
+        {
+            cursor: pointer;
+        }
+        
+        #tbl tr:first-child, #tblError tr:first-child
+        {
+            text-align: center;
+            background-color: #5f5f5f;
+            color: #f1f1f1;
+        }
+        
+        #tbl, #tblError
+        {
+            table-layout: fixed;
+        }
+        
+        #tbl tr td, #tblError tr td
+        {
+            border: 1px solid black;
+            padding: 0 0.2em 0 0.2em;
+            word-wrap:break-word;
+        }
+        /*
+        #contents
+        {
+            width: 85em;
+            margin-left: -27.5em;
+        }
+        
+        .modal-content
+        {
+            width: 90em;
+            margin-left: -23em;
+        }
+        */
+        .currentPage
+        {
+            text-decoration: underline;
+            font-weight: bold;
+            color: white !important;
+        }
+        
+        .clickable
+        {
+            cursor: pointer;
+            height: 10em;
+        }
+        
+        #example1
+        {
+            width: 50em;
+            border-collapse: collapse;
+        }
+        
+        #example1 tr td
+        {
+            text-wrap:normal;
+            word-wrap:break-word;
+            overflow-wrap: break-word;
+        }
+        
+        .selected
+        {
+            text-decoration: underline;
+            font-weight: bold;
+        }
+       
+        .sub_menu
+        {
+            margin: 0 0.7em 0 0.7em;
+        }
+        
+        #menu
+        {
+            margin: 0;
+            padding: 0;
+            list-style-type: none;
+        }
+        
+        #menu li
+        {
+            display: inline;
+        }
+        
+        #paginate
+        {            
+            padding: 0.3em 0 0 1em;
+            list-style-type: none !important;
+            border-radius: 25px;
+            background: #8AC007;            
+            height: 30px;
+            width: 100%;
+        }
+        
+        #paginate li
+        {            
+            display: inline !important;            
+            margin-right: 0.5em;            
+        }
+        
+        #paginate li a
+        {
+            color: #336600;
+        }
+
+    </style>
+{% endblock %}

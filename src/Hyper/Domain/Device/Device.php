@@ -17,6 +17,15 @@ use JMS\Serializer\Annotation\Expose;
 class Device
 {
     /**
+     * TODO move these const to Device Platform value object
+     */
+    const ANDROID_PLATFORM_CODE = '2';
+    const IOS_PLATFORM_CODE = '1';
+    
+    const ANDROID_PLATFORM_NAME = 'android';
+    const IOS_PLATFORM_NAME = 'ios';
+    
+    /**
      * @var string
      * @ORM\Column(name="id", type="string")
      * @ORM\Id
@@ -45,15 +54,15 @@ class Device
     /**
      * @var integer
      *
-     * @ORM\Column(name="click_time", type="integer", options={"unsigned"=true})
+     * @ORM\Column(name="click_time", type="integer", nullable=true, options={"unsigned"=true} )
      * @Expose
      */
     private $clickTime;
 
     /**
      * @var integer
-     *
-     * @ORM\Column(name="install_time", type="integer", options={"unsigned"=true})
+     * 
+     * @ORM\Column(name="install_time", type="integer", nullable=true, options={"unsigned"=true})
      * @Expose
      */
     private $installTime;
@@ -61,7 +70,7 @@ class Device
     /**
      * @var string
      *
-     * @ORM\Column(name="country_code", type="string")
+     * @ORM\Column(name="country_code", type="string", nullable=true)
      * @Expose
      */
     private $countryCode;
@@ -69,7 +78,7 @@ class Device
     /**
      * @var string
      *
-     * @ORM\Column(name="city", type="string")
+     * @ORM\Column(name="city", type="string", nullable=true)
      * @Expose
      */
     private $city;
@@ -77,7 +86,7 @@ class Device
     /**
      * @var string
      *
-     * @ORM\Column(name="ip", type="string")
+     * @ORM\Column(name="ip", type="string", nullable=true)
      * @Expose
      */
     private $ip;
@@ -85,7 +94,7 @@ class Device
     /**
      * @var string
      *
-     * @ORM\Column(name="wifi", type="string")
+     * @ORM\Column(name="wifi", type="string", nullable=true)
      * @Expose
      */
     private $wifi;
@@ -93,7 +102,7 @@ class Device
     /**
      * @var string
      *
-     * @ORM\Column(name="language", type="string")
+     * @ORM\Column(name="language", type="string", nullable=true)
      * @Expose
      */
     private $language;
@@ -101,7 +110,15 @@ class Device
     /**
      * @var string
      *
-     * @ORM\Column(name="operator", type="string")
+     * @ORM\Column(name="mac", type="string", nullable=true)
+     * @Expose
+     */
+    private $mac;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="operator", type="string", nullable=true)
      * @Expose
      */
     private $operator;
@@ -109,7 +126,7 @@ class Device
     /**
      * @var string
      *
-     * @ORM\Column(name="device_os_version", type="string")
+     * @ORM\Column(name="device_os_version", type="string", nullable=true)
      * @Expose
      */
     private $deviceOsVersion;   
@@ -124,16 +141,20 @@ class Device
     
     /**
      * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="Hyper\Domain\Action\Action", mappedBy="devices", fetch="EXTRA_LAZY", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Hyper\Domain\Action\Action", mappedBy="device", fetch="EXTRA_LAZY", cascade={"persist"})
      */
      private $actions;
     
     
     
     
-    public function __construct()
+    public function __construct($deviceId = null)
     {
-        $this->id = uniqid('',true);
+        if (!empty($deviceId)) {
+            $this->id = $deviceId;
+        } else {
+            $this->id = uniqid('',true);
+        }
         $this->actions = new \Doctrine\Common\Collections\ArrayCollection();
         $this->created = time();
     }
@@ -494,5 +515,28 @@ class Device
     public function getActions()
     {
         return $this->actions;
+    }
+
+    /**
+     * Set mac
+     *
+     * @param string $mac
+     * @return Device
+     */
+    public function setMac($mac)
+    {
+        $this->mac = $mac;
+
+        return $this;
+    }
+
+    /**
+     * Get mac
+     *
+     * @return string 
+     */
+    public function getMac()
+    {
+        return $this->mac;
     }
 }

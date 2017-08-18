@@ -28,15 +28,24 @@ class InstallAction
      * @var string
      *
      * @ORM\Column(name="device_id", type="string")
+     * @ORM\Id
      * @Expose
      */
     private $deviceId;
-
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="app_id", type="string", nullable=true)
+     * @Expose
+     */
+    private $appId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="application_id", type="string")
+     * @ORM\Id
      * @Expose
      */
     private $applicationId;
@@ -46,6 +55,7 @@ class InstallAction
      * @var integer
      *
      * @ORM\Column(name="installed_time", type="integer")
+     * @ORM\Id
      * @Expose
      */
     private $installedTime;
@@ -90,6 +100,29 @@ class InstallAction
     public function getDeviceId()
     {
         return $this->deviceId;
+    }
+    
+    /**
+     * Set appId
+     *
+     * @param string $appId
+     * @return InstallAction
+     */
+    public function setAppId($appId)
+    {
+        $this->appId = $appId;
+
+        return $this;
+    }
+
+    /**
+     * Get appId
+     *
+     * @return string 
+     */
+    public function getAppId()
+    {
+        return $this->appId;
     }
 
     /**

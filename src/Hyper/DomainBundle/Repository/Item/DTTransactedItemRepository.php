@@ -14,5 +14,9 @@ use Hyper\Domain\Item\TransactedItem;
  */
 class DTTransactedItemRepository extends EntityRepository implements TransactedItemRepository
 {
+    public function save(TransactedItem $transactionItem){
+        $this->_em->persist($transactionItem);
+        //$this->_em->flush();
+    }
     
 }

@@ -14,5 +14,8 @@ use Hyper\Domain\Item\InWishlistItem;
  */
 class DTInWishlistItemRepository extends EntityRepository implements InWishlistItemRepository
 {
-    
+    public function save(InWishlistItem $inWishlistItem){
+        $this->_em->persist($inWishlistItem);
+        //$this->_em->flush();
+    }
 }

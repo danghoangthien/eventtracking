@@ -1,0 +1,39 @@
+dashboard_audience_spotlight_user_journey:
+    path:     /user-journey/
+    defaults: { _controller: HyperEventBundle:Dashboard/AudienceSpotlight/UserJourney:index }
+dashboard_audience_spotlight_user_journey_validate:
+    path:     /user-journey/validate/
+    defaults: { _controller: HyperEventBundle:Dashboard/AudienceSpotlight/UserJourney:validate }
+dashboard_audience_spotlight_user_journey_load_profile:
+    path:     /user-journey/load-profile/
+    defaults: { _controller: HyperEventBundle:Dashboard/AudienceSpotlight/UserJourney:loadProfile }
+dashboard_audience_spotlight_user_journey_load_total_transaction:
+    path:     /user-journey/load-total-transaction/
+    defaults: { _controller: HyperEventBundle:Dashboard/AudienceSpotlight/UserJourney:loadTotalTransaction }
+dashboard_audience_spotlight_user_journey_load_total_money_spent:
+    path:     /user-journey/load-total-money-spent/
+    defaults: { _controller: HyperEventBundle:Dashboard/AudienceSpotlight/UserJourney:loadTotalMoneySpent }
+dashboard_audience_spotlight_user_journey_load_last_transaction:
+    path:     /user-journey/load-last-transaction/
+    defaults: { _controller: HyperEventBundle:Dashboard/AudienceSpotlight/UserJourney:loadLastTransaction }
+dashboard_audience_spotlight_user_journey_load_last_activity:
+    path:     /user-journey/load-last-activity/
+    defaults: { _controller: HyperEventBundle:Dashboard/AudienceSpotlight/UserJourney:loadLastActivity }
+dashboard_audience_spotlight_user_journey_load_timeline:
+    path:     /user-journey/load-timeline/
+    defaults: { _controller: HyperEventBundle:Dashboard/AudienceSpotlight/UserJourney:loadTimeline }
+dashboard_audience_spotlight_user_journey_load_preset_filter:
+    path:     /user-journey/load-preset-filter/
+    defaults: { _controller: HyperEventBundle:Dashboard/AudienceSpotlight/UserJourney:loadPresetFilter }
+dashboard_audience_spotlight_user_journey_load_unattached_preset_filter:
+    path:     /user-journey/load-unattached-preset-filter/
+    defaults: { _controller: HyperEventBundle:Dashboard/AudienceSpotlight/UserJourney:loadUnAttachedPresetFilter }
+dashboard_audience_spotlight_user_journey_delete_preset_filter:
+    path:     /user-journey/delete-preset-filter/
+    defaults: { _controller: HyperEventBundle:Dashboard/AudienceSpotlight/UserJourney:deletePresetFilter }
+dashboard_audience_spotlight_user_journey_attach_preset_filter:
+    path:     /user-journey/attach-preset-filter/
+    defaults: { _controller: HyperEventBundle:Dashboard/AudienceSpotlight/UserJourney:attachPresetFilter }
+dashboard_audience_spotlight_user_journey_detach_preset_filter:
+    path:     /user-journey/detach-preset-filter/
+    defaults: { _controller: HyperEventBundle:Dashboard/AudienceSpotlight/UserJourney:detachPresetFilter }

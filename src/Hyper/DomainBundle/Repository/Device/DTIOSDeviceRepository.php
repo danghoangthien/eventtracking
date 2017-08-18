@@ -15,5 +15,55 @@ use Hyper\Domain\Device\IOSDevice;
  */
 class DTIOSDeviceRepository extends EntityRepository implements IOSDeviceRepository
 {
-
+    public function save(IOSDevice $iosDevice){
+        $this->_em->persist($iosDevice);
+        //$this->_em->flush();
+    }
+    
+    /*
+    public function getByIdentifier($identifier) {
+        return $this->getByIdfa($identifier);
+    }
+    */
+    
+    /**
+     * return array contains deviceId
+     */
+    public function getByIdentifier($identifier) {
+        $idfa = $identifier;
+        $qb = $this->createQueryBuilder('id');
+        try {
+            $result = $qb->select('IDENTITY(id.device)')
+                                ->where($qb->expr()->eq('id.idfa','?1'))
+                                ->setParameter(1,$idfa)
+                                ->getQuery()
+                                ->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        } catch (\Doctrine\ORM\ORMException $ex) {
+            $result = null;
+        } catch (\Doctrine\ORM\NonUniqueResultException $nonUnique) {
+            $result = null;
+            // TODO - report in audit log
+        } 
+    }
+    
+    public function getByIdfa($idfa) {
+        return $this->findOneBy(
+            array('idfa' => $idfa)  
+        );
+    }
+    
+    public function getListDataFromIdentifier($listIdentifier = array())
+    {
+        if (empty($listIdentifier)) {
+            return;
+        }
+        $qb = $this->createQueryBuilder('ios')
+                ->select('IDENTITY(ios.device) AS id')
+                ->distinct();
+        $listIdentifier = array_unique($listIdentifier);
+            $qb->where($qb->expr()->in('id', $listIdentifier));
+        
+        return $qb->getQuery()->getResult();
+    }
+    
 }

@@ -1,0 +1,123 @@
+<?php
+
+namespace Hyper\Domain\Frm;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
+
+/**
+ * Frm
+ *
+ * @ORM\Table(name="frm")
+ * @ORM\Entity(repositoryClass="Hyper\DomainBundle\Repository\Frm\DTFrmRepository")
+ * @ExclusionPolicy("all")
+ */
+class Frm
+{
+    /**
+     * @var string
+     * @ORM\Column(name="id", type="string")
+     * @ORM\Id
+     * @Expose
+     */
+    private $id;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="device_id", type="string")
+     * @Expose
+     */
+    private $deviceId;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="app_id", type="string")
+     * @Expose
+     */
+    private $appId;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="event_type", type="integer")
+     * @Expose
+     */
+    private $eventType;
+    
+    /**
+     * @var integer
+     * 
+     * A.K.A app_industry
+     *
+     * @ORM\Column(name="account_type", type="integer")
+     * @Expose
+     */
+    private $accountType;
+    
+    /**
+     * @var string
+     * 
+     * could be transaction id,add to cart id,add to wishlist id
+     *
+     * @ORM\Column(name="reference_event_id", type="string")
+     * @Expose
+     */
+    private $referenceEventId;
+    
+    /**
+     * @var string
+     * 
+     * item codes that added to cart|added to wishlist|purchased
+     *
+     * @ORM\Column(name="reference_item_codes", type="string")
+     * @Expose
+     */
+    private $referenceItemCodes;
+
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="amount", type="float")
+     * @Expose
+     */
+    private $amount;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="base_currency", type="string")
+     * @Expose
+     */
+    private $baseCurrency;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="event_time", type="integer")
+     * @Expose
+     */
+    private $eventTime;
+    
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="created", type="integer")
+     * @Expose
+     */
+    private $created;
+    
+    public function __construct()
+    {
+        $this->id = uniqid('',true);
+        $this->created = time();
+    }
+
+}

@@ -2,6 +2,8 @@
 
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\Yaml\Parser;
+use Symfony\Component\Yaml\Exception\ParseException;
 
 class AppKernel extends Kernel
 {
@@ -20,11 +22,18 @@ class AppKernel extends Kernel
             new JMS\SerializerBundle\JMSSerializerBundle(),
             new Nelmio\ApiDocBundle\NelmioApiDocBundle(),
             new AppBundle\AppBundle(),
-            new Doctrine\Bundle\MongoDBBundle\DoctrineMongoDBBundle(),
+            //new Doctrine\Bundle\MongoDBBundle\DoctrineMongoDBBundle(),
             new Hyper\EventBundle\HyperEventBundle(),
             new Knp\Bundle\GaufretteBundle\KnpGaufretteBundle(),
             //new Lsw\MemcacheBundle\LswMemcacheBundle(),
             new Hyper\DomainBundle\HyperDomainBundle(),
+            //new Hyper\Adops\WebBundle\HyperAdopsWebBundle(),
+            //new Hyper\Adops\APIBundle\HyperAdopsAPIBundle(),
+            new Maxmind\Bundle\GeoipBundle\MaxmindGeoipBundle(),
+            new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
+            new Hyper\EventProcessingBundle\HyperEventProcessingBundle(),
+            new Snc\RedisBundle\SncRedisBundle(),
+            new Hyper\EventAPIBundle\HyperEventAPIBundle()
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
@@ -40,5 +49,13 @@ class AppKernel extends Kernel
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
         $loader->load($this->getRootDir().'/config/config_'.$this->getEnvironment().'.yml');
+        // load elasticache config
+        $yaml = new Parser();
+        try {
+            $content = $yaml->parse(file_get_contents($this->getRootDir().'/config/parameters.yml'));
+            $loader->load($this->getRootDir().'/config/elasticache_'.$content['parameters']['elasticache_env'].'.yml');
+        } catch (ParseException $e) {
+            echo "Unable to parse the YAML string: " . $e->getMessage();
+        }
     }
 }

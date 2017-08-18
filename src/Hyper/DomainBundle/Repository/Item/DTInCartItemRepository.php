@@ -14,5 +14,9 @@ use Hyper\Domain\Item\InCartItem;
  */
 class DTInCartItemRepository extends EntityRepository implements InCartItemRepository
 {
-    
+    public function save(InCartItem $inCartItem){
+        $this->_em->persist($inCartItem);
+        //$this->_em->flush();
+        echo "<hr/>"."incartitem persisted";
+    }
 }

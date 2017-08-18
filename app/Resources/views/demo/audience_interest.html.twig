@@ -1,0 +1,99 @@
+{% extends 'base2.html.twig' %}
+{% block body %}
+<section class="content-header" style="margin: -2em 0 0 -2em !important;">
+    <h1 style="font-size: 24px; margin: 0 0 1em 0.5em;">
+      Audience Interest
+    </h1>
+    <ol class="breadcrumb">
+      <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li class="active">Audience Interest</li>
+    </ol>
+</section> 
+
+<div class="row">
+    <div class="col-md-4">
+		<div class="form-group">
+			<label>Interest hierarchy</label>
+			<div class="easy-tree">
+				<ul>
+					<li>Camping 
+						<span class="catcode" catcode='m3z69c6f'>(m3z69c6f)</span>
+						<ul>
+							<li>Clothing
+								<span class="catcode" catcode=''></span>
+							</li>
+							<li>Shoes 
+								<span class="catcode" catcode='5cdh7t5f'>(5cdh7t5f)</span>
+								<ul>
+									<li>Waterproof Shoes
+										<span class="catcode" catcode=''></span>
+									</li>
+									<li>Trekking Shoes 
+										<span class="catcode" catcode='0zvi1n20'>(0zvi1n20)</span>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+					<li>Swimming
+						<span class="catcode" catcode=''></span>
+						<ul>
+							<li>Cap
+								<span class="catcode" catcode='ft5gsufm'>(ft5gsufm)</span>
+							</li>
+							<li>Goggles
+								<span class="catcode" catcode=''></span>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-8">
+		<div class="box box-danger">
+			<div class="box-header with-border">
+				<h3 class="box-title">Customize your audience interest</h3>
+			</div><!-- /.box-header -->
+			<!-- form start -->
+			
+			<div class="box-body">
+				<div class="form-group">
+					<label>Select SDK Category</label>
+					<select class="form-control">
+						<option>i2w99eet</option>
+						<option>p59s1obv</option>
+						<option>4o8jtqcp</option>
+						<option>inercrq1</option>
+					</select>
+				</div>
+				<div class="form-group">
+					<label>Select Matched Interest</label>
+					<select class="form-control">
+						<option>Clothing</option>
+						<option>Waterproof shoes</option>
+						<option>Swimming</option>
+						<option>Goggles</option>
+					</select>
+				</div>
+			</div><!-- /.box-body -->
+			<div class="box-footer">
+				<button type="submit" class="btn btn-danger">Add Interest</button>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+    (function ($) {
+		function init() {
+			$('.easy-tree').EasyTree({
+				addable: true,
+				editable: true,
+				deletable: true
+			});
+		}
+
+		window.onload = init();
+	})(jQuery)
+</script>
+{% endblock %}

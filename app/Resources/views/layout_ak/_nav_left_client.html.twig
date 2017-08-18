@@ -1,0 +1,52 @@
+<nav id="tour-highlight" class="navbar-default navbar-static-side" role="navigation">
+	<div class="sidebar-collapse">
+		<ul class="nav metismenu" id="side-menu" style="display: block;">
+			{{ render(controller('HyperEventBundle:SharedLayout:renderProfile', {request: app.request})) }}
+			<li id="mainmenu-dashboard" {% if active is defined and active == 'dashboard_main' %} class="active"{% endif %}>
+                <a href="{{ path('dashboard_main') }}">
+                    <i style="padding-bottom:5px"><img src="{{ asset('bundles/hyperevent/img/dashboard.png') }}" width="35px"></i>
+					<span>Dashboard</span>
+                </a>
+            </li>
+            <li id="mainmenu-cardbuilder" {% if active is defined and active == 'audience_card_creator' %} class="active"{% endif %}>
+                <a href="{{ path('dashboard_filter_card_builder') }}">
+                    <i style="padding-bottom:5px"><img src="{{ asset('bundles/hyperevent/img/card-creator.png') }}" width="30px"></i>
+                    <span>Card Builder</span>
+                </a>
+            </li>
+            <li id="mainmenu-audiencedeck" {% if active is defined and active == 'audience_deck' %} class="active"{% endif %}>
+                <a href="{{ path('dashboard_filter_audience_deck') }}">
+                    <i style="padding-bottom:5px"><img src="{{ asset('bundles/hyperevent/img/card-deck.png') }}" width="35px"></i>
+                    <span>Audience Deck</span>
+                </a>
+            </li>
+            <li id="mainmenu-userjourney" {% if active is defined and active == 'audience_spotlight' %} class="active"{% endif %}>
+                <a href="{{ path('dashboard_audience_spotlight_user_journey') }}">
+                    <i style="padding-bottom:5px"><img src="{{ asset('bundles/hyperevent/img/audience-spotlight.png') }}" width="35px"></i>
+					<span class="nav-label">Audience Spotlight</span>
+                </a>
+            </li>
+            <li{% if active is defined and active == 'inappevent_config' %} class="active"{% endif %}>
+                <a href="{{ path('dashboard_inappevent_config') }}">
+                    <i style="padding-bottom:5px" class="fa fa-cogs"></i>
+                    <span class="nav-label">Configuration</span>
+                </a>
+            </li>
+            {#<li{% if active is defined and (active == 'promo_banner' or active == 'push_notification') %} class="active"{% endif %}>#}
+            {#    <a href="#">#}
+            {#        <i class="fa fa-comments-o"></i>#}
+            {#        <span class="nav-label">Audience Connect</span>#}
+            {#        <span class="fa arrow"></span>#}
+            {#    </a>#}
+            {#    <ul class="nav nav-second-level collapse">#}
+            {#        <li{% if active is defined and active == 'push_notification' %} class="active"{% endif %}>#}
+            {#            <a href="{{ path('dashboard_push') }}">Push Notification</a>#}
+            {#        </li>#}
+            {#        <li{% if active is defined and active == 'promo_banner' %} class="active"{% endif %}>#}
+            {#            <a href="{{ path('dashboard_banner') }}">Promo Banner</a>#}
+            {#        </li>#}
+            {#    </ul>#}
+            {#</li>#}
+		</ul>
+	</div>
+</nav>

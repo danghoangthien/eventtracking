@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Hypergrowth | Admin</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.5 -->
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="dist/css/style.css">
+    <link rel="stylesheet" href="dist/css/animate.css">
+    <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+
+
+    <!-- Select2 -->
+    <link href="plugins/select2/select2.min.css" rel="stylesheet" />
+    <!-- FooTable -->
+    <link rel="stylesheet" href="plugins/footable/footable.core.css">
+    <link rel="stylesheet" href="plugins/footable/footable.metro.css">
+
+</head>
+
+  <body class="fixed-sidebar"> <!-- mini-navbar for collapsed sidebar, fixed-sidebar for fixed--> 
+    <div id="wrapper">
+
+        <!-- sidebar -->
+        <nav class="navbar-default navbar-static-side" role="navigation">
+            <div class="sidebar-collapse">
+                <ul class="nav metismenu" id="side-menu" style="display: block;">
+                    <li class="nav-header">
+                        <div class="dropdown profile-element">
+                            <div class="user-panel">
+                                <span class="image">
+									<img alt="image" class="img-circle" src="img/samuelchan.jpg">
+								</span>
+                            </div>
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                <span class="clear"> 
+									<span class="block m-t-xs"> 
+										<strong class="font-bold">Samuel Chan</strong>
+									 </span>
+                                <small>Member since Jun. 2015</small>
+                                <span class="text-muted text-xs block">Warehouse Admin 
+										<b class="caret"></b>
+									</span>
+                                </span>
+                            </a>
+                            <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                                <li><a href="#">Edit Profile</a>
+                                </li>
+                                <li><a href="#">Sign Out</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="logo-element">
+                            <span class="logo-mini"><img src="img/hypergrowth_small_transparent_16x35.png"></span>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="da.html">
+                            <i class="fa fa-bar-chart-o"></i> <span>Data Acquisition</span>
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="cm.html">
+                            <i class="fa fa-user-secret"></i> <span>Client Management</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="uam.html">
+                            <i class="fa fa-sitemap"></i> <span>User Access Management</span>
+                        </a>
+                    </li>
+                    <li>
+					<li>
+						<a href="#">
+							<i class="fa fa-laptop"></i> 
+							<span class="nav-label">Infrastructure Monitor</span> 
+							<span class="fa arrow"></span>
+						</a>
+						<ul class="nav nav-second-level collapse">
+							<li><a href="#">Elastic Load Balancer</a></li>
+							<li><a href="#">Elastic Cloud Compute</a></li>
+							<li><a href="#">Redshift</a></li>
+							<li><a href="#">Simple Queue Service</a></li>
+						</ul>
+					</li>
+                </ul>
+            </div>
+        </nav>
+        <!-- /.sidebar -->
+
+        <!-- Content Wrapper. Contains page content -->
+        <!--class content-wrapper for full width without sidebar, and gray-bg sidebar-content for right sidebar-->
+        <div id="page-wrapper" class="content-wrapper">
+
+            <!--top bar-->
+            <div class="row">
+                <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+                    <div class="navbar-header">
+                        <a class="navbar-minimalize  minimalize-styl-2 btn btn-default" href="#"><i class="fa fa-bars"></i> </a>
+                    </div>
+                    <ul class="nav navbar-top-links navbar-right">
+                        <li>
+                            <span class="m-r-sm welcome-message">Welcome to Warehouse Admin</span>
+                        </li>
+                        <li>
+                            <a href="index-admin.html">
+                                <i class="fa fa-sign-out"></i> Log out
+                            </a>
+                        </li>
+                    </ul>
+
+                </nav>
+            </div>
+            <!--End top bar-->
+
+            <!-- Main Content -->
+            <div class="wrapper wrapper-content">
+                <div class="row buffer-bottom-s">
+                    <div class="col-md-4">
+                        <h1>Client's Authorization</h1>
+                    </div>
+                    <label class="col-md-2 control-label" style="color:#333;text-align:right;margin-top:25px;">Search: </label>
+                    <div class="col-md-2">
+                        <input type="text" class="form-control" id="filter" style="margin-top:25px;">
+                    </div>
+                    <div class="col-md-4"></div>
+                </div>
+                <div class="row buffer-bottom-s">
+                    <div class="col-lg-8">
+                        <div class="row buffer-bottom-s">
+                            <div class="col-md-12">
+                                <table class="footable-user" data-page-size="7" data-page-navigation=".pagination" data-filter="#filter" data-filter-text-only="true">
+                                    <thead>
+                                        <tr>
+                                            <th>Client</th>
+                                            <th>Client App</th>
+                                            <th>Client Type</th>
+                                            <th data-sort-ignore="true">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Tiket</td>
+                                            <td>
+                                            	Tiket.com - Hotel & Pesawat - Android,<br/>
+                                            	Tiket.com - Booking Hotel, Flight Ticket & Train Ticket - iOS</td>
+                                            <td>E-commerce</td>
+                                            <td>
+                                                <a href="#">Edit</a>
+                                                <a href="#">Delete</a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Bukalapak</td>
+                                            <td>
+                                            	Bukalapak - Jual Beli Online - iOS,<br/>
+                                            	Bukalapak - Jual Beli Online - Android
+                                            </td>
+                                            <td>E-commerce</td>
+                                            <td>
+                                                <a href="#">Edit</a>
+                                                <a href="#">Delete</a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Raiders Quest</td>
+                                            <td>Raiders Quest - iOS</td>
+                                            <td>Gaming</td>
+                                            <td>
+                                                <a href="#">Edit</a>
+                                                <a href="#">Delete</a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Liputan6</td>
+                                            <td>
+                                            	Liputan6.com - Android,<br/>
+                                            	Liputan6 - Android	
+                                            </td>
+                                            <td>Branding</td>
+                                            <td>
+                                                <a href="#">Edit</a>
+                                                <a href="#">Delete</a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Yogrt</td>
+                                            <td>
+                                            	Yogrt: Meet Friends Nearby - Android	
+                                            </td>
+                                            <td>Branding</td>
+                                            <td>
+                                                <a href="#">Edit</a>
+                                                <a href="#">Delete</a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Wakfu Raiders</td>
+                                            <td>
+                                            	Wakfu Raiders - Android,<br/>
+                                            	Wakfu Raiders - iOS	
+                                            </td>
+                                            <td>Gaming</td>
+                                            <td>
+                                                <a href="#">Edit</a>
+                                                <a href="#">Delete</a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Chain Chronicle</td>
+                                            <td>
+                                            	Chain Chronicle – RPG - Android,<br/>
+                                            	Chain Chronicle - Line Defense RPG - iOS	
+                                            </td>
+                                            <td>Gaming</td>
+                                            <td>
+                                                <a href="#">Edit</a>
+                                                <a href="#">Delete</a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Brave Frontier</td>
+                                            <td>
+                                            	Brave Frontier - iOS,<br/>
+                                            	Brave Frontier - Android	
+                                            </td>
+                                            <td>Gaming</td>
+                                            <td>
+                                                <a href="#">Edit</a>
+                                                <a href="#">Delete</a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Asian Poker</td>
+                                            <td>
+                                            	Asian Poker - Big Two - Android,<br/>
+                                            	Asian Poker - Big Two - iOS,<br/>
+                                            	Asian Poker - Capsa Banting - Android	
+                                            </td>
+                                            <td>Gaming</td>
+                                            <td>
+                                                <a href="#">Edit</a>
+                                                <a href="#">Delete</a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot class="hide-if-no-paging">
+                                        <tr>
+                                            <td colspan="12" style="text-align:center;">
+                                                <div class="pagination pagination-centered"></div>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="ibox float-e-margins" style="padding:20px">
+                            <div class="ibox-title-transparent">
+                                <h3 class="font-bold">Add Client</h3>
+                            </div>
+                            <div class="ibox-content-transparent">
+                                <div class="panel" style="margin:0px">
+                                    <form action="" class="">
+                                        <div class="panel-body">
+                                        	
+                                            <div class="row">
+                                                <input type="text" class="form-control" placeholder="Enter Client Name">
+                                            </div>
+                                            <div class="row">
+                                                <label id="form_create_auth_name-error" class="error bottom-padding" for="form_create_auth_name">This field is required.</label>
+                                            </div>
+
+                                            <div class="row">
+                                                <select class="form-control inputClientMultiple" multiple="multiple" style="width:100%">
+                                                    <option>Please select App Access</option>
+                                                    <option>All Clients</option>
+                                                    <option>Brave Frontier</option>
+                                                    <option>Raiders Quest</option>
+                                                    <option>Wakfu Raiders</option>
+                                                    <option>Asian Poker</option>
+                                                    <option>Bukalapak</option>
+                                                    <option>Tiket</option>
+                                                    <option>Yogrt</option>
+                                                    <option>Liputan6</option>
+                                                    <option>Chain Chronicle</option>
+                                                </select>
+                                            </div>
+                                            <div class="row">
+                                                <label id="form_create_auth_name-error" class="error bottom-padding" for="form_create_auth_name">This field is required.</label>
+                                            </div>
+
+                                            <div class="row">
+                                                <select class="form-control inline-select-long" style="width: 200px;">
+                                                    <option value="">Select Client Type</option>
+                                                    <option value="">E-commerce</option>
+                                                    <option value="">Gaming</option>
+                                                    <option value="">Branding</option>
+                                                </select>
+                                            </div>
+                                            <div class="row">
+                                                <label id="form_create_auth_name-error" class="error bottom-padding" for="form_create_auth_name">This field is required.</label>
+                                            </div>
+
+                                            <div class="row">
+                                                <button type="submit" class="btn btn-primary">Add Client</button>
+                                            </div>
+                                        </div>
+                                </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--End Main Content-->
+
+            <div class="footer">
+                <div class="pull-right">
+                    <b>Version</b> 1.1.0
+                </div>
+                <div>
+                    <strong>Copyright &copy; 2016 <a href="http://www.hypergrowth.co"> HyperGrowth Pte Ltd</a>.</strong> All rights reserved.
+                </div>
+            </div>
+
+        </div>
+        <!-- /.content-wrapper -->
+
+    </div>
+    <!-- ./wrapper -->
+
+    <!-- jQuery 2.1.4 -->
+    <script src="plugins/jQuery/jQuery-2.1.4.min.js"></script>
+    <!-- jQuery UI 1.11.4 -->
+    <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+    <script>
+        $.widget.bridge('uibutton', $.ui.button);
+    </script>
+    <!-- Bootstrap 3.3.5 -->
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <!-- Slimscroll -->
+    <script src="plugins/slimScroll/jquery.slimscroll.min.js"></script>
+    <!-- ChartJS 1.0.1 -->
+    <script src="plugins/chartjs/Chart.min.js"></script>
+    <!-- FastClick -->
+    <script src="plugins/fastclick/fastclick.min.js"></script>
+    <!-- Metis Menu -->
+    <script src="plugins/metisMenu/jquery.metisMenu.js"></script>
+    <!-- AdminLTE App -->
+    <script src="dist/js/app.min.js"></script>
+    <script src="dist/js/inspinia.js"></script>
+
+    <!-- Select2 -->
+    <script src="plugins/select2/select2.min.js"></script>
+    <!-- FooTable-->
+    <script src="plugins/footable/footable.js"></script>
+    <!-- FooTable Sorting-->
+    <script src="plugins/footable/footable.sort.js"></script>
+    <!-- FooTable Pagination-->
+    <script src="plugins/footable/footable.paginate.js"></script>
+    <!-- FooTable Pagination-->
+    <script src="plugins/footable/footable.filter.js"></script>
+
+    <script>
+        $(".inputClientMultiple").select2({
+            placeholder: "Select Client that User can access"
+        });
+
+        $(function() {
+            $('.footable-user').footable();
+        });
+    </script>
+
+</body>
+
+</html>

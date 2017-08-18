@@ -1,0 +1,46 @@
+<div class="uj_card_holder">
+	<div class="uj_cards row" id="promt_attach_preset_filter_section">
+		<div class="col-md-8 col-sm-10" style=" border: #555 dashed 3px; margin-bottom: 15px; ">
+			<div class="col-md-9 col-sm-9">
+				<span class="uj_card_title" style="color:#555">Add to an Audience Card</span>
+			</div>
+			<div class="col-md-3 col-sm-3">
+				<span class="uj_x">
+					<a href="javascript:void(0)" id="promt_attach_preset_filter">
+						<span class="tool-tip" data-toggle="tooltip" data-placement="top" title="">
+							<i class="fa fa-plus" style="color:#555"></i>
+						</span>
+					</a>
+				</span>
+			</div>
+		</div>
+	</div>
+	{% if listPresetFilter is not empty %}
+	{% for presetFilter in listPresetFilter %}
+		{% set cardBgStyle = '' %}
+		{% if presetFilter['card_bg_color_code'] is defined and  presetFilter['card_bg_color_code'] is not empty %}
+			{% set cardBgStyle = 'background-color: '~ presetFilter['card_bg_color_code'] ~ ';' %}
+		{% endif %}
+		{% set cardTextColorStyle = '' %}
+		{% if presetFilter['card_text_color_code'] is defined and  presetFilter['card_text_color_code'] is not empty %}
+			{% set cardTextColorStyle = 'color: '~ presetFilter['card_text_color_code'] ~ ';' %}
+		{% endif %}
+	<div class="uj_cards row" data-preset_filter_id="{{ presetFilter['id'] }}">
+		<div class="col-md-8 col-sm-10" style="{{ cardBgStyle }}{{ cardTextColorStyle }}">
+			<div class="col-md-9 col-sm-9">
+				<span class="uj_card_title">{{ presetFilter['preset_name'] }}</span>
+			</div>
+			<div class="col-md-3 col-sm-3">
+				<span class="uj_x">
+					<a href="javascript:void(0)" data-preset_filter_id="{{ presetFilter['id'] }}" data-preset_filter_name="{{ presetFilter['preset_name'] }}" data-toggle="modal" data-target="#confirm_detach_preset_filter">
+						<span class="tool-tip" data-toggle="tooltip" data-placement="top" title="" data-original-title="Remove">
+							<i class="fa fa-remove"></i>
+						</span>
+					</a>
+				</span>
+			</div>
+		</div>
+	</div>
+	{% endfor %}
+	{% endif %}
+</div>

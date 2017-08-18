@@ -11,7 +11,7 @@ use JMS\Serializer\Annotation\Expose;
  * AddToWishlistAction
  *
  * @ORM\Table(name="add_to_wishlist_actions")
- * @ORM\Entity(repositoryClass="Hyper\DomainBundle\Repository\DTAddToWishlistActionRepository")
+ * @ORM\Entity(repositoryClass="Hyper\DomainBundle\Repository\Action\DTAddToWishlistActionRepository")
  * @ExclusionPolicy("all")
  */
 class AddToWishlistAction
@@ -31,6 +31,15 @@ class AddToWishlistAction
      * @Expose
      */
     private $deviceId;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="app_id", type="string", nullable=true)
+     * @ORM\Id
+     * @Expose
+     */
+    private $appId;
 
 
     /**
@@ -77,7 +86,7 @@ class AddToWishlistAction
     
     /**
      * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="Hyper\Domain\Item\InWishlistItem", mappedBy="add_to_wishlist_actions", fetch="EXTRA_LAZY", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Hyper\Domain\Item\InWishlistItem", mappedBy="wishlist", fetch="EXTRA_LAZY", cascade={"persist"})
      */
      private $inWishlistItems;
     
@@ -88,4 +97,221 @@ class AddToWishlistAction
         $this->inWishlistItems = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
+
+    /**
+     * Set deviceId
+     *
+     * @param string $deviceId
+     * @return AddToWishlistAction
+     */
+    public function setDeviceId($deviceId)
+    {
+        $this->deviceId = $deviceId;
+
+        return $this;
+    }
+
+    /**
+     * Get deviceId
+     *
+     * @return string 
+     */
+    public function getDeviceId()
+    {
+        return $this->deviceId;
+    }
+
+    /**
+     * Set applicationId
+     *
+     * @param string $applicationId
+     * @return AddToWishlistAction
+     */
+    public function setApplicationId($applicationId)
+    {
+        $this->applicationId = $applicationId;
+
+        return $this;
+    }
+
+    /**
+     * Get applicationId
+     *
+     * @return string 
+     */
+    public function getApplicationId()
+    {
+        return $this->applicationId;
+    }
+
+    /**
+     * Set totalItems
+     *
+     * @param integer $totalItems
+     * @return AddToWishlistAction
+     */
+    public function setTotalItems ($totalItems)
+    {
+        $this->totalItems = $totalItems;
+
+        return $this;
+    }
+
+    /**
+     * Get totalItems
+     *
+     * @return integer 
+     */
+    public function getTotalItems()
+    {
+        return $this->totalItems;
+    }
+
+    /**
+     * Set quantity
+     *
+     * @param integer $quantity
+     * @return AddToWishlistAction
+     */
+    public function setQuantity ($quantity)
+    {
+        $this->quantity = $quantity;
+
+        return $this;
+    }
+
+    /**
+     * Get quantity
+     *
+     * @return integer 
+     */
+    public function getQuantity()
+    {
+        return $this->quantity;
+    }
+
+    /**
+     * Set addedTime
+     *
+     * @param integer $addedTime
+     * @return AddToWishlistAction
+     */
+    public function setAddedTime ($addedTime)
+    {
+        $this->addedTime = $addedTime;
+
+        return $this;
+    }
+
+    /**
+     * Get addedTime
+     *
+     * @return integer 
+     */
+    public function getAddedTime()
+    {
+        return $this->addedTime;
+    }
+
+    /**
+     * Set created
+     *
+     * @param integer $created
+     * @return AddToWishlistAction
+     */
+    public function setCreated ($created)
+    {
+        $this->created = $created;
+
+        return $this;
+    }
+
+    /**
+     * Get created
+     *
+     * @return integer 
+     */
+    public function getCreated()
+    {
+        return $this->created;
+    }
+
+    /**
+     * Set action
+     *
+     * @param \Hyper\Domain\Action\Action $action
+     * @return AddToWishlistAction
+     */
+    public function setAction(\Hyper\Domain\Action\Action $action)
+    {
+        $this->action = $action;
+
+        return $this;
+    }
+
+    /**
+     * Get action
+     *
+     * @return \Hyper\Domain\Action\Action 
+     */
+    public function getAction()
+    {
+        return $this->action;
+    }
+
+    /**
+     * Add inWishlistItems
+     *
+     * @param \Hyper\Domain\Item\InWishlistItem $inWishlistItems
+     * @return AddToWishlistAction
+     */
+    public function addInWishlistItem(\Hyper\Domain\Item\InWishlistItem $inWishlistItems)
+    {
+        $this->inWishlistItems[] = $inWishlistItems;
+
+        return $this;
+    }
+
+    /**
+     * Remove inWishlistItems
+     *
+     * @param \Hyper\Domain\Item\InWishlistItem $inWishlistItems
+     */
+    public function removeInWishlistItem(\Hyper\Domain\Item\InWishlistItem $inWishlistItems)
+    {
+        $this->inWishlistItems->removeElement($inWishlistItems);
+    }
+
+    /**
+     * Get inWishlistItems
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getInWishlistItems()
+    {
+        return $this->inWishlistItems;
+    }
+
+    /**
+     * Set appId
+     *
+     * @param string $appId
+     * @return AddToWishlistAction
+     */
+    public function setAppId($appId)
+    {
+        $this->appId = $appId;
+
+        return $this;
+    }
+
+    /**
+     * Get appId
+     *
+     * @return string 
+     */
+    public function getAppId()
+    {
+        return $this->appId;
+    }
 }

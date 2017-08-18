@@ -14,5 +14,18 @@ use Hyper\Domain\Action\InstallAction;
  */
 class DTInstallActionRepository extends EntityRepository implements InstallActionRepository
 {
-
+    public function save(InstallAction $installAction){
+        $this->_em->persist($installAction);
+        //$this->_em->flush();
+    }
+    
+    public function completeTransaction(){
+        $this->_em->flush();
+        $this->_em->clear();
+    }
+    
+    public function closeConnection(){
+        $this->_em->close();
+    }
+    
 }

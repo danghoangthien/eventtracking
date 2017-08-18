@@ -1,0 +1,86 @@
+<?php
+
+namespace Hyper\Domain\Jasper;
+
+use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
+
+/**
+ * Jasper
+ *
+ * @ORM\Table(name="jasper_auth")
+ * @ORM\Entity(repositoryClass="Hyper\DomainBundle\Repository\Jasper\DTJasperRepository")
+ * @ExclusionPolicy("all")
+ */
+class Jasper
+{
+    public function __construct()
+    {
+        $this->id = uniqid('',true);    
+        $this->updated = strtotime(date('Y-m-d h:i:s'));
+    }
+    
+    /**
+     * @ORM\Column(name="id", type="string", length=255, nullable=false)")
+     * @ORM\Id
+     * @Expose
+     */
+    protected $id;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="username", type="string", length=255, nullable=false)
+     * @Expose
+     */
+    private $username;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="password", type="string", length=255, nullable=false)
+     * @Expose
+     */
+    private $password;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="organization", type="string",nullable=false, length=255)
+     * @Expose
+     */
+    private $organization;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="email", type="string",nullable=false, length=255)
+     * @Expose
+     */
+    private $email;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="extra_fields", type="string", length=13107, nullable=true)
+     * @Expose
+     */
+    private $extraFields;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="created", type="integer", nullable=false,)
+     * @Expose
+     */
+    private $created;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="updated", type="integer", nullable=false,)
+     * @Expose
+     */
+    private $updated;
+}

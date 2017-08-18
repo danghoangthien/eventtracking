@@ -1,0 +1,6 @@
+snc_redis:
+    clients:
+        default:
+            type: predis
+            alias: default
+            dsn: redis://audience-kit.xq0ucf.0001.usw2.cache.amazonaws.com:6379

@@ -1,0 +1,9 @@
+services:
+    hyper.event_api.listener.controller_listener.pre_execute_api:
+        class: Hyper\EventAPIBundle\Listener\ControllerListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
+    hyper.event_api.listener.exception_listener.api_exception:
+        class: Hyper\EventAPIBundle\Listener\ExceptionListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException } 
